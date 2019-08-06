@@ -13,6 +13,11 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "dependencies": {
     "gatsby": "^2.13.51",
     "gatsby-image": "^2.2.8",
