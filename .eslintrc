@@ -20,6 +20,13 @@
   },
   "rules": {
     "semi": 0,
+    "react/prop-types": 0,
+    "camelcase": [
+      "error",
+      {
+        "allow": ["id__normalized"] // id from graphql items data
+      }
+    ],
     "react/jsx-filename-extension": [
       1,
       {
