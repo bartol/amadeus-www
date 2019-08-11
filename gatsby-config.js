@@ -8,6 +8,7 @@ const itemQuery = `
         price
         id__normalized
         desc
+        slug
       }
     }
   }
