@@ -33,6 +33,7 @@
         "allow": ["id__normalized"] // id from graphql items data
       }
     ],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "react/jsx-filename-extension": [
       1,
       {
