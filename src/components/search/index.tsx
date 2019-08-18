@@ -39,7 +39,7 @@ const SearchBox = ({
 
 const CustomSearchBox = connectSearchBox(SearchBox)
 
-const Search = () => {
+const Search = ({ opened }: any) => {
   const data = useStaticQuery(graphql`
     {
       allItems {
@@ -58,21 +58,23 @@ const Search = () => {
   })
 
   return (
-    <>
+    <div className={`instantsearch ${opened ? 'open' : 'close'}`}>
       <InstantSearch searchClient={searchClient} indexName="amadeus2.hr">
         <CustomSearchBox />
         <CustomStats />
         {/* hits: {hitsNum}
         items: {itemsNum} */}
         {hitsNum < itemsNum ? (
-          <ul>
+          <ul className="list">
+            {/*
+             // @ts-ignore */}
             <Hits hitComponent={HitsPreview} />
           </ul>
         ) : (
           <ListAll />
         )}
       </InstantSearch>
-    </>
+    </div>
   )
 }
 

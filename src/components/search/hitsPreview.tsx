@@ -2,9 +2,10 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 import CartImage from '../cart/cartImage'
+// @ts-ignore
 import { addToCart } from '../../state/actions'
 
-const HitsPreview = ({ hit }: any) => {
+const HitsPreview = ({ hit, addToCart }: any) => {
   // return JSON.stringify(hit, null, 2)
   const { name, slug, price } = hit
   return (

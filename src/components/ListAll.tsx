@@ -2,9 +2,10 @@ import React from 'react'
 import { useStaticQuery, graphql, Link } from 'gatsby'
 import { connect } from 'react-redux'
 import CartImage from './cart/cartImage'
+// @ts-ignore
 import { addToCart } from '../state/actions'
 
-const List: React.FC = () => {
+const List: React.FC = ({ addToCart }) => {
   const data = useStaticQuery(graphql`
     {
       allItems {
@@ -18,7 +19,7 @@ const List: React.FC = () => {
     }
   `)
   return (
-    <ul>
+    <ul className="list">
       {data.allItems.nodes.map((item: any) => {
         // TODO add interface
         const { name, slug, price } = item
