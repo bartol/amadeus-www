@@ -43,3 +43,7 @@ export const addToCart = item => (dispatch, getState) => {
     dispatch(addToCartUnsafe(item))
   }
 }
+
+export const toggleCart = () => ({
+  type: types.TOGGLE_CART
+})

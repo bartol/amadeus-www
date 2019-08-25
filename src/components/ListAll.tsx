@@ -3,9 +3,13 @@ import { useStaticQuery, graphql, Link } from 'gatsby'
 import { connect } from 'react-redux'
 import CartImage from './cart/cartImage'
 // @ts-ignore
-import { addToCart } from '../state/actions'
+import { addToCart as reduxAddToCart } from '../state/actions'
 
-const List: React.FC = ({ addToCart }) => {
+interface Props {
+  addToCart: any
+}
+
+const List: React.FC<Props> = ({ addToCart }: any) => {
   const data = useStaticQuery(graphql`
     {
       allItems {
@@ -43,5 +47,5 @@ const List: React.FC = ({ addToCart }) => {
 // export default List
 export default connect(
   null,
-  { addToCart }
+  { addToCart: reduxAddToCart }
 )(List)
