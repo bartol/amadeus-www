@@ -67,6 +67,12 @@ module.exports = {
         queries,
         chunkSize: 10000 // default: 1000
       }
+    },
+    {
+      resolve: 'gatsby-plugin-crisp-chat',
+      options: {
+        websiteId: process.env.CRISP_WEBSITE_ID
+      }
     }
   ]
 }

@@ -5812,6 +5812,11 @@ gatsby-plugin-algolia@^0.3.2:
     gatsby-cli "^1.1.58"
     lodash.chunk "^4.2.0"
 
+gatsby-plugin-crisp-chat@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-crisp-chat/-/gatsby-plugin-crisp-chat-3.2.1.tgz#148948c38c1afa8bca01019bc83e83300892a31f"
+  integrity sha512-ZWJw0ktkqrSOz8oE51oVZ4eQ8VkeQ+flaUF8sFvmp8OZsntinasfvYJh/4IFBMCm6t+G6Ds8EFYNMqs2wRI6Iw==
+
 gatsby-plugin-eslint@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-eslint/-/gatsby-plugin-eslint-2.0.5.tgz#be02f5aff9b7f4a37927f3f917e82ad9f3d67f09"
