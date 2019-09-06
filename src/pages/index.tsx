@@ -17,7 +17,7 @@ const App: React.FC<Props> = ({ menu, toggleCart }) => {
   return (
     <Layout>
       {/* <Search opened={cartOpened} /> */}
-      <Search opened={menu.isCartOpened} />
+      <Search opened={menu.isCartOpened} toggleCart={toggleCart} />
       <button
         type="button"
         // className={`toggleCart ${cartOpened ? 'open' : 'close'}`}

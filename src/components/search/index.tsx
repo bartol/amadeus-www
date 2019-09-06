@@ -30,8 +30,8 @@ const SearchBox = ({
       value={currentRefinement}
       className="search"
       onChange={(event: any) => refine(event.currentTarget.value)}
-      placeholder="Search posts"
-      aria-label="Search posts"
+      placeholder="Search items"
+      aria-label="Search items"
     />
     {/* {isSearchStalled ? <NoHits /> : ''} */}
   </form>
@@ -39,7 +39,7 @@ const SearchBox = ({
 
 const CustomSearchBox = connectSearchBox(SearchBox)
 
-const Search = ({ opened }: any) => {
+const Search = ({ opened, toggleCart }: any) => {
   const data = useStaticQuery(graphql`
     {
       allItems {
@@ -58,12 +58,14 @@ const Search = ({ opened }: any) => {
   })
 
   return (
-    <div className={`instantsearch ${opened ? 'open' : 'close'}`}>
+    <div
+      className={`instantsearch ${opened ? 'open' : 'close'}`}
+      onClick={() => (opened ? toggleCart() : null)}
+      role="presentation"
+    >
       <InstantSearch searchClient={searchClient} indexName="amadeus2.hr">
         <CustomSearchBox />
         <CustomStats />
-        {/* hits: {hitsNum}
-        items: {itemsNum} */}
         {hitsNum < itemsNum ? (
           <ul className="list">
             {/*
