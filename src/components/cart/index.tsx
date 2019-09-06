@@ -33,7 +33,7 @@ const Cart: React.FC<Props> = ({
           <>
             <ul>
               {cart.map((item: any) => {
-                const { name, price, slug, qt, id__normalized: id } = item
+                const { name, price, slug, cqt, id__normalized: id } = item
 
                 return (
                   <li key={slug}>
@@ -43,7 +43,7 @@ const Cart: React.FC<Props> = ({
                     <CartImage ImageKey={`${slug}-1`} />
                     <i>{id}</i>
                     <p>{price / 100} kn</p>
-                    <p>{qt}</p>
+                    <p>{cqt}</p>
                     <button type="button" onClick={() => incrementQuantity(id)}>
                       +
                     </button>

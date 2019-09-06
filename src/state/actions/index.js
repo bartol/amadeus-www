@@ -18,7 +18,6 @@ export const removeFromCart = id => ({
 export const incrementQuantity = id => dispatch => {
   // const result = getState().cart.filter(e => e.id__normalized === id)
   // if (result[0].qt < qt) {
-  // TODO inc
   dispatch(incrementQuantityUnsafe(id))
   // }
 }
@@ -29,7 +28,7 @@ export const decrementQuantityUnsafe = id => ({
 })
 
 export const decrementQuantity = item => dispatch => {
-  if (item.qt > 1) {
+  if (item.cqt > 1) {
     dispatch(decrementQuantityUnsafe(item.id__normalized))
   } else {
     dispatch(removeFromCart(item.id__normalized))
