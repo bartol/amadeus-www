@@ -18,6 +18,7 @@ const List: React.FC<Props> = ({ addToCart }: any) => {
           slug
           price
           id__normalized
+          qt
         }
       }
     }
@@ -25,10 +26,9 @@ const List: React.FC<Props> = ({ addToCart }: any) => {
   return (
     <ul className="list">
       {data.allItems.nodes.map((item: any) => {
-        // TODO add interface
         const { name, slug, price } = item
         return (
-          <li>
+          <li key={slug}>
             <CartImage ImageKey={`${slug}-1`} />
             <Link to={`/${slug}/`} key={slug}>
               <h3>{name}</h3>

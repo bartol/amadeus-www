@@ -9,6 +9,7 @@ const itemQuery = `
         id__normalized
         desc
         slug
+        qt
       }
     }
   }
