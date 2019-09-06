@@ -19,6 +19,7 @@ store.subscribe(() => {
 // testing
 // ///////////////////////////////
 // eslint-disable-next-line no-undef
+
 // window.store = store
 
 export default ({ element }) => {

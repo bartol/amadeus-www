@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { graphql } from 'gatsby'
 import Image from 'gatsby-image'
 import '../styles/main.scss'
@@ -12,13 +12,14 @@ import {
   ButtonNext,
   Dot
 } from 'pure-react-carousel'
+// import mediumZoom from 'medium-zoom'
 import {
   addToCart as reduxAddToCart,
   toggleCart as reduxToggleCart
   // @ts-ignore
 } from '../state/actions'
 import Cart from '../components/cart'
-import Layout from '../components/Layout'
+// import Layout from '../components/Layout'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 
 interface Props {
@@ -42,13 +43,25 @@ interface Props {
   toggleCart: any
 }
 
-const Item: React.FC<Props> = ({ data, addToCart, menu, toggleCart }) => {
+const Item: React.FC<Props> = ({ data, addToCart, menu, cart, toggleCart }) => {
   const { name, price, desc, qt, id__normalized: id } = data.items
   const { nodes: images } = data.allS3Image
+  const cartItem = cart.filter((e: any) => e.id__normalized === id)
+  const cqt = cartItem.length ? cartItem[0].cqt : 0
+
+  useEffect(() => {
+    if (menu.isCartOpened) {
+      toggleCart()
+    }
+  }, [])
 
   return (
-    <Layout>
-      <div className={`itemWrapper ${menu.isCartOpened ? 'open' : 'close'}`}>
+    <div>
+      <div
+        className={`itemWrapper ${menu.isCartOpened ? 'open' : 'close'}`}
+        onClick={() => (menu.isCartOpened ? toggleCart() : null)}
+        role="presentation"
+      >
         <CarouselProvider
           naturalSlideWidth={500}
           naturalSlideHeight={500}
@@ -62,61 +75,71 @@ const Item: React.FC<Props> = ({ data, addToCart, menu, toggleCart }) => {
                 const { fluid } = childImageSharp
                 return (
                   <Slide index={index} key={Key}>
-                    <Image fluid={fluid} />
+                    <Image fluid={fluid} className="gatsby-resp-item-image" />
                   </Slide>
                 )
               })}
             </Slider>
+            {images.length > 1 && (
+              <>
+                <ButtonBack className="buttonBack">
+                  <ChevronLeft size={48} />
+                </ButtonBack>
+                <ButtonNext className="buttonNext">
+                  <ChevronRight size={48} />
+                </ButtonNext>
+              </>
+            )}
+          </div>
 
-            <ButtonBack className="buttonBack">
-              <ChevronLeft size={48} />
-            </ButtonBack>
-            <ButtonNext className="buttonNext">
-              <ChevronRight size={48} />
-            </ButtonNext>
-          </div>
-          <div className="dotWrapper">
-            {images.map((image: any, index: any) => {
-              const { localFile, Key } = image
-              const { childImageSharp } = localFile
-              const { fixed } = childImageSharp
-              return (
-                <Dot slide={index} key={Key} className="dot">
-                  <Image fixed={fixed} />
-                </Dot>
-              )
-            })}
-          </div>
+          {images.length > 1 && (
+            <div className="dotWrapper">
+              {images.map((image: any, index: any) => {
+                const { localFile, Key } = image
+                const { childImageSharp } = localFile
+                const { fixed } = childImageSharp
+                return (
+                  <Dot slide={index} key={Key} className="dot">
+                    <Image fixed={fixed} />
+                  </Dot>
+                )
+              })}
+            </div>
+          )}
         </CarouselProvider>
         <div className="details">
           <h1>{name}</h1>
           <i>{id}</i>
           <h2>{price / 100} kn</h2>
           <p>{desc}</p>
-          <p>{qt} kom.</p>
-          <button type="button" onClick={() => addToCart(data.items)}>
+          <p>{qt - cqt} kom.</p>
+          <button
+            type="button"
+            onClick={() => addToCart(data.items)}
+            disabled={!(qt - cqt)}
+          >
             Add to cart
           </button>
         </div>
-        <button
-          type="button"
-          // className={`toggleCart ${cartOpened ? 'open' : 'close'}`}
-          className={`toggleCart ${menu.isCartOpened ? 'open' : 'close'}`}
-          // onClick={() => isCartOpened(!cartOpened)}
-          onClick={() => toggleCart()}
-        >
-          Cart
-        </button>
-        {/* <Cart opened={cartOpened} /> */}
-        <Cart opened={menu.isCartOpened} />
       </div>
-    </Layout>
+      <button
+        type="button"
+        // className={`toggleCart ${cartOpened ? 'open' : 'close'}`}
+        className={`toggleCart ${menu.isCartOpened ? 'open' : 'close'}`}
+        // onClick={() => isCartOpened(!cartOpened)}
+        onClick={() => toggleCart()}
+      >
+        Cart
+      </button>
+      <Cart opened={menu.isCartOpened} />
+    </div>
   )
 }
 
 export default connect(
   (state: any) => ({
-    menu: state.menu
+    menu: state.menu,
+    cart: state.cart
   }),
   { addToCart: reduxAddToCart, toggleCart: reduxToggleCart }
 )(Item)
