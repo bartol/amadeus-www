@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import isEmail from 'validator/lib/isEmail'
+// @ts-ignore
+import Checkbox from 'react-simple-checkbox'
 
 interface Props {
   cart: any
@@ -31,7 +33,7 @@ const Checkout: React.FC<Props> = ({ cart }) => {
     return cart
       .map((item: any) => {
         const arr = []
-        for (let i = 0; i < item.qt; i++) {
+        for (let i = 0; i < item.cqt; i++) {
           arr.push(item.id__normalized)
         }
         return arr.join('')
@@ -39,8 +41,7 @@ const Checkout: React.FC<Props> = ({ cart }) => {
       .join('')
   }
 
-  const refresh = (e: any) => {
-    e.preventDefault()
+  const refresh = () => {
     axios
       .get(
         `https://api.amadeus2.hr/signature?order=${result()}&name=${name}&email=${email}&newsletter=${newsletter}`
@@ -69,11 +70,12 @@ const Checkout: React.FC<Props> = ({ cart }) => {
     }
   }
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = () => {
     if (name && isEmail(email)) {
-      refresh(e)
+      refresh()
     }
   }
+
   return (
     <div>
       <form
@@ -81,48 +83,58 @@ const Checkout: React.FC<Props> = ({ cart }) => {
         name="payway-authorize-form"
         method="post"
         action="https://pgwtest.ht.hr/services/payment/api/authorize-form"
-        onKeyUp={handleInputChange}
+        // onChange={handleInputChange}
       >
-        <label>
+        <label htmlFor="name">
           <input
             type="text"
+            name="name"
             placeholder="Name"
             value={name}
-            onChange={e => setName(e.target.value)}
+            // onChange={e => setName(e.target.value)}
+            onChange={e => {
+              setName(e.target.value)
+              handleInputChange()
+            }}
             onBlur={e => handleNameToast(e)}
           />
           {nameToast}
         </label>
         <br />
-        <label>
+        <label htmlFor="email">
           <input
             type="email"
+            name="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            // onChange={e => setEmail(e.target.value)}
+            onChange={e => {
+              setEmail(e.target.value)
+              handleInputChange()
+            }}
             onBlur={e => handleEmailToast(e)}
           />
           {emailToast}
         </label>
         <br />
-        <label>
-          <input
-            type="checkbox"
-            checked={newsletter}
-            onChange={e => setNewsletter(e.target.checked)}
-            onClick={handleInputChange}
-          />
-          Newsletter
-        </label>
+        <Checkbox
+          size={3}
+          tickAnimationDuration={300}
+          checked={newsletter}
+          onChange={(isChecked: any) => {
+            setNewsletter(isChecked)
+            handleInputChange()
+          }}
+        />
+        Newsletter
         <br />
-        <label>
-          <input
-            type="checkbox"
-            checked={terms}
-            onChange={e => setTerms(e.target.checked)}
-          />
-          Prihvacam uvjete o koristenju
-        </label>
+        <Checkbox
+          size={3}
+          tickAnimationDuration={300}
+          checked={terms}
+          onChange={(isChecked: any) => setTerms(isChecked)}
+        />
+        Prihvacam uvjete o koristenju
         <br />
         {isEmail(email) &&
         email === data.pgw_email &&
@@ -130,7 +142,9 @@ const Checkout: React.FC<Props> = ({ cart }) => {
         terms ? (
           <button type="submit">Pay with payway</button>
         ) : (
-          <button disabled>Pay with payway</button>
+          <button type="submit" disabled>
+            Pay with payway
+          </button>
         )}
         <input type="hidden" name="pgw_shop_id" value={data.pgw_shop_id} />
         <input type="hidden" name="pgw_order_id" value={data.pgw_order_id} />
