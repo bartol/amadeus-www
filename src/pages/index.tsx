@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 // @ts-ignore
 import { toggleCart as reduxToggleCart } from '../state/actions'
-import Search from '../components/search'
+import Search from '../components/search/search'
+// import Search from '../components/search'
 import Layout from '../components/Layout'
 import Cart from '../components/cart'
 
