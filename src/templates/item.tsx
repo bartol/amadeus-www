@@ -32,6 +32,9 @@ interface Props {
       price: number
       qt: number
       avb: number
+      image0: number
+      image1: number
+      image2: number
     }
     allS3Image: {
       nodes: object[]
@@ -44,10 +47,30 @@ interface Props {
 }
 
 const Item: React.FC<Props> = ({ data, addToCart, menu, cart, toggleCart }) => {
-  const { name, price, desc, qt, id__normalized: id } = data.items
-  const { nodes: images } = data.allS3Image
+  const {
+    name,
+    price,
+    desc,
+    qt,
+    id__normalized: id,
+    image0,
+    image1,
+    image2
+  } = data.items
   const cartItem = cart.filter((e: any) => e.id__normalized === id)
   const cqt = cartItem.length ? cartItem[0].cqt : 0
+
+  const images = []
+
+  if (image0) {
+    images.push(image0)
+  }
+  if (image1) {
+    images.push(image1)
+  }
+  if (image2) {
+    images.push(image2)
+  }
 
   useEffect(() => {
     if (menu.isCartOpened) {
@@ -68,20 +91,22 @@ const Item: React.FC<Props> = ({ data, addToCart, menu, cart, toggleCart }) => {
           totalSlides={images.length}
         >
           <div className="imageWrapper">
-            <Slider>
-              {images.map((image: any, index: any) => {
-                const { localFile, Key } = image
-                const { childImageSharp } = localFile
-                const { fluid } = childImageSharp
-                return (
-                  <Slide index={index} key={Key}>
-                    <Image fluid={fluid} className="gatsby-resp-item-image" />
-                  </Slide>
-                )
-              })}
-            </Slider>
-            {images.length > 1 && (
+            {images.length > 1 ? (
               <>
+                <Slider>
+                  {images.map((image: any, index: any) => {
+                    const { childImageSharp } = image
+                    const { fluid, id: Key } = childImageSharp
+                    return (
+                      <Slide index={index} key={Key}>
+                        <Image
+                          fluid={fluid}
+                          className="gatsby-resp-item-image"
+                        />
+                      </Slide>
+                    )
+                  })}
+                </Slider>
                 <ButtonBack className="buttonBack">
                   <ChevronLeft size={48} />
                 </ButtonBack>
@@ -89,15 +114,20 @@ const Item: React.FC<Props> = ({ data, addToCart, menu, cart, toggleCart }) => {
                   <ChevronRight size={48} />
                 </ButtonNext>
               </>
+            ) : (
+              <Image
+                // @ts-ignore
+                fluid={images[0].childImageSharp.fluid}
+                className="gatsby-resp-item-image"
+              />
             )}
           </div>
 
           {images.length > 1 && (
             <div className="dotWrapper">
               {images.map((image: any, index: any) => {
-                const { localFile, Key } = image
-                const { childImageSharp } = localFile
-                const { fixed } = childImageSharp
+                const { childImageSharp } = image
+                const { fixed, id: Key } = childImageSharp
                 return (
                   <Dot slide={index} key={Key} className="dot">
                     <Image fixed={fixed} />
@@ -145,7 +175,7 @@ export default connect(
 )(Item)
 
 export const query = graphql`
-  query($id: String!, $regex: String!) {
+  query($id: String!) {
     items(id__normalized: { eq: $id }) {
       name
       price
@@ -154,25 +184,29 @@ export const query = graphql`
       desc
       qt
       avb
+      image0 {
+        ...fluidImage
+      }
+      image1 {
+        ...fluidImage
+      }
+      image2 {
+        ...fluidImage
+      }
     }
-    allS3Image(
-      filter: { Key: { regex: $regex } }
-      sort: { fields: Key, order: ASC }
-    ) {
-      nodes {
-        Key
-        localFile {
-          childImageSharp {
-            fluid(maxWidth: 500) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
-          childImageSharp {
-            fixed(width: 75) {
-              ...GatsbyImageSharpFixed_withWebp
-            }
-          }
-        }
+  }
+`
+
+export const fluidImage = graphql`
+  fragment fluidImage on File {
+    childImageSharp {
+      fluid(maxWidth: 500) {
+        ...GatsbyImageSharpFluid_withWebp
+      }
+    }
+    childImageSharp {
+      fixed(width: 75) {
+        ...GatsbyImageSharpFixed_withWebp
       }
     }
   }
