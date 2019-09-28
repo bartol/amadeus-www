@@ -4,7 +4,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import isEmail from 'validator/lib/isEmail'
 // @ts-ignore
-import Checkbox from 'react-simple-checkbox'
+// import Checkbox from 'react-simple-checkbox'
 
 interface Props {
   cart: any
@@ -117,9 +117,17 @@ const Checkout: React.FC<Props> = ({ cart }) => {
           {emailToast}
         </label>
         <br />
-        <Checkbox
+        {/* <Checkbox
           size={3}
           tickAnimationDuration={300}
+          checked={newsletter}
+          onChange={(isChecked: any) => {
+            setNewsletter(isChecked)
+            handleInputChange()
+          }}
+        /> */}
+        <input
+          type="checkbox"
           checked={newsletter}
           onChange={(isChecked: any) => {
             setNewsletter(isChecked)
@@ -128,9 +136,14 @@ const Checkout: React.FC<Props> = ({ cart }) => {
         />
         Newsletter
         <br />
-        <Checkbox
+        {/* <Checkbox
           size={3}
           tickAnimationDuration={300}
+          checked={terms}
+          onChange={(isChecked: any) => setTerms(isChecked)}
+        /> */}
+        <input
+          type="checkbox"
           checked={terms}
           onChange={(isChecked: any) => setTerms(isChecked)}
         />
