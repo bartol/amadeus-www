@@ -1,0 +1,29 @@
+{
+  "name": "amadeus2.hr",
+  "version": "1.0.0",
+  "repository": "git@github.com:bartol/amadeus2.hr.git",
+  "author": "bartol <contact@bartol.dev>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "bs": "yarn build && yarn serve",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
+    "cleanup": "gatsby clean && rm -rf node_modules && yarn",
+    "analyze": "ANALYZE_BUNDLE_SIZE=true gatsby build"
+  },
+  "dependencies": {
+    "gatsby": "^2.15.28",
+    "react": "^16.10.0",
+    "react-dom": "^16.10.0",
+    "gatsby-plugin-typescript": "^2.1.11"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "@types/node": "^12.7.8",
+    "@types/react": "^16.9.3",
+    "@types/react-dom": "^16.9.1"
+  }
+}
