@@ -13,3 +13,4 @@
 
 - basic (only typescript) -- gzip 69kb
 - added graphql api (build time) -- gzip 72kb
+- with tailwind -- gzip 73kb
