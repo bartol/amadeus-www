@@ -1,12 +1,13 @@
 import { graphql, Link } from 'gatsby'
 import Image from 'gatsby-image'
 import React from 'react'
+import '../styles/index.css'
 
 const index: React.FC<Props> = ({ data }) => {
   const { items } = data.amadeus
   return (
-    <div>
-      <h1>amadeus2.hr</h1>
+    <div className='container mx-auto'>
+      <h1 className='bg-blue-200 text-center text-2xl'>amadeus2.hr</h1>
       <ul>
         {items.map(item => {
           const { name, price, slug, optimizedImages } = item
@@ -15,13 +16,13 @@ const index: React.FC<Props> = ({ data }) => {
               <Link to={`/${slug}/`}>
                 <h2>{name}</h2>
               </Link>
-              <h3>{price / 100} kn</h3>
-              {optimizedImages.map(optimizedImage => {
+              <h3 className='text-5xl'>{price / 100} kn</h3>
+              {optimizedImages.map((optimizedImage, index) => {
                 return (
                   <Image
                     fixed={optimizedImage.childImageSharp.fixed}
                     key={optimizedImage.childImageSharp.fixed.src}
-                    alt={name}
+                    alt={`Image ${index} of ${name}`}
                   />
                 )
               })}
@@ -29,6 +30,11 @@ const index: React.FC<Props> = ({ data }) => {
           )
         })}
       </ul>
+      <button className='btn btn-blue'>Button</button>
+      <br />
+      <button className='text-3xl py-2 px-6 rounded bg-green-400 hover:bg-green-500 active:bg-green-600 trans trans-bg focus:outline-none'>
+        Kupi ovaj proizvod
+      </button>
     </div>
   )
 }
