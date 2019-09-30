@@ -9,3 +9,9 @@
 .btn-blue:hover {
   @apply bg-blue-700;
 }
+
+.test {
+  .nested {
+    @apply bg-blue-700;
+  }
+}

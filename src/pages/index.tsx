@@ -1,7 +1,7 @@
 import { graphql, Link } from 'gatsby'
 import Image from 'gatsby-image'
 import React from 'react'
-import '../styles/index.css'
+import '../styles/custom.css'
 
 const index: React.FC<Props> = ({ data }) => {
   const { items } = data.amadeus
