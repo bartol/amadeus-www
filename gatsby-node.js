@@ -1,20 +1,32 @@
-const data = require('./pages.json')
+const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
 
-exports.createPages = ({ boundActionCreators }) => {
-  const { createPage } = boundActionCreators
+exports.createResolvers = ({
+  actions,
+  cache,
+  createNodeId,
+  createResolvers,
+  store,
+  reporter,
+}) => {
+  const { createNode } = actions
 
-  const template = require.resolve('./src/templates/item.tsx')
-
-  // Create pages for each JSON entry.
-  data.forEach(({ page }) => {
-    const path = page
-
-    createPage({
-      path,
-      component: template,
-      context: {
-        path,
+  createResolvers({
+    amadeus_Item: {
+      optimizedImages: {
+        type: '[File!]!',
+        resolve: (source, args, context, info) => {
+          return source.images.map(url => {
+            return createRemoteFileNode({
+              url,
+              store,
+              cache,
+              createNode,
+              createNodeId,
+              reporter,
+            })
+          })
+        },
       },
-    })
+    },
   })
 }
