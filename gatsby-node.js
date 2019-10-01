@@ -30,3 +30,33 @@ exports.createResolvers = ({
     },
   })
 }
+
+exports.createPages = async ({ actions, graphql, reporter }) => {
+  const query = await graphql(`
+    {
+      amadeus {
+        items {
+          slug
+          id
+        }
+      }
+    }
+  `)
+
+  if (query.errors) {
+    reporter.panic('failed to create pages', query.errors)
+  }
+
+  const { items } = query.data.amadeus
+
+  items.forEach(item => {
+    const { slug, id } = item
+    actions.createPage({
+      path: `/${slug}/`,
+      component: require.resolve('./src/templates/item.tsx'),
+      context: {
+        id,
+      },
+    })
+  })
+}
