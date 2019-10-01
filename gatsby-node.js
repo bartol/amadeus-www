@@ -1,4 +1,4 @@
-const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
+const { createRemoteFileNode } = require('gatsby-source-filesystem')
 
 exports.createResolvers = ({
   actions,
@@ -7,14 +7,14 @@ exports.createResolvers = ({
   createResolvers,
   store,
   reporter,
-}) => {
+}): void => {
   const { createNode } = actions
 
   createResolvers({
     amadeus_Item: {
       optimizedImages: {
         type: '[File!]!',
-        resolve: (source, args, context, info) => {
+        resolve: (source, _args, _context, _info): Array => {
           return source.images.map(url => {
             return createRemoteFileNode({
               url,
@@ -31,7 +31,7 @@ exports.createResolvers = ({
   })
 }
 
-exports.createPages = async ({ actions, graphql, reporter }) => {
+exports.createPages = async ({ actions, graphql, reporter }): void => {
   const query = await graphql(`
     {
       amadeus {
