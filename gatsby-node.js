@@ -7,14 +7,14 @@ exports.createResolvers = ({
   createResolvers,
   store,
   reporter,
-}): void => {
+}) => {
   const { createNode } = actions
 
   createResolvers({
     amadeus_Item: {
       optimizedImages: {
         type: '[File!]!',
-        resolve: (source, _args, _context, _info): Array => {
+        resolve: (source, _args, _context, _info) => {
           return source.images.map(url => {
             return createRemoteFileNode({
               url,
@@ -31,7 +31,7 @@ exports.createResolvers = ({
   })
 }
 
-exports.createPages = async ({ actions, graphql, reporter }): void => {
+exports.createPages = async ({ actions, graphql, reporter }) => {
   const query = await graphql(`
     {
       amadeus {
