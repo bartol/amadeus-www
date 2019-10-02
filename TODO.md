@@ -15,3 +15,4 @@
 - added graphql api (build time) -- gzip 72kb
 - with tailwind -- gzip 73kb
 - with carousel -- gzip 89kb
+- with apollo client -- gzip 136kb (too much??)
