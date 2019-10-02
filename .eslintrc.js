@@ -18,7 +18,7 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     'react/prop-types': 'off',
     '@typescript-eslint/camelcase': 'off',
-    '@typescript-eslint/no-var-requires': 'of',
+    '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
   settings: {
