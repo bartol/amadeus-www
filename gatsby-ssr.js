@@ -1,2 +1,2 @@
 // apollo provider
-export { wrapRootElement } from './src/apollo/wrap-root-element'
+export { wrapRootElement } from './src/state/wrap-root-element'
