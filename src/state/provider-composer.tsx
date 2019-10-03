@@ -1,5 +1,6 @@
 import React from 'react'
 import { CartProvider } from './cart'
+import { CheckoutProvider } from './checkout'
 import { ApolloProvider } from './apollo-client'
 
 const ProviderComposer = ({ contexts, children }) => {
@@ -18,6 +19,7 @@ export const ContextProvider = ({ children }) => {
       contexts={[
         <ApolloProvider key='ApolloProvider' />,
         <CartProvider key='CartProvider' />,
+        <CheckoutProvider key='CheckoutProvider' />,
       ]}
     >
       {children}
