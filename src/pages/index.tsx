@@ -1,18 +1,13 @@
 import { graphql } from 'gatsby'
-import React, { useContext } from 'react'
-import { CartContext } from '../state/global'
+import React from 'react'
 import Card from '../components/card'
-import Cart from '../components/cart'
 import Layout from '../components/layout'
 import '../styles/custom.css'
 
 const index: React.FC<Props> = ({ data }) => {
   const { items } = data.amadeus
-  const { cartContents } = useContext(CartContext)
   return (
     <Layout>
-      <Cart />
-      <pre>{JSON.stringify(cartContents, null, 2)}</pre>
       <ul className='flex mb-4'>
         {items.map(item => {
           const { name, price, slug, optimizedImages } = item
@@ -22,6 +17,7 @@ const index: React.FC<Props> = ({ data }) => {
               slug={slug}
               price={price}
               optimizedImage={optimizedImages[0]}
+              item={item}
               key={slug}
             />
           )
@@ -40,6 +36,8 @@ export const query = graphql`
         name
         price
         slug
+        id
+        quantity
         images
         optimizedImages {
           childImageSharp {

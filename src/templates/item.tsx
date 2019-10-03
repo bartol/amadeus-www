@@ -2,7 +2,8 @@ import { graphql } from 'gatsby'
 import Image from 'gatsby-image'
 import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
-import React from 'react'
+import React, { useContext } from 'react'
+import { CartContext } from '../state/global'
 import Layout from '../components/layout'
 
 const Item: React.FC<Props> = ({ data }) => {
@@ -14,7 +15,10 @@ const Item: React.FC<Props> = ({ data }) => {
     quantity,
     availability,
     optimizedImages,
+    id,
   } = item
+
+  const { addToCart, getQuantity } = useContext(CartContext)
 
   return (
     <Layout>
@@ -57,8 +61,11 @@ const Item: React.FC<Props> = ({ data }) => {
         <div className='lg:w-2/5'>
           <h1>{name}</h1>
           <h2>{price}</h2>
-          <h3>{quantity}</h3>
+          <h3>{getQuantity(id, quantity)}</h3>
           <h3>{availability}</h3>
+          <button type='button' onClick={() => addToCart(item)}>
+            Add to cart
+          </button>
         </div>
       </div>
       <article>{description}</article>
@@ -88,6 +95,7 @@ export const pageQuery = graphql`
         description
         quantity
         availability
+        id
       }
     }
   }

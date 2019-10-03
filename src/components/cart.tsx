@@ -1,132 +1,62 @@
-import React, { useState } from 'react'
-import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
-
-const query = gql`
-  query(
-    $order: [String!]!
-    $name: String!
-    $email: String!
-    $newsletter: Boolean!
-    $language: String!
-  ) {
-    signature(
-      order: $order
-      name: $name
-      email: $email
-      newsletter: $newsletter
-      language: $language
-    ) {
-      shop_id
-      order_id
-      amount
-      authorization_type
-      language
-      success_url
-      failure_url
-      first_name
-      email
-      order_info
-      order_items
-      signature
-    }
-  }
-`
+import React, { useContext } from 'react'
+import { CartContext } from '../state/global'
 
 const Cart: React.FC = () => {
-  const [statebtn, setStatebtn] = useState(false)
-  const { loading, error, data } = useQuery(query, {
-    variables: {
-      order: ['00001', '00001'],
-      name: 'Bartol<p>Test</p>',
-      email: 'contact@bartol.dev',
-      newsletter: true,
-      language: 'hr',
-    },
-    skip: !statebtn,
-  })
+  const {
+    itemsInCart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+  } = useContext(CartContext)
 
   return (
     <div>
-      {loading && <p>Loading graphl data...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {data && (
-        <>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-          <form
-            id='payway-authorize-form'
-            name='payway-authorize-form'
-            method='post'
-            action='https://pgwtest.ht.hr/services/payment/api/authorize-form'
-          >
-            <input
-              type='hidden'
-              name='pgw_shop_id'
-              value={data.signature.shop_id}
-            />
-            <input
-              type='hidden'
-              name='pgw_order_id'
-              value={data.signature.order_id}
-            />
+      <ul>
+        {itemsInCart.map(item => {
+          return (
+            <li key={item.id}>
+              <h3>{item.name}</h3>
+              <p>{item.quantity}</p>
+              <button type='button' onClick={() => removeFromCart(item.id)}>
+                remove from cart
+              </button>
+              <br />
+              <button type='button' onClick={() => incrementQuantity(item.id)}>
+                increment
+              </button>
+              <br />
+              <button type='button' onClick={() => decrementQuantity(item.id)}>
+                decrement
+              </button>
+            </li>
+          )
+        })}
+      </ul>
 
-            <input
-              type='hidden'
-              name='pgw_amount'
-              value={data.signature.amount}
-            />
-            <input
-              type='hidden'
-              name='pgw_authorization_type'
-              value={data.signature.authorization_type}
-            />
-            <input
-              type='hidden'
-              name='pgw_language'
-              value={data.signature.language}
-            />
-            <input
-              type='hidden'
-              name='pgw_success_url'
-              value={data.signature.success_url}
-            />
-            <input
-              type='hidden'
-              name='pgw_failure_url'
-              value={data.signature.failure_url}
-            />
-            <input
-              type='hidden'
-              name='pgw_first_name'
-              value={data.signature.first_name}
-            />
-            <input
-              type='hidden'
-              name='pgw_email'
-              value={data.signature.email}
-            />
-            <input
-              type='hidden'
-              name='pgw_order_info'
-              value={data.signature.order_info}
-            />
-            <input
-              type='hidden'
-              name='pgw_order_items'
-              value={data.signature.order_items}
-            />
-            <input
-              type='hidden'
-              name='pgw_signature'
-              value={data.signature.signature}
-            />
-            <button type='submit'>SUBMIT</button>
-          </form>
-        </>
-      )}
-      <button onClick={(): void => setStatebtn(!statebtn)}>FETCH</button>
+      {/* action='https://pgwtest.ht.hr/services/payment/api/authorize-form' */}
+      {/* <form name='payway-authorize-form' method='post'>
+        <PgwInput name='shop_id' value={pgwData.shop_id} />
+        <PgwInput name='order_id' value={pgwData.order_id} />
+        <PgwInput name='amount' value={pgwData.amount} />
+        <PgwInput
+          name='authorization_type'
+          value={pgwData.authorization_type}
+        />
+        <PgwInput name='language' value={pgwData.language} />
+        <PgwInput name='success_url' value={pgwData.success_url} />
+        <PgwInput name='failure_url' value={pgwData.failure_url} />
+        <PgwInput name='first_name' value={pgwData.first_name} />
+        <PgwInput name='email' value={pgwData.email} />
+        <PgwInput name='order_info' value={pgwData.order_info} />
+        <PgwInput name='order_items' value={pgwData.order_items} />
+        <PgwInput name='signature' value={pgwData.signature} />
+      </form> */}
     </div>
   )
 }
+
+// const PgwInput = (name: string, value: string) => {
+//   return <input type='hidden' name={`pgw_${name}`} value={value} />
+// }
 
 export default Cart
