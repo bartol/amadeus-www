@@ -1,6 +1,7 @@
 import React from 'react'
 import Footer from './footer'
 import Header from './header'
+import Cart from '../components/cart'
 
 const Layout = ({ children }) => {
   return (
@@ -8,6 +9,7 @@ const Layout = ({ children }) => {
       <Header />
       <main className='container mx-auto'>{children}</main>
       <Footer />
+      <Cart />
     </div>
   )
 }

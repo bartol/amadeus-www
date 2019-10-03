@@ -1,8 +1,11 @@
 import { Link } from 'gatsby'
 import Image from 'gatsby-image'
-import React from 'react'
+import React, { useContext } from 'react'
+import { CartContext } from '../state/global'
 
-const Card = ({ name, slug, price, optimizedImage }) => {
+const Card = ({ name, slug, price, optimizedImage, item }) => {
+  const { addToCart } = useContext(CartContext)
+
   return (
     <li
       key={slug}
@@ -17,6 +20,9 @@ const Card = ({ name, slug, price, optimizedImage }) => {
         <h2 className='text-2xl'>{name}</h2>
         <h3 className='text-xl'>{price / 100} kn</h3>
       </Link>
+      <button type='button' onClick={() => addToCart(item)}>
+        add to cart
+      </button>
     </li>
   )
 }
