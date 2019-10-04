@@ -1,9 +1,9 @@
+import React, { useContext } from 'react'
 import { graphql } from 'gatsby'
 import Image from 'gatsby-image'
 import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
-import React, { useContext } from 'react'
-import { CartContext } from '../state/global'
+import { CartContext, I18nContext } from '../state/global'
 import Layout from '../components/layout'
 
 const Item: React.FC<Props> = ({ data }) => {
@@ -19,6 +19,7 @@ const Item: React.FC<Props> = ({ data }) => {
   } = item
 
   const { addToCart, getQuantity } = useContext(CartContext)
+  const { currencyConversion } = useContext(I18nContext)
 
   return (
     <Layout>
@@ -60,7 +61,7 @@ const Item: React.FC<Props> = ({ data }) => {
         </div>
         <div className='lg:w-2/5'>
           <h1>{name}</h1>
-          <h2>{price}</h2>
+          <h2>{currencyConversion(price)}</h2>
           <h3>{getQuantity(id, quantity)}</h3>
           <h3>{availability}</h3>
           <button type='button' onClick={() => addToCart(item)}>
