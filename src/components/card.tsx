@@ -1,10 +1,11 @@
 import { Link } from 'gatsby'
 import Image from 'gatsby-image'
 import React, { useContext } from 'react'
-import { CartContext } from '../state/global'
+import { CartContext, I18nContext } from '../state/global'
 
 const Card = ({ name, slug, price, optimizedImage, item }) => {
   const { addToCart } = useContext(CartContext)
+  const { currencyConversion } = useContext(I18nContext)
 
   return (
     <li
@@ -18,7 +19,7 @@ const Card = ({ name, slug, price, optimizedImage, item }) => {
           alt={`${name} image`} // TODO seems like it isn't working
         />
         <h2 className='text-2xl'>{name}</h2>
-        <h3 className='text-xl'>{price / 100} kn</h3>
+        <h3 className='text-xl'>{currencyConversion(price)}</h3>
       </Link>
       <button type='button' onClick={() => addToCart(item)}>
         add to cart

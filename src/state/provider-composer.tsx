@@ -1,7 +1,8 @@
 import React from 'react'
+import { ApolloProvider } from './apollo-client'
 import { CartProvider } from './cart'
 import { CheckoutProvider } from './checkout'
-import { ApolloProvider } from './apollo-client'
+import { I18nProvider } from './i18n'
 
 const ProviderComposer = ({ contexts, children }) => {
   return contexts.reduceRight(
@@ -17,9 +18,10 @@ export const ContextProvider = ({ children }) => {
   return (
     <ProviderComposer
       contexts={[
-        <ApolloProvider key='ApolloProvider' />,
-        <CartProvider key='CartProvider' />,
-        <CheckoutProvider key='CheckoutProvider' />,
+        <ApolloProvider key='apollo' />,
+        <CartProvider key='cart' />,
+        <CheckoutProvider key='checkout' />,
+        <I18nProvider key='i18n' />,
       ]}
     >
       {children}
