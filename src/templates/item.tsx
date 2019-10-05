@@ -6,7 +6,8 @@ import 'pure-react-carousel/dist/react-carousel.es.css'
 import { CartContext, I18nContext } from '../state/global'
 import Layout from '../components/layout'
 
-const Item: React.FC<Props> = ({ data }) => {
+const Item: React.FC<Props> = ({ data, pageContext }) => {
+  const { language } = pageContext
   const { item } = data.amadeus
   const {
     name,
@@ -22,7 +23,7 @@ const Item: React.FC<Props> = ({ data }) => {
   const { currencyConversion } = useContext(I18nContext)
 
   return (
-    <Layout>
+    <Layout language={language}>
       <div className='flex'>
         <div className='lg:w-3/5 pr-4'>
           <CarouselProvider

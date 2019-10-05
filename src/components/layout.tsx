@@ -5,7 +5,7 @@ import Footer from './footer'
 import Header from './header'
 import Cart from '../components/cart'
 
-const Layout = ({ children }) => {
+const Layout = ({ children, language }) => {
   const { setCurrencyData } = useContext(I18nContext)
   const data = useStaticQuery(graphql`
     {
@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className='text-gray-900 leading-normal'>
-      <Header />
+      <Header language={language} />
       <main className='container mx-auto'>{children}</main>
       <Footer />
       <Cart />

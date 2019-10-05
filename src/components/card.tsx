@@ -3,7 +3,7 @@ import Image from 'gatsby-image'
 import React, { useContext } from 'react'
 import { CartContext, I18nContext } from '../state/global'
 
-const Card = ({ name, slug, price, optimizedImage, item }) => {
+const Card = ({ name, slug, price, optimizedImage, item, language }) => {
   const { addToCart } = useContext(CartContext)
   const { currencyConversion } = useContext(I18nContext)
 
@@ -12,7 +12,10 @@ const Card = ({ name, slug, price, optimizedImage, item }) => {
       key={slug}
       className='w-1/4 p-3 rounded-lg border border-gray-200  mx-auto'
     >
-      <Link to={`/${slug}/`} className='w-full h-full'>
+      <Link
+        to={`${language === 'hr' ? '/' : `/${language}/`}${slug}/`}
+        className='w-full h-full'
+      >
         <Image
           fixed={optimizedImage.childImageSharp.fixed}
           key={optimizedImage.childImageSharp.fixed.src}

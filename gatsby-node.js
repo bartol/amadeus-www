@@ -10,6 +10,28 @@ exports.onCreateWebpackConfig = ({ getConfig, stage }) => {
   }
 }
 
+exports.onCreatePage = ({ page, actions }) => {
+  const { createPage, deletePage } = actions
+  deletePage(page)
+
+  createPage({
+    ...page,
+    context: {
+      ...page.context,
+      language: 'hr',
+    },
+  })
+
+  createPage({
+    ...page,
+    path: `/en${page.path}`,
+    context: {
+      ...page.context,
+      language: 'en',
+    },
+  })
+}
+
 exports.createResolvers = ({
   actions,
   cache,
@@ -61,11 +83,22 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   items.forEach(item => {
     const { slug, id } = item
+
     actions.createPage({
       path: `/${slug}/`,
       component: require.resolve('./src/templates/item.tsx'),
       context: {
         id,
+        language: 'hr',
+      },
+    })
+
+    actions.createPage({
+      path: `/en/${slug}/`,
+      component: require.resolve('./src/templates/item.tsx'),
+      context: {
+        id,
+        language: 'en',
       },
     })
   })
