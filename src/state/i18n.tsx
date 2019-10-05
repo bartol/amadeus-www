@@ -6,21 +6,24 @@ export const I18nContext = createContext()
 export const isBrowser = () => typeof window !== 'undefined'
 
 export const I18nProvider = ({ children }) => {
-  const [currency, setCurrency] = useState('HRK')
+  const [currency, setCurrency] = useState(
+    // get currency from localstorage, if not found or ssr set to HRK
+    isBrowser() ? window.localStorage.getItem('currency') || 'HRK' : 'HRK'
+  )
   const [currencyData, setCurrencyData] = useState({})
 
   const changeLanguage = (_language: string) => {
-    // save to local storage ...
     navigate(
       isBrowser() && window.location.pathname.startsWith('/en/')
         ? window.location.pathname.slice(3)
-        : `/en${window.location.pathname}`
-    ) // replace
+        : `/en${window.location.pathname}`,
+      { replace: true }
+    )
   }
 
   const changeCurrency = (currency: string) => {
     setCurrency(currency)
-    // save to local storage ...
+    isBrowser() && window.localStorage.setItem('currency', currency)
   }
 
   const currencyConversion = (price: number) => {

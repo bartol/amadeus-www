@@ -4,7 +4,7 @@ import { header } from '../locales'
 import { I18nContext } from '../state/global'
 
 const Header = ({ language }) => {
-  const { changeLanguage, changeCurrency } = useContext(I18nContext)
+  const { currency, changeLanguage, changeCurrency } = useContext(I18nContext)
 
   return (
     <nav className='container mx-auto flex justify-between'>
@@ -24,7 +24,7 @@ const Header = ({ language }) => {
         <option value='hr'>Hrvatski</option>
         <option value='en'>English</option>
       </select>
-      <select onChange={e => changeCurrency(e.target.value)}>
+      <select value={currency} onChange={e => changeCurrency(e.target.value)}>
         <option value='HRK'>HRK</option>
         <option value='EUR'>EUR</option>
         <option value='BAM'>BAM</option>
