@@ -3,12 +3,31 @@ import React from 'react'
 import Card from '../components/card'
 import Layout from '../components/layout'
 import '../styles/custom.css'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
-const index: React.FC<Props> = ({ data }) => {
+const APOLLO_QUERY = gql`
+  {
+    currency {
+      HRK
+      BAM
+      RSD
+      EUR
+      USD
+      GBP
+    }
+  }
+`
+
+const index: React.FC<Props> = ({ data, pageContext }) => {
+  const { language } = pageContext
   const { items } = data.amadeus
+
+  const { data: apollodata } = useQuery(APOLLO_QUERY)
   return (
-    <Layout>
+    <Layout language={language}>
       <ul className='flex mb-4'>
+        <div hidden>{JSON.stringify(apollodata)}</div>
         {items.map(item => {
           const { name, price, slug, optimizedImages } = item
           return (
@@ -19,6 +38,7 @@ const index: React.FC<Props> = ({ data }) => {
               optimizedImage={optimizedImages[0]}
               item={item}
               key={slug}
+              language={language}
             />
           )
         })}

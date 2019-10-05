@@ -1,22 +1,26 @@
 import React, { useContext } from 'react'
+import { Link } from 'gatsby'
 import { header } from '../locales'
 import { I18nContext } from '../state/global'
 
-const Header = () => {
-  const { language, changeLanguage, currency, changeCurrency } = useContext(
-    I18nContext
-  )
+const Header = ({ language }) => {
+  const { changeLanguage, changeCurrency } = useContext(I18nContext)
+
   return (
     <nav className='container mx-auto flex justify-between'>
-      <h1 className='text-3xl'>Amadeus</h1>
+      <Link to={language === 'hr' ? '/' : `/${language}/`}>
+        <h1 className='text-3xl'>Amadeus</h1>
+      </Link>
       <input
         type='text'
         className='text-3xl bg-gray-200 rounded-lg focus:outline-none px-3 w-1/2'
         placeholder={header[language].searchPlaceholder}
       />
       <h3 className='text-3xl'>{header[language].cart}</h3>
-      {currency}
-      <select onChange={e => changeLanguage(e.target.value)}>
+      <select
+        onChange={e => changeLanguage(e.target.value)}
+        defaultValue={language}
+      >
         <option value='hr'>Hrvatski</option>
         <option value='en'>English</option>
       </select>

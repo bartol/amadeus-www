@@ -1,17 +1,21 @@
 import React, { useState, createContext } from 'react'
+import { navigate } from '@reach/router'
 
 export const I18nContext = createContext()
 
-export const I18nProvider = ({ children }) => {
-  const [language, setLanguage] = useState('hr')
-  const [currency, setCurrency] = useState('HRK')
+export const isBrowser = () => typeof window !== 'undefined'
 
+export const I18nProvider = ({ children }) => {
+  const [currency, setCurrency] = useState('HRK')
   const [currencyData, setCurrencyData] = useState({})
 
-  const changeLanguage = (language: string) => {
-    setLanguage(language)
+  const changeLanguage = (_language: string) => {
     // save to local storage ...
-    // change route
+    navigate(
+      isBrowser() && window.location.pathname.startsWith('/en/')
+        ? window.location.pathname.slice(3)
+        : `/en${window.location.pathname}`
+    ) // replace
   }
 
   const changeCurrency = (currency: string) => {
@@ -42,7 +46,6 @@ export const I18nProvider = ({ children }) => {
   return (
     <I18nContext.Provider
       value={{
-        language,
         changeLanguage,
         currency,
         changeCurrency,
