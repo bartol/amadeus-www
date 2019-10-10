@@ -1,7 +1,14 @@
 import React, { useContext } from 'react'
 import { graphql } from 'gatsby'
 import Image from 'gatsby-image'
-import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
+import {
+  CarouselProvider,
+  Dot,
+  Slide,
+  Slider,
+  ButtonBack,
+  ButtonNext,
+} from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { CartContext, I18nContext } from '../state/global'
 import Layout from '../components/layout'
@@ -40,11 +47,14 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
                       alt={`Image ${index + 1} of ${name}`}
                       loading={index === 0 ? 'eager' : 'lazy'}
                       className='select-none'
+                      fadeIn
                     />
                   </Slide>
                 )
               })}
             </Slider>
+            <ButtonBack>Back</ButtonBack>
+            <ButtonNext>Next</ButtonNext>
             <nav>
               {optimizedImages.map((optimizedImage, index) => {
                 return (
@@ -53,6 +63,7 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
                       fixed={optimizedImage.childImageSharp.fixed}
                       alt={`Thumbnail ${index + 1} of ${name}`}
                       className='select-none'
+                      fadeIn
                     />
                   </Dot>
                 )
