@@ -20,6 +20,7 @@ const Card = ({ name, slug, price, optimizedImage, item, language }) => {
           fixed={optimizedImage.childImageSharp.fixed}
           key={optimizedImage.childImageSharp.fixed.src}
           alt={`${name} image`} // TODO seems like it isn't working
+          fadeIn
         />
         <h2 className='text-2xl'>{name}</h2>
         <h3 className='text-xl'>{currencyConversion(price)}</h3>
