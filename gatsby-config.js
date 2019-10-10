@@ -22,7 +22,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-graphql',
       options: {
-        typeName: 'amadeus',
+        typeName: 'Amadeus',
         fieldName: 'amadeus',
         url: 'https://api.amadeus2.hr',
       },

@@ -43,11 +43,46 @@ exports.createResolvers = ({
   const { createNode } = actions
 
   createResolvers({
-    amadeus_Item: {
+    Amadeus_Item: {
       optimizedImages: {
         type: '[File!]!',
         resolve: (source, _args, _context, _info) => {
           return source.images.map(url => {
+            return createRemoteFileNode({
+              url,
+              store,
+              cache,
+              createNode,
+              createNodeId,
+              reporter,
+            })
+          })
+        },
+      },
+    },
+  })
+
+  createResolvers({
+    Amadeus_Banners: {
+      optimizedDesktop: {
+        type: '[File!]!',
+        resolve: (source, _args, _context, _info) => {
+          return source.desktop.map(url => {
+            return createRemoteFileNode({
+              url,
+              store,
+              cache,
+              createNode,
+              createNodeId,
+              reporter,
+            })
+          })
+        },
+      },
+      optimizedMobile: {
+        type: '[File!]!',
+        resolve: (source, _args, _context, _info) => {
+          return source.mobile.map(url => {
             return createRemoteFileNode({
               url,
               store,
