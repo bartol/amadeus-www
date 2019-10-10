@@ -61,7 +61,7 @@ export const query = graphql`
         images
         optimizedImages {
           childImageSharp {
-            fixed(width: 250, height: 250) {
+            fixed(width: 240, height: 180) {
               ...GatsbyImageSharpFixed_withWebp_tracedSVG
             }
           }
