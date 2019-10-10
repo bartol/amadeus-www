@@ -34,8 +34,8 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
       <div className='flex'>
         <div className='lg:w-3/5 pr-4'>
           <CarouselProvider
-            naturalSlideWidth={100}
-            naturalSlideHeight={100}
+            naturalSlideWidth={4}
+            naturalSlideHeight={3}
             totalSlides={optimizedImages.length}
           >
             <Slider>
@@ -58,7 +58,11 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
             <nav>
               {optimizedImages.map((optimizedImage, index) => {
                 return (
-                  <Dot slide={index} key={index} className='focus:outline-none'>
+                  <Dot
+                    slide={index}
+                    key={index}
+                    className='focus:outline-none focus:shadow-outline mx-1'
+                  >
                     <Image
                       fixed={optimizedImage.childImageSharp.fixed}
                       alt={`Thumbnail ${index + 1} of ${name}`}
@@ -97,10 +101,10 @@ export const pageQuery = graphql`
         images
         optimizedImages {
           childImageSharp {
-            fluid(maxWidth: 750, maxHeight: 750) {
+            fluid(maxWidth: 800, maxHeight: 600) {
               ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
-            fixed(width: 100, height: 100) {
+            fixed(width: 120, height: 90) {
               ...GatsbyImageSharpFixed_withWebp_tracedSVG
             }
           }
