@@ -5,6 +5,7 @@ import Layout from '../components/layout'
 import '../styles/custom.css'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import Banner from '../components/banner'
 
 const APOLLO_QUERY = gql`
   {
@@ -19,13 +20,14 @@ const APOLLO_QUERY = gql`
   }
 `
 
-const index: React.FC<Props> = ({ data, pageContext }) => {
+const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
-  const { items } = data.amadeus
+  const { items, banners } = data.amadeus
 
   const { data: apollodata } = useQuery(APOLLO_QUERY)
   return (
     <Layout language={language}>
+      <Banner banners={banners} />
       <ul className='flex mb-4'>
         <div hidden>{JSON.stringify(apollodata)}</div>
         {items.map(item => {
@@ -47,7 +49,7 @@ const index: React.FC<Props> = ({ data, pageContext }) => {
   )
 }
 
-export default index
+export default Index
 
 export const query = graphql`
   {
@@ -63,6 +65,24 @@ export const query = graphql`
           childImageSharp {
             fixed(width: 240, height: 180) {
               ...GatsbyImageSharpFixed_withWebp_tracedSVG
+            }
+          }
+        }
+      }
+      banners {
+        desktop
+        optimizedDesktop {
+          childImageSharp {
+            fluid(maxWidth: 1024, maxHeight: 340) {
+              ...GatsbyImageSharpFluid_withWebp_tracedSVG
+            }
+          }
+        }
+        mobile
+        optimizedMobile {
+          childImageSharp {
+            fluid(maxWidth: 767, maxHeight: 575) {
+              ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
         }
