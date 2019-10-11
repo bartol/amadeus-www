@@ -5,3 +5,27 @@
 @tailwind utilities;
 
 @import './utilities.css';
+
+.isDisabled:disabled {
+  @apply shadow-outline;
+}
+
+.dot-image:disabled {
+  @apply shadow-outline;
+}
+
+/* desktop & mobile banner switching */
+
+.mobileBanner {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .desktopBanner {
+    display: none;
+  }
+
+  .mobileBanner {
+    display: block;
+  }
+}

@@ -22,7 +22,7 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
     description,
     quantity,
     availability,
-    optimizedImages,
+    optimizedImages: images,
     id,
   } = item
 
@@ -36,14 +36,14 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
           <CarouselProvider
             naturalSlideWidth={4}
             naturalSlideHeight={3}
-            totalSlides={optimizedImages.length}
+            totalSlides={images.length}
           >
             <Slider>
-              {optimizedImages.map((optimizedImage, index) => {
+              {images.map((image, index) => {
                 return (
                   <Slide index={index} key={index}>
                     <Image
-                      fluid={optimizedImage.childImageSharp.fluid}
+                      fluid={image.childImageSharp.fluid}
                       alt={`Image ${index + 1} of ${name}`}
                       loading={index === 0 ? 'eager' : 'lazy'}
                       className='select-none'
@@ -56,15 +56,15 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
             <ButtonBack>Back</ButtonBack>
             <ButtonNext>Next</ButtonNext>
             <nav>
-              {optimizedImages.map((optimizedImage, index) => {
+              {images.map((image, index) => {
                 return (
                   <Dot
                     slide={index}
                     key={index}
-                    className='focus:outline-none focus:shadow-outline mx-1'
+                    className='focus:outline-none mx-1 dot-image'
                   >
                     <Image
-                      fixed={optimizedImage.childImageSharp.fixed}
+                      fixed={image.childImageSharp.fixed}
                       alt={`Thumbnail ${index + 1} of ${name}`}
                       className='select-none'
                       fadeIn
