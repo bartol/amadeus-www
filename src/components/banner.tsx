@@ -24,7 +24,7 @@ const Banner: React.FC<Props> = ({ banners }) => {
         totalSlides={desktopImages.length}
         isPlaying
         interval={5000}
-        infinite
+        infinite='true'
         className='desktopBanner'
       >
         <Slider>
@@ -63,7 +63,7 @@ const Banner: React.FC<Props> = ({ banners }) => {
         totalSlides={mobileImages.length}
         isPlaying
         interval={5000}
-        infinite
+        infinite='true'
         className='mobileBanner'
       >
         <Slider>
