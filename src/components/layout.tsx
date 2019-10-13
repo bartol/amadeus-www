@@ -6,11 +6,11 @@ import Header from './header'
 import Cart from '../components/cart'
 
 const Layout = ({ children, language }) => {
-  const { setCurrencyData } = useContext(I18nContext)
+  const { setExchangeRatesData } = useContext(I18nContext)
   const data = useStaticQuery(graphql`
     {
       amadeus {
-        currency {
+        exchangeRates {
           EUR
           BAM
           RSD
@@ -20,7 +20,7 @@ const Layout = ({ children, language }) => {
       }
     }
   `)
-  setCurrencyData(data.amadeus.currency)
+  setExchangeRatesData(data.amadeus.exchangeRates)
 
   return (
     <div className='text-gray-900 leading-normal'>

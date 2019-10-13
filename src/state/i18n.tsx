@@ -10,7 +10,7 @@ export const I18nProvider = ({ children }) => {
     // get currency from localstorage, if not found or ssr set to HRK
     isBrowser() ? window.localStorage.getItem('currency') || 'HRK' : 'HRK'
   )
-  const [currencyData, setCurrencyData] = useState({})
+  const [exchangeRatesData, setExchangeRatesData] = useState({})
 
   const changeLanguage = (_language: string) => {
     navigate(
@@ -28,7 +28,7 @@ export const I18nProvider = ({ children }) => {
 
   const currencyConversion = (price: number) => {
     const HRK = price / 100
-    const { EUR, BAM, RSD, USD, GBP } = currencyData
+    const { EUR, BAM, RSD, USD, GBP } = exchangeRatesData
 
     switch (currency) {
       case 'HRK':
@@ -52,7 +52,7 @@ export const I18nProvider = ({ children }) => {
         changeLanguage,
         currency,
         changeCurrency,
-        setCurrencyData,
+        setExchangeRatesData,
         currencyConversion,
       }}
     >
