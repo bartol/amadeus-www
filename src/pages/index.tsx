@@ -9,11 +9,11 @@ import Banner from '../components/banner'
 
 const APOLLO_QUERY = gql`
   {
-    currency {
+    exchangeRates {
       HRK
+      EUR
       BAM
       RSD
-      EUR
       USD
       GBP
     }
