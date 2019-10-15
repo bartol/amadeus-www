@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { CartContext } from '../state/global'
+import { CartContext, CheckoutContext } from '../state/global'
 
 const Cart: React.FC = () => {
   const {
@@ -9,6 +9,7 @@ const Cart: React.FC = () => {
     decrementQuantity,
   } = useContext(CartContext)
 
+  const { pgwData } = useContext(CheckoutContext)
   return (
     <div>
       <ul>
@@ -34,7 +35,7 @@ const Cart: React.FC = () => {
       </ul>
 
       {/* action='https://pgwtest.ht.hr/services/payment/api/authorize-form' */}
-      {/* <form name='payway-authorize-form' method='post'>
+      <form name='payway-authorize-form' method='post'>
         <PgwInput name='shop_id' value={pgwData.shop_id} />
         <PgwInput name='order_id' value={pgwData.order_id} />
         <PgwInput name='amount' value={pgwData.amount} />
@@ -50,13 +51,13 @@ const Cart: React.FC = () => {
         <PgwInput name='order_info' value={pgwData.order_info} />
         <PgwInput name='order_items' value={pgwData.order_items} />
         <PgwInput name='signature' value={pgwData.signature} />
-      </form> */}
+      </form>
     </div>
   )
 }
 
-// const PgwInput = (name: string, value: string) => {
-//   return <input type='hidden' name={`pgw_${name}`} value={value} />
-// }
+const PgwInput = (name: string, value: string) => {
+  return <input type='hidden' name={`pgw_${name}`} value={value} />
+}
 
 export default Cart
