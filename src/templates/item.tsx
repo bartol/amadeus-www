@@ -12,10 +12,21 @@ import {
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { CartContext, I18nContext } from '../state/global'
 import Layout from '../components/layout'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+
+const ITEM_QUERY = gql`
+  query($id: ID!) {
+    item(id: $id) {
+      price
+      quantity
+      availability
+    }
+  }
+`
 
 const Item: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
-  const { item } = data.amadeus
   const {
     name,
     price,
@@ -24,10 +35,25 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
     availability,
     optimizedImages: images,
     id,
-  } = item
+  } = data.amadeus.item
 
   const { addToCart, getQuantity } = useContext(CartContext)
   const { currencyConversion } = useContext(I18nContext)
+
+  const { data: runTimeData } = useQuery(ITEM_QUERY, {
+    fetchPolicy: 'cache-and-network',
+    variables: { id },
+  })
+  const runTimeItem = runTimeData ? runTimeData.item : {}
+
+  const addToCartItem = {
+    name,
+    price: runTimeItem.price || price,
+    quantity: runTimeItem.quantity || quantity,
+    availability: runTimeItem.availability || availability,
+    image: images[0],
+    id,
+  }
 
   return (
     <Layout language={language}>
@@ -77,10 +103,10 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
         </div>
         <div className='lg:w-2/5'>
           <h1>{name}</h1>
-          <h2>{currencyConversion(price)}</h2>
-          <h3>{getQuantity(id, quantity)}</h3>
-          <h3>{availability}</h3>
-          <button type='button' onClick={() => addToCart(item)}>
+          <h2>{currencyConversion(runTimeItem.price || price)}</h2>
+          <h3>{getQuantity(id, runTimeItem.quantity || quantity)}</h3>
+          <h3>{runTimeItem.availability || availability}</h3>
+          <button type='button' onClick={() => addToCart(addToCartItem)}>
             Add to cart
           </button>
         </div>
