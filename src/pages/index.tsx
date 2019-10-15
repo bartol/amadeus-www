@@ -7,39 +7,55 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import Banner from '../components/banner'
 
-const APOLLO_QUERY = gql`
+const ITEM_QUERY = gql`
   {
-    exchangeRates {
-      HRK
-      EUR
-      BAM
-      RSD
-      USD
-      GBP
+    items {
+      id
+      price
+      quantity
+      availability
     }
   }
 `
 
 const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
-  const { items, banners } = data.amadeus
 
-  const { data: apollodata } = useQuery(APOLLO_QUERY)
+  const { items: buildTimeItems, banners } = data.amadeus
+
+  const { data: runTimeData } = useQuery(ITEM_QUERY, {
+    fetchPolicy: 'cache-and-network',
+  })
+  const runTimeItems = runTimeData ? runTimeData.items : []
+
   return (
     <Layout language={language}>
       <Banner banners={banners} />
       <ul className='flex mb-4'>
-        <div hidden>{JSON.stringify(apollodata)}</div>
-        {items.map(item => {
-          const { name, price, slug, optimizedImages } = item
+        {buildTimeItems.map(item => {
+          const runTimeItem = runTimeItems.length
+            ? runTimeItems.find(i => i.id === item.id)
+            : {}
+          const {
+            name,
+            price,
+            quantity,
+            slug,
+            optimizedImages,
+            id,
+            availability,
+          } = item
           return (
             <Card
               name={name}
               slug={slug}
-              price={price}
+              price={runTimeItem.price || price}
+              quantity={runTimeItem.quantity || quantity}
+              availability={runTimeItem.availability || availability}
               optimizedImage={optimizedImages[0]}
-              item={item}
-              key={slug}
+              optimizedImages={optimizedImages}
+              id={id}
+              key={id}
               language={language}
             />
           )
@@ -60,6 +76,7 @@ export const query = graphql`
         slug
         id
         quantity
+        availability
         images
         optimizedImages {
           childImageSharp {

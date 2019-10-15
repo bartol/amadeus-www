@@ -3,9 +3,27 @@ import Image from 'gatsby-image'
 import React, { useContext } from 'react'
 import { CartContext, I18nContext } from '../state/global'
 
-const Card = ({ name, slug, price, optimizedImage, item, language }) => {
-  const { addToCart } = useContext(CartContext)
+const Card = ({
+  name,
+  slug,
+  price,
+  quantity,
+  availability,
+  optimizedImage,
+  language,
+  id,
+}) => {
+  const { addToCart, getQuantity } = useContext(CartContext)
   const { currencyConversion } = useContext(I18nContext)
+
+  const addToCartItem = {
+    name,
+    price,
+    quantity,
+    availability,
+    image: optimizedImage,
+    id,
+  }
 
   return (
     <li
@@ -24,8 +42,9 @@ const Card = ({ name, slug, price, optimizedImage, item, language }) => {
         />
         <h2 className='text-2xl'>{name}</h2>
         <h3 className='text-xl'>{currencyConversion(price)}</h3>
+        <h3 className='text-xl'>{getQuantity(id, quantity)}</h3>
       </Link>
-      <button type='button' onClick={() => addToCart(item)}>
+      <button type='button' onClick={() => addToCart(addToCartItem)}>
         add to cart
       </button>
     </li>
