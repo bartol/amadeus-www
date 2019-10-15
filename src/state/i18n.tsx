@@ -1,9 +1,8 @@
 import React, { useState, createContext } from 'react'
 import { navigate } from '@reach/router'
+import { isBrowser } from '../helpers/isBrowser'
 
 export const I18nContext = createContext()
-
-export const isBrowser = () => typeof window !== 'undefined'
 
 export const I18nProvider = ({ children }) => {
   const [currency, setCurrency] = useState(
