@@ -7,7 +7,7 @@ const Header = ({ language }) => {
   const { currency, changeLanguage, changeCurrency } = useContext(I18nContext)
 
   return (
-    <nav className='container mx-auto flex justify-between'>
+    <nav className='container mx-auto flex justify-between my-4'>
       <Link to={language === 'hr' ? '/' : `/${language}/`}>
         <h1 className='text-3xl'>Amadeus</h1>
       </Link>
