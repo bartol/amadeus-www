@@ -1,11 +1,12 @@
+import React, { useContext } from 'react'
 import { graphql } from 'gatsby'
-import React from 'react'
 import Card from '../components/card'
 import Layout from '../components/layout'
 import '../styles/custom.css'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import Banner from '../components/banner'
+import { SearchContext } from '../state/global'
 
 const ITEM_QUERY = gql`
   {
@@ -20,8 +21,9 @@ const ITEM_QUERY = gql`
 
 const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
+  const { results } = useContext(SearchContext)
 
-  const { items: buildTimeItems, banners } = data.amadeus
+  const { banners } = data.amadeus
 
   const { data: runTimeData } = useQuery(ITEM_QUERY, {
     fetchPolicy: 'cache-and-network',
@@ -32,10 +34,7 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
     <Layout language={language}>
       <Banner banners={banners} />
       <ul className='flex mb-4'>
-        {buildTimeItems.map(item => {
-          const runTimeItem = runTimeItems.length
-            ? runTimeItems.find(i => i.id === item.id)
-            : {}
+        {results.map(item => {
           const {
             name,
             price,
@@ -44,7 +43,12 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
             optimizedImages,
             id,
             availability,
-          } = item
+          } = item.item || item
+
+          const runTimeItem = runTimeItems.length
+            ? runTimeItems.find(i => i.id === id)
+            : {}
+
           return (
             <Card
               name={name}

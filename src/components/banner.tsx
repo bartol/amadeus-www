@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Image from 'gatsby-image'
 import {
   CarouselProvider,
@@ -9,15 +9,17 @@ import {
   ButtonNext,
 } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
+import { SearchContext } from '../state/global'
 
 const Banner: React.FC<Props> = ({ banners }) => {
   const {
     optimizedDesktop: desktopImages,
     optimizedMobile: mobileImages,
   } = banners
+  const { query } = useContext(SearchContext)
 
   return (
-    <div className='w-full'>
+    <div className='w-full' hidden={!!query}>
       <CarouselProvider
         naturalSlideWidth={3}
         naturalSlideHeight={1}
