@@ -25,10 +25,6 @@ export const SearchProvider = ({ children }) => {
       { name: 'category', weight: 0.75 },
       { name: 'description', weight: 0.75 },
       { name: 'id', weight: 0.5 },
-      { name: 'price', weight: 0.5 },
-      { name: 'quantity', weight: 0.5 },
-      { name: 'availability', weight: 0.5 },
-      { name: 'slug', weight: 0.5 },
     ],
   }
 
