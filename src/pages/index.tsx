@@ -21,7 +21,14 @@ const ITEM_QUERY = gql`
 
 const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
-  const { results } = useContext(SearchContext)
+  const {
+    results,
+    category,
+    categories,
+    allCategories,
+    setCategory,
+    query,
+  } = useContext(SearchContext)
 
   const { banners } = data.amadeus
 
@@ -33,38 +40,101 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
   return (
     <Layout language={language}>
       <Banner banners={banners} />
-      <ul className='flex mb-4'>
-        {results.map(item => {
-          const {
-            name,
-            price,
-            quantity,
-            slug,
-            optimizedImages,
-            id,
-            availability,
-          } = item.item || item
+      <div className='flex'>
+        <ul className='w-1/6'>
+          {query
+            ? categories.map(({ value, count }) => {
+                return (
+                  <li
+                    key={value}
+                    onClick={() => setCategory(category === value ? '' : value)}
+                    style={{
+                      backgroundColor:
+                        category === value ? 'rebeccapurple' : null,
+                    }}
+                  >
+                    {value} ({count})
+                  </li>
+                )
+              })
+            : allCategories.map(value => {
+                return (
+                  <li
+                    key={value}
+                    onClick={() => setCategory(category === value ? '' : value)}
+                    style={{
+                      backgroundColor:
+                        category === value ? 'rebeccapurple' : null,
+                    }}
+                  >
+                    {value}
+                  </li>
+                )
+              })}
+        </ul>
+        <ul className='flex flex-wrap mb-4 w-5/6'>
+          {results.map(item => {
+            const {
+              name,
+              price,
+              quantity,
+              slug,
+              optimizedImages,
+              id,
+              availability,
+            } = item.item || item
 
-          const runTimeItem = runTimeItems.length
-            ? runTimeItems.find(i => i.id === id)
-            : {}
+            const runTimeItem = runTimeItems.length
+              ? runTimeItems.find(i => i.id === id)
+              : {}
 
-          return (
-            <Card
-              name={name}
-              slug={slug}
-              price={runTimeItem.price || price}
-              quantity={runTimeItem.quantity || quantity}
-              availability={runTimeItem.availability || availability}
-              optimizedImage={optimizedImages[0]}
-              optimizedImages={optimizedImages}
-              id={id}
-              key={id}
-              language={language}
-            />
-          )
-        })}
-      </ul>
+            return (
+              <Card
+                name={name}
+                slug={slug}
+                price={runTimeItem.price || price}
+                quantity={runTimeItem.quantity || quantity}
+                availability={runTimeItem.availability || availability}
+                optimizedImage={optimizedImages[0]}
+                optimizedImages={optimizedImages}
+                id={id}
+                key={id}
+                language={language}
+              />
+            )
+          })}
+          {results.map(item => {
+            const {
+              name,
+              price,
+              quantity,
+              slug,
+              optimizedImages,
+              id,
+              availability,
+            } = item.item || item
+
+            const runTimeItem = runTimeItems.length
+              ? runTimeItems.find(i => i.id === id)
+              : {}
+
+            return (
+              <Card
+                name={name}
+                slug={slug}
+                price={runTimeItem.price || price}
+                quantity={runTimeItem.quantity || quantity}
+                availability={runTimeItem.availability || availability}
+                optimizedImage={optimizedImages[0]}
+                optimizedImages={optimizedImages}
+                id={id}
+                key={id}
+                language={language}
+              />
+            )
+          })}
+        </ul>
+      </div>
     </Layout>
   )
 }
@@ -84,8 +154,8 @@ export const query = graphql`
         images
         optimizedImages {
           childImageSharp {
-            fixed(width: 240, height: 180) {
-              ...GatsbyImageSharpFixed_withWebp_tracedSVG
+            fluid(maxWidth: 240, maxHeight: 180) {
+              ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
         }
@@ -130,7 +200,7 @@ interface Item {
 
 interface OptimizedImage {
   childImageSharp: {
-    fixed: {
+    fluid: {
       tracedSVG: string
       width: number
       height: number
