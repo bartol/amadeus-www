@@ -135,6 +135,7 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
           })}
         </ul>
       </div>
+      {query && !results.length ? <h2>No results</h2> : null}
     </Layout>
   )
 }
