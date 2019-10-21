@@ -20,7 +20,7 @@ const Layout = ({ children, language }) => {
         }
         items {
           name
-          # category
+          category
           description
           id
           price
@@ -30,8 +30,8 @@ const Layout = ({ children, language }) => {
           images
           optimizedImages {
             childImageSharp {
-              fixed(width: 240, height: 180) {
-                ...GatsbyImageSharpFixed_withWebp_tracedSVG
+              fluid(maxWidth: 240, maxHeight: 180) {
+                ...GatsbyImageSharpFluid_withWebp_tracedSVG
               }
             }
           }
