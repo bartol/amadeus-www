@@ -16,7 +16,7 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 const ITEM_QUERY = gql`
-  query($id: ID!) {
+  query ItemQuery($id: ID!) {
     item(id: $id) {
       price
       quantity
