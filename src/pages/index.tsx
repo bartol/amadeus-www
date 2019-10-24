@@ -8,8 +8,8 @@ import gql from 'graphql-tag'
 import Banner from '../components/banner'
 import { SearchContext } from '../state/global'
 
-const ITEM_QUERY = gql`
-  {
+const ITEMS_QUERY = gql`
+  query ItemsQuery {
     items {
       id
       price
@@ -32,7 +32,7 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
 
   const { banners } = data.amadeus
 
-  const { data: runTimeData } = useQuery(ITEM_QUERY, {
+  const { data: runTimeData } = useQuery(ITEMS_QUERY, {
     fetchPolicy: 'cache-and-network',
   })
   const runTimeItems = runTimeData ? runTimeData.items : []
