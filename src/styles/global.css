@@ -13,19 +13,3 @@
 .dot-image:disabled {
   @apply shadow-outline;
 }
-
-/* desktop & mobile banner switching */
-
-.mobileBanner {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .desktopBanner {
-    display: none;
-  }
-
-  .mobileBanner {
-    display: block;
-  }
-}
