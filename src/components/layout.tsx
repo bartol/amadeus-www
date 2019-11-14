@@ -20,14 +20,17 @@ const Layout = ({ children, language }) => {
         }
         items {
           name
-          category
           description
           id
           price
+          discountedPrice
+          type
+          brand
           quantity
           availability
           slug
           images
+          hidden
           optimizedImages {
             childImageSharp {
               fluid(maxWidth: 240, maxHeight: 180) {

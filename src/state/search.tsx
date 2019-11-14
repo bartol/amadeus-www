@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { navigate } from '@reach/router'
-import Fuse from 'fuse.js'
+import * as Fuse from 'fuse.js'
 import { urlToState } from '../helpers/urlToState'
 import { stateToUrl } from '../helpers/stateToUrl'
 import { isBrowser } from '../helpers/isBrowser'
@@ -20,10 +20,58 @@ const options = {
   minMatchCharLength: 2,
   keys: [
     { name: 'name', weight: 1 },
-    { name: 'category', weight: 0.75 },
-    { name: 'description', weight: 0.75 },
-    { name: 'id', weight: 0.5 },
+    { name: 'id', weight: 1 },
+    { name: 'category', weight: 0.85 },
+    { name: 'description', weight: 0.7 },
   ],
+}
+
+const calculateCategories = results => {
+  const allItemsCategories = results.map(item => {
+    const { type, brand, price } = item.item || item
+    return { type, brand, price }
+  })
+
+  const brand = []
+  const type = []
+  const price = {
+    min: 0,
+    max: 0,
+  }
+  allItemsCategories.forEach(itemCategory => {
+    const { type: itemType, brand: itemBrand, price: itemPrice } = itemCategory
+
+    const brandIndex = brand.findIndex(b => b.value === itemBrand)
+
+    if (brandIndex === -1) {
+      brand.push({
+        value: itemBrand,
+        count: 1,
+      })
+    } else {
+      brand[brandIndex].count++
+    }
+
+    const typeIndex = type.findIndex(t => t.value === itemType)
+
+    if (typeIndex === -1) {
+      type.push({
+        value: itemType,
+        count: 1,
+      })
+    } else {
+      type[typeIndex].count++
+    }
+
+    if (!price.min || itemPrice < price.min) price.min = itemPrice
+    if (!price.max || itemPrice > price.max) price.max = itemPrice
+  })
+
+  return {
+    brand,
+    type,
+    price,
+  }
 }
 
 export const SearchProvider = ({ children }) => {
@@ -32,112 +80,62 @@ export const SearchProvider = ({ children }) => {
 
   const [allResults, setAllResults] = useState([])
   const [results, setResults] = useState([])
-  const [allCategories, setAllCategories] = useState([])
-  const [categories, setCategories] = useState([])
-  const [query, setQuery] = useState(urlToState(location).q)
-  const [category, setCategory] = useState(urlToState(location).category)
-  const [sort, setSort] = useState(urlToState(location).sort)
+  const [query, setQuery] = useState(urlToState(location))
+  const [allCategories, setAllCategories] = useState({
+    brand: [],
+    type: [],
+    price: { min: 0, max: 0 },
+  })
+  const defaultCategories = {
+    brand: '',
+    type: '',
+    price: { min: 0, max: 0 },
+  }
+  const [categories, setCategories] = useState(defaultCategories)
+  const [sort, setSort] = useState('recent')
   const [debouncedSetResults, setDebouncedSetResults] = useState(null)
 
+  const fuse = new Fuse(allResults, options)
+
   useEffect(() => {
-    // if (sort === 'popular') {
-    //   allResults.sort((a, b) => {
-    //     return b.fields.views - a.fields.views
-    //   })
-    // } else if (sort === 'oldest') {
-    //   allResults.sort((a, b) => {
-    //     return a.fields.timestamp - b.fields.timestamp
-    //   })
-    // } else if (sort === 'alphabetical') {
-    //   allResults.sort((a, b) => {
-    //     return a.frontmatter.title.localeCompare(b.frontmatter.title)
-    //   })
-    // } else if (sort === 'unalphabetical') {
-    //   allResults.sort((a, b) => {
-    //     return b.frontmatter.title.localeCompare(a.frontmatter.title)
-    //   })
-    // } else {
-    //   allResults.sort((a, b) => {
-    //     return b.fields.timestamp - a.fields.timestamp
-    //   })
-    // }
+    setResults(query ? fuse.search(query) : allResults)
+    if (categories.brand || categories.type || categories.price) {
+      setCategories(defaultCategories)
+    }
+  }, [allResults, query])
 
-    const filtered = category
-      ? allResults.filter(result => result.category.includes(category))
-      : []
+  useEffect(() => {
+    console.log(categories)
+    // handle categories
+  }, [categories])
 
-    const list = filtered.length ? filtered : allResults
+  useEffect(() => {
+    setAllCategories(calculateCategories(results))
+  }, [results])
 
-    const fuse = new Fuse(list, options)
-
-    setResults(query ? fuse.search(query) : list)
-  }, [allResults, query, category, sort])
-
-  const params = {
-    query,
-    category,
-    sort,
-  }
-
+  // update url
   useEffect(() => {
     clearTimeout(debouncedSetResults)
 
     setDebouncedSetResults(
       setTimeout(() => {
-        navigate(stateToUrl(location, params), {
+        navigate(stateToUrl(location, { query }), {
           replace: true,
         })
       }, DEBOUNCE_TIME)
     )
   }, [query])
 
-  useEffect(() => {
-    navigate(stateToUrl(location, params), {
-      replace: true,
-    })
-  }, [category, sort])
-
-  useEffect(() => {
-    const allItemsCategories = results.map(item => {
-      const itemNormalized = item.item || item
-      return itemNormalized.category
-    })
-
-    const filteredCategories = []
-    allItemsCategories.forEach(itemCategories => {
-      itemCategories.forEach(category => {
-        const match = filteredCategories.filter(c => c.value === category)
-        if (match.length) {
-          return match[0].count++
-        }
-
-        filteredCategories.push({
-          value: category,
-          count: 1,
-        })
-      })
-    })
-
-    setCategories(filteredCategories)
-  }, [query])
-
-  useEffect(() => {
-    const allItemsCategories = allResults.map(item => item.category)
-
-    setAllCategories([...new Set([].concat(...allItemsCategories))])
-  }, [allResults])
-
   return (
     <SearchContext.Provider
       value={{
         setAllResults,
         results,
-        allCategories,
-        categories,
         query,
         setQuery,
-        category,
-        setCategory,
+        allCategories,
+        categories,
+        setCategories,
         sort,
         setSort,
       }}
