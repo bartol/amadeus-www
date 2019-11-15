@@ -98,7 +98,7 @@ export const SearchProvider = ({ children }) => {
   const fuse = new Fuse(allResults, options)
 
   useEffect(() => {
-    setResults(query ? fuse.search(query) : allResults)
+    setResults(query ? fuse.search(query).map(i => i.item) : allResults)
     if (categories.brand || categories.type || categories.price) {
       setCategories(defaultCategories)
     }
