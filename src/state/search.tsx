@@ -105,8 +105,36 @@ export const SearchProvider = ({ children }) => {
   }, [allResults, query])
 
   useEffect(() => {
-    console.log(categories)
-    // handle categories
+    const { type, brand, price } = categories
+    const data = results.map(result => {
+      // console.log(result.name, 'has type', type === result.type)
+      // console.log(result.name, 'has brand', brand === result.brand)
+      // console.log(
+      // result.name,
+      // 'is in price range',
+      // price.min < result.price && price.max > result.price
+      // )
+
+      if (
+        (type && type !== result.type) ||
+        (brand && brand !== result.brand) ||
+        (price.min && price.min > result.price) ||
+        (price.max && price.max < result.price)
+      ) {
+        result.hidden = true
+      } else {
+        result.hidden = false
+      }
+
+      return result
+    })
+    // data.forEach(d => {
+    // console.log(d.name, 'is hidden', d.hidden)
+    // })
+    // console.log('')
+    // console.log('')
+    // console.log('')
+    setResults(data)
   }, [categories])
 
   useEffect(() => {
