@@ -1,14 +1,7 @@
 import React, { useContext } from 'react'
 import { graphql } from 'gatsby'
 import Image from 'gatsby-image'
-import {
-  CarouselProvider,
-  Dot,
-  Slide,
-  Slider,
-  ButtonBack,
-  ButtonNext,
-} from 'pure-react-carousel'
+import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { CartContext, I18nContext } from '../state/global'
 import Layout from '../components/layout'
@@ -79,15 +72,13 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
                 )
               })}
             </Slider>
-            <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
             <nav>
               {images.map((image, index) => {
                 return (
                   <Dot
                     slide={index}
                     key={index}
-                    className='focus:outline-none mx-1 dot-image'
+                    className='focus:outline-none m-1 dot-image'
                   >
                     <Image
                       fixed={image.childImageSharp.fixed}

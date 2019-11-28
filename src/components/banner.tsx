@@ -1,14 +1,7 @@
 import React, { useContext } from 'react'
 import Image from 'gatsby-image'
 import { useMediaQuery } from 'react-responsive'
-import {
-  CarouselProvider,
-  Dot,
-  Slide,
-  Slider,
-  ButtonBack,
-  ButtonNext,
-} from 'pure-react-carousel'
+import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { SearchContext } from '../state/global'
 
@@ -46,8 +39,6 @@ const Banner: React.FC<Props> = ({ banners }) => {
               )
             })}
           </Slider>
-          <ButtonBack>Back</ButtonBack>
-          <ButtonNext>Next</ButtonNext>
           <nav>
             {desktopImages.map((image, index) => {
               return (
@@ -84,8 +75,6 @@ const Banner: React.FC<Props> = ({ banners }) => {
               )
             })}
           </Slider>
-          <ButtonBack>Back</ButtonBack>
-          <ButtonNext>Next</ButtonNext>
           <nav>
             {mobileImages.map((image, index) => {
               return (
