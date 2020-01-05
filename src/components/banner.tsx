@@ -1,21 +1,18 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Image from 'gatsby-image'
-import { useMediaQuery } from 'react-responsive'
+import { isBrowser } from '../helpers/isBrowser'
 import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
-import { SearchContext } from '../state/global'
 
-const Banner: React.FC<Props> = ({ banners }) => {
+const Banner: React.FC = ({ banners }) => {
   const {
     optimizedDesktop: desktopImages,
     optimizedMobile: mobileImages,
   } = banners
-  const { query } = useContext(SearchContext)
-  const isDesktop = useMediaQuery({ query: '(min-width: 767px)' })
 
   return (
-    <div className='w-full' hidden={!!query}>
-      {isDesktop ? (
+    <div className='w-full'>
+      {isBrowser() && window.innerWidth > 767 ? (
         <CarouselProvider
           naturalSlideWidth={3}
           naturalSlideHeight={1}
