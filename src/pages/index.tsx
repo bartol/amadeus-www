@@ -41,7 +41,7 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
 
   return (
     <Layout language={language}>
-      <Banner banners={banners} />
+      {!query && <Banner banners={banners} />}
       <div className='flex'>
         {!query && (
           <div className='w-1/6'>
