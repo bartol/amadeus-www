@@ -44,10 +44,19 @@ exports.createResolvers = ({
 
   createResolvers({
     Amadeus_Item: {
+      hidden: {
+        type: 'Boolean!',
+        resolve: () => false,
+      },
+    },
+  })
+
+  createResolvers({
+    Amadeus_Item: {
       optimizedImages: {
         type: '[File!]!',
         resolve: (source, _args, _context, _info) => {
-          return source.images.map(url => {
+          return source.images.map(({ src: url }) => {
             return createRemoteFileNode({
               url,
               store,
@@ -104,6 +113,11 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       amadeus {
         items {
           slug
+          type {
+            hr
+            en
+          }
+          brand
           id
         }
       }
@@ -117,10 +131,10 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const { items } = query.data.amadeus
 
   items.forEach(item => {
-    const { slug, id } = item
+    const { slug, type, id } = item
 
     actions.createPage({
-      path: `/${slug}/`,
+      path: `/${type.hr.toLowerCase()}/${slug}/`,
       component: require.resolve('./src/templates/item.tsx'),
       context: {
         id,
@@ -129,7 +143,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     })
 
     actions.createPage({
-      path: `/en/${slug}/`,
+      path: `/en/${type.en.toLowerCase()}/${slug}/`,
       component: require.resolve('./src/templates/item.tsx'),
       context: {
         id,

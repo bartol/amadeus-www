@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
-import { CartContext, CheckoutContext } from '../state/global'
+import { CartContext, CheckoutContext, I18nContext } from '../state/global'
 
-const Cart: React.FC = () => {
+const Cart: React.FC = ({ language }) => {
   const {
     itemsInCart,
     removeFromCart,
     incrementQuantity,
     decrementQuantity,
   } = useContext(CartContext)
+  const { currencyConversion } = useContext(I18nContext)
 
   const { pgwData } = useContext(CheckoutContext)
   return (
@@ -16,7 +17,8 @@ const Cart: React.FC = () => {
         {itemsInCart.map(item => {
           return (
             <li key={item.id}>
-              <h3>{item.name}</h3>
+              <h3>{item.name[language]}</h3>
+              <p>{currencyConversion(item.price)}</p>
               <p>{item.quantity}</p>
               <button type='button' onClick={() => removeFromCart(item.id)}>
                 remove from cart

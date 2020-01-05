@@ -5,11 +5,11 @@ import Footer from './footer'
 import Header from './header'
 import Cart from '../components/cart'
 
-const Layout = ({ children, language }) => {
+const Layout = ({ children, language, newUrl }) => {
   const { setExchangeRatesData } = useContext(I18nContext)
-  const { setAllResults } = useContext(SearchContext)
+  const { setAllResults, setLanguage } = useContext(SearchContext)
   const data = useStaticQuery(graphql`
-    {
+    query staticQuery {
       amadeus {
         exchangeRates {
           EUR
@@ -19,17 +19,32 @@ const Layout = ({ children, language }) => {
           GBP
         }
         items {
-          name
-          description
+          name {
+            hr
+            en
+          }
+          description {
+            hr
+            en
+          }
           id
           price
           discountedPrice
-          type
+          type {
+            hr
+            en
+          }
           brand
           quantity
-          availability
+          availability {
+            hr
+            en
+          }
           slug
-          images
+          images {
+            src
+            index
+          }
           hidden
           optimizedImages {
             childImageSharp {
@@ -45,13 +60,14 @@ const Layout = ({ children, language }) => {
   const { exchangeRates, items } = data.amadeus
   setExchangeRatesData(exchangeRates)
   setAllResults(items)
+  setLanguage(language)
 
   return (
     <div className='text-gray-900 leading-normal'>
-      <Header language={language} />
+      <Header language={language} newUrl={newUrl} />
       <main className='container mx-auto'>{children}</main>
       <Footer />
-      <Cart />
+      <Cart language={language} />
     </div>
   )
 }

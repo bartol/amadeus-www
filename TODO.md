@@ -33,8 +33,8 @@
 - [ ] handle newsletter unsubscribes (only with email and hash or logged in)
 
 ### Admin
-- [ ] implement cognito auth checking for CRUD actions
-- [ ] update item
+- [x] implement cognito auth checking for CRUD actions
+- [x] update item
 - [ ] create item
 - [ ] delete item
 

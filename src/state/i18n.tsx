@@ -11,13 +11,18 @@ export const I18nProvider = ({ children }) => {
   )
   const [exchangeRatesData, setExchangeRatesData] = useState({})
 
-  const changeLanguage = (_language: string) => {
-    navigate(
-      isBrowser() && window.location.pathname.startsWith('/en/')
-        ? window.location.pathname.slice(3)
-        : `/en${window.location.pathname}`,
-      { replace: true }
-    )
+  const changeLanguage = (url: string) => {
+    if (isBrowser()) {
+      const { pathname } = window.location
+      if (url) {
+        navigate(url, { replace: true })
+      } else {
+        navigate(
+          pathname.startsWith('/en') ? pathname.slice(3) : `/en${pathname}`,
+          { replace: true }
+        )
+      }
+    }
   }
 
   const changeCurrency = (currency: string) => {

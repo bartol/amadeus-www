@@ -10,7 +10,7 @@ export const stateToUrl = (location, params) => {
   if (category) {
     state.category = category
   }
-  if (sort !== 'relevance') {
+  if (sort && sort !== 'recent') {
     state.sort = sort
   }
 
