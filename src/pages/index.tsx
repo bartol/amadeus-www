@@ -41,7 +41,9 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
 
   return (
     <Layout language={language}>
-      {!query && <Banner banners={banners} />}
+      <section className='w-full' hidden={!!query}>
+        <Banner banners={banners} />
+      </section>
       <div className='flex'>
         {!query && (
           <div className='w-1/6'>
@@ -180,8 +182,8 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
           })}
         </ul>
       </div>
-      {/* <pre>{JSON.stringify(allCategories, null, 2)}</pre> */}
-      {/* <pre>{JSON.stringify(categories, null, 2)}</pre> */}
+      <pre>{JSON.stringify(allCategories, null, 2)}</pre>
+      <pre>{JSON.stringify(categories, null, 2)}</pre>
       {query && !results.length ? <h2>No results</h2> : null}
     </Layout>
   )
