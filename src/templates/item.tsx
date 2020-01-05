@@ -13,7 +13,10 @@ const ITEM_QUERY = gql`
     item(id: $id) {
       price
       quantity
-      availability
+      availability {
+        hr
+        en
+      }
     }
   }
 `
@@ -22,6 +25,8 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
   const {
     name,
+    type,
+    slug,
     price,
     description,
     quantity,
@@ -49,7 +54,14 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
   }
 
   return (
-    <Layout language={language}>
+    <Layout
+      language={language}
+      newUrl={
+        language === 'hr'
+          ? `/en/${type.en.toLowerCase()}/${slug}/`
+          : `/${type.hr.toLowerCase()}/${slug}/`
+      }
+    >
       <div className='flex'>
         <div className='lg:w-3/5 pr-4'>
           <CarouselProvider
@@ -93,16 +105,20 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
           </CarouselProvider>
         </div>
         <div className='lg:w-2/5'>
-          <h1>{name}</h1>
+          <h1>{name[language]}</h1>
           <h2>{currencyConversion(runTimeItem.price || price)}</h2>
           <h3>{getQuantity(id, runTimeItem.quantity || quantity)}</h3>
-          <h3>{runTimeItem.availability || availability}</h3>
+          <h3>
+            {runTimeItem.availability
+              ? runTimeItem.availability[language]
+              : availability[language]}
+          </h3>
           <button type='button' onClick={() => addToCart(addToCartItem)}>
             Add to cart
           </button>
         </div>
       </div>
-      <article>{description}</article>
+      <article dangerouslySetInnerHTML={{ __html: description[language] }} />
     </Layout>
   )
 }
@@ -113,9 +129,21 @@ export const pageQuery = graphql`
   query($id: ID!) {
     amadeus {
       item(id: $id) {
-        name
+        name {
+          hr
+          en
+        }
         price
-        images
+        slug
+        type {
+          hr
+          en
+        }
+        images {
+          src
+          index
+        }
+        hidden
         optimizedImages {
           childImageSharp {
             fluid(maxWidth: 800, maxHeight: 600) {
@@ -126,9 +154,15 @@ export const pageQuery = graphql`
             }
           }
         }
-        description
+        description {
+          hr
+          en
+        }
         quantity
-        availability
+        availability {
+          hr
+          en
+        }
         id
       }
     }

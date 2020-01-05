@@ -3,13 +3,16 @@ import { Link } from 'gatsby'
 import { header } from '../locales'
 import { I18nContext, SearchContext } from '../state/global'
 
-const Header = ({ language }) => {
+const Header = ({ language, newUrl }) => {
   const { currency, changeLanguage, changeCurrency } = useContext(I18nContext)
   const { query, setQuery } = useContext(SearchContext)
 
   return (
     <nav className='container mx-auto flex justify-between my-4'>
-      <Link to={language === 'hr' ? '/' : `/${language}/`}>
+      <Link
+        to={language === 'hr' ? '/' : `/${language}/`}
+        onClick={() => setQuery('')}
+      >
         <h1 className='text-3xl'>Amadeus</h1>
       </Link>
       <input
@@ -21,13 +24,18 @@ const Header = ({ language }) => {
       />
       <h3 className='text-3xl'>{header[language].cart}</h3>
       <select
-        onChange={e => changeLanguage(e.target.value)}
+        onChange={() => changeLanguage(newUrl)}
         defaultValue={language}
+        className='form-select'
       >
         <option value='hr'>Hrvatski</option>
         <option value='en'>English</option>
       </select>
-      <select value={currency} onChange={e => changeCurrency(e.target.value)}>
+      <select
+        value={currency}
+        onChange={e => changeCurrency(e.target.value)}
+        className='form-select'
+      >
         <option value='HRK'>HRK</option>
         <option value='EUR'>EUR</option>
         <option value='BAM'>BAM</option>

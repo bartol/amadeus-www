@@ -9,23 +9,6 @@ export const SearchContext = createContext()
 
 const DEBOUNCE_TIME = 400
 
-const options = {
-  shouldSort: true,
-  includeScore: true,
-  includeMatches: true,
-  threshold: 0.33,
-  location: 0,
-  distance: 100,
-  maxPatternLength: 32,
-  minMatchCharLength: 2,
-  keys: [
-    { name: 'name', weight: 1 },
-    { name: 'id', weight: 1 },
-    { name: 'category', weight: 0.85 },
-    { name: 'description', weight: 0.7 },
-  ],
-}
-
 const calculateCategories = results => {
   const allItemsCategories = results.map(item => {
     const { type, brand, price } = item.item || item
@@ -77,6 +60,7 @@ const calculateCategories = results => {
 export const SearchProvider = ({ children }) => {
   // eslint-disable-next-line no-undef
   const location = isBrowser() ? window.location : undefined
+  const [language, setLanguage] = useState('hr')
 
   const [allResults, setAllResults] = useState([])
   const [results, setResults] = useState([])
@@ -94,6 +78,24 @@ export const SearchProvider = ({ children }) => {
   const [categories, setCategories] = useState(defaultCategories)
   const [sort, setSort] = useState('recent')
   const [debouncedSetResults, setDebouncedSetResults] = useState(null)
+
+  const options = {
+    shouldSort: true,
+    includeScore: true,
+    includeMatches: true,
+    threshold: 0.33,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 2,
+    keys: [
+      { name: `name.${language}`, weight: 1 },
+      { name: 'id', weight: 1 },
+      { name: 'brand', weight: 0.85 },
+      { name: `type.${language}`, weight: 0.85 },
+      { name: `description.${language}`, weight: 0.7 },
+    ],
+  }
 
   const fuse = new Fuse(allResults, options)
 
@@ -116,7 +118,7 @@ export const SearchProvider = ({ children }) => {
       // )
 
       if (
-        (type && type !== result.type) ||
+        (type && type !== result.type[language]) ||
         (brand && brand !== result.brand) ||
         (price.min && price.min > result.price) ||
         (price.max && price.max < result.price)
@@ -166,6 +168,7 @@ export const SearchProvider = ({ children }) => {
         setCategories,
         sort,
         setSort,
+        setLanguage,
       }}
     >
       {children}

@@ -14,7 +14,10 @@ const ITEMS_QUERY = gql`
       id
       price
       quantity
-      availability
+      availability {
+        hr
+        en
+      }
     }
   }
 `
@@ -23,10 +26,9 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
   const {
     results,
-    category,
     categories,
     allCategories,
-    setCategory,
+    setCategories,
     query,
   } = useContext(SearchContext)
 
@@ -41,47 +43,114 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
     <Layout language={language}>
       <Banner banners={banners} />
       <div className='flex'>
-        <ul className='w-1/6'>
-          {query
-            ? categories.map(({ value, count }) => {
+        {!query && (
+          <div className='w-1/6'>
+            <ul>
+              {allCategories.brand.map(({ value, count }) => {
                 return (
                   <li
                     key={value}
-                    onClick={() => setCategory(category === value ? '' : value)}
+                    onClick={() => {
+                      if (categories.brand === value) {
+                        setCategories({
+                          ...categories,
+                          brand: '',
+                        })
+                      } else {
+                        setCategories({
+                          ...categories,
+                          brand: value,
+                        })
+                      }
+                    }}
                     style={{
                       backgroundColor:
-                        category === value ? 'rebeccapurple' : null,
+                        categories.brand === value ? 'rebeccapurple' : null,
                     }}
                   >
                     {value} ({count})
                   </li>
                 )
-              })
-            : allCategories.map(value => {
+              })}
+            </ul>
+          </div>
+        )}
+        {query && (
+          <div className='w-1/6'>
+            <h3 className='text-2xl'>Kategorije</h3>
+            <ul>
+              {allCategories.type.map(({ value, count }) => {
                 return (
                   <li
                     key={value}
-                    onClick={() => setCategory(category === value ? '' : value)}
+                    onClick={() => {
+                      if (categories.type === value[language]) {
+                        setCategories({
+                          ...categories,
+                          type: '',
+                        })
+                      } else {
+                        setCategories({
+                          ...categories,
+                          type: value[language],
+                        })
+                      }
+                    }}
                     style={{
                       backgroundColor:
-                        category === value ? 'rebeccapurple' : null,
+                        categories.type === value[language]
+                          ? 'rebeccapurple'
+                          : null,
                     }}
                   >
-                    {value}
+                    {value[language]} ({count})
                   </li>
                 )
               })}
-        </ul>
+            </ul>
+            <h3 className='text-2xl'>Brendovi</h3>
+            <ul>
+              {allCategories.brand.map(({ value, count }) => {
+                return (
+                  <li
+                    key={value}
+                    onClick={() => {
+                      if (categories.brand === value) {
+                        setCategories({
+                          ...categories,
+                          brand: '',
+                        })
+                      } else {
+                        setCategories({
+                          ...categories,
+                          brand: value,
+                        })
+                      }
+                    }}
+                    style={{
+                      backgroundColor:
+                        categories.brand === value ? 'rebeccapurple' : null,
+                    }}
+                  >
+                    {value} ({count})
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
         <ul className='flex flex-wrap mb-4 w-5/6'>
           {results.map(item => {
             const {
               name,
               price,
+              type,
               quantity,
               slug,
               optimizedImages,
               id,
               availability,
+              hidden,
             } = item.item || item
 
             const runTimeItem = runTimeItems.length
@@ -92,49 +161,27 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
               <Card
                 name={name}
                 slug={slug}
+                type={type}
                 price={runTimeItem.price || price}
                 quantity={runTimeItem.quantity || quantity}
-                availability={runTimeItem.availability || availability}
+                availability={
+                  runTimeItem.availability
+                    ? runTimeItem.availability[language]
+                    : availability[language]
+                }
                 optimizedImage={optimizedImages[0]}
                 optimizedImages={optimizedImages}
                 id={id}
                 key={id}
                 language={language}
-              />
-            )
-          })}
-          {results.map(item => {
-            const {
-              name,
-              price,
-              quantity,
-              slug,
-              optimizedImages,
-              id,
-              availability,
-            } = item.item || item
-
-            const runTimeItem = runTimeItems.length
-              ? runTimeItems.find(i => i.id === id)
-              : {}
-
-            return (
-              <Card
-                name={name}
-                slug={slug}
-                price={runTimeItem.price || price}
-                quantity={runTimeItem.quantity || quantity}
-                availability={runTimeItem.availability || availability}
-                optimizedImage={optimizedImages[0]}
-                optimizedImages={optimizedImages}
-                id={id}
-                key={id}
-                language={language}
+                hidden={hidden}
               />
             )
           })}
         </ul>
       </div>
+      {/* <pre>{JSON.stringify(allCategories, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(categories, null, 2)}</pre> */}
       {query && !results.length ? <h2>No results</h2> : null}
     </Layout>
   )
@@ -146,13 +193,22 @@ export const query = graphql`
   {
     amadeus {
       items {
-        name
+        name {
+          hr
+          en
+        }
         price
         slug
         id
         quantity
-        availability
-        images
+        availability {
+          hr
+          en
+        }
+        images {
+          src
+          index
+        }
         optimizedImages {
           childImageSharp {
             fluid(maxWidth: 240, maxHeight: 180) {

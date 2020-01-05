@@ -6,12 +6,14 @@ import { CartContext, I18nContext } from '../state/global'
 const Card = ({
   name,
   slug,
+  type,
   price,
   quantity,
   availability,
   optimizedImage,
   language,
   id,
+  hidden,
 }) => {
   const { addToCart, getQuantity } = useContext(CartContext)
   const { currencyConversion } = useContext(I18nContext)
@@ -25,21 +27,25 @@ const Card = ({
     id,
   }
 
+  if (hidden) return <></>
+
   return (
     <li key={slug} className='w-1/3 p-3 rounded-lg'>
       <div className='w-full h-full rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between'>
         <Link
-          to={`${language === 'hr' ? '/' : `/${language}/`}${slug}/`}
+          to={`${language === 'hr' ? '/' : `/${language}/`}${type[
+            language
+          ].toLowerCase()}/${slug}/`}
           className='flex-grow'
         >
           <div className='p-3'>
             <Image
               fluid={optimizedImage.childImageSharp.fluid}
               key={optimizedImage.childImageSharp.fluid.src}
-              alt={`${name} image`} // TODO seems like it isn't working
+              alt={`${name[language]} image`}
               fadeIn
             />
-            <h2 className='text-2xl'>{name}</h2>
+            <h2 className='text-2xl'>{name[language]}</h2>
             <h3 className='text-xl'>{currencyConversion(price)}</h3>
             <h3 className='text-xl'>{getQuantity(id, quantity)}</h3>
           </div>
