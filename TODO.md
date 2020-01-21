@@ -19,8 +19,7 @@
 - [ ] add rate info to api and db
 - [ ] add popularity (from 1 to 10)
 - [ ] add guaranty upgrade
-- [ ] add manufactures
-- [ ] short description for each item
+- [x] add manufactures
 
 
 ### Orders
@@ -35,8 +34,8 @@
 ### Admin
 - [x] implement cognito auth checking for CRUD actions
 - [x] update item
-- [ ] create item
-- [ ] delete item
+- [x] create item
+- [x] delete item
 
 
 
