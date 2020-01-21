@@ -15,6 +15,9 @@ const Type: React.FC = ({ data, pageContext }) => {
           : `/${items[0].type.hr.toLowerCase()}/`
       }
     >
+      {items.map(item => (
+        <li>{item.name[language]}</li>
+      ))}
       <pre>{JSON.stringify(items, null, 2)}</pre>
     </Layout>
   )

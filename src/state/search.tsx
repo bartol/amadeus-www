@@ -159,6 +159,7 @@ export const SearchProvider = ({ children }) => {
   return (
     <SearchContext.Provider
       value={{
+        allResults,
         setAllResults,
         results,
         query,

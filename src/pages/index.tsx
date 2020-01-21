@@ -1,5 +1,6 @@
-import React, { useState, useContext } from 'react'
-import { graphql } from 'gatsby'
+import * as React from 'react'
+import { useState, useContext } from 'react'
+import { Link, graphql } from 'gatsby'
 import InfiniteScroll from 'react-infinite-scroller'
 import Card from '../components/card'
 import Layout from '../components/layout'
@@ -30,6 +31,7 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
     categories,
     allCategories,
     setCategories,
+    allResults,
     query,
   } = useContext(SearchContext)
 
@@ -41,6 +43,21 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
     fetchPolicy: 'cache-and-network',
   })
   const runTimeItems = runTimeData ? runTimeData.items : []
+
+  const types = []
+  allResults.forEach(item => {
+    const typeIndex = types.findIndex(t => t.name === item.type[language])
+
+    if (typeIndex === -1) {
+      types.push({
+        name: item.type[language],
+        count: 1,
+      })
+    } else {
+      types[typeIndex].count++
+    }
+  })
+  types.sort((a, b) => b.count - a.count).slice(0, 10)
 
   return (
     <Layout language={language}>
@@ -195,6 +212,19 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
           </InfiniteScroll>
         )}
       </div>
+      <div>
+        {types.map(type => {
+          return (
+            <li key={type.name}>
+              <Link
+                to={`${language === 'hr' ? '/' : `/${language}/`}${type.name}/`}
+              >
+                {type.name} {type.count}
+              </Link>
+            </li>
+          )
+        })}
+      </div>
       <pre>{JSON.stringify(allCategories, null, 2)}</pre>
       <pre>{JSON.stringify(categories, null, 2)}</pre>
       {query && !results.length ? <h2>No results</h2> : null}
@@ -216,6 +246,10 @@ export const query = graphql`
         slug
         id
         quantity
+        type {
+          hr
+          en
+        }
         availability {
           hr
           en
