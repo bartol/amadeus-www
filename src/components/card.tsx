@@ -30,7 +30,10 @@ const Card = ({
   if (hidden) return <></>
 
   return (
-    <li key={slug} className='w-1/3 p-3 rounded-lg'>
+    <li
+      key={slug}
+      className='w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 p-2 rounded-lg'
+    >
       <div className='w-full h-full rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between'>
         <Link
           to={`${language === 'hr' ? '/' : `/${language}/`}${type[

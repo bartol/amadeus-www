@@ -63,9 +63,9 @@ const Layout = ({ children, language, newUrl }) => {
   setLanguage(language)
 
   return (
-    <div className='text-gray-900 leading-normal'>
+    <div className='text-gray-900 leading-normal container mx-auto'>
       <Header language={language} newUrl={newUrl} />
-      <main className='container mx-auto'>{children}</main>
+      <main>{children}</main>
       <Footer />
       <Cart language={language} />
     </div>
