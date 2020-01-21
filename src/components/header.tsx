@@ -8,7 +8,7 @@ const Header = ({ language, newUrl }) => {
   const { query, setQuery } = useContext(SearchContext)
 
   return (
-    <nav className='container mx-auto flex justify-between my-4'>
+    <nav className='flex justify-between my-4'>
       <Link
         to={language === 'hr' ? '/' : `/${language}/`}
         onClick={() => setQuery('')}

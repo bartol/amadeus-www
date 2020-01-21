@@ -1,7 +1,7 @@
-import React from 'react'
+import * as React from 'react'
 
 const Footer = () => {
-  return <footer className='container mx-auto bg-teal-200'>FOOTER</footer>
+  return <footer className='bg-teal-200'>FOOTER</footer>
 }
 
 export default Footer

@@ -168,8 +168,9 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
               setLength(length + 3)
             }}
             hasMore={length < results.length}
+            className='lg:flex-grow'
           >
-            <ul className='flex mb-4 w-5/6'>
+            <ul className='flex flex-wrap -m-2'>
               {results.map(item => {
                 const {
                   name,
@@ -260,7 +261,7 @@ export const query = graphql`
         }
         optimizedImages {
           childImageSharp {
-            fluid(maxWidth: 240, maxHeight: 180) {
+            fluid(maxWidth: 333, maxHeight: 250) {
               ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
@@ -270,7 +271,7 @@ export const query = graphql`
         desktop
         optimizedDesktop {
           childImageSharp {
-            fluid(maxWidth: 1024, maxHeight: 340) {
+            fluid(maxWidth: 1280, maxHeight: 425) {
               ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
@@ -278,7 +279,7 @@ export const query = graphql`
         mobile
         optimizedMobile {
           childImageSharp {
-            fluid(maxWidth: 767, maxHeight: 575) {
+            fluid(maxWidth: 640, maxHeight: 480) {
               ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
