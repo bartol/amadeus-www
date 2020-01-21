@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { graphql } from 'gatsby'
+import InfiniteScroll from 'react-infinite-scroller'
 import Card from '../components/card'
 import Layout from '../components/layout'
 import '../styles/custom.css'
@@ -31,6 +32,8 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
     setCategories,
     query,
   } = useContext(SearchContext)
+
+  const [length, setLength] = useState(4)
 
   const { banners } = data.amadeus
 
@@ -141,46 +144,56 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
             </ul>
           </div>
         )}
-        <ul className='flex flex-wrap mb-4 w-5/6'>
-          {results.map(item => {
-            const {
-              name,
-              price,
-              type,
-              quantity,
-              slug,
-              optimizedImages,
-              id,
-              availability,
-              hidden,
-            } = item.item || item
+        {results.length && (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={() => {
+              setLength(length + 3)
+            }}
+            hasMore={length < results.length}
+          >
+            <ul className='flex mb-4 w-5/6'>
+              {results.map(item => {
+                const {
+                  name,
+                  price,
+                  type,
+                  quantity,
+                  slug,
+                  optimizedImages,
+                  id,
+                  availability,
+                  hidden,
+                } = item.item || item
 
-            const runTimeItem = runTimeItems.length
-              ? runTimeItems.find(i => i.id === id)
-              : {}
+                const runTimeItem = runTimeItems.length
+                  ? runTimeItems.find(i => i.id === id)
+                  : {}
 
-            return (
-              <Card
-                name={name}
-                slug={slug}
-                type={type}
-                price={runTimeItem.price || price}
-                quantity={runTimeItem.quantity || quantity}
-                availability={
-                  runTimeItem.availability
-                    ? runTimeItem.availability[language]
-                    : availability[language]
-                }
-                optimizedImage={optimizedImages[0]}
-                optimizedImages={optimizedImages}
-                id={id}
-                key={id}
-                language={language}
-                hidden={hidden}
-              />
-            )
-          })}
-        </ul>
+                return (
+                  <Card
+                    name={name}
+                    slug={slug}
+                    type={type}
+                    price={runTimeItem.price || price}
+                    quantity={runTimeItem.quantity || quantity}
+                    availability={
+                      runTimeItem.availability
+                        ? runTimeItem.availability[language]
+                        : availability[language]
+                    }
+                    optimizedImage={optimizedImages[0]}
+                    optimizedImages={optimizedImages}
+                    id={id}
+                    key={id}
+                    language={language}
+                    hidden={hidden}
+                  />
+                )
+              })}
+            </ul>
+          </InfiniteScroll>
+        )}
       </div>
       <pre>{JSON.stringify(allCategories, null, 2)}</pre>
       <pre>{JSON.stringify(categories, null, 2)}</pre>

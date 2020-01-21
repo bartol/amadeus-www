@@ -151,4 +151,29 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       },
     })
   })
+
+  const types_hr = [...new Set(items.map(item => item.type.hr))]
+  const types_en = [...new Set(items.map(item => item.type.en))]
+
+  types_hr.map(type => {
+    actions.createPage({
+      path: `/${type}/`,
+      component: require.resolve('./src/templates/type.tsx'),
+      context: {
+        type,
+        language: 'hr',
+      },
+    })
+  })
+
+  types_en.map(type => {
+    actions.createPage({
+      path: `/en/${type}/`,
+      component: require.resolve('./src/templates/type.tsx'),
+      context: {
+        type,
+        language: 'en',
+      },
+    })
+  })
 }
