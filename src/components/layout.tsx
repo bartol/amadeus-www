@@ -64,7 +64,7 @@ const Layout: React.FC<Props> = ({ children, language, newUrl }) => {
   setLanguage(language)
 
   return (
-    <div className='text-gray-900 leading-normal container mx-auto'>
+    <div className='text-gray-900 leading-normal container mx-auto px-4'>
       <Header language={language} newUrl={newUrl} />
       <main>{children}</main>
       <Footer />
