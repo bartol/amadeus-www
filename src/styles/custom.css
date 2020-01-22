@@ -1,21 +1,3 @@
-.btn {
-  @apply font-bold py-2 px-4 rounded;
-}
-
-.btn-blue {
-  @apply bg-blue-500 text-white;
-}
-
-.btn-blue:hover {
-  @apply bg-blue-700;
-}
-
-.test {
-  .nested {
-    @apply bg-blue-700;
-  }
-}
-
 .mobileImages {
   @apply hidden;
 }
@@ -27,5 +9,18 @@
 
   .mobileImages {
     @apply block;
+  }
+}
+
+.type-img {
+  filter: brightness(60%);
+}
+
+/* center on small screens */
+@media screen and (max-width: 639px) {
+  .type-name {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
