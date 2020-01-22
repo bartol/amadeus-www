@@ -1,4 +1,5 @@
-import React, { useState, useEffect, createContext } from 'react'
+import * as React from 'react'
+import { useState, useEffect, createContext } from 'react'
 import { navigate } from '@reach/router'
 import * as Fuse from 'fuse.js'
 import { urlToState } from '../helpers/urlToState'
