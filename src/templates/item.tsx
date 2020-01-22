@@ -62,6 +62,29 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
           : `/${type.hr.toLowerCase()}/${slug}/`
       }
     >
+      <nav>
+        <Link to={language === 'hr' ? `/` : `/en/`}>Home</Link>
+        {' › '}
+        <Link
+          to={
+            language === 'hr'
+              ? `/${type.hr.toLowerCase()}/`
+              : `/${type.en.toLowerCase()}/`
+          }
+        >
+          {type[language]}
+        </Link>
+        {' › '}
+        <Link
+          to={
+            language === 'hr'
+              ? `/${type.hr.toLowerCase()}/${slug}/`
+              : `/en/${type.en.toLowerCase()}/${slug}/`
+          }
+        >
+          {name[language]}
+        </Link>
+      </nav>
       <div className='flex'>
         <div className='lg:w-3/5 pr-4'>
           <CarouselProvider
@@ -70,19 +93,21 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
             totalSlides={images.length}
           >
             <Slider>
-              {images.map((image, index) => {
-                return (
-                  <Slide index={index} key={index}>
-                    <Image
-                      fluid={image.childImageSharp.fluid}
-                      alt={`Image ${index + 1} of ${name}`}
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      className='select-none'
-                      fadeIn
-                    />
-                  </Slide>
-                )
-              })}
+              {images
+                .sort((a, b) => a.index - b.index)
+                .map((image, index) => {
+                  return (
+                    <Slide index={index} key={index}>
+                      <Image
+                        fluid={image.optimized.childImageSharp.fluid}
+                        alt={`Image ${index + 1} of ${name}`}
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        className='select-none'
+                        fadeIn
+                      />
+                    </Slide>
+                  )
+                })}
             </Slider>
             <nav>
               {images.map((image, index) => {
@@ -93,7 +118,7 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
                     className='focus:outline-none m-1 dot-image'
                   >
                     <Image
-                      fixed={image.childImageSharp.fixed}
+                      fixed={image.optimized.childImageSharp.fixed}
                       alt={`Thumbnail ${index + 1} of ${name}`}
                       className='select-none'
                       fadeIn
@@ -142,18 +167,18 @@ export const pageQuery = graphql`
         images {
           src
           index
-        }
-        hidden
-        optimizedImages {
-          childImageSharp {
-            fluid(maxWidth: 800, maxHeight: 600) {
-              ...GatsbyImageSharpFluid_withWebp_tracedSVG
-            }
-            fixed(width: 120, height: 90) {
-              ...GatsbyImageSharpFixed_withWebp_tracedSVG
+          optimized {
+            childImageSharp {
+              fluid(maxWidth: 800, maxHeight: 600) {
+                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+              }
+              fixed(width: 120, height: 90) {
+                ...GatsbyImageSharpFixed_withWebp_tracedSVG
+              }
             }
           }
         }
+        hidden
         description {
           hr
           en
@@ -178,13 +203,30 @@ interface Props {
 }
 
 interface Item {
-  name: string
+  name: {
+    hr: string
+    en: string
+  }
   price: number
-  description: string
+  description: {
+    hr: string
+    en: string
+  }
+  slug: string
+  type: {
+    hr: string
+    en: string
+  }
+  id: string
   quantity: number
   availability: string
-  images: string[]
-  optimizedImages: OptimizedImage[]
+  images: Image[]
+}
+
+interface Image {
+  index: number
+  src: string
+  optimized: OptimizedImage
 }
 
 interface OptimizedImage {

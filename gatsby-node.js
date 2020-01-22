@@ -51,59 +51,25 @@ exports.createResolvers = ({
     },
   })
 
-  createResolvers({
-    Amadeus_Item: {
-      optimizedImages: {
-        type: '[File!]!',
-        resolve: (source, _args, _context, _info) => {
-          return source.images.map(({ src: url }) => {
+  const need_optimization = ['Amadeus_Image', 'Amadeus_Type', 'Amadeus_Banner']
+  need_optimization.forEach(item => {
+    createResolvers({
+      [item]: {
+        optimized: {
+          type: 'File!',
+          resolve: (source, _args, _context, _info) => {
             return createRemoteFileNode({
-              url,
+              url: source.src,
               store,
               cache,
               createNode,
               createNodeId,
               reporter,
             })
-          })
+          },
         },
       },
-    },
-  })
-
-  createResolvers({
-    Amadeus_Banners: {
-      optimizedDesktop: {
-        type: '[File!]!',
-        resolve: (source, _args, _context, _info) => {
-          return source.desktop.map(url => {
-            return createRemoteFileNode({
-              url,
-              store,
-              cache,
-              createNode,
-              createNodeId,
-              reporter,
-            })
-          })
-        },
-      },
-      optimizedMobile: {
-        type: '[File!]!',
-        resolve: (source, _args, _context, _info) => {
-          return source.mobile.map(url => {
-            return createRemoteFileNode({
-              url,
-              store,
-              cache,
-              createNode,
-              createNodeId,
-              reporter,
-            })
-          })
-        },
-      },
-    },
+    })
   })
 }
 
@@ -157,7 +123,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   types_hr.map(type => {
     actions.createPage({
-      path: `/${type}/`,
+      path: `/${type.toLowerCase()}/`,
       component: require.resolve('./src/templates/type.tsx'),
       context: {
         type,
@@ -168,7 +134,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   types_en.map(type => {
     actions.createPage({
-      path: `/en/${type}/`,
+      path: `/en/${type.toLowerCase()}/`,
       component: require.resolve('./src/templates/type.tsx'),
       context: {
         type,

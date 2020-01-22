@@ -1,234 +1,120 @@
 import * as React from 'react'
 import { useState, useContext } from 'react'
 import { Link, graphql } from 'gatsby'
+import Image from 'gatsby-image'
 import InfiniteScroll from 'react-infinite-scroller'
 import Card from '../components/card'
 import Layout from '../components/layout'
 import '../styles/custom.css'
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 import Banner from '../components/banner'
 import { SearchContext } from '../state/global'
-
-const ITEMS_QUERY = gql`
-  query ItemsQuery {
-    items {
-      id
-      price
-      quantity
-      availability {
-        hr
-        en
-      }
-    }
-  }
-`
 
 const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
   const {
     results,
-    categories,
-    allCategories,
-    setCategories,
-    allResults,
-    query,
+    mainListBrand,
+    mainListBrands,
+    mainListResults,
+    setMainListBrand,
   } = useContext(SearchContext)
 
   const [length, setLength] = useState(4)
 
-  const { banners } = data.amadeus
-
-  const { data: runTimeData } = useQuery(ITEMS_QUERY, {
-    fetchPolicy: 'cache-and-network',
-  })
-  const runTimeItems = runTimeData ? runTimeData.items : []
-
-  const types = []
-  allResults.forEach(item => {
-    const typeIndex = types.findIndex(t => t.name === item.type[language])
-
-    if (typeIndex === -1) {
-      types.push({
-        name: item.type[language],
-        count: 1,
-      })
-    } else {
-      types[typeIndex].count++
-    }
-  })
-  types.sort((a, b) => b.count - a.count).slice(0, 10)
+  const { types, banners } = data.amadeus
 
   return (
     <Layout language={language}>
-      <section className='w-full' hidden={!!query}>
-        <Banner banners={banners} />
-      </section>
-      <div className='flex'>
-        {!query && (
-          <div className='w-1/6'>
-            <ul>
-              {allCategories.brand.map(({ value, count }) => {
-                return (
-                  <li
-                    key={value}
-                    onClick={() => {
-                      if (categories.brand === value) {
-                        setCategories({
-                          ...categories,
-                          brand: '',
-                        })
-                      } else {
-                        setCategories({
-                          ...categories,
-                          brand: value,
-                        })
-                      }
-                    }}
-                    style={{
-                      backgroundColor:
-                        categories.brand === value ? 'rebeccapurple' : null,
-                    }}
-                  >
-                    {value} ({count})
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )}
-        {query && (
-          <div className='w-1/6'>
-            <h3 className='text-2xl'>Kategorije</h3>
-            <ul>
-              {allCategories.type.map(({ value, count }) => {
-                return (
-                  <li
-                    key={value}
-                    onClick={() => {
-                      if (categories.type === value[language]) {
-                        setCategories({
-                          ...categories,
-                          type: '',
-                        })
-                      } else {
-                        setCategories({
-                          ...categories,
-                          type: value[language],
-                        })
-                      }
-                    }}
-                    style={{
-                      backgroundColor:
-                        categories.type === value[language]
-                          ? 'rebeccapurple'
-                          : null,
-                    }}
-                  >
-                    {value[language]} ({count})
-                  </li>
-                )
-              })}
-            </ul>
-            <h3 className='text-2xl'>Brendovi</h3>
-            <ul>
-              {allCategories.brand.map(({ value, count }) => {
-                return (
-                  <li
-                    key={value}
-                    onClick={() => {
-                      if (categories.brand === value) {
-                        setCategories({
-                          ...categories,
-                          brand: '',
-                        })
-                      } else {
-                        setCategories({
-                          ...categories,
-                          brand: value,
-                        })
-                      }
-                    }}
-                    style={{
-                      backgroundColor:
-                        categories.brand === value ? 'rebeccapurple' : null,
-                    }}
-                  >
-                    {value} ({count})
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )}
-        {results.length && (
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={() => {
-              setLength(length + 3)
-            }}
-            hasMore={length < results.length}
-            className='lg:flex-grow'
-          >
-            <ul className='flex flex-wrap -m-2'>
-              {results.map(item => {
-                const {
-                  name,
-                  price,
-                  type,
-                  quantity,
-                  slug,
-                  optimizedImages,
-                  id,
-                  availability,
-                  hidden,
-                } = item.item || item
-
-                const runTimeItem = runTimeItems.length
-                  ? runTimeItems.find(i => i.id === id)
-                  : {}
-
-                return (
-                  <Card
-                    name={name}
-                    slug={slug}
-                    type={type}
-                    price={runTimeItem.price || price}
-                    quantity={runTimeItem.quantity || quantity}
-                    availability={
-                      runTimeItem.availability
-                        ? runTimeItem.availability[language]
-                        : availability[language]
+      <Banner banners={banners} />
+      <div className='flex flex-col lg:flex-row'>
+        <div className='w-full lg:w-1/6'>
+          <ul>
+            {mainListBrands.map(({ value, count }) => {
+              return (
+                <li
+                  key={value}
+                  onClick={() => {
+                    if (mainListBrand === value) {
+                      setMainListBrand('')
+                    } else {
+                      setMainListBrand(value)
                     }
-                    optimizedImage={optimizedImages[0]}
-                    optimizedImages={optimizedImages}
-                    id={id}
-                    key={id}
-                    language={language}
-                    hidden={hidden}
-                  />
-                )
-              })}
-            </ul>
-          </InfiniteScroll>
-        )}
+                  }}
+                  style={{
+                    backgroundColor:
+                      mainListBrand === value ? 'rebeccapurple' : null,
+                  }}
+                >
+                  {value} ({count})
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => {
+            setLength(length + 3)
+          }}
+          hasMore={length < results.length}
+          className='lg:flex-grow'
+        >
+          <ul className='flex flex-wrap -m-2'>
+            {mainListResults.map(item => {
+              const {
+                name,
+                price,
+                type,
+                quantity,
+                slug,
+                images,
+                id,
+                availability,
+                hidden,
+              } = item.item || item
+
+              return (
+                <Card
+                  name={name}
+                  slug={slug}
+                  type={type}
+                  price={price}
+                  quantity={quantity}
+                  availability={availability[language]}
+                  image={images[0]}
+                  id={id}
+                  key={id}
+                  language={language}
+                  hidden={hidden}
+                />
+              )
+            })}
+          </ul>
+        </InfiniteScroll>
       </div>
-      <div>
-        {types.map(type => {
+      <ul>
+        {types.map(({ name, optimized }) => {
+          const type = name.split('|||')[language === 'hr' ? 0 : 1]
+
           return (
-            <li key={type.name}>
+            <li key={name}>
               <Link
-                to={`${language === 'hr' ? '/' : `/${language}/`}${type.name}/`}
+                to={`${
+                  language === 'hr' ? '/' : `/${language}/`
+                }${type.toLowerCase()}/`}
               >
-                {type.name} {type.count}
+                {type}
+                <Image
+                  fluid={optimized.childImageSharp.fluid}
+                  alt={`Image of ${type}`}
+                  loading='lazy'
+                  fadeIn
+                />
               </Link>
             </li>
           )
         })}
-      </div>
-      <pre>{JSON.stringify(allCategories, null, 2)}</pre>
-      <pre>{JSON.stringify(categories, null, 2)}</pre>
-      {query && !results.length ? <h2>No results</h2> : null}
+      </ul>
     </Layout>
   )
 }
@@ -238,49 +124,38 @@ export default Index
 export const query = graphql`
   {
     amadeus {
-      items {
-        name {
-          hr
-          en
-        }
-        price
-        slug
-        id
-        quantity
-        type {
-          hr
-          en
-        }
-        availability {
-          hr
-          en
-        }
-        images {
-          src
-          index
-        }
-        optimizedImages {
+      types {
+        name
+        src
+        optimized {
           childImageSharp {
-            fluid(maxWidth: 333, maxHeight: 250) {
+            # fix this
+            fluid(maxWidth: 200, maxHeight: 100) {
               ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
         }
       }
       banners {
-        desktop
-        optimizedDesktop {
-          childImageSharp {
-            fluid(maxWidth: 1280, maxHeight: 425) {
-              ...GatsbyImageSharpFluid_withWebp_tracedSVG
+        desktop {
+          src
+          link
+          optimized {
+            childImageSharp {
+              fluid(maxWidth: 1280, maxHeight: 425) {
+                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+              }
             }
           }
         }
-        mobile
-        optimizedMobile {
-          childImageSharp {
-            fluid(maxWidth: 640, maxHeight: 480) {
-              ...GatsbyImageSharpFluid_withWebp_tracedSVG
+        mobile {
+          src
+          link
+          optimized {
+            childImageSharp {
+              fluid(maxWidth: 640, maxHeight: 480) {
+                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+              }
             }
           }
         }
@@ -290,31 +165,41 @@ export const query = graphql`
 `
 
 interface Props {
+  pageContext: {
+    language: string
+  }
   data: {
     amadeus: {
-      items: Item[]
+      banners: Banner[]
+      types: Type[]
     }
   }
 }
 
-interface Item {
+interface Banner {
+  link: string
+  src: string
+  optimized: OptimizedImage
+}
+
+interface Type {
   name: string
-  price: number
-  slug: string
-  images: string[]
-  optimizedImages: OptimizedImage[]
+  src: string
+  optimized: OptimizedImage
 }
 
 interface OptimizedImage {
   childImageSharp: {
     fluid: {
-      tracedSVG: string
-      width: number
-      height: number
+      aspectRatio: number
       src: string
       srcSet: string
-      srcWebp: string
-      srcSetWebp: string
+      sizes: string
+      base64?: string
+      tracedSVG?: string
+      srcWebp?: string
+      srcSetWebp?: string
+      media?: string
     }
   }
 }

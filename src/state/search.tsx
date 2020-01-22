@@ -79,6 +79,22 @@ export const SearchProvider = ({ children }) => {
   const [sort, setSort] = useState('recent')
   const [debouncedSetResults, setDebouncedSetResults] = useState(null)
 
+  const [mainListResults, setMainListResults] = useState([])
+  const [mainListBrands, setMainListBrands] = useState([])
+  const [mainListBrand, setMainListBrand] = useState('')
+
+  useEffect(() => {
+    setMainListBrands(calculateCategories(allResults).brand)
+  }, [allResults])
+
+  useEffect(() => {
+    setMainListResults(
+      mainListBrand
+        ? allResults.filter(res => res.brand === mainListBrand)
+        : allResults
+    )
+  }, [mainListBrand, mainListBrands])
+
   const options = {
     shouldSort: true,
     includeScore: true,
@@ -100,7 +116,7 @@ export const SearchProvider = ({ children }) => {
   const fuse = new Fuse(allResults, options)
 
   useEffect(() => {
-    setResults(query ? fuse.search(query).map(i => i.item) : allResults)
+    setResults(query ? [...fuse.search(query)].map(i => i.item) : allResults)
     if (categories.brand || categories.type || categories.price) {
       setCategories(defaultCategories)
     }
@@ -169,6 +185,10 @@ export const SearchProvider = ({ children }) => {
         setCategories,
         sort,
         setSort,
+        mainListBrand,
+        mainListBrands,
+        mainListResults,
+        setMainListBrand,
         setLanguage,
       }}
     >

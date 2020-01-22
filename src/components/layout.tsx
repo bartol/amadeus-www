@@ -1,11 +1,12 @@
-import React, { useContext } from 'react'
+import * as React from 'react'
+import { useContext } from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
 import { I18nContext, SearchContext } from '../state/global'
 import Footer from './footer'
 import Header from './header'
 import Cart from '../components/cart'
 
-const Layout = ({ children, language, newUrl }) => {
+const Layout: React.FC<Props> = ({ children, language, newUrl }) => {
   const { setExchangeRatesData } = useContext(I18nContext)
   const { setAllResults, setLanguage } = useContext(SearchContext)
   const data = useStaticQuery(graphql`
@@ -44,15 +45,15 @@ const Layout = ({ children, language, newUrl }) => {
           images {
             src
             index
-          }
-          hidden
-          optimizedImages {
-            childImageSharp {
-              fluid(maxWidth: 240, maxHeight: 180) {
-                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+            optimized {
+              childImageSharp {
+                fluid(maxWidth: 240, maxHeight: 180) {
+                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                }
               }
             }
           }
+          hidden
         }
       }
     }
