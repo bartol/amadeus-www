@@ -74,3 +74,8 @@ const Layout: React.FC<Props> = ({ children, language, newUrl }) => {
 }
 
 export default Layout
+
+interface Props {
+  language: string
+  newUrl?: string
+}

@@ -1,25 +1,11 @@
-import React, { useContext } from 'react'
-import { graphql } from 'gatsby'
+import * as React from 'react'
+import { useContext } from 'react'
+import { Link, graphql } from 'gatsby'
 import Image from 'gatsby-image'
 import { CarouselProvider, Dot, Slide, Slider } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { CartContext, I18nContext } from '../state/global'
 import Layout from '../components/layout'
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
-
-const ITEM_QUERY = gql`
-  query ItemQuery($id: ID!) {
-    item(id: $id) {
-      price
-      quantity
-      availability {
-        hr
-        en
-      }
-    }
-  }
-`
 
 const Item: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
@@ -31,24 +17,18 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
     description,
     quantity,
     availability,
-    optimizedImages: images,
+    images,
     id,
   } = data.amadeus.item
 
   const { addToCart, getQuantity } = useContext(CartContext)
   const { currencyConversion } = useContext(I18nContext)
 
-  const { data: runTimeData } = useQuery(ITEM_QUERY, {
-    fetchPolicy: 'cache-and-network',
-    variables: { id },
-  })
-  const runTimeItem = runTimeData ? runTimeData.item : {}
-
   const addToCartItem = {
     name,
-    price: runTimeItem.price || price,
-    quantity: runTimeItem.quantity || quantity,
-    availability: runTimeItem.availability || availability,
+    price,
+    quantity,
+    availability,
     image: images[0],
     id,
   }
@@ -131,13 +111,9 @@ const Item: React.FC<Props> = ({ data, pageContext }) => {
         </div>
         <div className='lg:w-2/5'>
           <h1>{name[language]}</h1>
-          <h2>{currencyConversion(runTimeItem.price || price)}</h2>
-          <h3>{getQuantity(id, runTimeItem.quantity || quantity)}</h3>
-          <h3>
-            {runTimeItem.availability
-              ? runTimeItem.availability[language]
-              : availability[language]}
-          </h3>
+          <h2>{currencyConversion(price)}</h2>
+          <h3>{getQuantity(id, quantity)}</h3>
+          <h3>{availability[language]}</h3>
           <button type='button' onClick={() => addToCart(addToCartItem)}>
             Add to cart
           </button>
@@ -195,6 +171,9 @@ export const pageQuery = graphql`
 `
 
 interface Props {
+  pageContext: {
+    language: string
+  }
   data: {
     amadeus: {
       item: Item
