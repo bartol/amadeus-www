@@ -48,11 +48,11 @@ export const pageQuery = graphql`
         images {
           src
           index
-        }
-        optimizedImages {
-          childImageSharp {
-            fluid(maxWidth: 240, maxHeight: 180) {
-              ...GatsbyImageSharpFluid_withWebp_tracedSVG
+          optimized {
+            childImageSharp {
+              fluid(maxWidth: 240, maxHeight: 180) {
+                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+              }
             }
           }
         }

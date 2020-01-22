@@ -10,7 +10,7 @@ const Card = ({
   price,
   quantity,
   availability,
-  optimizedImage,
+  image,
   language,
   id,
   hidden,
@@ -23,7 +23,7 @@ const Card = ({
     price,
     quantity,
     availability,
-    image: optimizedImage,
+    image,
     id,
   }
 
@@ -43,8 +43,8 @@ const Card = ({
         >
           <div className='p-3'>
             <Image
-              fluid={optimizedImage.childImageSharp.fluid}
-              key={optimizedImage.childImageSharp.fluid.src}
+              fluid={image.optimized.childImageSharp.fluid}
+              key={image.optimized.childImageSharp.fluid.src}
               alt={`${name[language]} image`}
               fadeIn
             />
