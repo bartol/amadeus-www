@@ -7,12 +7,12 @@ import Card from '../components/card'
 import Layout from '../components/layout'
 import '../styles/custom.css'
 import Banner from '../components/banner'
+import Featured from '../components/featured'
 import { SearchContext } from '../state/global'
 
 const Index: React.FC<Props> = ({ data, pageContext }) => {
   const { language } = pageContext
   const {
-    results,
     mainListBrand,
     mainListBrands,
     mainListResults,
@@ -21,11 +21,12 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
 
   const [length, setLength] = useState(4)
 
-  const { types, banners } = data.amadeus
+  const { types, banners, featuredItems } = data.amadeus
 
   return (
     <Layout language={language}>
       <Banner banners={banners} />
+      <Featured items={featuredItems} language={language} />
       <ul className='flex flex-wrap -mx-1'>
         {types.map(({ name, optimized }) => {
           const type = name.split('|||')[language === 'hr' ? 0 : 1]
@@ -85,7 +86,7 @@ const Index: React.FC<Props> = ({ data, pageContext }) => {
           loadMore={() => {
             setLength(length + 3)
           }}
-          hasMore={length < results.length}
+          hasMore={length < mainListResults.length}
           className='lg:flex-grow'
         >
           <ul className='flex flex-wrap -m-2'>
@@ -130,6 +131,35 @@ export default Index
 export const query = graphql`
   {
     amadeus {
+      featuredItems {
+        name {
+          hr
+          en
+        }
+        price
+        slug
+        type {
+          hr
+          en
+        }
+        images {
+          src
+          index
+          optimized {
+            childImageSharp {
+              fluid(maxWidth: 240, maxHeight: 180) {
+                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+              }
+            }
+          }
+        }
+        quantity
+        availability {
+          hr
+          en
+        }
+        id
+      }
       types {
         name
         src
@@ -181,6 +211,7 @@ interface Props {
         mobile: BannerImage[]
       }
       types: TypeImage[]
+      featuredItems: any
     }
   }
 }

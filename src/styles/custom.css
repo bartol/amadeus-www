@@ -24,3 +24,17 @@
     transform: translate(-50%, -50%);
   }
 }
+
+.featured-slide-container > div {
+  @apply flex justify-center items-center
+}
+
+@media screen and (min-width: 500px) {
+  .usm_hidden {
+    @apply hidden
+  }
+
+  .usm_block {
+    @apply block
+  }
+}

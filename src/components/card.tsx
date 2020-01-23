@@ -1,6 +1,7 @@
+import * as React from 'react'
+import { useContext } from 'react'
 import { Link } from 'gatsby'
 import Image from 'gatsby-image'
-import React, { useContext } from 'react'
 import { CartContext, I18nContext } from '../state/global'
 
 const Card = ({
