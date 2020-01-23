@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = {
   plugins: [
+    'gatsby-plugin-preact',
     'gatsby-plugin-typescript',
     {
       resolve: 'gatsby-plugin-webpack-bundle-analyzer',
