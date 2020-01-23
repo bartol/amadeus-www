@@ -199,10 +199,10 @@ interface Item {
   id: string
   quantity: number
   availability: string
-  images: Image[]
+  images: ItemImage[]
 }
 
-interface Image {
+interface ItemImage {
   index: number
   src: string
   optimized: OptimizedImage
