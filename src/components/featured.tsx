@@ -100,6 +100,88 @@ const Featured: React.FC<Props> = ({ items, language }) => {
     )
   }
 
+  const MobileSlides = () => {
+    return (
+      <div>
+        <div className='flex justify-between lg:justify-center'>
+          <ButtonBack className='lg:hidden'>Back</ButtonBack>
+          <h2 className='text-2xl sm:text-3xl'>istaknuti proizvodi</h2>
+          <ButtonNext className='lg:hidden'>Next</ButtonNext>
+        </div>
+        <div className='flex'>
+          <Slider className='flex-grow'>
+            {items.map((item, index) => {
+              const {
+                type,
+                slug,
+                name,
+                price,
+                availability,
+                images,
+                id,
+                quantity,
+              } = item
+
+              const addToCartItem = {
+                name,
+                price,
+                quantity,
+                availability,
+                image: images[0],
+                id,
+              }
+
+              return (
+                <Slide
+                  index={index}
+                  key={index}
+                  className='featured-slide-container'
+                >
+                  <div className='w-full lg:w-3/4 relative rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between'>
+                    <Link
+                      to={`${language === 'hr' ? '/' : `/${language}/`}${type[
+                        language
+                      ].toLowerCase()}/${slug}/`}
+                      className='flex-grow'
+                    >
+                      <div className='p-3 flex'>
+                        <Image
+                          fluid={images[0].optimized.childImageSharp.fluid}
+                          key={images[0].optimized.childImageSharp.fluid.src}
+                          alt={`${name[language]} image`}
+                          className='h-full w-1/2'
+                          fadeIn
+                        />
+                        <div className='px-12 py-4 md:py-6 xl:py-10'>
+                          <h2 className='text-3xl'>{name[language]}</h2>
+                          <h3 className='text-xl'>
+                            {currencyConversion(price)}
+                          </h3>
+                          <h3 className='text-xl'>
+                            {getQuantity(id, quantity)}
+                          </h3>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className='px-12 py-8 md:py-10 w-1/2 absolute right-0 bottom-0'>
+                      <button
+                        type='button'
+                        onClick={() => addToCart(addToCartItem)}
+                        className='w-full bg-gray-400 py-2 rounded'
+                      >
+                        add to cart
+                      </button>
+                    </div>
+                  </div>
+                </Slide>
+              )
+            })}
+          </Slider>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <section>
       <CarouselProvider
