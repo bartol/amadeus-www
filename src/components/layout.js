@@ -1,17 +1,81 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
+import { useStaticQuery, graphql } from 'gatsby';
+import { SharedContext } from '../state/shared';
+import { Header } from './header';
+import { Footer } from './footer';
+import { Search } from './search';
+import { Cart } from './cart';
 
-const Layout = ({ children }) => {
+export const Layout = ({ children, language, changeLanguageCustomUrl }) => {
+    const { setLanguage, setCurrencyData, setSearchData } = useContext(
+        SharedContext
+    );
+
+    const data = useStaticQuery(graphql`
+        query dataQuery {
+            amadeus {
+                exchangeRates {
+                    EUR
+                    BAM
+                    RSD
+                    USD
+                    GBP
+                }
+                items {
+                    name {
+                        hr
+                        en
+                    }
+                    price
+                    discountedPrice
+                    slug
+                    id
+                    type {
+                        hr
+                        en
+                    }
+                    brand
+                    quantity
+                    availability {
+                        hr
+                        en
+                    }
+                    description {
+                        hr
+                        en
+                    }
+                    images {
+                        index
+                        src
+                        optimized {
+                            childImageSharp {
+                                # cards
+                                fluid(maxWidth: 240, maxHeight: 180) {
+                                    ...GatsbyImageSharpFluid_withWebp
+                                }
+                                # cart
+                                fixed(width: 120, height: 90) {
+                                    ...GatsbyImageSharpFixed_withWebp
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `);
+
+    setLanguage(language);
+    setCurrencyData(data.amadeus.exchangeRates);
+    setSearchData(data.amadeus.items);
+
     return (
-        <>
-            <h1> from layout </h1>
+        <div className='container'>
+            <Header changeLanguageCustomUrl={changeLanguageCustomUrl} />
             <main>{children}</main>
-        </>
+            <Footer />
+            <Search />
+            <Cart />
+        </div>
     );
 };
-
-Layout.propTypes = {
-    children: PropTypes.element.isRequired,
-};
-
-export default Layout;
