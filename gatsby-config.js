@@ -2,6 +2,10 @@ module.exports = {
     plugins: [
         'gatsby-plugin-preact',
         'gatsby-plugin-sass',
+        // Transform images
+        'gatsby-plugin-sharp',
+        'gatsby-transformer-sharp',
+        // Connect to API
         {
             resolve: 'gatsby-source-graphql',
             options: {
@@ -10,6 +14,7 @@ module.exports = {
                 url: 'https://api.amadeus2.hr',
             },
         },
+        // Analyze bundle size
         {
             resolve: 'gatsby-plugin-webpack-bundle-analyzer',
             options: {
