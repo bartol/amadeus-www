@@ -40,7 +40,9 @@ const Item = ({ data, pageContext }) => {
                                 price: item.discountedPrice,
                                 quantity: item.quantity,
                                 availability: item.availability,
-                                image: item.images[0].optimized.fixed,
+                                image:
+                                    item.images[0].optimized.childImageSharp
+                                        .fixed,
                                 id: item.id,
                             })
                         }
