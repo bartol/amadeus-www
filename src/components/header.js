@@ -6,6 +6,8 @@ export const Header = ({ changeLanguageCustomUrl }) => {
     const {
         language,
         getLanguagePrefix,
+        setSearchVisible,
+        setCartVisible,
         changeLanguage,
         currency,
         changeCurrency,
@@ -14,6 +16,14 @@ export const Header = ({ changeLanguageCustomUrl }) => {
     return (
         <header>
             <Link to={`${getLanguagePrefix(language)}/`}>Amadeus</Link>
+            <button type='button' onClick={() => setSearchVisible(true)}>
+                {/* FIXME add icon */}
+                search
+            </button>
+            <button type='button' onClick={() => setCartVisible(true)}>
+                {/* FIXME add icon */}
+                cart
+            </button>
             <select
                 onChange={e =>
                     changeLanguage(e.target.value, changeLanguageCustomUrl)

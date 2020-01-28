@@ -37,7 +37,8 @@ const Item = ({ data, pageContext }) => {
                         onClick={() =>
                             addToCart({
                                 name: item.name,
-                                price: item.discountedPrice,
+                                price: item.price,
+                                discountedPrice: item.discountedPrice,
                                 quantity: item.quantity,
                                 availability: item.availability,
                                 image:

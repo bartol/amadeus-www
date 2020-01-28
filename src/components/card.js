@@ -48,7 +48,8 @@ export const Card = ({
                 onClick={() =>
                     addToCart({
                         name,
-                        price: discountedPrice,
+                        price,
+                        discountedPrice,
                         quantity,
                         availability,
                         image: image.optimized.childImageSharp.fixed,
