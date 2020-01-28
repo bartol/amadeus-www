@@ -1,4 +1,5 @@
 import React, { useState, createContext } from 'react';
+import { navigate } from 'gatsby';
 import { isBrowser } from '../helpers/isBrowser';
 
 export const SharedContext = createContext();
@@ -6,6 +7,24 @@ export const SharedContext = createContext();
 export const SharedProvider = ({ children }) => {
     // Language state
     const [language, setLanguage] = useState('hr');
+
+    const changeLanguage = (newLanguage, customUrl) => {
+        if (customUrl && customUrl[newLanguage]) {
+            navigate(customUrl[newLanguage], { replace: true });
+        } else {
+            if (isBrowser()) {
+                const { pathname } = window.location;
+                const pathnameWithoutLanguage =
+                    language === 'hr' ? pathname : pathname.slice(3);
+                navigate(
+                    `${getLanguagePrefix(
+                        newLanguage
+                    )}/${pathnameWithoutLanguage}`,
+                    { replace: true }
+                );
+            }
+        }
+    };
 
     const getLanguagePrefix = language => {
         switch (language) {
@@ -22,6 +41,11 @@ export const SharedProvider = ({ children }) => {
         isBrowser() ? window.localStorage.getItem('currency') || 'HRK' : 'HRK'
     );
     const [currencyData, setCurrencyData] = useState({});
+
+    const changeCurrency = currency => {
+        setCurrency(currency);
+        isBrowser() && window.localStorage.setItem('currency', currency);
+    };
 
     const convertToCurrency = price => {
         const HRK = price / 100;
@@ -44,6 +68,7 @@ export const SharedProvider = ({ children }) => {
     };
 
     // Cart state
+    const [cartVisible, setCartVisible] = useState(false);
     const [cart, setCart] = useState([]);
 
     const incrementQuantity = id => {
@@ -98,6 +123,7 @@ export const SharedProvider = ({ children }) => {
 
     // Search state
     const [searchData, setSearchData] = useState([]);
+    const [searchVisible, setSearchVisible] = useState(false);
 
     return (
         <SharedContext.Provider
@@ -119,6 +145,12 @@ export const SharedProvider = ({ children }) => {
                 decrementQuantity,
                 addToCart,
                 getQuantity,
+                cartVisible,
+                setCartVisible,
+                searchVisible,
+                setSearchVisible,
+                changeLanguage,
+                changeCurrency,
             }}
         >
             {children}
