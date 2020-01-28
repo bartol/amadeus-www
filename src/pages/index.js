@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
 import { Card } from '../components/card';
@@ -7,11 +7,50 @@ const Index = ({ pageContext, data }) => {
     const { language } = pageContext;
     const { items } = data.amadeus;
 
+    const brands = [];
+    items.forEach(item => {
+        const index = brands.findIndex(b => b.name === item.brand);
+        if (index === -1) {
+            brands.push({
+                name: item.brand,
+                count: 1,
+            });
+        } else {
+            brands[index].count++;
+        }
+    });
+
+    const [selectedBrand, setSelectedBrand] = useState('');
+    const [listItems, setListItems] = useState(items);
+
+    useEffect(() => {
+        setListItems(
+            selectedBrand
+                ? listItems.filter(item => item.brand === selectedBrand)
+                : items
+        );
+    }, [selectedBrand]);
+
     return (
         <Layout language={language}>
-            {/* TODO */}
             <ul>
-                {items.map(item => {
+                {brands.map(brand => {
+                    return (
+                        <li
+                            onClick={() =>
+                                brand.name !== selectedBrand
+                                    ? setSelectedBrand(brand.name)
+                                    : setSelectedBrand('')
+                            }
+                            key={brand.name}
+                        >
+                            {brand.name} ({brand.count})
+                        </li>
+                    );
+                })}
+            </ul>
+            <ul>
+                {listItems.map(item => {
                     return (
                         <Card
                             name={item.name}
@@ -23,7 +62,6 @@ const Index = ({ pageContext, data }) => {
                             availability={item.availability}
                             slug={item.slug}
                             id={item.id}
-                            hidden={item.hidden}
                             key={item.id}
                         />
                     );
