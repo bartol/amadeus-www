@@ -19,4 +19,8 @@ module.exports = {
             version: 'detect',
         },
     },
+    env: {
+        browser: true,
+        node: true,
+    },
 };
