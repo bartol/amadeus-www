@@ -127,15 +127,18 @@ export const SharedProvider = ({ children }) => {
     const [searchData, setSearchData] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
     const [query, setQuery] = useState('');
-    const [availableCategories, setAvailableCategories] = useState({
+    const defaultAvailableCategories = {
         brands: [],
         types: [],
         prices: {
             min: 0,
             max: 0,
         },
-    });
-    const [selectedCategory, setSelectedCategory] = useState({
+    };
+    const [availableCategories, setAvailableCategories] = useState(
+        defaultAvailableCategories
+    );
+    const defaultSelectedCategories = {
         brand: '',
         type: {
             hr: '',
@@ -145,7 +148,10 @@ export const SharedProvider = ({ children }) => {
             min: 0,
             max: 0,
         },
-    });
+    };
+    const [selectedCategory, setSelectedCategory] = useState(
+        defaultSelectedCategories
+    );
 
     const searchOptions = {
         shouldSort: true,
@@ -170,9 +176,11 @@ export const SharedProvider = ({ children }) => {
 
             setSearchResults(results);
             setAvailableCategories(calculateCategories(results));
+            setSelectedCategory(defaultSelectedCategories);
         } else {
-            setSearchResults(searchData);
-            setAvailableCategories(calculateCategories(searchData));
+            setSearchResults([]);
+            setAvailableCategories(defaultAvailableCategories);
+            setSelectedCategory(defaultSelectedCategories);
         }
     }, [searchData, query]);
 
