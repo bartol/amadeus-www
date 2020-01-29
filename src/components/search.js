@@ -37,8 +37,6 @@ export const Search = () => {
                     {/* FIXME add icon */}
                     exit
                 </button>
-                <pre>{JSON.stringify(availableCategories, null, 2)}</pre>
-                <pre>{JSON.stringify(selectedCategory, null, 2)}</pre>
                 <ul>
                     {availableCategories.types.map(type => {
                         return (

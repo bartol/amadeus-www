@@ -72,6 +72,7 @@ export const Cart = () => {
                         );
                     })}
                 </ul>
+                {/* TODO checkout */}
             </div>
         </div>
     );
