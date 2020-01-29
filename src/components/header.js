@@ -11,6 +11,7 @@ export const Header = ({ changeLanguageCustomUrl }) => {
         changeLanguage,
         currency,
         changeCurrency,
+        cart,
     } = useContext(SharedContext);
 
     return (
@@ -22,7 +23,7 @@ export const Header = ({ changeLanguageCustomUrl }) => {
             </button>
             <button type='button' onClick={() => setCartVisible(true)}>
                 {/* FIXME add icon */}
-                cart
+                cart ({cart.reduce((acc, obj) => acc + obj.quantity, 0)})
             </button>
             <select
                 onChange={e =>
