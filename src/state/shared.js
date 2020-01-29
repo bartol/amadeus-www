@@ -1,5 +1,6 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { navigate } from 'gatsby';
+import Fuse from 'fuse.js';
 import { isBrowser } from '../helpers/isBrowser';
 
 export const SharedContext = createContext();
@@ -122,8 +123,123 @@ export const SharedProvider = ({ children }) => {
     };
 
     // Search state
-    const [searchData, setSearchData] = useState([]);
     const [searchVisible, setSearchVisible] = useState(false);
+    const [searchData, setSearchData] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
+    const [query, setQuery] = useState('');
+    const [availableCategories, setAvailableCategories] = useState({
+        brands: [],
+        types: [],
+        prices: {
+            min: 0,
+            max: 0,
+        },
+    });
+    const [selectedCategory, setSelectedCategory] = useState({
+        brand: '',
+        type: {
+            hr: '',
+            en: '',
+        },
+        price: {
+            min: 0,
+            max: 0,
+        },
+    });
+
+    const searchOptions = {
+        shouldSort: true,
+        threshold: 0.33,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 2,
+        keys: [
+            { name: `name.${language}`, weight: 1 },
+            { name: 'id', weight: 1 },
+            { name: 'brand', weight: 0.85 },
+            { name: `type.${language}`, weight: 0.85 },
+        ],
+    };
+
+    const fuse = new Fuse(searchData, searchOptions);
+
+    useEffect(() => {
+        if (query) {
+            const results = [...fuse.search(query)];
+
+            setSearchResults(results);
+            setAvailableCategories(calculateCategories(results));
+        } else {
+            setSearchResults(searchData);
+            setAvailableCategories(calculateCategories(searchData));
+        }
+    }, [searchData, query]);
+
+    useEffect(() => {
+        const { type, brand, price } = selectedCategory;
+        setSearchResults(results =>
+            results.map(result => {
+                if (
+                    (type[language] &&
+                        type[language] !== result.type[language]) ||
+                    (brand && brand !== result.brand) ||
+                    (price.min && price.min > result.price) ||
+                    (price.max && price.max < result.price)
+                ) {
+                    result.hidden = true;
+                } else {
+                    result.hidden = false;
+                }
+
+                return result;
+            })
+        );
+    }, [selectedCategory]);
+
+    const calculateCategories = results => {
+        const brands = [];
+        const types = [];
+        const prices = {
+            min: 0,
+            max: 0,
+        };
+
+        results.forEach(({ type, brand, price }) => {
+            const brandIndex = brands.findIndex(b => b.name === brand);
+
+            if (brandIndex === -1) {
+                brands.push({
+                    name: brand,
+                    count: 1,
+                });
+            } else {
+                brands[brandIndex].count++;
+            }
+
+            const typeIndex = types.findIndex(
+                t => t.name[language] === type[language]
+            );
+
+            if (typeIndex === -1) {
+                types.push({
+                    name: type,
+                    count: 1,
+                });
+            } else {
+                types[typeIndex].count++;
+            }
+
+            if (!prices.min || price < prices.min) prices.min = price;
+            if (!prices.max || price > prices.max) prices.max = price;
+        });
+
+        return {
+            brands,
+            types,
+            prices,
+        };
+    };
 
     return (
         <SharedContext.Provider
@@ -151,6 +267,12 @@ export const SharedProvider = ({ children }) => {
                 setSearchVisible,
                 changeLanguage,
                 changeCurrency,
+                searchResults,
+                query,
+                setQuery,
+                availableCategories,
+                selectedCategory,
+                setSelectedCategory,
             }}
         >
             {children}
