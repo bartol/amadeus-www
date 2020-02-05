@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
+import { Banners } from '../components/banners';
 import { Card } from '../components/card';
 
 const Index = ({ pageContext, data }) => {
     const { language } = pageContext;
-    const { items } = data.amadeus;
+    const { items, banners } = data.amadeus;
 
     const brands = [];
     items.forEach(item => {
@@ -33,6 +34,7 @@ const Index = ({ pageContext, data }) => {
 
     return (
         <Layout language={language}>
+            <Banners banners={banners} />
             <ul>
                 {brands.map(brand => {
                     return (
@@ -107,6 +109,30 @@ export const indexQuery = graphql`
                             # cart
                             fixed(width: 120, height: 90) {
                                 ...GatsbyImageSharpFixed_withWebp
+                            }
+                        }
+                    }
+                }
+            }
+            banners {
+                desktop {
+                    link
+                    src
+                    optimized {
+                        childImageSharp {
+                            fluid(maxWidth: 1280, maxHeight: 430) {
+                                ...GatsbyImageSharpFluid_withWebp
+                            }
+                        }
+                    }
+                }
+                mobile {
+                    link
+                    src
+                    optimized {
+                        childImageSharp {
+                            fluid(maxWidth: 640, maxHeight: 480) {
+                                ...GatsbyImageSharpFluid_withWebp
                             }
                         }
                     }
