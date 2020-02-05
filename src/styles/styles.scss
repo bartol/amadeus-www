@@ -49,3 +49,18 @@
   max-height: 100%;
   overflow-y: scroll;
 }
+
+// banners
+.desktop {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .desktop {
+        display: block;
+    }
+
+    .mobile {
+        display: none;
+    }
+}
