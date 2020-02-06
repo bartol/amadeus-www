@@ -16,7 +16,6 @@ export const Banners = ({ banners }) => {
         }
 
         new Glider(gliderDesktopRef.current, {
-            slidesToShow: 1,
             draggable: true,
             dragVelocity: 2,
             dots: '.desktop-dots',
@@ -33,7 +32,6 @@ export const Banners = ({ banners }) => {
         }
 
         new Glider(gliderMobileRef.current, {
-            slidesToShow: 1,
             draggable: true,
             dragVelocity: 2,
             dots: '.mobile-dots',

@@ -3,10 +3,11 @@ import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
 import { Banners } from '../components/banners';
 import { Card } from '../components/card';
+import { FeaturedItems } from '../components/FeaturedItems';
 
 const Index = ({ pageContext, data }) => {
     const { language } = pageContext;
-    const { items, banners } = data.amadeus;
+    const { items, banners, featuredItems } = data.amadeus;
 
     const brands = [];
     items.forEach(item => {
@@ -35,6 +36,7 @@ const Index = ({ pageContext, data }) => {
     return (
         <Layout language={language}>
             <Banners banners={banners} />
+            <FeaturedItems items={featuredItems} />
             <ul>
                 {brands.map(brand => {
                     return (
@@ -133,6 +135,41 @@ export const indexQuery = graphql`
                         childImageSharp {
                             fluid(maxWidth: 640, maxHeight: 480) {
                                 ...GatsbyImageSharpFluid_withWebp
+                            }
+                        }
+                    }
+                }
+            }
+            featuredItems {
+                name {
+                    hr
+                    en
+                }
+                price
+                discountedPrice
+                slug
+                id
+                type {
+                    hr
+                    en
+                }
+                quantity
+                availability {
+                    hr
+                    en
+                }
+                images {
+                    index
+                    src
+                    optimized {
+                        childImageSharp {
+                            # cards
+                            fluid(maxWidth: 240, maxHeight: 180) {
+                                ...GatsbyImageSharpFluid_withWebp
+                            }
+                            # cart
+                            fixed(width: 120, height: 90) {
+                                ...GatsbyImageSharpFixed_withWebp
                             }
                         }
                     }
