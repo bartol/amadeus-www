@@ -1,5 +1,6 @@
 // FIXME i18n
 import React, { useContext, useRef, useLayoutEffect } from 'react';
+import { Link } from 'gatsby';
 import Image from 'gatsby-image';
 import Glider from 'glider-js';
 import { SharedContext } from '../state/shared';
@@ -17,7 +18,7 @@ export const Banners = ({ banners }) => {
         new Glider(gliderDesktopRef.current, {
             slidesToShow: 1,
             draggable: true,
-            rewind: true,
+            dragVelocity: 2,
             dots: '.desktop-dots',
             arrows: {
                 prev: '.desktop-glider-prev',
@@ -34,7 +35,7 @@ export const Banners = ({ banners }) => {
         new Glider(gliderMobileRef.current, {
             slidesToShow: 1,
             draggable: true,
-            rewind: true,
+            dragVelocity: 2,
             dots: '.mobile-dots',
             arrows: {
                 prev: '.mobile-glider-prev',
@@ -49,7 +50,7 @@ export const Banners = ({ banners }) => {
                 <div className='glider-wrap' ref={gliderMobileRef}>
                     {mobile.map((image, index) => {
                         return (
-                            <div key={image.index}>
+                            <div key={index} className='banner'>
                                 <Image
                                     fluid={
                                         image.optimized.childImageSharp.fluid
@@ -59,6 +60,12 @@ export const Banners = ({ banners }) => {
                                     loading={index === 0 ? 'eager' : 'lazy'}
                                     fadeIn
                                 />
+                                <Link
+                                    to={image.link}
+                                    className='banner_learn_more'
+                                >
+                                    Saznaj vise
+                                </Link>
                             </div>
                         );
                     })}
@@ -83,7 +90,7 @@ export const Banners = ({ banners }) => {
                 <div className='glider-wrap' ref={gliderDesktopRef}>
                     {desktop.map((image, index) => {
                         return (
-                            <div key={image.index}>
+                            <div key={index} className='banner'>
                                 <Image
                                     fluid={
                                         image.optimized.childImageSharp.fluid
@@ -93,6 +100,12 @@ export const Banners = ({ banners }) => {
                                     loading={index === 0 ? 'eager' : 'lazy'}
                                     fadeIn
                                 />
+                                <Link
+                                    to={image.link}
+                                    className='banner_learn_more'
+                                >
+                                    Saznaj vise
+                                </Link>
                             </div>
                         );
                     })}

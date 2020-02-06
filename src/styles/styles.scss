@@ -64,3 +64,25 @@
         display: none;
     }
 }
+
+.banner {
+    position: relative
+}
+
+.banner_learn_more {
+    position: absolute;
+}
+
+.desktop .banner_learn_more {
+    bottom: 4rem;
+    left: 5rem;
+    background: white;
+    padding: 0.8rem;
+}
+
+.mobile .banner_learn_more {
+    bottom: 20%;
+    left: 15%;
+    background: white;
+    padding: 0.8rem;
+}
