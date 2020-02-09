@@ -5,6 +5,7 @@ import { Layout } from '../components/layout';
 import { Breadcrumbs } from '../components/breadcrumbs';
 import { ItemImages } from '../components/itemImages';
 import { cart } from '../locales';
+import { Contact } from '../components/contact';
 
 const Item = ({ data, pageContext }) => {
     const { language } = pageContext;
@@ -61,6 +62,7 @@ const Item = ({ data, pageContext }) => {
                 />
                 <aside>{/* recommended items */}</aside>
             </div>
+            <Contact />
         </Layout>
     );
 };

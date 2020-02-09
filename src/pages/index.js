@@ -4,6 +4,7 @@ import { Layout } from '../components/layout';
 import { Banners } from '../components/banners';
 import { Card } from '../components/card';
 import { FeaturedItems } from '../components/FeaturedItems';
+import { Contact } from '../components/contact';
 
 const Index = ({ pageContext, data }) => {
     const { language } = pageContext;
@@ -37,6 +38,7 @@ const Index = ({ pageContext, data }) => {
         <Layout language={language}>
             <Banners banners={banners} />
             <FeaturedItems items={featuredItems} />
+            <Contact />
             <ul>
                 {brands.map(brand => {
                     return (
