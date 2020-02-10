@@ -25,6 +25,7 @@ const Index = ({ pageContext, data }) => {
 
     const [selectedBrand, setSelectedBrand] = useState('');
     const [listItems, setListItems] = useState(items);
+    const [length, setLength] = useState(3);
 
     useEffect(() => {
         setListItems(
@@ -56,7 +57,7 @@ const Index = ({ pageContext, data }) => {
                 })}
             </ul>
             <ul>
-                {listItems.map(item => {
+                {listItems.slice(0, length).map(item => {
                     return (
                         <Card
                             name={item.name}
@@ -73,6 +74,12 @@ const Index = ({ pageContext, data }) => {
                     );
                 })}
             </ul>
+            {length < listItems.length && (
+                <button type='button' onClick={() => setLength(length + 3)}>
+                    {/* FIXME i18n */}
+                    Load more
+                </button>
+            )}
         </Layout>
     );
 };
