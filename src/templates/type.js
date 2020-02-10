@@ -25,6 +25,7 @@ const Type = ({ data, pageContext }) => {
 
     const [selectedBrand, setSelectedBrand] = useState('');
     const [listItems, setListItems] = useState(items);
+    const [length, setLength] = useState(3);
 
     useEffect(() => {
         setListItems(
@@ -59,7 +60,7 @@ const Type = ({ data, pageContext }) => {
                 })}
             </ul>
             <ul>
-                {items.map(item => {
+                {listItems.slice(0, length).map(item => {
                     return (
                         <Card
                             name={item.name}
@@ -76,6 +77,12 @@ const Type = ({ data, pageContext }) => {
                     );
                 })}
             </ul>
+            {length < listItems.length && (
+                <button type='button' onClick={() => setLength(length + 3)}>
+                    {/* FIXME i18n */}
+                    Load more
+                </button>
+            )}
         </Layout>
     );
 };
