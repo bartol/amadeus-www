@@ -1,7 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { request } from 'graphql-request';
+import isEmail from 'validator/es/lib/isEmail';
 import { Link } from 'gatsby';
 import { SharedContext } from '../state/shared';
 import { footer } from '../locales';
+
+const newsletterQuery = `mutation($email:String!) {
+  newsletterSubscribe(email:$email)
+}`;
 
 export const Footer = () => {
     const {
@@ -17,8 +23,34 @@ export const Footer = () => {
             .join('_');
     };
 
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState('');
+
+    const newsletterSubmit = () => {
+        setStatus('loading');
+        request('https://api.amadeus2.hr', newsletterQuery, {
+            email,
+        }).then(data => setStatus(data.newsletterSubscribe));
+    };
+
     return (
         <footer>
+            <section>
+                <input
+                    type='email'
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                />
+                <button
+                    type='submit'
+                    onClick={() => newsletterSubmit()}
+                    disabled={!isEmail(email) || status === 'loading'}
+                >
+                    {status
+                        ? footer[language].newsletter_status[status]
+                        : footer[language].newsletter_button}
+                </button>
+            </section>
             <section>
                 {footer[language].support_header}
                 <ul>
@@ -126,7 +158,7 @@ export const Footer = () => {
                                     <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path>
                                     <circle cx='12' cy='10' r='3'></circle>
                                 </svg>
-                                Vladimira Nazora 45 Ploče, Hrvatska
+                                Vladimira Nazora 45 Ploče
                             </a>
                         </address>
                     </li>

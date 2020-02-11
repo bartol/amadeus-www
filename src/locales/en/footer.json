@@ -6,5 +6,11 @@
     "delivery": "Delivery",
     "servicing": "Servicing",
     "acc": "My account",
-    "contact_header": "Contact"
+    "contact_header": "Contact",
+    "newsletter_button": "Send",
+    "newsletter_status": {
+        "success": "Success",
+        "failure": "Failure",
+        "loading": "Sending..."
+    }
 }
