@@ -6,5 +6,11 @@
     "delivery": "Dostava",
     "servicing": "Servis",
     "acc": "Moj račun",
-    "contact_header": "Kontaktirajte nas"
+    "contact_header": "Kontaktirajte nas",
+    "newsletter_button": "Pošalji",
+    "newsletter_status": {
+        "success": "Uspješno poslano",
+        "failure": "Došlo je do pogreške",
+        "loading": "Slanje..."
+    }
 }

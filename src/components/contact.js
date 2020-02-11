@@ -16,6 +16,7 @@ export const Contact = () => {
     const [response, setResponse] = useState(null);
 
     const submitMessage = () => {
+        setResponse('loading');
         if (email && isEmail(email) && message) {
             request('https://api.amadeus2.hr', messageQuery, {
                 email,
