@@ -16,6 +16,32 @@ export const Header = ({ changeLanguageCustomUrl }) => {
 
     return (
         <header>
+            <nav>
+                <a
+                    href='mailto:amadeus@pioneer.hr'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                >
+                    amadeus@pioneer.hr
+                </a>
+                <a
+                    href='tel:+38520670111'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                >
+                    +385 (20) 670 111
+                </a>
+                {/* FIXME i18n */}
+                <address>
+                    <a
+                        href='https://goo.gl/maps/74YCcjpq3PBWpKZK9'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
+                        Vladimira Nazora 45 Ploče, Hrvatska
+                    </a>
+                </address>
+            </nav>
             <Link to={`${getLanguagePrefix(language)}/`}>Amadeus</Link>
             <button type='button' onClick={() => setSearchVisible(true)}>
                 {/* FIXME add icon */}
