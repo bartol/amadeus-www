@@ -79,7 +79,14 @@ export const Header = ({ changeLanguageCustomUrl }) => {
                     Moj racun
                 </Link>
             </nav>
-            <Link to={`${getLanguagePrefix(language)}/`}>Amadeus</Link>
+            <Link to={`${getLanguagePrefix(language)}/`}>
+                <img
+                    src='/logo.png'
+                    alt='Amadeus logo'
+                    width={200}
+                    height={40}
+                />
+            </Link>
             <button type='button' onClick={() => setSearchVisible(true)}>
                 {/* FIXME add icon */}
                 search

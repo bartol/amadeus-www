@@ -36,20 +36,28 @@ export const Footer = () => {
     return (
         <footer>
             <section>
-                <input
-                    type='email'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                <img
+                    src='/logo.png'
+                    alt='Amadeus logo'
+                    width={300}
+                    height={60}
                 />
-                <button
-                    type='submit'
-                    onClick={() => newsletterSubmit()}
-                    disabled={!isEmail(email) || status === 'loading'}
-                >
-                    {status
-                        ? footer[language].newsletter_status[status]
-                        : footer[language].newsletter_button}
-                </button>
+                <div>
+                    <input
+                        type='email'
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                    <button
+                        type='submit'
+                        onClick={() => newsletterSubmit()}
+                        disabled={!isEmail(email) || status === 'loading'}
+                    >
+                        {status
+                            ? footer[language].newsletter_status[status]
+                            : footer[language].newsletter_button}
+                    </button>
+                </div>
             </section>
             <section>
                 {footer[language].support_header}
