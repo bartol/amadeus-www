@@ -7,17 +7,16 @@ import { SharedContext } from '../state/shared';
 const signatureQuery = `query($input: SignatureParams!) {
   signature(input: $input) {
     shop_id
-    order_id
+    cart_id 
     amount
-    authorization_type
     language
     success_url
     failure_url
-    first_name
     email
     order_info
     order_items
     signature
+    price
   }
 }`;
 
@@ -33,7 +32,6 @@ export const Cart = () => {
         convertToCurrency,
     } = useContext(SharedContext);
 
-    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [newsletter, setNewsletter] = useState(false);
     const [terms, setTerms] = useState(false);
@@ -41,19 +39,19 @@ export const Cart = () => {
         shop_id: '',
         order_id: '',
         amount: 0,
-        authorization_type: 0,
         language: '',
         success_url: '',
         failure_url: '',
-        first_name: '',
         email: '',
         order_info: '',
         order_items: '',
         signature: '',
+        price: '',
+        cart_id: '',
     });
 
     useEffect(() => {
-        if (cart.length && name && email && isEmail(email) && terms) {
+        if (cart.length && email && isEmail(email) && terms) {
             const order = [];
             cart.forEach(item => {
                 for (let i = 0; i < item.quantity; i++) {
@@ -64,14 +62,14 @@ export const Cart = () => {
             request('https://api.amadeus2.hr', signatureQuery, {
                 input: {
                     order,
-                    name,
+                    name: 'tmp',
                     email,
                     newsletter,
                     language,
                 },
             }).then(data => setPgwData(data.signature));
         }
-    }, [cart, email, name, terms]);
+    }, [cart, email, terms]);
 
     return (
         <div
@@ -131,107 +129,123 @@ export const Cart = () => {
                         );
                     })}
                 </ul>
+                <input
+                    type='email'
+                    placeholder='Email'
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                />
+                <input
+                    type='checkbox'
+                    checked={newsletter}
+                    onChange={() => setNewsletter(!newsletter)}
+                />
+                Newsletter
+                <input
+                    type='checkbox'
+                    checked={terms}
+                    onChange={() => setTerms(!terms)}
+                />
+                Prihvacam uvjete o koristenju
                 {/* TODO checkout */}
                 <form
-                    id='payway-authorize-form'
-                    name='payway-authorize-form'
-                    method='post'
-                    action='https://pgwtest.ht.hr/services/payment/api/authorize-form'
+                    name='pay'
+                    action='https://formtest.payway.com.hr/Authorization.aspx'
+                    method='POST'
                 >
                     <input
-                        type='text'
-                        placeholder='Name'
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                    />
-                    <input
-                        type='email'
-                        placeholder='Email'
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                    <input
-                        type='checkbox'
-                        checked={newsletter}
-                        onChange={() => setNewsletter(!newsletter)}
-                    />
-                    Newsletter
-                    <input
-                        type='checkbox'
-                        checked={terms}
-                        onChange={() => setTerms(!terms)}
-                    />
-                    Prihvacam uvjete o koristenju
-                    <button
-                        // type='submit'
-                        disabled={
-                            !(
-                                cart.length &&
-                                terms &&
-                                name &&
-                                email &&
-                                isEmail(email) &&
-                                name === pgwData.first_name &&
-                                email === pgwData.email
-                            )
-                        }
-                    >
-                        Pay with payway
-                    </button>
-                    <input
                         type='hidden'
-                        name='pgw_shop_id'
+                        name='ShopID'
                         value={pgwData.shop_id}
                     />
                     <input
                         type='hidden'
-                        name='pgw_order_id'
-                        value={pgwData.order_id}
+                        name='ShoppingCartID'
+                        value={pgwData.cart_id}
                     />
                     <input
                         type='hidden'
-                        name='pgw_amount'
-                        value={pgwData.amount}
+                        name='TotalAmount'
+                        value={pgwData.price}
                     />
                     <input
                         type='hidden'
-                        name='pgw_authorization_type'
-                        value={pgwData.authorization_type}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_success_url'
-                        value={pgwData.success_url}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_failure_url'
-                        value={pgwData.failure_url}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_first_name'
-                        value={pgwData.first_name}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_email'
-                        value={pgwData.email}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_email'
-                        value={pgwData.order_info}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_email'
-                        value={pgwData.order_items}
-                    />
-                    <input
-                        type='hidden'
-                        name='pgw_signature'
+                        name='Signature'
                         value={pgwData.signature}
+                    />
+                    <input
+                        type='hidden'
+                        name='ReturnURL'
+                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                    />
+                    <input
+                        type='hidden'
+                        name='CancelURL'
+                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                    />
+                    <input
+                        type='hidden'
+                        name='ReturnErrorURL'
+                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                    />
+                    <input
+                        type='submit'
+                        value='Buy'
+                        disabled={
+                            !(
+                                cart.length &&
+                                terms &&
+                                email &&
+                                isEmail(email) &&
+                                email === pgwData.email
+                            )
+                        }
+                    />
+                </form>
+                <form
+                    name='pay'
+                    action='https://formtest.payway.com.hr/Authorization.aspx'
+                    method='POST'
+                >
+                    <input type='hidden' name='ShopID' value='10001888' />
+                    <input
+                        type='hidden'
+                        name='ShoppingCartID'
+                        value='Amadeus-7484810000'
+                    />
+                    <input type='hidden' name='TotalAmount' value='20,00' />
+                    <input
+                        type='hidden'
+                        name='Signature'
+                        value='246facb299793fb6c61b39038859f4b1'
+                    />
+                    <input
+                        type='hidden'
+                        name='ReturnURL'
+                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                    />
+                    <input
+                        type='hidden'
+                        name='CancelURL'
+                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                    />
+                    <input
+                        type='hidden'
+                        name='ReturnErrorURL'
+                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                    />
+                    <input
+                        type='submit'
+                        value='Buy'
+                        disabled={
+                            !(
+                                cart.length &&
+                                terms &&
+                                email &&
+                                isEmail(email) &&
+                                email === pgwData.email
+                            )
+                        }
                     />
                 </form>
                 <pre>{JSON.stringify(pgwData, null, 2)}</pre>
