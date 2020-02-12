@@ -249,7 +249,6 @@ export const Cart = () => {
                     />
                 </form>
                 <pre>{JSON.stringify(pgwData, null, 2)}</pre>
-                <pre>{JSON.stringify(name, null, 2)}</pre>
                 <pre>{JSON.stringify(email, null, 2)}</pre>
                 <pre>{JSON.stringify(terms, null, 2)}</pre>
                 <pre>{JSON.stringify(newsletter, null, 2)}</pre>

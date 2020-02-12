@@ -73,6 +73,13 @@ address {
     position: relative
 }
 
+.desktop-banner-glider > *:nth-child(n + 2),
+.mobile-banner-glider > *:nth-child(n + 2),
+.featured-glider > *:nth-child(n + 2),
+.item-glider > *:nth-child(n + 2) {
+    display: none;
+}
+
 .banner_learn_more {
     position: absolute;
 }

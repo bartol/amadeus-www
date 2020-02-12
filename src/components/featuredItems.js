@@ -19,10 +19,20 @@ export const FeaturedItems = ({ items }) => {
                 next: '.featured-glider-next',
             },
         });
+
+        document
+            .querySelector('.featured-glider')
+            .addEventListener('glider-loaded', function() {
+                document
+                    .querySelectorAll('.featured-glider > *')
+                    .forEach(item => {
+                        item.style.display = 'block';
+                    });
+            });
     }, []);
     return (
         <div>
-            <div className='glider-wrap' ref={gliderRef}>
+            <div className='glider-wrap featured-glider' ref={gliderRef}>
                 {items.map(item => {
                     return (
                         <Card
