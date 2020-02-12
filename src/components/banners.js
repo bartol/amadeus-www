@@ -1,5 +1,5 @@
 // FIXME i18n
-import React, { useContext, useRef, useLayoutEffect } from 'react';
+import React, { useContext, useRef, useLayoutEffect, useEffect } from 'react';
 import { Link } from 'gatsby';
 import Image from 'gatsby-image';
 import Glider from 'glider-js';
@@ -24,7 +24,18 @@ export const Banners = ({ banners }) => {
                 next: '.desktop-glider-next',
             },
         });
+
+        document
+            .querySelector('.desktop-banner-glider')
+            .addEventListener('glider-loaded', function() {
+                document
+                    .querySelectorAll('.desktop-banner-glider > *')
+                    .forEach(banner => {
+                        banner.style.display = 'block';
+                    });
+            });
     }, []);
+
     const gliderMobileRef = useRef(null);
     useLayoutEffect(() => {
         if (!gliderMobileRef.current) {
@@ -40,12 +51,25 @@ export const Banners = ({ banners }) => {
                 next: '.mobile-glider-next',
             },
         });
+
+        document
+            .querySelector('.mobile-banner-glider')
+            .addEventListener('glider-loaded', function() {
+                document
+                    .querySelectorAll('.mobile-banner-glider > *')
+                    .forEach(banner => {
+                        banner.style.display = 'block';
+                    });
+            });
     }, []);
 
     return (
         <div>
             <div className='mobile'>
-                <div className='glider-wrap' ref={gliderMobileRef}>
+                <div
+                    className='glider-wrap mobile-banner-glider'
+                    ref={gliderMobileRef}
+                >
                     {mobile.map((image, index) => {
                         return (
                             <div key={index} className='banner'>
@@ -85,7 +109,10 @@ export const Banners = ({ banners }) => {
                 <div role='tablist' className='mobile-dots'></div>
             </div>
             <div className='desktop'>
-                <div className='glider-wrap' ref={gliderDesktopRef}>
+                <div
+                    className='glider-wrap desktop-banner-glider'
+                    ref={gliderDesktopRef}
+                >
                     {desktop.map((image, index) => {
                         return (
                             <div key={index} className='banner'>

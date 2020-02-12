@@ -19,11 +19,21 @@ export const ItemImages = ({ images, name }) => {
             draggable: true,
         });
         setGlider(glider);
+
+        document
+            .querySelector('.item-glider')
+            .addEventListener('glider-loaded', function() {
+                document
+                    .querySelectorAll('.item-glider > *')
+                    .forEach(banner => {
+                        banner.style.display = 'block';
+                    });
+            });
     }, []);
 
     return (
         <div>
-            <div className='glider-wrap' ref={gliderRef}>
+            <div className='glider-wrap item-glider' ref={gliderRef}>
                 {images.map(image => {
                     return (
                         <div key={image.index}>
