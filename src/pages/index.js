@@ -3,7 +3,7 @@ import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
 import { Banners } from '../components/banners';
 import { Card } from '../components/card';
-import { FeaturedItems } from '../components/FeaturedItems';
+import { FeaturedItems } from '../components/featuredItems';
 import { Contact } from '../components/contact';
 
 const Index = ({ pageContext, data }) => {
