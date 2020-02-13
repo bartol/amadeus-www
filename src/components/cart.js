@@ -202,52 +202,6 @@ export const Cart = () => {
                         }
                     />
                 </form>
-                <form
-                    name='pay'
-                    action='https://formtest.payway.com.hr/Authorization.aspx'
-                    method='POST'
-                >
-                    <input type='hidden' name='ShopID' value='10001888' />
-                    <input
-                        type='hidden'
-                        name='ShoppingCartID'
-                        value='Amadeus-7484810000'
-                    />
-                    <input type='hidden' name='TotalAmount' value='20,00' />
-                    <input
-                        type='hidden'
-                        name='Signature'
-                        value='246facb299793fb6c61b39038859f4b1'
-                    />
-                    <input
-                        type='hidden'
-                        name='ReturnURL'
-                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
-                    />
-                    <input
-                        type='hidden'
-                        name='CancelURL'
-                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
-                    />
-                    <input
-                        type='hidden'
-                        name='ReturnErrorURL'
-                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
-                    />
-                    <input
-                        type='submit'
-                        value='Buy'
-                        disabled={
-                            !(
-                                cart.length &&
-                                terms &&
-                                email &&
-                                isEmail(email) &&
-                                email === pgwData.email
-                            )
-                        }
-                    />
-                </form>
                 <pre>{JSON.stringify(pgwData, null, 2)}</pre>
                 <pre>{JSON.stringify(email, null, 2)}</pre>
                 <pre>{JSON.stringify(terms, null, 2)}</pre>
