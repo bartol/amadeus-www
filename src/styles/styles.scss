@@ -1,7 +1,61 @@
+/////////////////////////////////////////////
+////// global
+/////////////////////////////////////////////
+
+a {
+    text-decoration: none;
+}
+
+* {
+     border-width: 0;
+     border-style: solid;
+     border-color: #e2e8f0;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0aec0'%3e%3cpath d='M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z'/%3e%3c/svg%3e");
+    appearance: none;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    border-color: #e2e8f0;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    padding-top: 0.5rem;
+    padding-right: 2.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    border-color: #63b3ed;
+}
+
+
+// disable focus ring in firefox
+select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #000;
+}
+
+/////////////////////////////////////////////
+////// container
+/////////////////////////////////////////////
+
 .container {
   max-width: 1280px;
   width: 95%;
   margin: 0 auto;
+}
+
+body {
+    margin: 0;
+    line-height: 1.5;
 }
 
 // Hide scrollbars for glider-js in firefox
@@ -13,6 +67,96 @@
     overflow: hidden;
   }
 }
+
+/////////////////////////////////////////////
+////// header
+/////////////////////////////////////////////
+
+.headerInfoWrapper {
+    background-color: #111;
+}
+
+.headerInfo {
+    max-width: 1280px;
+    width: 95%;
+    margin: 0 auto;
+    padding: 0.3rem 0;
+
+    display: flex;
+    justify-content: space-between;
+
+    a {
+        color: #eee;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        margin-top: 0.2rem;
+    }
+
+    .feather-mail,
+    .feather-phone-call {
+        margin-right: 0.5rem;
+    }
+}
+
+.account_label {
+    display: none;
+}
+
+.header {
+    margin: 0.75rem 0;
+}
+
+.logo {
+    width: 10rem;
+    height: 2rem;
+}
+
+.main_part_header {
+    width: 100%;
+
+    display: flex;
+
+    a {
+        flex-grow: 1;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        background-color:  transparent;
+        border: none;
+
+        svg {
+            height: 2rem;
+            width: 2rem;
+        }
+    }
+
+    .cartButton {
+        position: relative;
+    }
+
+    .cartItemCount {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        font-size: 0.8rem;
+
+        height: 1.4rem;
+        width: 1.4rem;
+        background-color: yellow;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+}
+
+/////////////////////////////////////////////
+////// other
+/////////////////////////////////////////////
 
 .overlay {
   position: fixed;
