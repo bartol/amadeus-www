@@ -127,7 +127,10 @@ export const indexQuery = graphql`
             }
             banners {
                 desktop {
-                    link
+                    link {
+                        hr
+                        en
+                    }
                     src
                     optimized {
                         childImageSharp {
@@ -138,7 +141,10 @@ export const indexQuery = graphql`
                     }
                 }
                 mobile {
-                    link
+                    link {
+                        hr
+                        en
+                    }
                     src
                     optimized {
                         childImageSharp {
