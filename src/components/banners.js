@@ -83,7 +83,7 @@ export const Banners = ({ banners }) => {
                                     fadeIn
                                 />
                                 <Link
-                                    to={image.link}
+                                    to={image.link[language]}
                                     className='banner_learn_more'
                                 >
                                     Saznaj vise
@@ -126,7 +126,7 @@ export const Banners = ({ banners }) => {
                                     fadeIn
                                 />
                                 <Link
-                                    to={image.link}
+                                    to={image.link[language]}
                                     className='banner_learn_more'
                                 >
                                     Saznaj vise
