@@ -6,6 +6,10 @@ a {
     text-decoration: none;
 }
 
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 * {
      border-width: 0;
      border-style: solid;
@@ -20,13 +24,17 @@ select {
     border-color: #e2e8f0;
     border-width: 1px;
     border-radius: 0.25rem;
-    padding-top: 0.5rem;
-    padding-right: 2.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.75rem;
+    // padding-top: 0.5rem;
+    // padding-right: 2.5rem;
+    // padding-bottom: 0.5rem;
+    // padding-left: 0.75rem;
+    padding-top: 0.25rem;
+    padding-right: 1.45rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.25rem;
     font-size: 1rem;
-    line-height: 1.5;
-    background-position: right 0.5rem center;
+    background-position: right 0.15rem center;
+    // background-position: right 0.5rem center;
     background-size: 1.5em 1.5em;
 }
 
@@ -80,7 +88,7 @@ body {
     max-width: 1280px;
     width: 95%;
     margin: 0 auto;
-    padding: 0.3rem 0;
+    padding: 0.35rem 0;
 
     display: flex;
     justify-content: space-between;
@@ -90,7 +98,6 @@ body {
         font-size: 0.8rem;
         display: flex;
         align-items: center;
-        margin-top: 0.2rem;
     }
 
     .feather-mail,
@@ -108,8 +115,8 @@ body {
 }
 
 .logo {
-    width: 10rem;
-    height: 2rem;
+    width: 11rem;
+    height: 2.25rem;
 }
 
 .main_part_header {
@@ -128,19 +135,20 @@ body {
         border: none;
 
         svg {
-            height: 2rem;
-            width: 2rem;
+            height: 2.25rem;
+            width: 2.25rem;
         }
     }
 
     .cartButton {
         position: relative;
+        margin-right: 0.1rem;
     }
 
     .cartItemCount {
         position: absolute;
-        top: -5px;
-        right: -5px;
+        top: -3px;
+        right: -3px;
         font-size: 0.8rem;
 
         height: 1.4rem;
@@ -152,6 +160,16 @@ body {
         align-items: center;
         border-radius: 50%;
     }
+}
+
+.header_select {
+    display: flex;
+    justify-content: right;
+    margin-top: 0.75rem;
+}
+
+.select_currency {
+    margin-left: 0.75rem;
 }
 
 /////////////////////////////////////////////
