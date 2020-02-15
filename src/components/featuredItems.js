@@ -32,6 +32,8 @@ export const FeaturedItems = ({ items }) => {
     }, []);
     return (
         <div>
+            {/* FIXME i18n */}
+            <h2 className='featured_heading'>Istaknuti proizvodi</h2>
             <div className='glider-wrap featured-glider' ref={gliderRef}>
                 {items.map(item => {
                     return (
@@ -46,6 +48,7 @@ export const FeaturedItems = ({ items }) => {
                             slug={item.slug}
                             id={item.id}
                             key={item.id}
+                            featured={true}
                         />
                     );
                 })}
