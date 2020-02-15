@@ -15,6 +15,7 @@ export const Card = ({
     slug,
     id,
     hidden,
+    featured,
 }) => {
     const {
         language,
@@ -27,7 +28,7 @@ export const Card = ({
     if (hidden) return <></>;
 
     return (
-        <li>
+        <li className={`card${featured ? ' featured' : ''}`}>
             <Link
                 to={`${getLanguagePrefix(language)}/${type[
                     language
@@ -40,8 +41,19 @@ export const Card = ({
                     fadeIn
                 />
                 <h2>{name[language]}</h2>
-                <h3>{convertToCurrency(price)}</h3>
-                <h3>{getQuantity(id, quantity)}</h3>
+                <div className='card_params'>
+                    {discountedPrice !== price ? (
+                        <h3>{convertToCurrency(price)}</h3>
+                    ) : (
+                        <h3>
+                            <strike>{convertToCurrency(price)}</strike>
+                            {convertToCurrency(discountedPrice)}
+                        </h3>
+                    )}
+                    <h3 className='card_quantity'>
+                        {getQuantity(id, quantity)} kom.
+                    </h3>
+                </div>
             </Link>
             <button
                 type='button'
@@ -57,6 +69,7 @@ export const Card = ({
                     })
                 }
                 disabled={getQuantity(id, quantity) === 0}
+                className='add_to_cart_button'
             >
                 {cart[language].addToCard}
             </button>
