@@ -86,27 +86,57 @@ export const Banners = ({ banners }) => {
                                     to={image.link[language]}
                                     className='banner_learn_more'
                                 >
-                                    Saznaj vise
+                                    Saznaj više
                                 </Link>
                             </div>
                         );
                     })}
                 </div>
-                <button
-                    role='button'
-                    aria-label='Previous'
-                    className='mobile-glider-prev'
-                >
-                    «
-                </button>
-                <button
-                    role='button'
-                    aria-label='Next'
-                    className='mobile-glider-next'
-                >
-                    »
-                </button>
-                <div role='tablist' className='mobile-dots'></div>
+                <nav className='carousel_nav'>
+                    <button
+                        role='button'
+                        aria-label='Previous'
+                        className='mobile-glider-prev'
+                    >
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            className='feather feather-chevrons-left'
+                        >
+                            <polyline points='11 17 6 12 11 7'></polyline>
+                            <polyline points='18 17 13 12 18 7'></polyline>
+                        </svg>
+                    </button>
+                    <div role='tablist' className='mobile-dots'></div>
+                    <button
+                        role='button'
+                        aria-label='Next'
+                        className='mobile-glider-next'
+                    >
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            className='feather feather-chevrons-right'
+                        >
+                            <polyline points='13 17 18 12 13 7'></polyline>
+                            <polyline points='6 17 11 12 6 7'></polyline>
+                        </svg>
+                    </button>
+                </nav>
             </div>
             <div className='desktop'>
                 <div
@@ -129,7 +159,7 @@ export const Banners = ({ banners }) => {
                                     to={image.link[language]}
                                     className='banner_learn_more'
                                 >
-                                    Saznaj vise
+                                    Saznaj više
                                 </Link>
                             </div>
                         );

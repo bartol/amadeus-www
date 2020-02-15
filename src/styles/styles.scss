@@ -28,22 +28,26 @@ select {
     // padding-right: 2.5rem;
     // padding-bottom: 0.5rem;
     // padding-left: 0.75rem;
-    padding-top: 0.25rem;
-    padding-right: 1.45rem;
-    padding-bottom: 0.25rem;
-    padding-left: 0.25rem;
+    padding-top: 0.4rem;
+    padding-right: 1.8rem;
+    padding-bottom: 0.4rem;
+    padding-left: 0.5rem;
     font-size: 1rem;
-    background-position: right 0.15rem center;
+    background-position: right 0.25rem center;
     // background-position: right 0.5rem center;
     background-size: 1.5em 1.5em;
 }
 
-select:focus {
+select:focus,
+.banner_learn_more:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
     border-color: #63b3ed;
 }
 
+li {
+    list-style: none;
+}
 
 // disable focus ring in firefox
 select:-moz-focusring {
@@ -88,7 +92,7 @@ body {
     max-width: 1280px;
     width: 95%;
     margin: 0 auto;
-    padding: 0.35rem 0;
+    padding: 0.5rem 0;
 
     display: flex;
     justify-content: space-between;
@@ -134,6 +138,11 @@ body {
         background-color:  transparent;
         border: none;
 
+        &:focus {
+            outline: none;
+            color: cyan;
+        }
+
         svg {
             height: 2.25rem;
             width: 2.25rem;
@@ -153,7 +162,7 @@ body {
 
         height: 1.4rem;
         width: 1.4rem;
-        background-color: yellow;
+        background-color: cyan;
 
         display: flex;
         justify-content: center;
@@ -164,12 +173,99 @@ body {
 
 .header_select {
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
     margin-top: 0.75rem;
 }
 
 .select_currency {
     margin-left: 0.75rem;
+}
+
+/////////////////////////////////////////////
+////// banners
+/////////////////////////////////////////////
+
+.carousel_nav {
+    display: flex;
+    align-items: center;
+    margin-top: 0.15rem;
+
+    > button {
+        background: transparent;
+        padding: 0;
+
+        &.disabled {
+            opacity: 0.25;
+        }
+
+        &:focus {
+            outline: 0;
+        }
+
+        svg {
+            height: 2.25rem;
+            width: 2.25rem;
+        }
+    }
+}
+
+.glider-dot {
+    opacity: 0.25;
+    background-color: black !important;
+
+    &.active {
+        opacity: 0.9;
+    }
+}
+
+.desktop {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .desktop {
+        display: block;
+    }
+
+    .mobile {
+        display: none;
+    }
+}
+
+.banner {
+    position: relative
+}
+
+// fix carousel flash of content
+.desktop-banner-glider > *:nth-child(n + 2),
+.mobile-banner-glider > *:nth-child(n + 2),
+.featured-glider > *:nth-child(n + 2),
+.item-glider > *:nth-child(n + 2) {
+    display: none;
+}
+
+.banner_learn_more {
+    position: absolute;
+    color: black;
+}
+
+.desktop .banner_learn_more {
+    bottom: 4rem;
+    left: 5rem;
+    background: white;
+    padding: 0.8rem;
+}
+
+.mobile .banner_learn_more {
+    bottom: 10%;
+    left: 10%;
+
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border-color: #e2e8f0;
+    border-width: 1px;
+    border-radius: 0.35rem;
 }
 
 /////////////////////////////////////////////
@@ -217,45 +313,3 @@ address {
 }
 
 // banners
-.desktop {
-    display: none;
-}
-
-@media (min-width: 640px) {
-    .desktop {
-        display: block;
-    }
-
-    .mobile {
-        display: none;
-    }
-}
-
-.banner {
-    position: relative
-}
-
-.desktop-banner-glider > *:nth-child(n + 2),
-.mobile-banner-glider > *:nth-child(n + 2),
-.featured-glider > *:nth-child(n + 2),
-.item-glider > *:nth-child(n + 2) {
-    display: none;
-}
-
-.banner_learn_more {
-    position: absolute;
-}
-
-.desktop .banner_learn_more {
-    bottom: 4rem;
-    left: 5rem;
-    background: white;
-    padding: 0.8rem;
-}
-
-.mobile .banner_learn_more {
-    bottom: 20%;
-    left: 15%;
-    background: white;
-    padding: 0.8rem;
-}
