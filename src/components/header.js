@@ -65,26 +65,29 @@ export const Header = ({ changeLanguageCustomUrl }) => {
                     ) : null}
                 </button>
             </div>
-            <select
-                onChange={e =>
-                    changeLanguage(e.target.value, changeLanguageCustomUrl)
-                }
-                value={language}
-            >
-                <option value='hr'>Hrvatski</option>
-                <option value='en'>English</option>
-            </select>
-            <select
-                value={currency}
-                onChange={e => changeCurrency(e.target.value)}
-            >
-                <option value='HRK'>HRK</option>
-                <option value='EUR'>EUR</option>
-                <option value='BAM'>BAM</option>
-                <option value='RSD'>RSD</option>
-                <option value='USD'>USD</option>
-                <option value='GBP'>GBP</option>
-            </select>
+            <div className='header_select'>
+                <select
+                    onChange={e =>
+                        changeLanguage(e.target.value, changeLanguageCustomUrl)
+                    }
+                    value={language}
+                >
+                    <option value='hr'>Hrvatski</option>
+                    <option value='en'>English</option>
+                </select>
+                <select
+                    value={currency}
+                    onChange={e => changeCurrency(e.target.value)}
+                    className='select_currency'
+                >
+                    <option value='HRK'>HRK</option>
+                    <option value='EUR'>EUR</option>
+                    <option value='BAM'>BAM</option>
+                    <option value='RSD'>RSD</option>
+                    <option value='USD'>USD</option>
+                    <option value='GBP'>GBP</option>
+                </select>
+            </div>
         </header>
     );
 };
