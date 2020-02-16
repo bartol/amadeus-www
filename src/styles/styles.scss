@@ -416,6 +416,44 @@ body {
 }
 
 /////////////////////////////////////////////
+////// categories
+/////////////////////////////////////////////
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1.8rem 0;
+    padding: 0;
+}
+
+.category {
+    max-width: calc(300px - 0.5rem);
+    width: calc(50% - 0.5rem);
+    margin: 0.25rem;
+
+    position: relative;
+    border-radius: 0.1rem;
+    overflow: hidden;
+
+    .category_image {
+        filter: brightness(0.6);
+        object-fit: cover;
+    }
+
+    span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+
+        font-size: 1.75rem;
+        font-weight: 500;
+        color: #fff;
+    }
+
+}
+
+/////////////////////////////////////////////
 ////// other
 /////////////////////////////////////////////
 
