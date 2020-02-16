@@ -25,27 +25,45 @@ export const Contact = () => {
         }
     };
 
+    const getInfo = status => {
+        switch (status) {
+            case 'success':
+                return 'Succesfuly sent message.';
+            case 'failure':
+                return 'There was error, please try again.';
+            case 'loading':
+                return 'Sending message.';
+        }
+    };
+
     return (
         <section>
-            <input
-                type='email'
-                placeholder='Email'
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-            />
+            <h2 className='featured_heading'>Kontaktirajte nas</h2>
+            <div className='form_heading'>
+                <input
+                    type='email'
+                    placeholder='Email'
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    className='contact_email'
+                />
+                <button
+                    type='submit'
+                    onClick={() => submitMessage()}
+                    disabled={!email || !isEmail(email) || !message}
+                    className='contact_submit'
+                >
+                    Pošalji
+                </button>
+            </div>
             <textarea
                 placeholder='Message'
                 value={message}
                 onChange={e => setMessage(e.target.value)}
+                className='contact_textarea'
+                rows={5}
             />
-            <button
-                type='submit'
-                onClick={() => submitMessage()}
-                disabled={!email || !isEmail(email) || !message}
-            >
-                submit
-            </button>
-            {response && <p>{response}</p>}
+            {response && <p className='contact_info'>{getInfo(response)}</p>}
         </section>
     );
 };
