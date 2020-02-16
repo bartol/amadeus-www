@@ -5,6 +5,7 @@ import { Banners } from '../components/banners';
 import { Card } from '../components/card';
 import { FeaturedItems } from '../components/featuredItems';
 import { Contact } from '../components/contact';
+import { Categories } from '../components/categories';
 
 const Index = ({ pageContext, data }) => {
     const { language } = pageContext;
@@ -40,6 +41,7 @@ const Index = ({ pageContext, data }) => {
             <Banners banners={banners} />
             <FeaturedItems items={featuredItems} />
             <Contact />
+            <Categories />
             <ul>
                 {brands.map(brand => {
                     return (
