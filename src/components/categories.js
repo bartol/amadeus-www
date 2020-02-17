@@ -31,25 +31,29 @@ export const Categories = () => {
     const language_index = languages.indexOf(language);
 
     return (
-        <ul className='categories'>
-            {types.map(type => {
-                const name = type.name.split('|||')[language_index];
-                return (
-                    <li key={type.name} className='category'>
-                        <Link
-                            to={`${getLanguagePrefix(
-                                language
-                            )}/${name.toLowerCase()}/`}
-                        >
-                            <Image
-                                fluid={type.optimized.childImageSharp.fluid}
-                                className='category_image'
-                            />
-                            <span>{name}</span>
-                        </Link>
-                    </li>
-                );
-            })}
-        </ul>
+        <>
+            {/* FIXME i18n */}
+            <h2 className='featured_heading'>Kategorije</h2>
+            <ul className='categories'>
+                {types.map(type => {
+                    const name = type.name.split('|||')[language_index];
+                    return (
+                        <li key={type.name} className='category'>
+                            <Link
+                                to={`${getLanguagePrefix(
+                                    language
+                                )}/${name.toLowerCase()}/`}
+                            >
+                                <Image
+                                    fluid={type.optimized.childImageSharp.fluid}
+                                    className='category_image'
+                                />
+                                <span>{name}</span>
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
+        </>
     );
 };

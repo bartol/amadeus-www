@@ -28,7 +28,7 @@ export const Card = ({
     if (hidden) return <></>;
 
     return (
-        <li className={`card${featured ? ' featured' : ''}`}>
+        <li className={`card ${featured ? 'featured' : 'regular'}`}>
             <Link
                 to={`${getLanguagePrefix(language)}/${type[
                     language

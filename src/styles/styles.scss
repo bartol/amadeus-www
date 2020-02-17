@@ -208,6 +208,7 @@ body {
     display: flex;
     justify-content: flex-end;
     margin-top: 0.75rem;
+    margin-bottom: 1.25rem;
 }
 
 .select_currency {
@@ -310,7 +311,7 @@ body {
 .featured_heading {
     font-size: 1.75rem;
     margin-bottom: 0.4rem;
-    margin-top: 1.8rem;
+    margin-top: 2.5rem;
 }
 
 .card.featured {
@@ -422,7 +423,7 @@ body {
 .categories {
     display: flex;
     flex-wrap: wrap;
-    margin: 1.8rem 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -451,6 +452,117 @@ body {
         color: #fff;
     }
 
+}
+
+/////////////////////////////////////////////
+////// list
+/////////////////////////////////////////////
+
+.shown_brands_mobile {
+	display: flex;
+	align-items: baseline;
+
+	.shown_brands_text {
+		font-size: 1.25rem;
+		margin-right: 0.75rem;
+	}
+
+	.shown_brands_select {
+		flex-grow: 1;
+	}
+}
+
+.itemsList {
+    display: flex;
+    flex-wrap: wrap;
+	margin: 0;
+    padding: 0;
+    margin-top: 0.4rem;
+}
+
+.card.regular {
+    display: flex;
+    flex-direction: column;
+	width: 100%;
+	padding: 0.7rem;
+	background-color: #fff;
+	border-color: #e2e8f0;
+	border-width: 1px;
+	border-radius: 0.35rem;
+	margin: 0.5rem 0;
+
+    a {
+        color: black;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        margin: 0;
+        padding-top: 0.5rem;
+        font-weight: 600;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    strike {
+        margin-right: 0.75rem;
+        font-size: 1.4rem;
+        font-weight: 400;
+        opacity: 0.6;
+    }
+
+    .card_params {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .card_quantity {
+        font-weight: 500;
+        font-size: 1.2rem;
+    }
+
+	.gatsby-image-wrapper {
+		margin-top: 0.1rem;
+	}
+
+    .add_to_cart_button {
+        align-self: center;
+        width: 100%;
+        color: black;
+        font-size: 1.25rem;
+        font-weight: 500;
+        padding: 0.75rem 0;
+        background-color: #fff;
+        border-color: #e2e8f0;
+        border-width: 1px;
+        border-radius: 0.35rem;
+        margin-top: 0.5rem;
+
+        &:disabled {
+            opacity: 0.5;
+        }
+    }
+}
+
+.load_more_button {
+	width: 100%;
+	color: black;
+	font-size: 1.25rem;
+	font-weight: 500;
+	padding: 0.75rem 0;
+	background-color: #fff;
+	border-color: #e2e8f0;
+	border-width: 1px;
+	border-radius: 0.35rem;
+	margin-top: 0.5rem;
+
+	&:disabled {
+		opacity: 0.5;
+	}
 }
 
 /////////////////////////////////////////////
@@ -496,5 +608,3 @@ body {
 address {
     display: inline;
 }
-
-// banners
