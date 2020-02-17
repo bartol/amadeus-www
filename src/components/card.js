@@ -42,7 +42,7 @@ export const Card = ({
                 />
                 <h2>{name[language]}</h2>
                 <div className='card_params'>
-                    {discountedPrice !== price ? (
+                    {discountedPrice === price ? (
                         <h3>{convertToCurrency(price)}</h3>
                     ) : (
                         <h3>
