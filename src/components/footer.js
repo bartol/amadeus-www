@@ -38,6 +38,7 @@ export const Footer = () => {
                         type='email'
                         value={email}
                         onChange={e => setEmail(e.target.value)}
+                        placeholder='bartol.kasic@email.com'
                     />
                     <button
                         type='submit'

@@ -32,7 +32,7 @@ export const ItemImages = ({ images, name }) => {
     }, []);
 
     return (
-        <div>
+        <div className='item-carousel'>
             <div className='glider-wrap item-glider' ref={gliderRef}>
                 {images.map(image => {
                     return (

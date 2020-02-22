@@ -131,9 +131,9 @@ export const Cart = () => {
                 </ul>
                 <input
                     type='email'
-                    placeholder='Email'
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    placeholder='bartol.kasic@email.com'
                 />
                 <input
                     type='checkbox'
