@@ -7,7 +7,7 @@ export const Breadcrumbs = ({ name, type, slug }) => {
     const { language, getLanguagePrefix } = useContext(SharedContext);
 
     return (
-        <nav>
+        <nav className='breadcrumbs'>
             <Link to={`${getLanguagePrefix(language)}/`}>
                 {item[language].breadcrumbs.home}
             </Link>

@@ -23,46 +23,72 @@ const Item = ({ data, pageContext }) => {
                 en: `/en/${item.type.en.toLowerCase()}/${item.slug}/`,
             }}
         >
-            <Breadcrumbs name={item.name} type={item.type} slug={item.slug} />
-            <div>
-                <ItemImages images={item.images} name={item.name} />
-                <section>
-                    <h1>{item.name[language]}</h1>
-                    <h3>{getQuantity(item.id, item.quantity)}</h3>
-                    {/* availability */}
-                    <h2>{convertToCurrency(item.price)}</h2>
-                    <h2>{convertToCurrency(item.discountedPrice)}</h2>
-                    {/* guarantee... */}
-                    <button
-                        type='button'
-                        onClick={() =>
-                            addToCart({
-                                name: item.name,
-                                price: item.price,
-                                discountedPrice: item.discountedPrice,
-                                quantity: item.quantity,
-                                availability: item.availability,
-                                image:
-                                    item.images[0].optimized.childImageSharp
-                                        .fixed,
-                                id: item.id,
-                            })
-                        }
-                        disabled={getQuantity(item.id, item.quantity) === 0}
-                    >
-                        {cart[language].addToCard}
-                    </button>
-                </section>
-            </div>
-            <div>
-                <section
-                    dangerouslySetInnerHTML={{
-                        __html: item.description[language],
-                    }}
+            <div className='item_content'>
+                <Breadcrumbs
+                    name={item.name}
+                    type={item.type}
+                    slug={item.slug}
                 />
-                <aside>{/* recommended items */}</aside>
+                <div>
+                    <ItemImages images={item.images} name={item.name} />
+                    <section>
+                        <h1>{item.name[language]}</h1>
+                        <h3 className='availability'>
+                            {item.availability[language]}
+                        </h3>
+                        <div className='item_params'>
+                            {item.discountedPrice === item.price ? (
+                                <h3>{convertToCurrency(item.price)}</h3>
+                            ) : (
+                                <h3>
+                                    <strike>
+                                        {convertToCurrency(item.price)}
+                                    </strike>
+                                    {convertToCurrency(item.discountedPrice)}
+                                </h3>
+                            )}
+                            <h3 className='item_quantity'>
+                                {getQuantity(item.id, item.quantity)} kom.
+                            </h3>
+                        </div>
+                        {/* guarantee... */}
+                        <button
+                            type='button'
+                            onClick={() =>
+                                addToCart({
+                                    name: item.name,
+                                    price: item.price,
+                                    discountedPrice: item.discountedPrice,
+                                    quantity: item.quantity,
+                                    availability: item.availability,
+                                    image:
+                                        item.images[0].optimized.childImageSharp
+                                            .fixed,
+                                    id: item.id,
+                                })
+                            }
+                            disabled={getQuantity(item.id, item.quantity) === 0}
+                            className='add_to_cart_button'
+                        >
+                            {cart[language].addToCard}
+                        </button>
+                    </section>
+                </div>
+                <div className='description_and_recommended'>
+                    <section
+                        dangerouslySetInnerHTML={{
+                            __html: item.description[language],
+                        }}
+                        className='description'
+                    />
+                    <aside className='recommended'>
+                        {/* recommended items */}
+                    </aside>
+                </div>
+                <div className='item_contact'>
+                    <Contact />
+                </div>
             </div>
-            <Contact />
         </Layout>
     );
 };
