@@ -76,10 +76,10 @@ export const Layout = ({ children, language, changeLanguageCustomUrl }) => {
             <div className='container'>
                 <Header changeLanguageCustomUrl={changeLanguageCustomUrl} />
                 <main>{children}</main>
-                <Footer />
-                <Search />
-                <Cart />
             </div>
+            <Footer />
+            <Search />
+            <Cart />
         </>
     );
 };

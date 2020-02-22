@@ -7,6 +7,7 @@
     "servicing": "Servis",
     "acc": "Moj račun",
     "contact_header": "Kontaktirajte nas",
+	"newsletter_header": "Prijavi se na nas newsletter",
     "newsletter_button": "Pošalji",
     "newsletter_status": {
         "success": "Uspješno poslano",
