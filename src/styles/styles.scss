@@ -66,12 +66,12 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus,
-.contact_submit:focus,
-.banner_learn_more:focus,
-.add_to_cart_button:focus,
-.contact_submit:active,
-.banner_learn_more:active,
-.add_to_cart_button:active {
+.contact_submit:focus:not(:disabled),
+.banner_learn_more:focus:not(:disabled),
+.add_to_cart_button:focus:not(:disabled),
+.contact_submit:active:not(:disabled),
+.banner_learn_more:active:not(:disabled),
+.add_to_cart_button:active:not(:disabled) {
     outline: none;
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
     border-color: #63b3ed;
@@ -773,10 +773,24 @@ address {
 		border-radius: 0.35rem;
 		margin: 1.25rem 0;
 	}
+}
 
-	.item_contact {
-		margin-bottom: 0.75rem;
+.item_contact {
+	margin-bottom: 0.75rem;
+
+	.featured_heading {
+		margin-top: 1.25rem;
 	}
+}
+
+/////////////////////////////////////////////
+////// types
+/////////////////////////////////////////////
+
+.type_heading {
+    font-size: 1.75rem;
+    margin-bottom: 0.4rem;
+    margin-top: 0;
 }
 
 /////////////////////////////////////////////

@@ -42,7 +42,7 @@ export const Contact = () => {
             <div className='form_heading'>
                 <input
                     type='email'
-                    placeholder='Email'
+                    placeholder='bartol.kasic@email.com'
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     className='contact_email'
