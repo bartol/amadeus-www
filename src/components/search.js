@@ -44,6 +44,11 @@ export const Search = () => {
                             onChange={e => setQuery(e.target.value)}
                             placeholder='Search'
                             ref={search_input}
+                            onKeyDown={e => {
+                                if (e.keyCode === 13) {
+                                    search_input.current.blur();
+                                }
+                            }}
                         />
                         <button
                             type='button'
