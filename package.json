@@ -20,7 +20,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.0",
     "fuse.js": "^3.4.6",
-    "gatsby": "2.19.17",
+    "gatsby": "2.19.19",
     "gatsby-image": "^2.2.39",
     "gatsby-plugin-preact": "^3.1.25",
     "gatsby-plugin-sass": "^2.1.27",
