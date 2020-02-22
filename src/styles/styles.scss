@@ -142,8 +142,20 @@ body {
     }
 }
 
+@media screen and (max-width: 360px) {
+	.email_label {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.account_label {
+		display: none;
+	}
+}
+
 .account_label {
-    display: none;
+	margin-right: 0.5rem;
 }
 
 .header {
@@ -398,8 +410,7 @@ body {
     padding-bottom: 0.5rem;
     padding-left: 1.25rem;
     font-size: 1rem;
-
-    margin-left: 1.5rem;
+    margin-left: 0.75rem;
 
     &:disabled {
         opacity: 0.5;
@@ -408,6 +419,7 @@ body {
 
 .contact_email {
     flex-grow: 1;
+	width: 1px;
 }
 
 .contact_info {
@@ -468,6 +480,7 @@ body {
 
 	.shown_brands_select {
 		flex-grow: 1;
+		width: 1px;
 	}
 }
 
