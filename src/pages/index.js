@@ -62,6 +62,7 @@ const Index = ({ pageContext, data }) => {
             <h2 className='featured_heading'>Svi proizvodi</h2>
             <div className='shown_brands_mobile'>
                 <span className='shown_brands_text'>
+                    {/* FIXME i18n */}
                     Prikazani brand{selectedBrand === '' ? 'ovi' : ''}:
                 </span>
                 <select
