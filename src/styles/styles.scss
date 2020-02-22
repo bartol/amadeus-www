@@ -71,7 +71,9 @@ textarea:focus,
 .add_to_cart_button:focus:not(:disabled),
 .contact_submit:active:not(:disabled),
 .banner_learn_more:active:not(:disabled),
-.add_to_cart_button:active:not(:disabled) {
+.add_to_cart_button:active:not(:disabled),
+.x_button:active,
+.x_button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
     border-color: #63b3ed;
@@ -496,6 +498,7 @@ body {
     display: flex;
     flex-direction: column;
 	width: 100%;
+	height: fit-content;
 	padding: 0.7rem;
 	background-color: #fff;
 	border-color: #e2e8f0;
@@ -801,38 +804,101 @@ address {
 /////////////////////////////////////////////
 
 .type_heading {
-    font-size: 1.75rem;
-    margin-bottom: 0.4rem;
-    margin-top: 0;
+	font-size: 1.75rem;
+	margin-bottom: 0.4rem;
+	margin-top: 0;
+}
+
+/////////////////////////////////////////////
+////// search
+/////////////////////////////////////////////
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+	background-color: rgba(0, 0, 0, 0.65);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.hidden {
+	display: none;
+}
+
+.search {
+	height: 100%;
+	margin-top: 2rem;
+	display: flex;
+	flex-direction: column;
+	// background: red;
+
+	.inputs {
+		display: flex;
+		position: sticky;
+		top: 0;
+		align-items: center;
+		margin: 0 0.25rem 0.75rem 0.25rem;
+
+		input {
+			font-size: 1.25rem;
+			flex-grow: 1;
+		}
+
+		button {
+			padding: 0.35rem 0.35rem 0.15rem 0.35rem;
+			background-color: #fff;
+			border-color: #e2e8f0;
+			border-width: 1px;
+			border-radius: 0.35rem;
+			margin-left: 0.75rem;
+
+			svg {
+				height: 2.25rem;
+				width: 2.25rem;
+			}
+		}
+	}
+
+	.select_type_brand {
+		padding: 0.75rem;
+		margin: 0.75rem 0.25rem;
+		background-color: #fff;
+		border-color: #e2e8f0;
+		border-width: 1px;
+		border-radius: 0.35rem;
+
+		> :not(:last-of-type) {
+			margin-bottom: 0.75rem;
+		}
+	}
+
+	.itemsList {
+		margin-top: 0;
+		margin-bottom: 2rem;
+		overflow-y: scroll;
+		flex-grow: 1;
+
+		.card.regular {
+			margin-right: 0.25rem;
+			margin-left: 0.25rem;
+		}
+
+		.card.regular:first-of-type {
+			margin-top: 0;
+		}
+	}
 }
 
 /////////////////////////////////////////////
 ////// other
 /////////////////////////////////////////////
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background-color: rgba(0, 0, 0, 0.65);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.hidden {
-  display: none;
-}
-
-.search {
-  background-color: white;
-  max-height: 100%;
-  overflow-y: scroll;
-}
 
 .cart {
   max-width: 800px;
