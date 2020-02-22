@@ -10,11 +10,7 @@ const newsletterQuery = `mutation($email:String!) {
 }`;
 
 export const Footer = () => {
-    const {
-        language,
-
-        getLanguagePrefix,
-    } = useContext(SharedContext);
+    const { language, getLanguagePrefix } = useContext(SharedContext);
 
     const getLink = title => {
         return title
@@ -36,13 +32,8 @@ export const Footer = () => {
     return (
         <footer>
             <section>
-                <img
-                    src='/logo.png'
-                    alt='Amadeus logo'
-                    width={300}
-                    height={60}
-                />
-                <div>
+                <h2>{footer[language].newsletter_header}</h2>
+                <div className='newsletter_container'>
                     <input
                         type='email'
                         value={email}
@@ -58,9 +49,19 @@ export const Footer = () => {
                             : footer[language].newsletter_button}
                     </button>
                 </div>
+                <Link
+                    to={`${getLanguagePrefix(language)}/`}
+                    className='logo_footer_container'
+                >
+                    <img
+                        src='/logo.png'
+                        alt='Amadeus logo'
+                        className='logo_footer'
+                    />
+                </Link>
             </section>
             <section>
-                {footer[language].support_header}
+                <h2>{footer[language].support_header}</h2>
                 <ul>
                     <li>
                         <Link to={getLink(footer[language].tos)}>
@@ -95,8 +96,8 @@ export const Footer = () => {
                 </ul>
             </section>
             <section>
-                {footer[language].contact_header}
-                <ul>
+                <h2>{footer[language].contact_header}</h2>
+                <ul className='footer_list_with_icons'>
                     <li>
                         <a
                             href='mailto:amadeus@pioneer.hr'

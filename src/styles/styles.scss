@@ -24,10 +24,6 @@ select {
     border-color: #e2e8f0;
     border-width: 1px;
     border-radius: 0.25rem;
-    // padding-top: 0.5rem;
-    // padding-right: 2.5rem;
-    // padding-bottom: 0.5rem;
-    // padding-left: 0.75rem;
     padding-top: 0.4rem;
     padding-right: 1.8rem;
     padding-bottom: 0.4rem;
@@ -92,6 +88,9 @@ select:-moz-focusring {
 ////// container
 /////////////////////////////////////////////
 
+.headerInfo,
+.search,
+footer > *,
 .container {
   max-width: 1280px;
   width: 95%;
@@ -122,9 +121,6 @@ body {
 }
 
 .headerInfo {
-    max-width: 1280px;
-    width: 95%;
-    margin: 0 auto;
     padding: 0.5rem 0;
 
     display: flex;
@@ -559,10 +555,113 @@ body {
 	border-width: 1px;
 	border-radius: 0.35rem;
 	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 
 	&:disabled {
 		opacity: 0.5;
 	}
+}
+
+/////////////////////////////////////////////
+////// footer
+/////////////////////////////////////////////
+
+footer {
+	background-color: black;
+	margin-top: 0.5rem;
+	padding: 1px 1rem 1rem 1rem;
+
+	ul {
+		margin: 0;
+		padding: 0;
+		padding-left: 0.25rem;
+	}
+
+	a {
+		color: #eee;
+		text-decoration: underline;
+	}
+
+	h2 {
+		color: white;
+		margin-top: 1rem;
+		margin-bottom: 0.1rem;
+	}
+}
+
+
+.newsletter_container {
+	display: flex;
+	margin-top: 0.35rem;
+
+	input {
+		background: transparent;
+		border-color: #333;
+		color: white;
+		flex-grow: 1;
+		width: 1px;
+	}
+
+	button {
+		font-size: 1rem;
+		font-weight: 500;
+		padding: 0.75rem 0;
+		background-color: transparent;
+		border-color: #333;
+		color: white;
+		border-width: 1px;
+		border-radius: 0.35rem;
+		padding: 0 1rem;
+		margin-left: 0.75rem;
+		white-space: pre;
+
+		&:disabled {
+			opacity: 0.5;
+		}
+	}
+}
+
+.logo_footer_container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.logo_footer {
+	width: 95%;
+	margin: 1.5rem 0.25rem 0.25rem 0;
+
+	filter: brightness(100) opacity(1);
+	// do this on desktop
+	// filter: brightness(100) opacity(0.6);
+	// transition: 0.25s;
+
+	// &:hover {
+	// 	filter: brightness(100) opacity(1);
+	// }
+}
+
+.footer_list_with_icons {
+	li {
+		a {
+	 		display: flex;
+			align-items: center;
+			padding: 0.25rem 0;
+
+			svg {
+				margin-right: 0.5rem;
+			}
+		}
+	}
+
+	li:not(:first-of-type) {
+		margin: 0.25rem 0;
+	}
+}
+
+address {
+    display: inline;
+	font-style: normal;
 }
 
 /////////////////////////////////////////////
@@ -588,9 +687,6 @@ body {
 }
 
 .search {
-  max-width: 1280px;
-  width: 95%;
-  margin: 0 auto;
   background-color: white;
   max-height: 100%;
   overflow-y: scroll;
@@ -603,8 +699,4 @@ body {
   background-color: white;
   max-height: 100%;
   overflow-y: scroll;
-}
-
-address {
-    display: inline;
 }
