@@ -71,6 +71,7 @@ export const SharedProvider = ({ children }) => {
     // Cart state
     const [cartVisible, setCartVisible] = useState(false);
     const [cart, setCart] = useState([]);
+    // window.localStorage.setItem('cart', JSON.stringify(cart));
 
     const incrementQuantity = id => {
         return setCart(
@@ -83,7 +84,11 @@ export const SharedProvider = ({ children }) => {
     };
 
     const removeFromCart = id => {
-        return setCart(cart.filter(item => item.id !== id));
+        const new_cart = cart.filter(item => item.id !== id);
+
+        window.localStorage.setItem('cart', JSON.stringify(new_cart));
+
+        return setCart(new_cart);
     };
 
     const decrementQuantity = id => {
@@ -92,13 +97,15 @@ export const SharedProvider = ({ children }) => {
             return removeFromCart(id);
         }
 
-        return setCart(
-            cart.map(item =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, ...{ quantity: item.quantity - 1 } }
-                    : item
-            )
+        const new_cart = cart.map(item =>
+            item.id === id && item.quantity > 1
+                ? { ...item, ...{ quantity: item.quantity - 1 } }
+                : item
         );
+
+        window.localStorage.setItem('cart', JSON.stringify(new_cart));
+
+        return setCart(new_cart);
     };
 
     const addToCart = item => {
@@ -119,8 +126,21 @@ export const SharedProvider = ({ children }) => {
         if (item) {
             return quantity - item.quantity;
         }
+
         return quantity;
     };
+
+    useEffect(() => {
+        if (isBrowser() && window.localStorage.getItem('cart')) {
+            setCart(JSON.parse(window.localStorage.getItem('cart')) || []);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isBrowser() && cart.length) {
+            window.localStorage.setItem('cart', JSON.stringify(cart));
+        }
+    }, [cart]);
 
     // Search state
     const [searchVisible, setSearchVisible] = useState(false);
