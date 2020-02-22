@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
 import { Card } from '../components/card';
+import { Contact } from '../components/contact';
 
 const Type = ({ data, pageContext }) => {
     const { language, type } = pageContext;
@@ -43,23 +44,45 @@ const Type = ({ data, pageContext }) => {
                 en: `/en/${items[0].type.en.toLowerCase()}/`,
             }}
         >
-            <ul>
-                {brands.map(brand => {
-                    return (
-                        <li
-                            onClick={() =>
-                                brand.name !== selectedBrand
-                                    ? setSelectedBrand(brand.name)
-                                    : setSelectedBrand('')
-                            }
-                            key={brand.name}
-                        >
-                            {brand.name} ({brand.count})
-                        </li>
-                    );
-                })}
-            </ul>
-            <ul>
+            {/* <ul> */}
+            {/*     {brands.map(brand => { */}
+            {/*         return ( */}
+            {/*             <li */}
+            {/*                 onClick={() => */}
+            {/*                     brand.name !== selectedBrand */}
+            {/*                         ? setSelectedBrand(brand.name) */}
+            {/*                         : setSelectedBrand('') */}
+            {/*                 } */}
+            {/*                 key={brand.name} */}
+            {/*             > */}
+            {/*                 {brand.name} ({brand.count}) */}
+            {/*             </li> */}
+            {/*         ); */}
+            {/*     })} */}
+            {/* </ul> */}
+            {/* FIXME i18n */}
+            <h2 className='type_heading'>U kategoriji: {type}</h2>
+            <div className='shown_brands_mobile'>
+                <span className='shown_brands_text'>
+                    Prikazani brand{selectedBrand === '' ? 'ovi' : ''}:
+                </span>
+                <select
+                    value={selectedBrand}
+                    onChange={e => setSelectedBrand(e.target.value)}
+                    className='shown_brands_select'
+                >
+                    {/* FIXME i18n */}
+                    <option value=''>Svi ({items.length})</option>
+                    {brands.map(brand => {
+                        return (
+                            <option value={brand.name} key={brand.name}>
+                                {brand.name} ({brand.count})
+                            </option>
+                        );
+                    })}
+                </select>
+            </div>
+            <ul className='itemsList'>
                 {listItems.slice(0, length).map(item => {
                     return (
                         <Card
@@ -78,11 +101,18 @@ const Type = ({ data, pageContext }) => {
                 })}
             </ul>
             {length < listItems.length && (
-                <button type='button' onClick={() => setLength(length + 3)}>
+                <button
+                    type='button'
+                    onClick={() => setLength(length + 3)}
+                    className='load_more_button'
+                >
                     {/* FIXME i18n */}
                     Load more
                 </button>
             )}
+            <div className='item_contact'>
+                <Contact />
+            </div>
         </Layout>
     );
 };
