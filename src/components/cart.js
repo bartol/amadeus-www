@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Image from 'gatsby-image';
 import { request } from 'graphql-request';
-import isEmail from 'validator/es/lib/isEmail';
 import { SharedContext } from '../state/shared';
 
 const signatureQuery = `query($input: SignatureParams!) {
@@ -9,14 +8,10 @@ const signatureQuery = `query($input: SignatureParams!) {
     shop_id
     cart_id 
     amount
-    language
     success_url
     failure_url
-    email
-    order_info
-    order_items
+	cancel_url
     signature
-    price
   }
 }`;
 
@@ -32,44 +27,41 @@ export const Cart = () => {
         convertToCurrency,
     } = useContext(SharedContext);
 
-    const [email, setEmail] = useState('');
-    const [newsletter, setNewsletter] = useState(false);
     const [terms, setTerms] = useState(false);
+    const [amount, setAmount] = useState('');
     const [pgwData, setPgwData] = useState({
         shop_id: '',
-        order_id: '',
-        amount: 0,
-        language: '',
+        cart_id: '',
+        amount: '',
         success_url: '',
         failure_url: '',
-        email: '',
-        order_info: '',
-        order_items: '',
+        cancel_url: '',
         signature: '',
-        price: '',
-        cart_id: '',
     });
 
     useEffect(() => {
-        if (cart.length && email && isEmail(email) && terms) {
+        if (cart.length) {
             const order = [];
+            let amount = 0;
             cart.forEach(item => {
                 for (let i = 0; i < item.quantity; i++) {
                     order.push(item.id);
+                    amount += item.price;
                 }
             });
+
+            const base = amount.toString().slice(0, -2);
+            const fraction = amount.toString().slice(-2);
+            setAmount(base + ',' + fraction);
 
             request('https://api.amadeus2.hr', signatureQuery, {
                 input: {
                     order,
-                    name: 'tmp',
-                    email,
-                    newsletter,
                     language,
                 },
             }).then(data => setPgwData(data.signature));
         }
-    }, [cart, email, terms]);
+    }, [cart]);
 
     return (
         <div
@@ -82,72 +74,90 @@ export const Cart = () => {
             }}
         >
             <div className='cart'>
-                {/* FIXME i18n */}
-                <h2>Cart</h2>
-                <button type='button' onClick={() => setCartVisible(false)}>
-                    {/* FIXME add icon */}
-                    exit
-                </button>
-                <ul>
+                <div className='head'>
+                    {/* FIXME i18n */}
+                    <h2>Cart</h2>
+                    <button type='button' onClick={() => setCartVisible(false)}>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            className='feather feather-x'
+                        >
+                            <line x1='18' y1='6' x2='6' y2='18'></line>
+                            <line x1='6' y1='6' x2='18' y2='18'></line>
+                        </svg>
+                    </button>
+                </div>
+                <ul className='cartItems'>
                     {cart.map(item => {
                         return (
-                            <li key={item.id}>
-                                <Image
-                                    fixed={item.image}
-                                    // FIXME i18n
-                                    alt={`${name} thumbnail`}
-                                    loading='lazy'
-                                    fadeIn
-                                />
-                                <h3>{item.name[language]}</h3>
-                                <h3>
-                                    {convertToCurrency(item.discountedPrice)}
-                                </h3>
-                                <h3>{item.quantity}</h3>
-                                <h3>{item.availability[language]}</h3>
-                                <button
-                                    type='button'
-                                    onClick={() => removeFromCart(item.id)}
-                                >
-                                    remove from cart
-                                </button>
-                                <br />
-                                <button
-                                    type='button'
-                                    onClick={() => incrementQuantity(item.id)}
-                                >
-                                    increment
-                                </button>
-                                <br />
-                                <button
-                                    type='button'
-                                    onClick={() => decrementQuantity(item.id)}
-                                >
-                                    decrement
-                                </button>
+                            <li key={item.id} className='cartItem'>
+                                <div className='cartItemHead'>
+                                    <div className='cartImage'>
+                                        <Image
+                                            fixed={item.image}
+                                            // FIXME i18n
+                                            alt={`${name} thumbnail`}
+                                            loading='lazy'
+                                            fadeIn
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3>{item.name[language]}</h3>
+                                        <h3>{item.availability[language]}</h3>
+                                    </div>
+                                </div>
+                                <div className='cartItemParams'>
+                                    <h3>
+                                        {convertToCurrency(
+                                            item.discountedPrice
+                                        )}
+                                    </h3>
+                                    <h3>{item.quantity}</h3>
+                                    <button
+                                        type='button'
+                                        onClick={() => removeFromCart(item.id)}
+                                    >
+                                        remove from cart
+                                    </button>
+                                    <button
+                                        type='button'
+                                        onClick={() =>
+                                            incrementQuantity(item.id)
+                                        }
+                                    >
+                                        increment
+                                    </button>
+                                    <button
+                                        type='button'
+                                        onClick={() =>
+                                            decrementQuantity(item.id)
+                                        }
+                                    >
+                                        decrement
+                                    </button>
+                                </div>
                             </li>
                         );
                     })}
                 </ul>
-                <input
-                    type='email'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder='bartol.kasic@email.com'
-                />
-                <input
-                    type='checkbox'
-                    checked={newsletter}
-                    onChange={() => setNewsletter(!newsletter)}
-                />
-                Newsletter
-                <input
-                    type='checkbox'
-                    checked={terms}
-                    onChange={() => setTerms(!terms)}
-                />
-                Prihvacam uvjete o koristenju
-                {/* TODO checkout */}
+                <label className='terms_wrapper'>
+                    <input
+                        type='checkbox'
+                        checked={terms}
+                        onChange={() => setTerms(!terms)}
+                    />
+                    <span className='terms_label'>
+                        Prihvacam uvjete o koristenju
+                    </span>
+                </label>
                 <form
                     name='pay'
                     action='https://formtest.payway.com.hr/Authorization.aspx'
@@ -166,7 +176,7 @@ export const Cart = () => {
                     <input
                         type='hidden'
                         name='TotalAmount'
-                        value={pgwData.price}
+                        value={pgwData.amount}
                     />
                     <input
                         type='hidden'
@@ -176,36 +186,32 @@ export const Cart = () => {
                     <input
                         type='hidden'
                         name='ReturnURL'
-                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                        value={pgwData.success_url}
                     />
                     <input
                         type='hidden'
                         name='CancelURL'
-                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                        value={pgwData.cancel_url}
                     />
                     <input
                         type='hidden'
                         name='ReturnErrorURL'
-                        value='https://78v2i6aivb.execute-api.us-east-1.amazonaws.com/dev/get'
+                        value={pgwData.failure_url}
+                    />
+                    <input
+                        type='hidden'
+                        name='Lang'
+                        value={language.toUpperCase()}
                     />
                     <input
                         type='submit'
                         value='Buy'
                         disabled={
-                            !(
-                                cart.length &&
-                                terms &&
-                                email &&
-                                isEmail(email) &&
-                                email === pgwData.email
-                            )
+                            !(cart.length && terms && amount === pgwData.amount)
                         }
+                        className='buy_button'
                     />
                 </form>
-                <pre>{JSON.stringify(pgwData, null, 2)}</pre>
-                <pre>{JSON.stringify(email, null, 2)}</pre>
-                <pre>{JSON.stringify(terms, null, 2)}</pre>
-                <pre>{JSON.stringify(newsletter, null, 2)}</pre>
             </div>
         </div>
     );

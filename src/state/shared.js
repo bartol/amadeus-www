@@ -71,7 +71,6 @@ export const SharedProvider = ({ children }) => {
     // Cart state
     const [cartVisible, setCartVisible] = useState(false);
     const [cart, setCart] = useState([]);
-    // window.localStorage.setItem('cart', JSON.stringify(cart));
 
     const incrementQuantity = id => {
         return setCart(
