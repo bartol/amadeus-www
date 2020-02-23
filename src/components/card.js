@@ -32,7 +32,7 @@ export const Card = ({
             <Link
                 to={`${getLanguagePrefix(language)}/${type[
                     language
-                ].toLowerCase()}/${slug}`}
+                ].toLowerCase()}/${slug}/`}
             >
                 <Image
                     fluid={image.optimized.childImageSharp.fluid}
