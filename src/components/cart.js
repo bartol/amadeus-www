@@ -41,18 +41,18 @@ export const Cart = () => {
 
     useEffect(() => {
         if (cart.length) {
+            const amount = cart.reduce(
+                (acc, obj) => acc + obj.discountedPrice * obj.quantity,
+                0
+            );
+            setAmount(amount);
+
             const order = [];
-            let amount = 0;
             cart.forEach(item => {
                 for (let i = 0; i < item.quantity; i++) {
                     order.push(item.id);
-                    amount += item.price;
                 }
             });
-
-            const base = amount.toString().slice(0, -2);
-            const fraction = amount.toString().slice(-2);
-            setAmount(base + ',' + fraction);
 
             request('https://api.amadeus2.hr', signatureQuery, {
                 input: {
@@ -76,7 +76,7 @@ export const Cart = () => {
             <div className='cart'>
                 <div className='head'>
                     {/* FIXME i18n */}
-                    <h2>Cart</h2>
+                    <h2>Košarica</h2>
                     <button type='button' onClick={() => setCartVisible(false)}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
@@ -111,43 +111,139 @@ export const Cart = () => {
                                     </div>
                                     <div>
                                         <h3>{item.name[language]}</h3>
-                                        <h3>{item.availability[language]}</h3>
+                                        <h3 className='availability'>
+                                            {item.availability[language]}
+                                        </h3>
                                     </div>
                                 </div>
                                 <div className='cartItemParams'>
-                                    <h3>
-                                        {convertToCurrency(
-                                            item.discountedPrice
-                                        )}
+                                    {item.discountedPrice === item.price ? (
+                                        <h3>{convertToCurrency(item.price)}</h3>
+                                    ) : (
+                                        <h3>
+                                            <strike>
+                                                {convertToCurrency(item.price)}
+                                            </strike>
+                                            <br />
+                                            {convertToCurrency(
+                                                item.discountedPrice
+                                            )}
+                                        </h3>
+                                    )}
+                                    <h3 className='item_quantity'>
+                                        {item.quantity} kom.
                                     </h3>
-                                    <h3>{item.quantity}</h3>
-                                    <button
-                                        type='button'
-                                        onClick={() => removeFromCart(item.id)}
-                                    >
-                                        remove from cart
-                                    </button>
-                                    <button
-                                        type='button'
-                                        onClick={() =>
-                                            incrementQuantity(item.id)
-                                        }
-                                    >
-                                        increment
-                                    </button>
-                                    <button
-                                        type='button'
-                                        onClick={() =>
-                                            decrementQuantity(item.id)
-                                        }
-                                    >
-                                        decrement
-                                    </button>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            onClick={() =>
+                                                incrementQuantity(item.id)
+                                            }
+                                        >
+                                            <svg
+                                                xmlns='http://www.w3.org/2000/svg'
+                                                width='24'
+                                                height='24'
+                                                viewBox='0 0 24 24'
+                                                fill='none'
+                                                stroke='currentColor'
+                                                strokeWidth='2'
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                className='feather feather-plus'
+                                            >
+                                                <line
+                                                    x1='12'
+                                                    y1='5'
+                                                    x2='12'
+                                                    y2='19'
+                                                ></line>
+                                                <line
+                                                    x1='5'
+                                                    y1='12'
+                                                    x2='19'
+                                                    y2='12'
+                                                ></line>
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type='button'
+                                            onClick={() =>
+                                                decrementQuantity(item.id)
+                                            }
+                                        >
+                                            <svg
+                                                xmlns='http://www.w3.org/2000/svg'
+                                                width='24'
+                                                height='24'
+                                                viewBox='0 0 24 24'
+                                                fill='none'
+                                                stroke='currentColor'
+                                                strokeWidth='2'
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                className='feather feather-minus'
+                                            >
+                                                <line
+                                                    x1='5'
+                                                    y1='12'
+                                                    x2='19'
+                                                    y2='12'
+                                                ></line>
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type='button'
+                                            onClick={() =>
+                                                removeFromCart(item.id)
+                                            }
+                                        >
+                                            <svg
+                                                xmlns='http://www.w3.org/2000/svg'
+                                                width='24'
+                                                height='24'
+                                                viewBox='0 0 24 24'
+                                                fill='none'
+                                                stroke='currentColor'
+                                                strokeWidth='2'
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                className='feather feather-trash-2'
+                                            >
+                                                <polyline points='3 6 5 6 21 6'></polyline>
+                                                <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path>
+                                                <line
+                                                    x1='10'
+                                                    y1='11'
+                                                    x2='10'
+                                                    y2='17'
+                                                ></line>
+                                                <line
+                                                    x1='14'
+                                                    y1='11'
+                                                    x2='14'
+                                                    y2='17'
+                                                ></line>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </li>
                         );
                     })}
                 </ul>
+                {cart.length ? (
+                    <h2 className='total'>
+                        <span>Ukupno:</span>
+                        <span>{convertToCurrency(amount)}</span>
+                    </h2>
+                ) : null}
+                {!cart.length ? (
+                    <div className='empty_cart'>
+                        <img src='/sad_face.png' />
+                        <span>Vaša košarica je prazna.</span>
+                    </div>
+                ) : null}
                 <label className='terms_wrapper'>
                     <input
                         type='checkbox'
@@ -155,7 +251,7 @@ export const Cart = () => {
                         onChange={() => setTerms(!terms)}
                     />
                     <span className='terms_label'>
-                        Prihvacam uvjete o koristenju
+                        Prihvaćam uvjete o korištenju.
                     </span>
                 </label>
                 <form
@@ -207,7 +303,12 @@ export const Cart = () => {
                         type='submit'
                         value='Buy'
                         disabled={
-                            !(cart.length && terms && amount === pgwData.amount)
+                            !(
+                                cart.length &&
+                                terms &&
+                                amount ===
+                                    parseInt(pgwData.amount.replace(',', ''))
+                            )
                         }
                         className='buy_button'
                     />
