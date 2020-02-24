@@ -34,6 +34,7 @@ export const Head = () => {
                     href='tel:+38520670111'
                     target='_blank'
                     rel='noopener noreferrer'
+                    className='phone_link'
                 >
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
