@@ -606,8 +606,12 @@ body {
 
 footer {
 	background-color: black;
+}
+
+.footer {
 	margin-top: 0.5rem;
 	padding: 1px 1rem 1.25rem 1rem;
+	max-width: 1280px;
 
 	ul {
 		margin: 0;
@@ -628,6 +632,39 @@ footer {
 		color: white;
 		margin-top: 1rem;
 		margin-bottom: 0.1rem;
+	}
+}
+
+.newsletter_logo_wrapper {
+	max-width: 25rem;
+	margin: 0 auto;
+}
+
+
+@media screen and (min-width: 550px) {
+	.support_contact_wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-evenly;
+	}
+
+	.support_wrapper {
+		margin-right: 2rem;
+	}
+}
+
+@media screen and (min-width: 950px) {
+	.footer {
+		display: flex;
+		justify-content: space-evenly;
+	}
+
+	.newsletter_logo_wrapper {
+		margin: 0;
+	}
+
+	.support_contact_wrapper {
+		flex-wrap: nowrap;
 	}
 }
 
@@ -674,13 +711,17 @@ footer {
 	margin: 1.5rem 0.25rem 0.25rem 0;
 
 	filter: brightness(100) opacity(1);
-	// do this on desktop
-	// filter: brightness(100) opacity(0.6);
-	// transition: 0.25s;
+}
 
-	// &:hover {
-	// 	filter: brightness(100) opacity(1);
-	// }
+@media screen and (min-width: 950px) {
+	.logo_footer {
+		filter: brightness(100) opacity(0.6);
+		transition: 0.5s;
+
+		&:hover {
+			filter: brightness(100) opacity(1);
+		}
+	}
 }
 
 .footer_list_with_icons {
