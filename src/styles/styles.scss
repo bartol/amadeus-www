@@ -127,7 +127,6 @@ body {
 
 .headerInfo {
     padding: 0.5rem 0;
-
     display: flex;
     justify-content: space-between;
 
@@ -171,7 +170,6 @@ body {
 
 .main_part_header {
     width: 100%;
-
     display: flex;
 
     a {
@@ -1081,7 +1079,7 @@ address {
 		height: 10rem;
 		width: 10rem;
 		filter: brightness(1%);
-		opacity: 0.8;
+		// opacity: 0.95;
 		margin-bottom: 0.5rem;
 	}
 }
