@@ -42,7 +42,7 @@ export const Contact = () => {
             <div className='form_heading'>
                 <input
                     type='email'
-                    placeholder='bartol.kasic@email.com'
+                    placeholder='Vaš email'
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     className='contact_email'
@@ -57,7 +57,7 @@ export const Contact = () => {
                 </button>
             </div>
             <textarea
-                placeholder='Message'
+                placeholder='Poruka'
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 className='contact_textarea'
