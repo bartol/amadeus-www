@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useLayoutEffect } from 'react';
+import React, { useContext, useRef, useState, useLayoutEffect } from 'react';
 import Glider from 'glider-js';
 import { SharedContext } from '../state/shared';
 import { Card } from './card';
@@ -14,10 +14,41 @@ export const FeaturedItems = ({ items }) => {
 
         new Glider(gliderRef.current, {
             dots: '.featured-dots',
+            slidesToShow: 1,
+            slidesToScroll: 1,
             arrows: {
                 prev: '.featured-glider-prev',
                 next: '.featured-glider-next',
             },
+            responsive: [
+                {
+                    breakpoint: 525,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                        itemWidth: 250,
+                        duration: 0.25,
+                    },
+                },
+                {
+                    breakpoint: 850,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 1,
+                        itemWidth: 250,
+                        duration: 0.25,
+                    },
+                },
+                {
+                    breakpoint: 1150,
+                    settings: {
+                        slidesToShow: 4,
+                        slidesToScroll: 1,
+                        itemWidth: 250,
+                        duration: 0.25,
+                    },
+                },
+            ],
         });
 
         document
