@@ -37,7 +37,7 @@ export const Contact = () => {
     };
 
     return (
-        <section>
+        <section className='contact_form'>
             <h2 className='featured_heading'>Kontaktirajte nas</h2>
             <div className='form_heading'>
                 <input

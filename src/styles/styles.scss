@@ -447,6 +447,12 @@ body {
     }
 }
 
+@media screen and (min-width: 550px) {
+	.card.featured:not(:last-child) {
+		margin-right: 1.5rem;
+	}
+}
+
 /////////////////////////////////////////////
 ////// contact
 /////////////////////////////////////////////
@@ -460,6 +466,16 @@ body {
 .form_heading {
     display: flex;
     justify-content: space-between;
+}
+
+.form_heading ~ textarea {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.contact_form {
+	max-width: 750px;
+	margin: 0 auto;
 }
 
 .contact_submit {

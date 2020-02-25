@@ -85,7 +85,11 @@ export const Cart = () => {
                 <div className='head'>
                     {/* FIXME i18n */}
                     <h2>Košarica</h2>
-                    <button type='button' onClick={() => setCartVisible(false)}>
+                    <button
+                        type='button'
+                        onClick={() => setCartVisible(false)}
+                        className='x_button'
+                    >
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='24'
