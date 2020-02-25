@@ -518,7 +518,6 @@ body {
 }
 
 .category {
-    max-width: calc(300px - 0.5rem);
     width: calc(50% - 0.5rem);
     margin: 0.25rem;
 
@@ -542,6 +541,22 @@ body {
         color: #fff;
     }
 
+}
+
+@media screen and (min-width: 660px) {
+	.category {
+		width: calc(33.3% - 0.5rem);
+
+		span {
+			font-size: 2rem;
+		}
+	}
+}
+
+@media screen and (min-width: 1050px) {
+	.category {
+		width: calc(25% - 0.5rem);
+	}
 }
 
 /////////////////////////////////////////////
