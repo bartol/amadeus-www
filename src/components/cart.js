@@ -147,6 +147,10 @@ export const Cart = () => {
                                             onClick={() =>
                                                 incrementQuantity(item.id)
                                             }
+                                            disabled={
+                                                item.quantity ===
+                                                item.maxQuantity
+                                            }
                                         >
                                             <svg
                                                 xmlns='http://www.w3.org/2000/svg'
