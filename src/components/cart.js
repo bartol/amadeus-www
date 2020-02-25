@@ -63,6 +63,14 @@ export const Cart = () => {
         }
     }, [cart]);
 
+    useEffect(() => {
+        if (cartVisible) {
+            document.querySelector('body').classList.add('disable_scroll');
+        } else {
+            document.querySelector('body').classList.remove('disable_scroll');
+        }
+    }, [cartVisible]);
+
     return (
         <div
             className={`overlay ${cartVisible ? 'visible' : 'hidden'}`}
