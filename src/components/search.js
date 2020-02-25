@@ -20,6 +20,9 @@ export const Search = () => {
     useEffect(() => {
         if (searchVisible) {
             search_input.current.focus();
+            document.querySelector('body').classList.add('disable_scroll');
+        } else {
+            document.querySelector('body').classList.remove('disable_scroll');
         }
     }, [searchVisible]);
 
