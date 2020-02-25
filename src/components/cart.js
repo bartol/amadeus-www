@@ -128,7 +128,7 @@ export const Cart = () => {
                                     {item.discountedPrice === item.price ? (
                                         <h3>{convertToCurrency(item.price)}</h3>
                                     ) : (
-                                        <h3>
+                                        <h3 className='price_and_discount'>
                                             <strike>
                                                 {convertToCurrency(item.price)}
                                             </strike>
