@@ -52,9 +52,9 @@ export const Head = () => {
                     </svg>
                     <span className='phone_label'>+385 (20) 670 111</span>
                 </a>
-                <Link to={`${getLanguagePrefix(language)}/account/`}>
+                <Link to='/account/'>
                     {/* FIXME i18n */}
-                    <span className='account_label'>Moj racun</span>
+                    <span className='account_label'>Moj račun</span>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
                         width='24'
