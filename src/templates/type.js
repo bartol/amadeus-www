@@ -3,6 +3,7 @@ import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
 import { Card } from '../components/card';
 import { Contact } from '../components/contact';
+import { isBrowser } from '../helpers/isBrowser';
 
 const Type = ({ data, pageContext }) => {
     const { language, type } = pageContext;
@@ -26,7 +27,9 @@ const Type = ({ data, pageContext }) => {
 
     const [selectedBrand, setSelectedBrand] = useState('');
     const [listItems, setListItems] = useState(items);
-    const [length, setLength] = useState(3);
+    const [length, setLength] = useState(
+        isBrowser() ? (window.innerWidth > 550 ? 12 : 6) : 6
+    );
 
     useEffect(() => {
         setListItems(
@@ -44,24 +47,8 @@ const Type = ({ data, pageContext }) => {
                 en: `/en/${items[0].type.en.toLowerCase()}/`,
             }}
         >
-            {/* <ul> */}
-            {/*     {brands.map(brand => { */}
-            {/*         return ( */}
-            {/*             <li */}
-            {/*                 onClick={() => */}
-            {/*                     brand.name !== selectedBrand */}
-            {/*                         ? setSelectedBrand(brand.name) */}
-            {/*                         : setSelectedBrand('') */}
-            {/*                 } */}
-            {/*                 key={brand.name} */}
-            {/*             > */}
-            {/*                 {brand.name} ({brand.count}) */}
-            {/*             </li> */}
-            {/*         ); */}
-            {/*     })} */}
-            {/* </ul> */}
             {/* FIXME i18n */}
-            <h2 className='type_heading'>U kategoriji: {type}</h2>
+            <h1 className='type_heading'>U kategoriji: {type}</h1>
             <div className='shown_brands_mobile'>
                 <span className='shown_brands_text'>
                     Prikazani brand{selectedBrand === '' ? 'ovi' : ''}:
@@ -82,34 +69,67 @@ const Type = ({ data, pageContext }) => {
                     })}
                 </select>
             </div>
-            <ul className='itemsList'>
-                {listItems.slice(0, length).map(item => {
-                    return (
-                        <Card
-                            name={item.name}
-                            price={item.price}
-                            discountedPrice={item.discountedPrice}
-                            image={item.images[0]}
-                            type={item.type}
-                            quantity={item.quantity}
-                            availability={item.availability}
-                            slug={item.slug}
-                            id={item.id}
-                            key={item.id}
-                        />
-                    );
-                })}
-            </ul>
-            {length < listItems.length && (
-                <button
-                    type='button'
-                    onClick={() => setLength(length + 3)}
-                    className='load_more_button'
-                >
-                    {/* FIXME i18n */}
-                    Load more
-                </button>
-            )}
+            <div className='list_container'>
+                <ul className='shown_brands_desktop'>
+                    <span>Prikazani brandovi</span>
+                    {brands.map(brand => {
+                        return (
+                            <li key={brand.name}>
+                                <button
+                                    type='button'
+                                    onClick={() =>
+                                        brand.name !== selectedBrand
+                                            ? setSelectedBrand(brand.name)
+                                            : setSelectedBrand('')
+                                    }
+                                    className='brand_button'
+                                    style={{
+                                        background:
+                                            brand.name === selectedBrand
+                                                ? '#00d7d7'
+                                                : 'transparent',
+                                    }}
+                                >
+                                    <span className='brand_label'>
+                                        {brand.name}
+                                    </span>{' '}
+                                    <span className='brand_count'>
+                                        {brand.count}
+                                    </span>
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <ul className='itemsList'>
+                    {listItems.slice(0, length).map(item => {
+                        return (
+                            <Card
+                                name={item.name}
+                                price={item.price}
+                                discountedPrice={item.discountedPrice}
+                                image={item.images[0]}
+                                type={item.type}
+                                quantity={item.quantity}
+                                availability={item.availability}
+                                slug={item.slug}
+                                id={item.id}
+                                key={item.id}
+                            />
+                        );
+                    })}
+                </ul>
+                {length < listItems.length && (
+                    <button
+                        type='button'
+                        onClick={() => setLength(length + 6)}
+                        className='load_more_button'
+                    >
+                        {/* FIXME i18n */}
+                        Load more
+                    </button>
+                )}
+            </div>
             <div className='item_contact'>
                 <Contact />
             </div>
