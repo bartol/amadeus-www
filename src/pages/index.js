@@ -44,22 +44,6 @@ const Index = ({ pageContext, data }) => {
             <FeaturedItems items={featuredItems} />
             <Contact />
             <Categories />
-            {/* <ul> */}
-            {/*     {brands.map(brand => { */}
-            {/*         return ( */}
-            {/*             <li */}
-            {/*                 onClick={() => */}
-            {/*                     brand.name !== selectedBrand */}
-            {/*                         ? setSelectedBrand(brand.name) */}
-            {/*                         : setSelectedBrand('') */}
-            {/*                 } */}
-            {/*                 key={brand.name} */}
-            {/*             > */}
-            {/*                 {brand.name} ({brand.count}) */}
-            {/*             </li> */}
-            {/*         ); */}
-            {/*     })} */}
-            {/* </ul> */}
             {/* FIXME i18n */}
             <h2 className='featured_heading'>Svi proizvodi</h2>
             <div className='shown_brands_mobile'>
@@ -83,34 +67,69 @@ const Index = ({ pageContext, data }) => {
                     })}
                 </select>
             </div>
-            <ul className='itemsList'>
-                {listItems.slice(0, length).map(item => {
-                    return (
-                        <Card
-                            name={item.name}
-                            price={item.price}
-                            discountedPrice={item.discountedPrice}
-                            image={item.images[0]}
-                            type={item.type}
-                            quantity={item.quantity}
-                            availability={item.availability}
-                            slug={item.slug}
-                            id={item.id}
-                            key={item.id}
-                        />
-                    );
-                })}
-            </ul>
-            {length < listItems.length && (
-                <button
-                    type='button'
-                    onClick={() => setLength(length + 3)}
-                    className='load_more_button'
-                >
-                    {/* FIXME i18n */}
-                    Load more
-                </button>
-            )}
+            <div className='list_container'>
+                <ul className='shown_brands_desktop'>
+                    <span>Prikazani brandovi</span>
+                    {brands.map(brand => {
+                        return (
+                            <li key={brand.name}>
+                                <button
+                                    type='button'
+                                    onClick={() =>
+                                        brand.name !== selectedBrand
+                                            ? setSelectedBrand(brand.name)
+                                            : setSelectedBrand('')
+                                    }
+                                    className='brand_button'
+                                    style={{
+                                        background:
+                                            brand.name === selectedBrand
+                                                ? '#00d7d7'
+                                                : 'transparent',
+                                    }}
+                                >
+                                    <span className='brand_label'>
+                                        {brand.name}
+                                    </span>{' '}
+                                    <span className='brand_count'>
+                                        {brand.count}
+                                    </span>
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <div>
+                    <ul className='itemsList'>
+                        {listItems.slice(0, length).map(item => {
+                            return (
+                                <Card
+                                    name={item.name}
+                                    price={item.price}
+                                    discountedPrice={item.discountedPrice}
+                                    image={item.images[0]}
+                                    type={item.type}
+                                    quantity={item.quantity}
+                                    availability={item.availability}
+                                    slug={item.slug}
+                                    id={item.id}
+                                    key={item.id}
+                                />
+                            );
+                        })}
+                    </ul>
+                    {length < listItems.length && (
+                        <button
+                            type='button'
+                            onClick={() => setLength(length + 6)}
+                            className='load_more_button'
+                        >
+                            {/* FIXME i18n */}
+                            Load more
+                        </button>
+                    )}
+                </div>
+            </div>
         </Layout>
     );
 };
