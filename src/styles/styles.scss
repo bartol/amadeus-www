@@ -198,7 +198,7 @@ body {
 
         &:focus {
             outline: none;
-            color: cyan;
+            color: #00d7d7;
         }
 
         svg {
@@ -220,7 +220,7 @@ body {
 
         height: 1.4rem;
         width: 1.4rem;
-        background-color: cyan;
+        background-color: #00d7d7;
 
         display: flex;
         justify-content: center;
@@ -512,6 +512,7 @@ body {
 
 .categories {
     display: flex;
+	// justify-content: center;
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
@@ -670,6 +671,73 @@ body {
 
 	&:disabled {
 		opacity: 0.5;
+	}
+}
+
+.shown_brands_desktop {
+	display: none;
+	margin: 1rem 1.25rem 0 0;
+	padding: 0;
+	white-space: pre;
+
+	> span {
+		font-size: 1.25rem;
+		font-weight: 500;
+		border-bottom: 1px solid #e2e8f0;
+		display: block;
+		margin-bottom: 0.5rem;
+	}
+
+	.brand_button {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		padding: 0.3rem 0.6rem;
+		border-radius: 0.25rem;
+
+		font-size: 1rem;
+	}
+
+	.brand_count {
+	}
+}
+
+@media screen and (min-width: 550px) {
+	.itemsList {
+		width: 100%;
+	}
+
+	.card.regular {
+		box-sizing: border-box;
+		width: calc(50% - 1rem);
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
+
+		strike {
+			display: block;
+		}
+	}
+}
+
+@media screen and (min-width: 900px) {
+	.shown_brands_desktop {
+		display: block;
+	}
+	.shown_brands_mobile {
+		display: none;
+	}
+
+	.list_container {
+		display: flex;
+		> div {
+			flex-grow: 1;
+		}
+	}
+}
+
+@media screen and (min-width: 1050px) {
+	.card.regular {
+		width: calc(33.333% - 1rem);
 	}
 }
 
