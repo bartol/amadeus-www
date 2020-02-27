@@ -25,6 +25,7 @@ export const Cart = () => {
         decrementQuantity,
         removeFromCart,
         convertToCurrency,
+        currency,
     } = useContext(SharedContext);
 
     const [terms, setTerms] = useState(false);
@@ -251,7 +252,19 @@ export const Cart = () => {
                 {cart.length ? (
                     <h2 className='total'>
                         <span>Ukupno:</span>
-                        <span>{convertToCurrency(amount)}</span>
+                        <span className='total_price'>
+                            {convertToCurrency(amount)}
+                            {currency !== 'HRK'
+                                ? ` / ${amount / 100} HRK`
+                                : null}
+                            <br />
+                            {currency !== 'HRK' ? (
+                                <span>
+                                    Cijene u ovoj valuti su okvirne i plaćanje
+                                    se obavlja isključivo u HRK.
+                                </span>
+                            ) : null}
+                        </span>
                     </h2>
                 ) : null}
                 {!cart.length ? (

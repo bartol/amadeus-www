@@ -1298,8 +1298,19 @@ address {
 	.total {
 		display: flex;
 		justify-content: space-between;
-		margin: 0 0.85rem;
+		align-items: flex-start;
+		margin: 0 1rem;
 		margin-bottom: 1rem;
+
+		.total_price {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			span {
+				font-size: 0.75rem;
+				font-weight: 400;
+			}
+		}
 	}
 }
 
