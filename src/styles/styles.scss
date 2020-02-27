@@ -747,6 +747,11 @@ body {
 
 footer {
 	background-color: black;
+	position:fixed;
+	bottom:0;
+	left:0;
+	width: 100vw;
+
 }
 
 .footer {
@@ -918,6 +923,50 @@ address {
 		& > div  > * {
 			width: 80px !important;
 			height: 60px !important;
+		}
+	}
+}
+
+@media screen and (min-width: 800px) {
+	.item-carousel {
+		width: 50%;
+	}
+
+	.item_details_wrapper {
+		display: flex;
+
+		> section {
+			width: 50%;
+			margin-top: 2.5rem;
+			margin-left: 2.5rem;
+
+			h1 {
+				font-size: 2.5rem;
+			}
+
+			.item_params {
+				flex-direction: column;
+				align-items: flex-start;
+
+				> .item_quantity {
+					order: -1;
+					font-size: 1.25rem;
+					font-weight: 400;
+				}
+
+				h3:not(.item_quantity) {
+					font-size: 2.75rem;
+					align-self: flex-end;
+
+					strike {
+						font-size: 2rem;
+					}
+				}
+			}
+
+			.availability {
+				font-size: 1.25rem;
+			}
 		}
 	}
 }
