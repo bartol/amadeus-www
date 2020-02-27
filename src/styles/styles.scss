@@ -30,7 +30,6 @@ select {
     padding-left: 0.5rem;
     font-size: 1rem;
     background-position: right 0.25rem center;
-    // background-position: right 0.5rem center;
     background-size: 1.5em 1.5em;
 }
 
@@ -513,7 +512,6 @@ body {
 
 .categories {
     display: flex;
-	// justify-content: center;
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
@@ -682,6 +680,7 @@ body {
 	padding: 0;
 	white-space: pre;
 
+	ul > span,
 	> span {
 		font-size: 1.25rem;
 		font-weight: 500;
@@ -708,8 +707,8 @@ body {
 	.card.regular {
 		box-sizing: border-box;
 		width: calc(50% - 1rem);
-		margin-left: 0.5rem;
-		margin-right: 0.5rem;
+		margin-left: 0.5rem !important;
+		margin-right: 0.5rem !important;
 
 		strike {
 			display: block;
@@ -721,12 +720,15 @@ body {
 	.shown_brands_desktop {
 		display: block;
 	}
+	.select_type_brand,
 	.shown_brands_mobile {
 		display: none;
 	}
 
 	.list_container {
 		display: flex;
+		overflow-y: scroll;
+
 		> div {
 			flex-grow: 1;
 		}
@@ -925,6 +927,7 @@ address {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-end;
+	margin-right: 0.25rem;
 }
 
 .price_and_discount_item {
@@ -949,7 +952,7 @@ address {
 			margin-left: 3rem;
 
 			h1 {
-				font-size: 2.5rem;
+				font-size: 2.75rem;
 			}
 
 			.item_params {
@@ -965,7 +968,7 @@ address {
 				h3:not(.item_quantity) {
 					font-size: 2.75rem;
 					align-self: flex-end;
-					margin-top: 2rem;
+					margin-top: 3rem;
 
 					strike {
 						font-size: 2rem;
@@ -1102,7 +1105,6 @@ address {
 	margin-top: 2rem;
 	display: flex;
 	flex-direction: column;
-	// background: red;
 
 	.inputs {
 		display: flex;
@@ -1153,9 +1155,22 @@ address {
 			margin-right: 0.25rem;
 			margin-left: 0.25rem;
 		}
+	}
+}
 
-		.card.regular:first-of-type {
-			margin-top: 0;
+.search_categories {
+	background: white;
+	margin-top: 0.5rem !important;
+	padding: 0.35rem 0.5rem 0.5rem 0.5rem;
+	border-radius: 0.25rem;
+	height: fit-content;
+
+	ul {
+		margin: 0;
+		padding: 0;
+
+		&:not(:last-of-type) {
+			margin-bottom: 0.35rem;
 		}
 	}
 }
@@ -1375,7 +1390,6 @@ address {
 		height: 10rem;
 		width: 10rem;
 		filter: brightness(1%);
-		// opacity: 0.95;
 		margin-bottom: 0.5rem;
 	}
 }

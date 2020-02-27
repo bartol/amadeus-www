@@ -1,6 +1,7 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import { SharedContext } from '../state/shared';
 import { Card } from '../components/card';
+import { isBrowser } from '../helpers/isBrowser';
 
 export const Search = () => {
     const {
@@ -16,6 +17,10 @@ export const Search = () => {
     } = useContext(SharedContext);
 
     const search_input = useRef(null);
+
+    const [length, setLength] = useState(
+        isBrowser() ? (window.innerWidth > 550 ? 12 : 6) : 6
+    );
 
     useEffect(() => {
         if (searchVisible) {
@@ -37,7 +42,16 @@ export const Search = () => {
                 }
             }}
         >
-            <div className='search'>
+            <div
+                className='search'
+                onClick={e => {
+                    // if overlay and not its children is clicked
+                    if (e.target === e.currentTarget) {
+                        setSearchVisible(false);
+                        setQuery('');
+                    }
+                }}
+            >
                 <div className='inputs_wrapper'>
                     <div className='inputs'>
                         {/* FIXME i18n */}
@@ -79,32 +93,6 @@ export const Search = () => {
                         </button>
                     </div>
                     <div className='select_type_brand'>
-                        {/* <ul> */}
-                        {/*     {availableCategories.types.map(type => { */}
-                        {/*         return ( */}
-                        {/*             <li */}
-                        {/*                 onClick={() => */}
-                        {/*                     type.name[language] !== */}
-                        {/*                     selectedCategory.type[language] */}
-                        {/*                         ? setSelectedCategory({ */}
-                        {/*                               ...selectedCategory, */}
-                        {/*                               type: type.name, */}
-                        {/*                           }) */}
-                        {/*                         : setSelectedCategory({ */}
-                        {/*                               ...selectedCategory, */}
-                        {/*                               type: { */}
-                        {/*                                   hr: '', */}
-                        {/*                                   en: '', */}
-                        {/*                               }, */}
-                        {/*                           }) */}
-                        {/*                 } */}
-                        {/*                 key={type.name[language]} */}
-                        {/*             > */}
-                        {/*                 {type.name[language]} ({type.count}) */}
-                        {/*             </li> */}
-                        {/*         ); */}
-                        {/*     })} */}
-                        {/* </ul> */}
                         <div className='shown_brands_mobile'>
                             <span className='shown_brands_text'>
                                 {/* FIXME i18n */}
@@ -141,28 +129,6 @@ export const Search = () => {
                                 })}
                             </select>
                         </div>
-                        {/* <ul> */}
-                        {/*     {availableCategories.brands.map(brand => { */}
-                        {/*         return ( */}
-                        {/*             <li */}
-                        {/*                 onClick={() => */}
-                        {/*                     brand.name !== selectedCategory.brand */}
-                        {/*                         ? setSelectedCategory({ */}
-                        {/*                               ...selectedCategory, */}
-                        {/*                               brand: brand.name, */}
-                        {/*                           }) */}
-                        {/*                         : setSelectedCategory({ */}
-                        {/*                               ...selectedCategory, */}
-                        {/*                               brand: '', */}
-                        {/*                           }) */}
-                        {/*                 } */}
-                        {/*                 key={brand.name} */}
-                        {/*             > */}
-                        {/*                 {brand.name} ({brand.count}) */}
-                        {/*             </li> */}
-                        {/*         ); */}
-                        {/*     })} */}
-                        {/* </ul> */}
                         <div className='shown_brands_mobile'>
                             <span className='shown_brands_text'>
                                 {/* FIXME i18n */}
@@ -197,34 +163,137 @@ export const Search = () => {
                         </div>
                     </div>
                 </div>
-                <ul
-                    className='itemsList'
-                    onClick={e => {
-                        // if overlay and not its children is clicked
-                        if (e.target === e.currentTarget) {
-                            setSearchVisible(false);
-                            setQuery('');
-                        }
-                    }}
-                >
-                    {searchResults.map(item => {
-                        return (
-                            <Card
-                                name={item.name}
-                                price={item.price}
-                                discountedPrice={item.discountedPrice}
-                                image={item.images[0]}
-                                type={item.type}
-                                quantity={item.quantity}
-                                availability={item.availability}
-                                slug={item.slug}
-                                id={item.id}
-                                hidden={item.hidden}
-                                key={item.id}
-                            />
-                        );
-                    })}
-                </ul>
+                <div className='list_container'>
+                    {searchResults.length ? (
+                        <ul className='search_categories shown_brands_desktop'>
+                            <ul>
+                                <span>Prikazane kategorije</span>
+                                {availableCategories.types.map(type => {
+                                    return (
+                                        <li key={type.name[language]}>
+                                            <button
+                                                type='button'
+                                                onClick={() =>
+                                                    type.name[language] !==
+                                                    selectedCategory.type[
+                                                        language
+                                                    ]
+                                                        ? setSelectedCategory({
+                                                              ...selectedCategory,
+                                                              type: type.name,
+                                                          })
+                                                        : setSelectedCategory({
+                                                              ...selectedCategory,
+                                                              type: {
+                                                                  hr: '',
+                                                                  en: '',
+                                                              },
+                                                          })
+                                                }
+                                                className='brand_button'
+                                                style={{
+                                                    background:
+                                                        type.name[language] ===
+                                                        selectedCategory.type[
+                                                            language
+                                                        ]
+                                                            ? '#00d7d7'
+                                                            : 'transparent',
+                                                }}
+                                            >
+                                                <span className='brand_label'>
+                                                    {type.name[language]}
+                                                </span>{' '}
+                                                <span className='brand_count'>
+                                                    {type.count}
+                                                </span>
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                            <ul>
+                                <span>Prikazani brandovi</span>
+                                {availableCategories.brands.map(brand => {
+                                    return (
+                                        <li key={brand.name}>
+                                            <button
+                                                type='button'
+                                                onClick={() =>
+                                                    brand.name !==
+                                                    selectedCategory.brand
+                                                        ? setSelectedCategory({
+                                                              ...selectedCategory,
+                                                              brand: brand.name,
+                                                          })
+                                                        : setSelectedCategory({
+                                                              ...selectedCategory,
+                                                              brand: '',
+                                                          })
+                                                }
+                                                className='brand_button'
+                                                style={{
+                                                    background:
+                                                        brand.name ===
+                                                        selectedCategory.brand
+                                                            ? '#00d7d7'
+                                                            : 'transparent',
+                                                }}
+                                            >
+                                                <span className='brand_label'>
+                                                    {brand.name}
+                                                </span>{' '}
+                                                <span className='brand_count'>
+                                                    {brand.count}
+                                                </span>
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </ul>
+                    ) : null}
+                    <div>
+                        <ul
+                            className='itemsList'
+                            onClick={e => {
+                                // if overlay and not its children is clicked
+                                if (e.target === e.currentTarget) {
+                                    setSearchVisible(false);
+                                    setQuery('');
+                                }
+                            }}
+                        >
+                            {searchResults.slice(0, length).map(item => {
+                                return (
+                                    <Card
+                                        name={item.name}
+                                        price={item.price}
+                                        discountedPrice={item.discountedPrice}
+                                        image={item.images[0]}
+                                        type={item.type}
+                                        quantity={item.quantity}
+                                        availability={item.availability}
+                                        slug={item.slug}
+                                        id={item.id}
+                                        hidden={item.hidden}
+                                        key={item.id}
+                                    />
+                                );
+                            })}
+                        </ul>
+                        {length < searchResults.length && (
+                            <button
+                                type='button'
+                                onClick={() => setLength(length + 6)}
+                                className='load_more_button'
+                            >
+                                {/* FIXME i18n */}
+                                Load more
+                            </button>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );
