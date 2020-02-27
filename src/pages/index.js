@@ -26,7 +26,9 @@ const Index = ({ pageContext, data }) => {
 
     const [selectedBrand, setSelectedBrand] = useState('');
     const [listItems, setListItems] = useState(items);
-    const [length, setLength] = useState(3);
+    const [length, setLength] = useState(
+        typeof window !== undefined ? (window.innerWidth > 550 ? 12 : 6) : 6
+    );
 
     useEffect(() => {
         setListItems(
