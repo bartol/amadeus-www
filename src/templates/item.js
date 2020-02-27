@@ -29,7 +29,7 @@ const Item = ({ data, pageContext }) => {
                     type={item.type}
                     slug={item.slug}
                 />
-                <div>
+                <div className='item_details_wrapper'>
                     <ItemImages images={item.images} name={item.name} />
                     <section>
                         <h1>{item.name[language]}</h1>

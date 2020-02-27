@@ -17,6 +17,10 @@ export const ItemImages = ({ images, name }) => {
         const glider = new Glider(gliderRef.current, {
             slidesToShow: 1,
             draggable: true,
+            arrows: {
+                prev: '.arrow-prev-hidden',
+                next: '.arrow-next-hidden',
+            },
         });
         setGlider(glider);
 
@@ -66,6 +70,8 @@ export const ItemImages = ({ images, name }) => {
                     );
                 })}
             </div>
+            <div className='arrow-prev-hidden'></div>
+            <div className='arrow-next-hidden'></div>
         </div>
     );
 };
