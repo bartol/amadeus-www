@@ -23,6 +23,7 @@ export const Card = ({
         convertToCurrency,
         getQuantity,
         addToCart,
+        setSearchVisible,
     } = useContext(SharedContext);
 
     if (hidden) return <></>;
@@ -33,6 +34,7 @@ export const Card = ({
                 to={`${getLanguagePrefix(language)}/${type[
                     language
                 ].toLowerCase()}/${slug}/`}
+                onClick={() => setSearchVisible('')}
             >
                 <Image
                     fluid={image.optimized.childImageSharp.fluid}
