@@ -250,22 +250,23 @@ export const Cart = () => {
                     })}
                 </ul>
                 {cart.length ? (
-                    <h2 className='total'>
-                        <span>Ukupno:</span>
-                        <span className='total_price'>
-                            {convertToCurrency(amount)}
-                            {currency !== 'HRK'
-                                ? ` / ${amount / 100} HRK`
-                                : null}
-                            <br />
-                            {currency !== 'HRK' ? (
-                                <span>
-                                    Cijene u ovoj valuti su okvirne i plaćanje
-                                    se obavlja isključivo u HRK.
-                                </span>
-                            ) : null}
-                        </span>
-                    </h2>
+                    <div className='total'>
+                        <h2>
+                            <span>Ukupno:</span>
+                            <span>
+                                {convertToCurrency(amount)}
+                                {currency !== 'HRK'
+                                    ? ` / ${amount / 100} HRK`
+                                    : null}
+                            </span>
+                        </h2>
+                        {currency !== 'HRK' ? (
+                            <span>
+                                Cijene u ovoj valuti su okvirne i plaćanje se
+                                obavlja isključivo u HRK.
+                            </span>
+                        ) : null}
+                    </div>
                 ) : null}
                 {!cart.length ? (
                     <div className='empty_cart'>
