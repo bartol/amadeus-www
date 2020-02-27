@@ -6,6 +6,7 @@ import { Card } from '../components/card';
 import { FeaturedItems } from '../components/featuredItems';
 import { Contact } from '../components/contact';
 import { Categories } from '../components/categories';
+import { isBrowser } from '../helpers/isBrowser';
 
 const Index = ({ pageContext, data }) => {
     const { language } = pageContext;
@@ -27,7 +28,7 @@ const Index = ({ pageContext, data }) => {
     const [selectedBrand, setSelectedBrand] = useState('');
     const [listItems, setListItems] = useState(items);
     const [length, setLength] = useState(
-        typeof window !== undefined ? (window.innerWidth > 550 ? 12 : 6) : 6
+        isBrowser() ? (window.innerWidth > 550 ? 12 : 6) : 6
     );
 
     useEffect(() => {
