@@ -40,7 +40,7 @@ const Item = ({ data, pageContext }) => {
                             {item.discountedPrice === item.price ? (
                                 <h3>{convertToCurrency(item.price)}</h3>
                             ) : (
-                                <h3>
+                                <h3 className='price_and_discount_item'>
                                     <strike>
                                         {convertToCurrency(item.price)}
                                     </strike>

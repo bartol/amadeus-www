@@ -45,7 +45,7 @@ export const Card = ({
                     {discountedPrice === price ? (
                         <h3>{convertToCurrency(price)}</h3>
                     ) : (
-                        <h3>
+                        <h3 className='price_and_discount_card'>
                             <strike>{convertToCurrency(price)}</strike>
                             {convertToCurrency(discountedPrice)}
                         </h3>
