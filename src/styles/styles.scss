@@ -727,7 +727,6 @@ body {
 
 	.list_container {
 		display: flex;
-		overflow-y: scroll;
 
 		> div {
 			flex-grow: 1;
@@ -1106,6 +1105,10 @@ address {
 	display: flex;
 	flex-direction: column;
 
+	.list_container {
+		overflow-y: scroll;
+	}
+
 	.inputs {
 		display: flex;
 		position: sticky;
@@ -1148,7 +1151,6 @@ address {
 
 	.itemsList {
 		margin-top: 0;
-		overflow-y: scroll;
 		flex-grow: 1;
 
 		.card.regular {
