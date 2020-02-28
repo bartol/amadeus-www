@@ -28,7 +28,7 @@
     "gatsby-plugin-webpack-bundle-analyzer": "^1.0.5",
     "gatsby-source-filesystem": "^2.1.46",
     "gatsby-source-graphql": "2.1.29",
-    "gatsby-transformer-sharp": "^2.3.13",
+    "gatsby-transformer-sharp": "^2.3.16",
     "glider-js": "^1.7.1",
     "node-sass": "^4.13.1",
     "preact": "^10.2.1",
