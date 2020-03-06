@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import { Layout } from '../components/layout';
 import { Banners } from '../components/banners';
 import { Card } from '../components/card';
@@ -41,6 +42,9 @@ const Index = ({ pageContext, data }) => {
 
     return (
         <Layout language={language}>
+            <Helmet defer={false}>
+                <title>Amadeus 2 web shop</title>
+            </Helmet>
             <Banners banners={banners} />
             <FeaturedItems items={featuredItems} />
             <Contact />

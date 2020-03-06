@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import { SharedContext } from '../state/shared';
 import { Layout } from '../components/layout';
 import { Breadcrumbs } from '../components/breadcrumbs';
@@ -23,6 +24,9 @@ const Item = ({ data, pageContext }) => {
                 en: `/en/${item.type.en.toLowerCase()}/${item.slug}/`,
             }}
         >
+            <Helmet defer={false}>
+                <title>{item.name[language]} - Amadeus 2 web shop</title>
+            </Helmet>
             <div className='item_content'>
                 <Breadcrumbs
                     name={item.name}
