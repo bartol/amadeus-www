@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import { Layout } from '../components/layout';
 import { Card } from '../components/card';
 import { Contact } from '../components/contact';
@@ -47,6 +48,9 @@ const Type = ({ data, pageContext }) => {
                 en: `/en/${items[0].type.en.toLowerCase()}/`,
             }}
         >
+            <Helmet defer={false}>
+                <title>{type[language]} - Amadeus 2 web shop</title>
+            </Helmet>
             {/* FIXME i18n */}
             <h1 className='type_heading'>U kategoriji: {type}</h1>
             <div className='shown_brands_mobile'>

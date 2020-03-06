@@ -14,6 +14,8 @@ module.exports = {
                 url: 'https://api.amadeus2.hr',
             },
         },
+        // SEO
+        'gatsby-plugin-react-helmet',
         // Analyze bundle size
         {
             resolve: 'gatsby-plugin-webpack-bundle-analyzer',

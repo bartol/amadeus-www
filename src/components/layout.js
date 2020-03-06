@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import { SharedContext } from '../state/shared';
 import { Header } from './header';
 import { Head } from './head';
@@ -72,6 +73,9 @@ export const Layout = ({ children, language, changeLanguageCustomUrl }) => {
 
     return (
         <>
+            <Helmet defer={false}>
+                <meta name='robots' content='index, follow' />
+            </Helmet>
             <Head />
             <div className='container'>
                 <Header changeLanguageCustomUrl={changeLanguageCustomUrl} />
