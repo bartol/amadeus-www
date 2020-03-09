@@ -40,10 +40,29 @@ const Index = ({ pageContext, data }) => {
         );
     }, [selectedBrand]);
 
+    const title = 'Amadeus 2 Webshop';
+    const url = 'https://amadeus2.hr';
+    const desc =
+        'Amadeus 2 Ploče je webshop s najpovoljnijim cijenama DJ opreme, klima uređaja, televizora i bijele tehnike. Sve narudžbe dolaze s besplatnom dostavom.';
+
     return (
         <Layout language={language}>
             <Helmet defer={false}>
-                <title>Amadeus 2 web shop</title>
+                <title>{title}</title>
+                <meta name='description' content={desc} />
+                <meta name='robots' content='index,follow' />
+
+                <meta name='twitter:card' content='summary' />
+                <meta name='twitter:title' content={title} />
+                <meta name='twitter:description' content={desc} />
+                <meta name='twitter:image' content={`${url}/logo.png`} />
+                <meta name='twitter:site' content={url} />
+
+                <meta property='og:url' content={url} />
+                <meta property='og:type' content='website' />
+                <meta property='og:title' content={title} />
+                <meta property='og:description' content={desc} />
+                <meta property='og:image' content={`${url}/logo.png`} />
             </Helmet>
             <Banners banners={banners} />
             <FeaturedItems items={featuredItems} />

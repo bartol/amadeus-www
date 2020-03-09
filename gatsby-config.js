@@ -1,4 +1,7 @@
 module.exports = {
+    siteMetadata: {
+        siteUrl: 'https://amadeus2.hr',
+    },
     plugins: [
         'gatsby-plugin-preact',
         'gatsby-plugin-sass',
@@ -16,6 +19,7 @@ module.exports = {
         },
         // SEO
         'gatsby-plugin-react-helmet',
+        'gatsby-plugin-sitemap',
         // Analyze bundle size
         {
             resolve: 'gatsby-plugin-webpack-bundle-analyzer',

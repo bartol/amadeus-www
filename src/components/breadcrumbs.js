@@ -7,26 +7,41 @@ export const Breadcrumbs = ({ name, type, slug }) => {
     const { language, getLanguagePrefix } = useContext(SharedContext);
 
     return (
-        <nav className='breadcrumbs'>
-            <Link to={`${getLanguagePrefix(language)}/`}>
-                {item[language].breadcrumbs.home}
-            </Link>
-            {' › '}
-            <Link
-                to={`${getLanguagePrefix(language)}/${type[
-                    language
-                ].toLowerCase()}/`}
-            >
-                {type[language]}
-            </Link>
-            {' › '}
-            <Link
-                to={`${getLanguagePrefix(language)}/${type[
-                    language
-                ].toLowerCase()}/${slug}`}
-            >
-                {name[language]}
-            </Link>
-        </nav>
+        <ol
+            className='breadcrumbs'
+            vocab='https://schema.org/'
+            typeof='BreadcrumbList'
+        >
+            <li property='itemListElement' typeof='ListItem'>
+                <Link
+                    to={`${getLanguagePrefix(language)}/`}
+                    property='item'
+                    typeof='WebPage'
+                >
+                    <span property='name'>
+                        {item[language].breadcrumbs.home}
+                    </span>
+                </Link>
+                <meta property='position' content='1' />
+            </li>
+            <span>{' › '}</span>
+            <li property='itemListElement' typeof='ListItem'>
+                <Link
+                    to={`${getLanguagePrefix(language)}/${type[
+                        language
+                    ].toLowerCase()}/`}
+                    property='item'
+                    typeof='WebPage'
+                >
+                    <span property='name'>{type[language]}</span>
+                </Link>
+                <meta property='position' content='2' />
+            </li>
+            <span>{' › '}</span>
+            <li property='itemListElement' typeof='ListItem'>
+                <span property='name'>{name[language]}</span>
+                <meta property='position' content='3' />
+            </li>
+        </ol>
     );
 };
