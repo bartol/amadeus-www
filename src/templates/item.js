@@ -16,6 +16,14 @@ const Item = ({ data, pageContext }) => {
         SharedContext
     );
 
+    const title = item.name[language] + ' - Amadeus 2 Webshop';
+    const url =
+        'https://amadeus2.hr' +
+        `/${item.type[language].toLowerCase()}/${item.slug}/`;
+    const desc =
+        item.name[language] +
+        ' - Amadeus 2 Ploče je webshop s najpovoljnijim cijenama DJ opreme, klima uređaja, televizora i bijele tehnike. Sve narudžbe dolaze s besplatnom dostavom.';
+
     return (
         <Layout
             language={language}
@@ -25,7 +33,45 @@ const Item = ({ data, pageContext }) => {
             }}
         >
             <Helmet defer={false}>
-                <title>{item.name[language]} - Amadeus 2 web shop</title>
+                <title>{title}</title>
+                <meta name='description' content={desc} />
+                <meta name='robots' content='index,follow' />
+
+                <meta name='twitter:card' content='summary' />
+                <meta name='twitter:title' content={title} />
+                <meta name='twitter:description' content={desc} />
+                <meta name='twitter:image' content={item.images[0].src} />
+                <meta name='twitter:site' content={url} />
+
+                <meta property='og:url' content={url} />
+                <meta property='og:type' content='website' />
+                <meta property='og:title' content={title} />
+                <meta property='og:description' content={desc} />
+                <meta property='og:image' content={item.images[0].src} />
+
+                <script type='application/ld+json'>
+                    {JSON.stringify({
+                        '@context': 'https://schema.org/',
+                        '@type': 'Product',
+                        name: item.name[language],
+                        image: [...item.images.map(i => i.src)],
+                        description: desc,
+                        brand: {
+                            '@type': 'Brand',
+                            name: item.brand,
+                        },
+                        offers: {
+                            '@type': 'Offer',
+                            url,
+                            priceCurrency: 'HRK',
+                            price: item.price / 100 + '',
+                            seller: {
+                                '@type': 'Organization',
+                                name: 'Amadeus 2 Ploče Webshop',
+                            },
+                        },
+                    })}
+                </script>
             </Helmet>
             <div className='item_content'>
                 <Breadcrumbs
@@ -111,6 +157,7 @@ export const itemQuery = graphql`
                 discountedPrice
                 slug
                 id
+                brand
                 type {
                     hr
                     en

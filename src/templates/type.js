@@ -40,6 +40,13 @@ const Type = ({ data, pageContext }) => {
         );
     }, [selectedBrand]);
 
+    const title = type[language] + ' - Amadeus 2 Webshop';
+    const url = 'https://amadeus2.hr/' + type[language].toLowerCase() + '/';
+    const desc =
+        'Uređaji u kategoriji: ' +
+        type[language] +
+        ' - Amadeus 2 Ploče je webshop s najpovoljnijim cijenama DJ opreme, klima uređaja, televizora i bijele tehnike. Sve narudžbe dolaze s besplatnom dostavom.';
+
     return (
         <Layout
             language={language}
@@ -49,7 +56,27 @@ const Type = ({ data, pageContext }) => {
             }}
         >
             <Helmet defer={false}>
-                <title>{type[language]} - Amadeus 2 web shop</title>
+                <title>{title}</title>
+                <meta name='description' content={desc} />
+                <meta name='robots' content='index,follow' />
+
+                <meta name='twitter:card' content='summary' />
+                <meta name='twitter:title' content={title} />
+                <meta name='twitter:description' content={desc} />
+                <meta
+                    name='twitter:image'
+                    content='https://amadeus2.hr/logo.png'
+                />
+                <meta name='twitter:site' content={url} />
+
+                <meta property='og:url' content={url} />
+                <meta property='og:type' content='website' />
+                <meta property='og:title' content={title} />
+                <meta property='og:description' content={desc} />
+                <meta
+                    property='og:image'
+                    content='https://amadeus2.hr/logo.png'
+                />
             </Helmet>
             {/* FIXME i18n */}
             <h1 className='type_heading'>U kategoriji: {type}</h1>
