@@ -40,11 +40,11 @@ const Type = ({ data, pageContext }) => {
         );
     }, [selectedBrand]);
 
-    const title = type[language] + ' - Amadeus 2 Webshop';
-    const url = 'https://amadeus2.hr/' + type[language].toLowerCase() + '/';
+    const title = type + ' - Amadeus 2 Webshop';
+    const url = 'https://amadeus2.hr/' + type.toLowerCase() + '/';
     const desc =
         'Uređaji u kategoriji: ' +
-        type[language] +
+        type +
         ' - Amadeus 2 Ploče je webshop s najpovoljnijim cijenama DJ opreme, klima uređaja, televizora i bijele tehnike. Sve narudžbe dolaze s besplatnom dostavom.';
 
     return (
