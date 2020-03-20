@@ -50,14 +50,14 @@ exports.onCreatePage = ({ page, actions }) => {
         },
     });
 
-    createPage({
-        ...page,
-        path: `/en${page.path}`,
-        context: {
-            ...page.context,
-            language: 'en',
-        },
-    });
+    // createPage({
+    //     ...page,
+    //     path: `/en${page.path}`,
+    //     context: {
+    //         ...page.context,
+    //         language: 'en',
+    //     },
+    // });
 };
 
 // Create item and type pages
@@ -95,18 +95,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
             },
         });
 
-        actions.createPage({
-            path: `/en/${type.en.toLowerCase()}/${slug}/`,
-            component: require.resolve('./src/templates/item.js'),
-            context: {
-                id,
-                language: 'en',
-            },
-        });
+        // actions.createPage({
+        //     path: `/en/${type.en.toLowerCase()}/${slug}/`,
+        //     component: require.resolve('./src/templates/item.js'),
+        //     context: {
+        //         id,
+        //         language: 'en',
+        //     },
+        // });
     });
 
     const types_hr = [...new Set(items.map(item => item.type.hr))];
-    const types_en = [...new Set(items.map(item => item.type.en))];
+    // const types_en = [...new Set(items.map(item => item.type.en))];
 
     types_hr.map(type => {
         actions.createPage({
@@ -119,14 +119,14 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         });
     });
 
-    types_en.map(type => {
-        actions.createPage({
-            path: `/en/${type.toLowerCase()}/`,
-            component: require.resolve('./src/templates/type.js'),
-            context: {
-                type,
-                language: 'en',
-            },
-        });
-    });
+    // types_en.map(type => {
+    //     actions.createPage({
+    //         path: `/en/${type.toLowerCase()}/`,
+    //         component: require.resolve('./src/templates/type.js'),
+    //         context: {
+    //             type,
+    //             language: 'en',
+    //         },
+    //     });
+    // });
 };
