@@ -66,6 +66,7 @@ export const Header = ({ changeLanguageCustomUrl }) => {
                 </button>
             </div>
             <div className='header_select'>
+                {/*
                 <select
                     onChange={e =>
                         changeLanguage(e.target.value, changeLanguageCustomUrl)
@@ -75,6 +76,7 @@ export const Header = ({ changeLanguageCustomUrl }) => {
                     <option value='hr'>Hrvatski</option>
                     <option value='en'>English</option>
                 </select>
+*/}
                 <select
                     value={currency}
                     onChange={e => changeCurrency(e.target.value)}

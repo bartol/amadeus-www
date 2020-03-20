@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { navigate } from 'gatsby';
 import Image from 'gatsby-image';
 import { request } from 'graphql-request';
 import { SharedContext } from '../state/shared';
@@ -284,6 +285,7 @@ export const Cart = () => {
                         Prihvaćam uvjete o korištenju.
                     </span>
                 </label>
+                {/*
                 <form
                     name='pay'
                     action='https://formtest.payway.com.hr/Authorization.aspx'
@@ -343,6 +345,22 @@ export const Cart = () => {
                         className='buy_button'
                     />
                 </form>
+*/}
+                <input
+                    type='submit'
+                    value='Checkout'
+                    disabled={
+                        !(
+                            (cart.length && terms)
+                            // && amount === parseInt(pgwData.amount.replace(',', ''))
+                        )
+                    }
+                    onClick={() => {
+                        navigate('/checkout/');
+                        setCartVisible(false);
+                    }}
+                    className='buy_button'
+                />
             </div>
         </div>
     );
