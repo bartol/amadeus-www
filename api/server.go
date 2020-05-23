@@ -11,7 +11,26 @@ import (
 var key = "LFC9PD4UU6FY2KIS32X12RLGHIL1Q9G6"
 
 func getURL(resource string) string {
-	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full&limit=20"
+	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full&limit=5" // TODO
+}
+
+func getImageURL(productID int, imageID string) string {
+	return "https://pioneer.hr/api/images/products/" + strconv.Itoa(productID) + "/" + imageID
+}
+
+func getBody(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return []byte(""), err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return []byte(""), err
+	}
+
+	return body, nil
 }
 
 type product struct {
@@ -104,6 +123,14 @@ func main() {
 			}
 		}
 
+		defaultImage := image{URL: getImageURL(p.ID, p.DefaultImageID)}
+
+		images := []image{}
+		for _, img := range p.Associations.Images {
+			image := image{URL: getImageURL(p.ID, img.ID)}
+			images = append(images, image)
+		}
+
 		product := product{
 			ID:            p.ID,
 			Name:          p.Name,
@@ -113,6 +140,11 @@ func main() {
 			ReductionType: reductionType,
 			OutOfStock:    outOfStock,
 			Quantity:      quantity,
+			Slug:          p.LinkRewrite,
+			URL:           "", // TODO
+			Description:   "", // TODO
+			DefaultImage:  defaultImage,
+			Images:        images,
 		}
 
 		fmt.Printf("%+v\n", product)
@@ -121,20 +153,21 @@ func main() {
 
 type getProductsResp struct {
 	Products []struct {
-		ID    int
-		Name  string
-		Price string
+		ID             int
+		Name           string
+		Price          string
+		LinkRewrite    string `json:"link_rewrite"`
+		DefaultImageID string `json:"id_default_image"`
+		Associations   struct {
+			Images []struct {
+				ID string
+			}
+		}
 	}
 }
 
 func getProducts() (getProductsResp, error) {
-	resp, err := http.Get(getURL("products"))
-	if err != nil {
-		return getProductsResp{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := getBody(getURL("products"))
 	if err != nil {
 		return getProductsResp{}, err
 	}
@@ -157,13 +190,7 @@ type getSpecificPricesResp struct {
 }
 
 func getSpecificPrices() (getSpecificPricesResp, error) {
-	resp, err := http.Get(getURL("specific_prices"))
-	if err != nil {
-		return getSpecificPricesResp{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := getBody(getURL("specific_prices"))
 	if err != nil {
 		return getSpecificPricesResp{}, err
 	}
@@ -186,14 +213,7 @@ type getStockAvailablesResp struct {
 }
 
 func getStockAvailables() (getStockAvailablesResp, error) {
-	fmt.Println(getURL("stock_availables"))
-	resp, err := http.Get(getURL("stock_availables"))
-	if err != nil {
-		return getStockAvailablesResp{}, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := getBody(getURL("stock_availables"))
 	if err != nil {
 		return getStockAvailablesResp{}, err
 	}
