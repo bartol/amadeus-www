@@ -1,0 +1,24 @@
+{
+  "product_feature_values": [
+    { "id": 37, "id_feature": "9", "custom": "0", "value": "2 GB" },
+    { "id": 38, "id_feature": "9", "custom": "0", "value": "3 GB" },
+    { "id": 39, "id_feature": "9", "custom": "0", "value": "4 GB" },
+    { "id": 40, "id_feature": "9", "custom": "0", "value": "6 GB" },
+    { "id": 41, "id_feature": "9", "custom": "0", "value": "8 GB" },
+    { "id": 42, "id_feature": "9", "custom": "0", "value": "12 GB" },
+    { "id": 250, "id_feature": "9", "custom": "1", "value": "4 MB" },
+    { "id": 274, "id_feature": "9", "custom": "1", "value": "16 GB" },
+    { "id": 281, "id_feature": "9", "custom": "1", "value": "512 MB" },
+    { "id": 284, "id_feature": "9", "custom": "1", "value": "4 MB" },
+    { "id": 347, "id_feature": "9", "custom": "1", "value": "512 MB" },
+    { "id": 43, "id_feature": "10", "custom": "0", "value": "16 GB" },
+    { "id": 44, "id_feature": "10", "custom": "0", "value": "32 GB" },
+    { "id": 45, "id_feature": "10", "custom": "0", "value": "64 GB" },
+    { "id": 46, "id_feature": "10", "custom": "0", "value": "128 GB" },
+    { "id": 47, "id_feature": "10", "custom": "0", "value": "256 GB" },
+    { "id": 252, "id_feature": "10", "custom": "1", "value": "4 MB" },
+    { "id": 283, "id_feature": "10", "custom": "1", "value": "4 GB" },
+    { "id": 286, "id_feature": "10", "custom": "1", "value": "4 MB" },
+    { "id": 349, "id_feature": "10", "custom": "1", "value": "4 GB" }
+  ]
+}
