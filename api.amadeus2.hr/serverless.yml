@@ -1,0 +1,194 @@
+service: amadeus
+
+plugins:
+  - serverless-plugin-typescript
+
+custom:
+  config: ${file(./config.json)}
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: prod
+  region: us-east-1
+
+  deploymentBucket:
+    name: amadeus-serverless-deployment
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        # - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:us-east-1:838001547158:table/amadeus-dev'
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:DeleteObject
+      Resource: 'arn:aws:s3:::amadeus-images/*'
+    - Effect: Allow
+      Action:
+        # - dynamodb:Query
+        # - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        # - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:us-east-1:838001547158:table/amadeus-cart'
+    - Effect: Allow
+      Action:
+        # - dynamodb:Query
+        # - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        # - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:us-east-1:838001547158:table/amadeus-newsletter'
+    - Effect: Allow
+      Action:
+        # - dynamodb:Query
+        # - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        # - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:us-east-1:838001547158:table/amadeus-dev-forms'
+    - Effect: Allow
+      Action:
+        # - dynamodb:Query
+        # - dynamodb:Scan
+        # - dynamodb:GetItem
+        - dynamodb:PutItem
+        # - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:us-east-1:838001547158:table/orders-successful'
+    - Effect: Allow
+      Action:
+        # - dynamodb:Query
+        # - dynamodb:Scan
+        # - dynamodb:GetItem
+        - dynamodb:PutItem
+        # - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:us-east-1:838001547158:table/orders-failed'
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: 'arn:aws:lambda:us-east-1:838001547158:function:amadeus-prod-receipt' # TODO env
+    - Effect: 'Allow'
+      Action:
+        - 'ses:SendEmail'
+      Resource: '*' # TODO fix
+
+  package:
+    exclude:
+      - .git/**
+      - config.json
+
+  environment:
+    ITEMS_TABLE: ${self:custom.config.ITEMS_TABLE}
+    CARTS_TABLE: ${self:custom.config.CARTS_TABLE}
+    EMAILS_TABLE: ${self:custom.config.EMAILS_TABLE}
+    FORMS_TABLE: ${self:custom.config.FORMS_TABLE}
+    SUCCESSFUL_ORDERS_TABLE: ${self:custom.config.SUCCESSFUL_ORDERS_TABLE}
+    FAILED_ORDERS_TABLE: ${self:custom.config.FAILED_ORDERS_TABLE}
+    RECEIPT_FUNCTION: ${self:custom.config.RECEIPT_FUNCTION}
+    SECRET_KEY: ${self:custom.config.SECRET_KEY}
+    SHOP_ID: ${self:custom.config.SHOP_ID}
+    MAIN_URL: ${self:custom.config.MAIN_URL}
+    REDIRECT_URL: ${self:custom.config.REDIRECT_URL}
+    SUCCESS_URL: ${self:custom.config.SUCCESS_URL}
+    FAILURE_URL: ${self:custom.config.FAILURE_URL}
+    RECEIPT_SEND_EMAIL: ${self:custom.config.RECEIPT_SEND_EMAIL}
+    FORM_SEND_EMAIL: ${self:custom.config.FORM_SEND_EMAIL}
+    FORM_RECEIVE_EMAIL: ${self:custom.config.FORM_RECEIVE_EMAIL}
+    FIXER_API_KEYS: ${self:custom.config.FIXER_API_KEYS}
+    COGNITO_ISS_DASHBOARD: ${self:custom.config.COGNITO_ISS_DASHBOARD}
+    COGNITO_AUD_DASHBOARD: ${self:custom.config.COGNITO_AUD_DASHBOARD}
+    COGNITO_JWK_DASHBOARD: ${self:custom.config.COGNITO_JWK_DASHBOARD}
+
+functions:
+  # # checkout
+  # signature:
+  #   handler: checkout/signature.handler
+  #   events:
+  #     - http:
+  #         path: signature
+  #         method: GET
+  #         cors: true
+  # redirect:
+  #   handler: checkout/redirect.handler
+  #   events:
+  #     - http:
+  #         path: redirect
+  #         method: POST
+  # receipt:
+  #   handler: checkout/receipt.handler
+
+  # # form
+  # contact:
+  #   handler: form/contact.handler
+  #   events:
+  #     - http:
+  #         path: contact
+  #         method: POST
+  #         cors: true
+
+  # # crud
+  # get:
+  #   handler: crud/get.handler
+  #   events:
+  #     - http:
+  #         path: get/{id}
+  #         method: GET
+  #         cors: true
+  # list:
+  #   handler: crud/list.handler
+  #   events:
+  #     - http:
+  #         path: list
+  #         method: GET
+  #         cors: true
+  # add:
+  #   handler: crud/add.handler
+  #   events:
+  #     - http:
+  #         path: add
+  #         method: POST
+  #         cors: true
+
+  graphql:
+    handler: graphql.graphql
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+      - http:
+          path: /
+          method: get
+          cors: true
+# resources:
+#   Resources:
+#     GatewayResponseDefault4XX:
+#       Type: 'AWS::ApiGateway::GatewayResponse'
+#       Properties:
+#         ResponseParameters:
+#           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+#           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+#         ResponseType: DEFAULT_4XX
+#         RestApiId:
+#           Ref: 'ApiGatewayRestApi'
+#     GatewayResponseDefault5XX:
+#       Type: 'AWS::ApiGateway::GatewayResponse'
+#       Properties:
+#         ResponseParameters:
+#           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+#           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+#         ResponseType: DEFAULT_5XX
+#         RestApiId:
+#           Ref: 'ApiGatewayRestApi'

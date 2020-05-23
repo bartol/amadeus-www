@@ -1,0 +1,20 @@
+{
+  "messages": [
+    {
+      "hr": "sutra",
+      "en": "tomorrow"
+    },
+    {
+      "hr": "odmah",
+      "en": "now"
+    },
+    {
+      "hr": "prekosutra",
+      "en": "after tomorrow"
+    },
+    {
+      "hr": "Sada",
+      "en": "Now"
+    }
+  ]
+}

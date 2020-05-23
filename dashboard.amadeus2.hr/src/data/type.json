@@ -1,0 +1,24 @@
+{
+  "types": [
+    {
+      "hr": "Televizija",
+      "en": "Television"
+    },
+    {
+      "hr": "Mikser",
+      "en": "Mixer"
+    },
+    {
+      "hr": "Mikrofon",
+      "en": "Microphone"
+    },
+    {
+      "hr": "tv",
+      "en": "tv"
+    },
+    {
+      "hr": "Mobitel",
+      "en": "Mobile phone"
+    }
+  ]
+}
