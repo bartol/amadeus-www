@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -65,11 +64,10 @@ type feature struct {
 	Value string
 }
 
-// var products map[string]product
+var productsMap = make(map[string]product)
+var productsSlice []product
 
-func main() {
-	fmt.Println("== start ===============================")
-
+func reindex() {
 	productsData, err := getProducts()
 	if err != nil {
 		panic(err)
@@ -200,7 +198,8 @@ func main() {
 			Features:      features,
 		}
 
-		fmt.Printf("%+v\n", product)
+		productsMap[URL] = product
+		productsSlice = append(productsSlice, product)
 	}
 }
 
@@ -352,4 +351,34 @@ func getProductFeatureValues() (getProductFeatureValuesResp, error) {
 	}
 
 	return data, nil
+}
+
+func main() {
+	reindex()
+
+	http.HandleFunc("/products/", handler)
+
+	http.ListenAndServe(":8080", nil)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	URL := r.URL.Path[len("/products/"):]
+	if URL != "" {
+		product, ok := productsMap[URL]
+		if !ok {
+			notFoundHandler(w, r)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(product)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(productsSlice)
+}
+
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("404"))
 }
