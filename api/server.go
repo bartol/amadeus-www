@@ -127,10 +127,11 @@ func main() {
 		quantity := 1
 		for _, sa := range stockAvailablesData.StockAvailables {
 			if sa.ProductID == strconv.Itoa(p.ID) && sa.ProductAttributeID == "0" {
-				quantity, err := strconv.Atoi(sa.Quantity)
+				q, err := strconv.Atoi(sa.Quantity)
 				if err != nil {
 					panic(err)
 				}
+				quantity = q
 				if quantity == 0 {
 					outOfStock = true
 				}
@@ -199,7 +200,7 @@ func main() {
 			Features:      features,
 		}
 
-		fmt.Printf("%+v\n", product.Features)
+		fmt.Printf("%+v\n", product)
 	}
 }
 
