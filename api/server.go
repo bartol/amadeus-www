@@ -57,6 +57,7 @@ type image struct {
 
 type category struct {
 	Name string
+	Slug string
 }
 
 type feature struct {
@@ -81,6 +82,11 @@ func main() {
 	}
 
 	stockAvailablesData, err := getStockAvailables()
+	if err != nil {
+		panic(err)
+	}
+
+	categoriesData, err := getCategories()
 	if err != nil {
 		panic(err)
 	}
@@ -111,7 +117,7 @@ func main() {
 		outOfStock := false
 		quantity := 1
 		for _, sa := range stockAvailablesData.StockAvailables {
-			if sa.ProductID == strconv.Itoa(p.ID) && sa.ProductIDAttribute == "0" {
+			if sa.ProductID == strconv.Itoa(p.ID) && sa.ProductAttributeID == "0" {
 				quantityInt64, err := strconv.ParseInt(sa.Quantity, 10, 32)
 				if err != nil {
 					panic(err)
@@ -131,6 +137,19 @@ func main() {
 			images = append(images, image)
 		}
 
+		categories := []category{}
+		for _, categoryFromAssociations := range p.Associations.Categories {
+			for _, categoryFromData := range categoriesData.Categories {
+				if categoryFromAssociations.ID == strconv.Itoa(categoryFromData.ID) {
+					category := category{
+						Name: categoryFromData.Name,
+						Slug: categoryFromData.LinkRewrite,
+					}
+					categories = append(categories, category)
+				}
+			}
+		}
+
 		product := product{
 			ID:            p.ID,
 			Name:          p.Name,
@@ -145,6 +164,7 @@ func main() {
 			Description:   "", // TODO
 			DefaultImage:  defaultImage,
 			Images:        images,
+			Categories:    categories,
 		}
 
 		fmt.Printf("%+v\n", product)
@@ -160,6 +180,9 @@ type getProductsResp struct {
 		DefaultImageID string `json:"id_default_image"`
 		Associations   struct {
 			Images []struct {
+				ID string
+			}
+			Categories []struct {
 				ID string
 			}
 		}
@@ -207,7 +230,7 @@ func getSpecificPrices() (getSpecificPricesResp, error) {
 type getStockAvailablesResp struct {
 	StockAvailables []struct {
 		ProductID          string `json:"id_product"`
-		ProductIDAttribute string `json:"id_product_attribute"`
+		ProductAttributeID string `json:"id_product_attribute"`
 		Quantity           string
 	} `json:"stock_availables"`
 }
@@ -222,6 +245,29 @@ func getStockAvailables() (getStockAvailablesResp, error) {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		return getStockAvailablesResp{}, err
+	}
+
+	return data, nil
+}
+
+type getCategoriesResp struct {
+	Categories []struct {
+		ID          int
+		Name        string
+		LinkRewrite string `json:"link_rewrite"`
+	}
+}
+
+func getCategories() (getCategoriesResp, error) {
+	body, err := getBody(getURL("categories"))
+	if err != nil {
+		return getCategoriesResp{}, err
+	}
+
+	data := getCategoriesResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getCategoriesResp{}, err
 	}
 
 	return data, nil
