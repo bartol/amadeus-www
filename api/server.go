@@ -61,9 +61,8 @@ type category struct {
 }
 
 type feature struct {
-	Name     string
-	Value    string
-	Position int
+	Name  string
+	Value string
 }
 
 // var products map[string]product
@@ -87,6 +86,16 @@ func main() {
 	}
 
 	categoriesData, err := getCategories()
+	if err != nil {
+		panic(err)
+	}
+
+	productFeaturesData, err := getProductFeatures()
+	if err != nil {
+		panic(err)
+	}
+
+	productFeatureValuesData, err := getProductFeatureValues()
 	if err != nil {
 		panic(err)
 	}
@@ -118,14 +127,14 @@ func main() {
 		quantity := 1
 		for _, sa := range stockAvailablesData.StockAvailables {
 			if sa.ProductID == strconv.Itoa(p.ID) && sa.ProductAttributeID == "0" {
-				quantityInt64, err := strconv.ParseInt(sa.Quantity, 10, 32)
+				quantity, err := strconv.Atoi(sa.Quantity)
 				if err != nil {
 					panic(err)
 				}
-				quantity = int(quantityInt64)
 				if quantity == 0 {
 					outOfStock = true
 				}
+				break
 			}
 		}
 
@@ -152,6 +161,26 @@ func main() {
 
 		URL := categories[len(categories)-1].Slug + "/" + p.LinkRewrite
 
+		features := []feature{}
+		for _, featureFromAssociations := range p.Associations.ProductOptionValues {
+			for _, featureFromData := range productFeaturesData.ProductFeatures {
+				if featureFromAssociations.ID == strconv.Itoa(featureFromData.ID) {
+					value := ""
+					for _, featureValue := range productFeatureValuesData.ProductFeatureValues {
+						if featureValue.FeatureID == strconv.Itoa(featureFromData.ID) {
+							value = featureValue.Value
+							break
+						}
+					}
+					feature := feature{
+						Name:  featureFromData.Name,
+						Value: value,
+					}
+					features = append(features, feature)
+				}
+			}
+		}
+
 		product := product{
 			ID:            p.ID,
 			Name:          p.Name,
@@ -163,13 +192,14 @@ func main() {
 			Quantity:      quantity,
 			Slug:          p.LinkRewrite,
 			URL:           URL,
-			Description:   "", // TODO
+			Description:   p.Description,
 			DefaultImage:  defaultImage,
 			Images:        images,
 			Categories:    categories,
+			Features:      features,
 		}
 
-		fmt.Printf("%+v\n", product)
+		fmt.Printf("%+v\n", product.Features)
 	}
 }
 
@@ -179,6 +209,7 @@ type getProductsResp struct {
 		Name           string
 		Price          string
 		LinkRewrite    string `json:"link_rewrite"`
+		Description    string
 		DefaultImageID string `json:"id_default_image"`
 		Associations   struct {
 			Images []struct {
@@ -187,6 +218,9 @@ type getProductsResp struct {
 			Categories []struct {
 				ID string
 			}
+			ProductOptionValues []struct {
+				ID string
+			} `json:"product_option_values"`
 		}
 	}
 }
@@ -270,6 +304,50 @@ func getCategories() (getCategoriesResp, error) {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		return getCategoriesResp{}, err
+	}
+
+	return data, nil
+}
+
+type getProductFeaturesResp struct {
+	ProductFeatures []struct {
+		ID   int
+		Name string
+	} `json:"product_features"`
+}
+
+func getProductFeatures() (getProductFeaturesResp, error) {
+	body, err := getBody(getURL("product_features"))
+	if err != nil {
+		return getProductFeaturesResp{}, err
+	}
+
+	data := getProductFeaturesResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getProductFeaturesResp{}, err
+	}
+
+	return data, nil
+}
+
+type getProductFeatureValuesResp struct {
+	ProductFeatureValues []struct {
+		FeatureID string `json:"id_feature"`
+		Value     string
+	} `json:"product_feature_values"`
+}
+
+func getProductFeatureValues() (getProductFeatureValuesResp, error) {
+	body, err := getBody(getURL("product_feature_values"))
+	if err != nil {
+		return getProductFeatureValuesResp{}, err
+	}
+
+	data := getProductFeatureValuesResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getProductFeatureValuesResp{}, err
 	}
 
 	return data, nil
