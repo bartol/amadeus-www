@@ -11,7 +11,7 @@ import (
 var key = "LFC9PD4UU6FY2KIS32X12RLGHIL1Q9G6"
 
 func getURL(resource string) string {
-	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full&limit=5" // TODO
+	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full&limit=20" // TODO
 }
 
 func getImageURL(productID int, imageID string) string {
@@ -150,6 +150,8 @@ func main() {
 			}
 		}
 
+		URL := categories[len(categories)-1].Slug + "/" + p.LinkRewrite
+
 		product := product{
 			ID:            p.ID,
 			Name:          p.Name,
@@ -160,7 +162,7 @@ func main() {
 			OutOfStock:    outOfStock,
 			Quantity:      quantity,
 			Slug:          p.LinkRewrite,
-			URL:           "", // TODO
+			URL:           URL,
 			Description:   "", // TODO
 			DefaultImage:  defaultImage,
 			Images:        images,
