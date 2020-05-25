@@ -11,7 +11,7 @@ import (
 var key = "LFC9PD4UU6FY2KIS32X12RLGHIL1Q9G6"
 
 func getURL(resource string) string {
-	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full" // TODO
+	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
 }
 
 func getImageURL(productID int, imageID string) string {
@@ -50,8 +50,6 @@ type product struct {
 	Categories    []category
 	Features      []feature
 	Options       []option
-	Tags          []tag
-	Combinations  []combination
 }
 
 type image struct {
@@ -68,9 +66,13 @@ type feature struct {
 	Value string
 }
 
-type option struct{}
-type tag struct{}
-type combination struct{}
+type option struct {
+	Name       string
+	Value      string
+	Price      int
+	OutOfStock bool
+	Quantity   int
+}
 
 var productsMap = make(map[string]product)
 var productsSlice []product
@@ -221,10 +223,6 @@ func reindex() {
 
 		productsMap[URL] = product
 		productsSlice = append(productsSlice, product)
-
-		fmt.Println(product.URL)
-		fmt.Println(product.Features)
-		// fmt.Println(product.Options)
 	}
 
 	fmt.Println("end")
