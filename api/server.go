@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -10,7 +11,7 @@ import (
 var key = "LFC9PD4UU6FY2KIS32X12RLGHIL1Q9G6"
 
 func getURL(resource string) string {
-	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full&limit=20" // TODO
+	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full" // TODO
 }
 
 func getImageURL(productID int, imageID string) string {
@@ -48,6 +49,9 @@ type product struct {
 	Images        []image
 	Categories    []category
 	Features      []feature
+	Options       []option
+	Tags          []tag
+	Combinations  []combination
 }
 
 type image struct {
@@ -64,10 +68,16 @@ type feature struct {
 	Value string
 }
 
+type option struct{}
+type tag struct{}
+type combination struct{}
+
 var productsMap = make(map[string]product)
 var productsSlice []product
 
 func reindex() {
+	fmt.Println("start")
+
 	productsData, err := getProducts()
 	if err != nil {
 		panic(err)
@@ -99,6 +109,17 @@ func reindex() {
 	}
 
 	for _, p := range productsData.Products {
+		// TODO
+		// isAmadeus := false
+		// for _, c := range p.Associations.Categories {
+		// 	if c.ID == "25" {
+		// 		isAmadeus = true
+		// 	}
+		// }
+		// if !isAmadeus {
+		// 	continue
+		// }
+
 		priceFloat, err := strconv.ParseFloat(p.Price, 10)
 		if err != nil {
 			panic(err)
@@ -161,12 +182,12 @@ func reindex() {
 		URL := categories[len(categories)-1].Slug + "/" + p.LinkRewrite
 
 		features := []feature{}
-		for _, featureFromAssociations := range p.Associations.ProductOptionValues {
+		for _, featureFromAssociations := range p.Associations.ProductFeatures {
 			for _, featureFromData := range productFeaturesData.ProductFeatures {
 				if featureFromAssociations.ID == strconv.Itoa(featureFromData.ID) {
 					value := ""
 					for _, featureValue := range productFeatureValuesData.ProductFeatureValues {
-						if featureValue.FeatureID == strconv.Itoa(featureFromData.ID) {
+						if featureFromAssociations.ValueID == strconv.Itoa(featureValue.ID) {
 							value = featureValue.Value
 							break
 						}
@@ -200,7 +221,13 @@ func reindex() {
 
 		productsMap[URL] = product
 		productsSlice = append(productsSlice, product)
+
+		fmt.Println(product.URL)
+		fmt.Println(product.Features)
+		// fmt.Println(product.Options)
 	}
+
+	fmt.Println("end")
 }
 
 type getProductsResp struct {
@@ -221,6 +248,10 @@ type getProductsResp struct {
 			ProductOptionValues []struct {
 				ID string
 			} `json:"product_option_values"`
+			ProductFeatures []struct {
+				ID      string
+				ValueID string `json:"id_feature_value"`
+			} `json:"product_features"`
 		}
 	}
 }
@@ -333,8 +364,8 @@ func getProductFeatures() (getProductFeaturesResp, error) {
 
 type getProductFeatureValuesResp struct {
 	ProductFeatureValues []struct {
-		FeatureID string `json:"id_feature"`
-		Value     string
+		ID    int
+		Value string
 	} `json:"product_feature_values"`
 }
 
