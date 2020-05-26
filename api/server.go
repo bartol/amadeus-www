@@ -52,6 +52,22 @@ type product struct {
 	Options       []option
 }
 
+type productLite struct {
+	ID            int
+	Name          string
+	Price         int
+	HasReduction  bool
+	Reduction     int
+	ReductionType string
+	OutOfStock    bool
+	Quantity      int
+	Slug          string
+	URL           string
+	DefaultImage  image
+	Categories    []category
+	Features      []feature
+}
+
 type image struct {
 	URL string
 }
@@ -75,7 +91,7 @@ type option struct {
 }
 
 var productsMap = make(map[string]product)
-var productsSlice []product
+var productsLiteSlice []productLite
 
 func reindex() {
 	productsData, err := getProducts()
@@ -297,8 +313,24 @@ func reindex() {
 		}
 
 		productsMap[URL] = product
-		product.Description = ""
-		productsSlice = append(productsSlice, product)
+
+		productLite := productLite{
+			ID:            p.ID,
+			Name:          p.Name,
+			Price:         price,
+			HasReduction:  hasReduction,
+			Reduction:     reduction,
+			ReductionType: reductionType,
+			OutOfStock:    outOfStock,
+			Quantity:      quantity,
+			Slug:          p.LinkRewrite,
+			URL:           URL,
+			DefaultImage:  defaultImage,
+			Categories:    categories,
+			Features:      features,
+		}
+
+		productsLiteSlice = append(productsLiteSlice, productLite)
 	}
 }
 
@@ -534,13 +566,17 @@ func getCombinations() (getCombinationsResp, error) {
 func main() {
 	reindex()
 
-	http.HandleFunc("/products/", handler)
+	http.HandleFunc("/products/", productsHandler)
+	// http.HandleFunc("/categories/", categoriesHandler)
 
 	fmt.Println("server listening on :8080")
 	http.ListenAndServe(":8080", nil)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func productsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	URL := r.URL.Path[len("/products/"):]
 	if URL != "" {
 		product, ok := productsMap[URL]
@@ -549,18 +585,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		json.NewEncoder(w).Encode(product)
 		return
 	}
 
-	page := 1
-	perPage := 100
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	json.NewEncoder(w).Encode(productsSlice[(page-1)*perPage : page*perPage])
+	json.NewEncoder(w).Encode(productsLiteSlice)
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
