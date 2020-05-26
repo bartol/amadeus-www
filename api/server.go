@@ -93,6 +93,34 @@ type option struct {
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
 
+var blacklistedCategories = []string{
+	"1",  // Root
+	"2",  // Home
+	"12", // USB Player
+	"13", // Controller / Combo DJ System
+	"14", // Headphones
+	"15", // Turntable
+	"16", // Player
+	"17", // Mixer
+	"18", // Controller Bag / Flight Case
+	"19", // Zvučnici (kom)
+	"20", // Dodaci
+	"21", // Remix Station
+	"22", // All In One Systems
+	"23", // XPRS zvučnici
+	"24", // Rasprodaja
+	"31", // Elektronika
+	"37", // Digitalni prijamnici
+	"78", // Effector
+	"83", // Hi-Fi
+	"84", // Mini linije
+	"85", // BT zvučnici/karaoke
+	"87", // Kućna kina
+	"88", // Slušalice
+	"89", // Bežične slušalice
+	"90", // Zvučnici
+}
+
 func reindex() {
 	productsData, err := getProducts()
 	if err != nil {
@@ -140,16 +168,15 @@ func reindex() {
 	}
 
 	for _, p := range productsData.Products {
-		// TODO
-		// isAmadeus := false
-		// for _, c := range p.Associations.Categories {
-		// 	if c.ID == "25" {
-		// 		isAmadeus = true
-		// 	}
-		// }
-		// if !isAmadeus {
-		// 	continue
-		// }
+		isAmadeus := true
+		for _, c := range blacklistedCategories {
+			if c == p.Associations.Categories[len(p.Associations.Categories)-1].ID {
+				isAmadeus = false
+			}
+		}
+		if !isAmadeus {
+			continue
+		}
 
 		priceFloat, err := strconv.ParseFloat(p.Price, 10)
 		if err != nil {
