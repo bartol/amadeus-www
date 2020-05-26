@@ -1,0 +1,51 @@
+{
+  "product_options": [
+    {
+      "id": 3,
+      "is_color_group": "1",
+      "group_type": "color",
+      "position": "0",
+      "name": "Color",
+      "public_name": "Color",
+      "associations": {
+        "product_option_values": [
+          { "id": "5" },
+          { "id": "6" },
+          { "id": "7" },
+          { "id": "8" },
+          { "id": "9" },
+          { "id": "10" },
+          { "id": "11" },
+          { "id": "12" },
+          { "id": "13" },
+          { "id": "14" },
+          { "id": "15" },
+          { "id": "16" },
+          { "id": "17" },
+          { "id": "24" }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "is_color_group": "0",
+      "group_type": "select",
+      "position": "1",
+      "name": "Produljeno jamstvo 5 god.",
+      "public_name": "Produljeno jamstvo 5 god.",
+      "associations": {
+        "product_option_values": [
+          { "id": "25" },
+          { "id": "26" },
+          { "id": "27" },
+          { "id": "28" },
+          { "id": "29" },
+          { "id": "30" },
+          { "id": "31" },
+          { "id": "32" },
+          { "id": "33" }
+        ]
+      }
+    }
+  ]
+}
