@@ -250,7 +250,10 @@ func reindex() {
 						Name: categoryFromData.Name,
 						Slug: categoryFromData.LinkRewrite,
 					}
-					categories = append(categories, category)
+					if category.Slug != "amadeus-ii-shop" {
+						categories = append(categories, category)
+					}
+					break
 				}
 			}
 		}
@@ -273,6 +276,7 @@ func reindex() {
 						Value: value,
 					}
 					features = append(features, feature)
+					break
 				}
 			}
 		}
