@@ -78,8 +78,6 @@ var productsMap = make(map[string]product)
 var productsSlice []product
 
 func reindex() {
-	fmt.Println("start")
-
 	productsData, err := getProducts()
 	if err != nil {
 		panic(err)
@@ -106,6 +104,21 @@ func reindex() {
 	}
 
 	productFeatureValuesData, err := getProductFeatureValues()
+	if err != nil {
+		panic(err)
+	}
+
+	productOptionsData, err := getProductOptions()
+	if err != nil {
+		panic(err)
+	}
+
+	productOptionValuesData, err := getProductOptionValues()
+	if err != nil {
+		panic(err)
+	}
+
+	combinationsData, err := getCombinations()
 	if err != nil {
 		panic(err)
 	}
@@ -203,6 +216,67 @@ func reindex() {
 			}
 		}
 
+		options := []option{}
+		for _, sa := range p.Associations.StockAvailables {
+			if sa.ProductAttributeID == "0" {
+				continue
+			}
+
+			v := ""
+			n := ""
+			pr := 0
+
+			for _, combination := range combinationsData.Combinations {
+				if sa.ProductAttributeID == strconv.Itoa(combination.ID) {
+					for _, optionValue := range productOptionValuesData.ProductOptionValues {
+						if combination.Associations.ProductOptionValues[0].ID == strconv.Itoa(optionValue.ID) {
+							v = optionValue.Value
+
+							for _, option := range productOptionsData.ProductOptions {
+								if optionValue.ProductOptionID == strconv.Itoa(option.ID) {
+									n = option.Name
+									break
+								}
+							}
+							break
+						}
+					}
+
+					pFloat, err := strconv.ParseFloat(combination.Price, 10)
+					if err != nil {
+						panic(err)
+					}
+					pr = int(pFloat * 100)
+					break
+				}
+			}
+
+			q := 0
+			s := false
+			for _, sad := range stockAvailablesData.StockAvailables {
+				if sa.ID == strconv.Itoa(sad.ID) {
+					qu, err := strconv.Atoi(sad.Quantity)
+					if err != nil {
+						panic(err)
+					}
+					q = qu
+					if q == 0 {
+						s = true
+					}
+					break
+				}
+			}
+
+			option := option{
+				Name:       n,
+				Value:      v,
+				Price:      pr,
+				OutOfStock: s,
+				Quantity:   q,
+			}
+			options = append(options, option)
+		}
+
 		product := product{
 			ID:            p.ID,
 			Name:          p.Name,
@@ -219,13 +293,13 @@ func reindex() {
 			Images:        images,
 			Categories:    categories,
 			Features:      features,
+			Options:       options,
 		}
 
 		productsMap[URL] = product
+		product.Description = ""
 		productsSlice = append(productsSlice, product)
 	}
-
-	fmt.Println("end")
 }
 
 type getProductsResp struct {
@@ -243,13 +317,14 @@ type getProductsResp struct {
 			Categories []struct {
 				ID string
 			}
-			ProductOptionValues []struct {
-				ID string
-			} `json:"product_option_values"`
 			ProductFeatures []struct {
 				ID      string
 				ValueID string `json:"id_feature_value"`
 			} `json:"product_features"`
+			StockAvailables []struct {
+				ID                 string
+				ProductAttributeID string `json:"id_product_attribute"`
+			} `json:"stock_availables"`
 		}
 	}
 }
@@ -294,6 +369,7 @@ func getSpecificPrices() (getSpecificPricesResp, error) {
 
 type getStockAvailablesResp struct {
 	StockAvailables []struct {
+		ID                 int
 		ProductID          string `json:"id_product"`
 		ProductAttributeID string `json:"id_product_attribute"`
 		Quantity           string
@@ -382,11 +458,85 @@ func getProductFeatureValues() (getProductFeatureValuesResp, error) {
 	return data, nil
 }
 
+type getProductOptionResp struct {
+	ProductOptions []struct {
+		ID   int
+		Name string
+	} `json:"product_options"`
+}
+
+func getProductOptions() (getProductOptionResp, error) {
+	body, err := getBody(getURL("product_options"))
+	if err != nil {
+		return getProductOptionResp{}, err
+	}
+
+	data := getProductOptionResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getProductOptionResp{}, err
+	}
+
+	return data, nil
+}
+
+type getProductOptionValuesResp struct {
+	ProductOptionValues []struct {
+		ID              int
+		ProductOptionID string `json:"id_attribute_group"`
+		Value           string `json:"name"`
+	} `json:"product_option_values"`
+}
+
+func getProductOptionValues() (getProductOptionValuesResp, error) {
+	body, err := getBody(getURL("product_option_values"))
+	if err != nil {
+		return getProductOptionValuesResp{}, err
+	}
+
+	data := getProductOptionValuesResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getProductOptionValuesResp{}, err
+	}
+
+	return data, nil
+}
+
+type getCombinationsResp struct {
+	Combinations []struct {
+		ID int
+		// ProductID string `json:"id_product"`
+		Price        string
+		Associations struct {
+			ProductOptionValues []struct {
+				ID string
+			} `json:"product_option_values"`
+		}
+	}
+}
+
+func getCombinations() (getCombinationsResp, error) {
+	body, err := getBody(getURL("combinations"))
+	if err != nil {
+		return getCombinationsResp{}, err
+	}
+
+	data := getCombinationsResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getCombinationsResp{}, err
+	}
+
+	return data, nil
+}
+
 func main() {
 	reindex()
 
 	http.HandleFunc("/products/", handler)
 
+	fmt.Println("server listening on :8080")
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -404,8 +554,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	page := 1
+	perPage := 100
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(productsSlice)
+	json.NewEncoder(w).Encode(productsSlice[(page-1)*perPage : page*perPage])
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
