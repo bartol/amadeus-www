@@ -33,6 +33,14 @@ func getBody(url string) ([]byte, error) {
 	return body, nil
 }
 
+func reverseCategories(a []category) []category {
+	for i := len(a)/2 - 1; i >= 0; i-- {
+		opp := len(a) - 1 - i
+		a[i], a[opp] = a[opp], a[i]
+	}
+	return a
+}
+
 type product struct {
 	ID            int
 	Name          string
@@ -90,8 +98,19 @@ type option struct {
 	Quantity   int
 }
 
+type categoryWithProducts struct {
+	ID         int
+	Name       string
+	Slug       string
+	Image      image
+	Products   []productLite
+	Categories []category
+}
+
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
+var categoriesMap = make(map[string]categoryWithProducts)
+var categoriesSlice []categoryWithProducts
 
 var blacklistedCategories = []string{
 	"1",  // Root
@@ -115,7 +134,6 @@ var blacklistedCategories = []string{
 	"83", // Hi-Fi
 	"84", // Mini linije
 	"85", // BT zvučnici/karaoke
-	"87", // Kućna kina
 	"88", // Slušalice
 	"89", // Bežične slušalice
 	"90", // Zvučnici
@@ -359,6 +377,73 @@ func reindex() {
 
 		productsLiteSlice = append(productsLiteSlice, productLite)
 	}
+
+	for _, c := range categoriesData.Categories {
+		isAmadeus := true
+		for _, blc := range blacklistedCategories {
+			if blc == strconv.Itoa(c.ID) {
+				isAmadeus = false
+			}
+		}
+		if !isAmadeus {
+			continue
+		}
+
+		image := image{
+			URL: "", // TODO
+		}
+
+		products := []productLite{}
+		for _, p := range c.Associations.Products {
+			var product productLite
+			for _, pl := range productsLiteSlice {
+				if p.ID == strconv.Itoa(pl.ID) {
+					product = pl
+					break
+				}
+			}
+			products = append(products, product)
+		}
+
+		categories := []category{}
+		var getCategory func(string)
+		getCategory = func(id string) {
+			var ctg category
+			var parentID string
+			for _, ct := range categoriesData.Categories {
+				if id == strconv.Itoa(ct.ID) {
+					ctg = category{
+						Name: ct.Name,
+						Slug: ct.LinkRewrite,
+					}
+					parentID = ct.ParentID
+					break
+				}
+			}
+
+			if ctg.Slug != "amadeus-ii-shop" {
+				categories = append(categories, ctg)
+			}
+
+			if parentID != "1" {
+				getCategory(parentID)
+			}
+		}
+		getCategory(strconv.Itoa(c.ID))
+		categories = reverseCategories(categories)
+
+		category := categoryWithProducts{
+			ID:         c.ID,
+			Name:       c.Name,
+			Slug:       c.LinkRewrite,
+			Image:      image,
+			Products:   products,
+			Categories: categories,
+		}
+
+		categoriesMap[category.Slug] = category
+		categoriesSlice = append(categoriesSlice, category)
+	}
 }
 
 type getProductsResp struct {
@@ -452,9 +537,15 @@ func getStockAvailables() (getStockAvailablesResp, error) {
 
 type getCategoriesResp struct {
 	Categories []struct {
-		ID          int
-		Name        string
-		LinkRewrite string `json:"link_rewrite"`
+		ID           int
+		ParentID     string `json:"id_parent"`
+		Name         string
+		LinkRewrite  string `json:"link_rewrite"`
+		Associations struct {
+			Products []struct {
+				ID string
+			}
+		}
 	}
 }
 
@@ -564,8 +655,7 @@ func getProductOptionValues() (getProductOptionValuesResp, error) {
 
 type getCombinationsResp struct {
 	Combinations []struct {
-		ID int
-		// ProductID string `json:"id_product"`
+		ID           int
 		Price        string
 		Associations struct {
 			ProductOptionValues []struct {
@@ -591,10 +681,11 @@ func getCombinations() (getCombinationsResp, error) {
 }
 
 func main() {
+	fmt.Println("reindexing...")
 	reindex()
 
 	http.HandleFunc("/products/", productsHandler)
-	// http.HandleFunc("/categories/", categoriesHandler)
+	http.HandleFunc("/categories/", categoriesHandler)
 
 	fmt.Println("server listening on :8080")
 	http.ListenAndServe(":8080", nil)
@@ -617,6 +708,25 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(productsLiteSlice)
+}
+
+func categoriesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	slug := r.URL.Path[len("/categories/"):]
+	if slug != "" {
+		category, ok := categoriesMap[slug]
+		if !ok {
+			notFoundHandler(w, r)
+			return
+		}
+
+		json.NewEncoder(w).Encode(category)
+		return
+	}
+
+	json.NewEncoder(w).Encode(categoriesSlice)
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
