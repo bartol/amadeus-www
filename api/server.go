@@ -734,5 +734,6 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("404"))
 }
