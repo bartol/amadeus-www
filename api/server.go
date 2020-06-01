@@ -131,50 +131,50 @@ var blacklistedCategories = []string{
 	"90", // Zvučnici
 }
 
-func reindex() {
+func reindex() error {
 	productsData, err := getProducts()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	specificPricesData, err := getSpecificPrices()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	stockAvailablesData, err := getStockAvailables()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	categoriesData, err := getCategories()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	productFeaturesData, err := getProductFeatures()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	productFeatureValuesData, err := getProductFeatureValues()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	productOptionsData, err := getProductOptions()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	productOptionValuesData, err := getProductOptionValues()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	combinationsData, err := getCombinations()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	for _, p := range productsData.Products {
@@ -190,7 +190,7 @@ func reindex() {
 
 		priceFloat, err := strconv.ParseFloat(p.Price, 10)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		price := int(priceFloat * 100)
 
@@ -202,7 +202,7 @@ func reindex() {
 				hasReduction = true
 				reductionFloat, err := strconv.ParseFloat(sp.Reduction, 10)
 				if err != nil {
-					panic(err)
+					return err
 				}
 				reduction = int(reductionFloat * 100)
 				reductionType = sp.ReductionType
@@ -216,7 +216,7 @@ func reindex() {
 			if sa.ProductID == strconv.Itoa(p.ID) && sa.ProductAttributeID == "0" {
 				q, err := strconv.Atoi(sa.Quantity)
 				if err != nil {
-					panic(err)
+					return err
 				}
 				quantity = q
 				if quantity == 0 {
@@ -301,7 +301,7 @@ func reindex() {
 
 					pFloat, err := strconv.ParseFloat(combination.Price, 10)
 					if err != nil {
-						panic(err)
+						return err
 					}
 					pr = int(pFloat * 100)
 					break
@@ -314,7 +314,7 @@ func reindex() {
 				if sa.ID == strconv.Itoa(sad.ID) {
 					qu, err := strconv.Atoi(sad.Quantity)
 					if err != nil {
-						panic(err)
+						return err
 					}
 					q = qu
 					if q == 0 {
@@ -424,6 +424,8 @@ func reindex() {
 		categoriesMap[category.Slug] = category
 		categoriesSlice = append(categoriesSlice, category)
 	}
+
+	return nil
 }
 
 type getProductsResp struct {
@@ -662,7 +664,12 @@ func getCombinations() (getCombinationsResp, error) {
 
 func main() {
 	fmt.Println("reindexing...")
-	reindex()
+	err := reindex()
+	if err != nil {
+		panic(err)
+	}
+
+	http.HandleFunc("/reindex/", reindexHandler)
 
 	http.HandleFunc("/products/", productsHandler)
 	http.HandleFunc("/categories/", categoriesHandler)
