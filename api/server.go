@@ -678,6 +678,17 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 
+func reindexHandler(w http.ResponseWriter, r *http.Request) {
+	err := reindex()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	w.Write([]byte("success"))
+}
+
 func productsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
