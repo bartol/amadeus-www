@@ -1,26 +1,15 @@
 import Head from "next/head";
-import useSWR from "swr";
 import Link from "next/link";
 import ProductsList from "../components/products_list.js";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
-function Index() {
-  const { data: categories, error } = useSWR(
-    "http://localhost:8080/categories/",
-    fetcher
-  );
-
-  if (error) return <div>404 TODO</div>;
-  if (!categories) return <div>loading...</div>;
-
+function Index({ categories }) {
   return (
     <div className="container mx-auto px-4">
       <Head>
-        <title>amadeus2.hr</title>
+        <title>Amadeus II shop</title>
       </Head>
 
-      <h2 className="text-3xl font-bold">Popularne kategorije</h2>
+      <h2 className="text-5xl font-bold">Popularne kategorije</h2>
       <ul>
         {categories
           .filter((c) => c.Slug !== "amadeus-ii-shop")
@@ -35,12 +24,21 @@ function Index() {
           })}
       </ul>
 
-      <h2 className="text-3xl font-bold">Izdvojeni proizvodi</h2>
+      <h2 className="text-5xl font-bold">Izdvojeni proizvodi</h2>
       <ProductsList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
       />
     </div>
   );
+}
+
+export async function getStaticProps(context) {
+  const res = await fetch("http://localhost:8080/categories/");
+  const categories = await res.json();
+
+  return {
+    props: { categories },
+  };
 }
 
 export default Index;
