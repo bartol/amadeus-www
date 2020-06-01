@@ -33,14 +33,6 @@ func getBody(url string) ([]byte, error) {
 	return body, nil
 }
 
-func reverseCategories(a []category) []category {
-	for i := len(a)/2 - 1; i >= 0; i-- {
-		opp := len(a) - 1 - i
-		a[i], a[opp] = a[opp], a[i]
-	}
-	return a
-}
-
 type product struct {
 	ID            int
 	Name          string
@@ -410,31 +402,15 @@ func reindex() {
 		}
 
 		categories := []category{}
-		var getCategory func(string)
-		getCategory = func(id string) {
-			var ctg category
-			var parentID string
-			for _, ct := range categoriesData.Categories {
-				if id == strconv.Itoa(ct.ID) {
-					ctg = category{
-						Name: ct.Name,
-						Slug: ct.LinkRewrite,
-					}
-					parentID = ct.ParentID
-					break
+		for _, ctg := range categoriesData.Categories {
+			if ctg.ParentID == strconv.Itoa(c.ID) {
+				category := category{
+					Name: ctg.Name,
+					Slug: ctg.LinkRewrite,
 				}
-			}
-
-			if ctg.Slug != "amadeus-ii-shop" {
-				categories = append(categories, ctg)
-			}
-
-			if parentID != "1" {
-				getCategory(parentID)
+				categories = append(categories, category)
 			}
 		}
-		getCategory(strconv.Itoa(c.ID))
-		categories = reverseCategories(categories)
 
 		category := categoryWithProducts{
 			ID:         c.ID,
