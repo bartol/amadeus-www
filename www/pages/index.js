@@ -1,6 +1,7 @@
 import Head from "next/head";
 import useSWR from "swr";
 import Link from "next/link";
+import ProductsList from "../components/products_list.js";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -14,12 +15,12 @@ function Index() {
   if (!categories) return <div>loading...</div>;
 
   return (
-    <div>
+    <div className="container mx-auto px-4">
       <Head>
         <title>amadeus2.hr</title>
       </Head>
 
-      <h2 className="text-3xl">Popularne kategorije</h2>
+      <h2 className="text-3xl font-bold">Popularne kategorije</h2>
       <ul>
         {categories
           .filter((c) => c.Slug !== "amadeus-ii-shop")
@@ -34,18 +35,10 @@ function Index() {
           })}
       </ul>
 
-      <h2 className="text-3xl">Izdvojeni proizvodi</h2>
-      <ul>
-        {categories
-          .find((c) => c.Slug === "amadeus-ii-shop")
-          .Products.map((p) => {
-            return (
-              <li key={p.ID}>
-                <Link href={p.URL}>{p.Name}</Link>
-              </li>
-            );
-          })}
-      </ul>
+      <h2 className="text-3xl font-bold">Izdvojeni proizvodi</h2>
+      <ProductsList
+        products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
+      />
     </div>
   );
 }
