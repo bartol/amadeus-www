@@ -7,7 +7,9 @@ function ProductsList({ products }) {
         {products.map((p) => {
           return (
             <li key={p.ID}>
-              <Link href={p.URL}>{p.Name}</Link>
+              <Link href={p.URL}>
+                <a>{p.Name}</a>
+              </Link>
             </li>
           );
         })}

@@ -1,24 +1,48 @@
 import { useRouter } from "next/router";
-import useSWR from "swr"; // TODO remove swr
+import ProductsList from "../../components/products_list";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
-function Category() {
+function Category({ category }) {
   const router = useRouter();
-  const { category: slug } = router.query;
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
-  const { data: category, error } = useSWR(
-    `http://localhost:8080/categories/${slug}`,
-    fetcher
-  );
-
-  if (error) return <div>404 TODO</div>;
-  if (!category) return <div>loading...</div>;
   return (
-    <div>
-      <pre>DEBUG: {JSON.stringify(category, null, 2)}</pre>
+    <div className="container mx-auto px-4">
+      <h1 className="text-5xl font-bold">{category.Name}</h1>
+      <ProductsList products={category.Products} />
     </div>
   );
+}
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:8080/categories/");
+  const categories = await res.json();
+  const paths = categories.map((c) => {
+    return {
+      params: {
+        category: c.Slug,
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: true,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const res = await fetch(
+    `http://localhost:8080/categories/${params.category}`
+  );
+  const category = await res.json();
+
+  return {
+    props: {
+      category,
+    },
+  };
 }
 
 export default Category;

@@ -18,7 +18,9 @@ function Index({ categories }) {
           .map((c) => {
             return (
               <li key={c.ID}>
-                <Link href={c.Slug}>{c.Name}</Link>
+                <Link href={c.Slug}>
+                  <a>{c.Name}</a>
+                </Link>
               </li>
             );
           })}
@@ -37,7 +39,9 @@ export async function getStaticProps(context) {
   const categories = await res.json();
 
   return {
-    props: { categories },
+    props: {
+      categories,
+    },
   };
 }
 
