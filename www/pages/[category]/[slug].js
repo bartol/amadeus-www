@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR from "swr"; // TODO remove swr
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
