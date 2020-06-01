@@ -1,26 +1,49 @@
 import { useRouter } from "next/router";
-import useSWR from "swr"; // TODO remove swr
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
-function Product() {
+function Product({ product }) {
   const router = useRouter();
-  const { category, slug } = router.query;
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
-  const { data: product, error } = useSWR(
-    `http://localhost:8080/products/${category}/${slug}`,
-    fetcher
-  );
-
-  if (error) return <div>404 TODO</div>;
-  if (!product) return <div>loading...</div>;
   return (
-    <div>
-      <h1>{product.Name}</h1>
+    <div className="container mx-auto px-4">
+      <h1 className="text-5xl font-bold">{product.Name}</h1>
       <div dangerouslySetInnerHTML={{ __html: product.Description }}></div>
       <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
     </div>
   );
+}
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:8080/products/");
+  const products = await res.json();
+  const paths = products.map((p) => {
+    return {
+      params: {
+        category: p.Categories[p.Categories.length - 1].Slug,
+        slug: p.Slug,
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: true,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const res = await fetch(
+    `http://localhost:8080/products/${params.category}/${params.slug}`
+  );
+  const product = await res.json();
+
+  return {
+    props: {
+      product,
+    },
+  };
 }
 
 export default Product;
