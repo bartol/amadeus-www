@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { Heading, Box } from "@chakra-ui/core";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -17,8 +16,8 @@ function Product() {
   if (!product) return <div>loading...</div>;
   return (
     <div>
-      <Heading>{product.Name}</Heading>
-      <Box dangerouslySetInnerHTML={{ __html: product.Description }}></Box>
+      <h1>{product.Name}</h1>
+      <div dangerouslySetInnerHTML={{ __html: product.Description }}></div>
       <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
     </div>
   );
