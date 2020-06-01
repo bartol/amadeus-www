@@ -19,7 +19,7 @@ function Index() {
         <title>amadeus2.hr</title>
       </Head>
 
-      <h2>Popularne kategorije</h2>
+      <h2 className="text-3xl">Popularne kategorije</h2>
       <ul>
         {categories
           .filter((c) => c.Slug !== "amadeus-ii-shop")
@@ -34,7 +34,7 @@ function Index() {
           })}
       </ul>
 
-      <h2>Izdvojeni proizvodi</h2>
+      <h2 className="text-3xl">Izdvojeni proizvodi</h2>
       <ul>
         {categories
           .find((c) => c.Slug === "amadeus-ii-shop")
