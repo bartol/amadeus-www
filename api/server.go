@@ -177,6 +177,11 @@ func reindex() error {
 		return err
 	}
 
+	productsMap = make(map[string]product)
+	productsLiteSlice = []productLite{}
+	categoriesMap = make(map[string]categoryWithProducts)
+	categoriesSlice = []categoryWithProducts{}
+
 	for _, p := range productsData.Products {
 		isAmadeus := true
 		for _, c := range blacklistedCategories {
