@@ -2,13 +2,14 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 )
 
-var key = "LFC9PD4UU6FY2KIS32X12RLGHIL1Q9G6"
+var key = os.Getenv("PIONEER_API_KEY")
 
 func getURL(resource string) string {
 	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
@@ -668,10 +669,14 @@ func getCombinations() (getCombinationsResp, error) {
 }
 
 func main() {
-	fmt.Println("reindexing...")
+	if key == "" {
+		log.Fatal("add key in PIONEER_API_KEY")
+	}
+
+	log.Println("reindexing...")
 	err := reindex()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	http.HandleFunc("/reindex/", reindexHandler)
@@ -679,8 +684,8 @@ func main() {
 	http.HandleFunc("/products/", productsHandler)
 	http.HandleFunc("/categories/", categoriesHandler)
 
-	fmt.Println("server listening on :8080")
-	http.ListenAndServe(":8080", nil)
+	log.Println("server listening on :8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func reindexHandler(w http.ResponseWriter, r *http.Request) {
