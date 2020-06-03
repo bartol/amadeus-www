@@ -48,6 +48,7 @@ function Cart() {
                   type="number"
                   value={p.Quantity}
                   onChange={(e) => CartSetQuantity(setState, p, e.target.value | 0)}
+                  min="1"
                 />
               </td>
               <td>
