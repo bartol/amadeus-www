@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { getPrice, getReduction } from "../helpers/price";
+import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
+import { useSharedState } from "../state/shared";
+import { CartAdd } from "../helpers/cart";
 
 function ProductCard({ product }) {
   const p = product;
+  const [, setState] = useSharedState();
 
   return (
-    <li key={p.ID}>
+    <li>
       <Link href={"/" + p.URL}>
         <a>
           <img
@@ -14,19 +17,37 @@ function ProductCard({ product }) {
             className="w-56"
           />
           <h3>{p.Name}</h3>
-
-          {p.HasReduction ? (
-            <h4>
-              <span className="line-through">{getPrice(p.Price)}</span>
-              {getReduction(p.Price, p.Reduction, p.ReductionType)}
-            </h4>
-          ) : (
-            <h4>{getPrice(p.Price)}</h4>
-          )}
-
-          <pre>{JSON.stringify(p, null, 2)}</pre>
         </a>
       </Link>
+      <div>
+        <div>
+          <h4 className={`${p.HasReduction ? "line-through" : "text-2xl"}`}>
+            {getPrice(p.Price)}
+          </h4>
+          {p.HasReduction && (
+            <h4 className="text-2xl">
+              {getReductionPrice(p.Price, p.Reduction, p.ReductionType)}
+            </h4>
+          )}
+        </div>
+
+        {p.HasReduction && (
+          <h4 className="text-2xl">
+            {getReduction(p.Reduction, p.ReductionType)}
+          </h4>
+        )}
+      </div>
+      <div>
+        <Link href={"/" + p.URL}>
+          <a>Više informacija</a>
+        </Link>
+
+        {p.OutOfStock || (
+          <button onClick={() => CartAdd(setState, p)}>
+            Dodaj u košaricu{/* TODO icon */}
+          </button>
+        )}
+      </div>
     </li>
   );
 }

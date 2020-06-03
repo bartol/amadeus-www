@@ -2,7 +2,7 @@ function getPrice(price) {
   return price / 100 + " kn";
 }
 
-function getReduction(price, reduction, reductionType) {
+function getReductionPrice(price, reduction, reductionType) {
   let p;
   if (reductionType === "amount") {
     p = price - reduction;
@@ -14,4 +14,13 @@ function getReduction(price, reduction, reductionType) {
   return getPrice(p);
 }
 
-export { getPrice, getReduction };
+function getReduction(reduction, reductionType) {
+  if (reductionType === "amount") {
+    return "-" + getPrice(reduction);
+  }
+  if (reductionType == "percentage") {
+    return `-${reduction}%`;
+  }
+}
+
+export { getPrice, getReductionPrice, getReduction };

@@ -10,7 +10,7 @@ function Category({ category }) {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-5xl font-bold">{category.Name}</h1>
-      <ProductList products={category.Products} />
+      <ProductList products={category.Products} limit={5} />
     </div>
   );
 }
