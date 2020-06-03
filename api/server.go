@@ -757,9 +757,7 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Length", strconv.FormatInt(img.ContentLength, 10))
 	w.Header().Set("Content-Type", img.Header.Get("Content-Type"))
-
 	_, err = io.Copy(w, img.Body)
 	if err != nil {
 		w.Write([]byte(err.Error()))
