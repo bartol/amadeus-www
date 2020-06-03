@@ -2,11 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var key = os.Getenv("PIONEER_API_KEY")
@@ -15,8 +17,8 @@ func getURL(resource string) string {
 	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
 }
 
-func getImageURL(productID int, imageID string) string {
-	return "https://pioneer.hr/api/images/products/" + strconv.Itoa(productID) + "/" + imageID
+func getImagePublicURL(productID int, imageID string) string {
+	return "http://localhost:8080/images/" + strconv.Itoa(productID) + "/" + imageID
 }
 
 func getBody(url string) ([]byte, error) {
@@ -232,11 +234,11 @@ func reindex() error {
 			}
 		}
 
-		defaultImage := image{URL: getImageURL(p.ID, p.DefaultImageID)}
+		defaultImage := image{URL: getImagePublicURL(p.ID, p.DefaultImageID)}
 
 		images := []image{}
 		for _, img := range p.Associations.Images {
-			image := image{URL: getImageURL(p.ID, img.ID)}
+			image := image{URL: getImagePublicURL(p.ID, img.ID)}
 			images = append(images, image)
 		}
 
@@ -683,6 +685,7 @@ func main() {
 
 	http.HandleFunc("/products/", productsHandler)
 	http.HandleFunc("/categories/", categoriesHandler)
+	http.HandleFunc("/images/", imagesHandler)
 
 	log.Println("server listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -730,11 +733,37 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// TODO handle err
 		json.NewEncoder(w).Encode(category)
 		return
 	}
 
 	json.NewEncoder(w).Encode(categoriesSlice)
+}
+
+// TODO implement caching
+func imagesHandler(w http.ResponseWriter, r *http.Request) {
+	imgPath := r.URL.Path[len("/images/"):]
+	img, err := http.Get("https://" + key + "@pioneer.hr/api/images/products/" + imgPath)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	defer img.Body.Close()
+
+	if !strings.HasPrefix(img.Header.Get("Content-Type"), "image/") {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("404"))
+		return
+	}
+
+	w.Header().Set("Content-Length", strconv.FormatInt(img.ContentLength, 10))
+	w.Header().Set("Content-Type", img.Header.Get("Content-Type"))
+
+	_, err = io.Copy(w, img.Body)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
