@@ -11,30 +11,20 @@ function ProductCard({ product }) {
     <li>
       <Link href={"/" + p.URL}>
         <a>
-          <img
-            src={p.DefaultImage.URL}
-            alt="slika proizvoda"
-            className="w-56"
-          />
+          <img src={p.DefaultImage.URL} alt="slika proizvoda" className="w-56" />
           <h3>{p.Name}</h3>
         </a>
       </Link>
       <div>
         <div>
-          <h4 className={`${p.HasReduction ? "line-through" : "text-2xl"}`}>
-            {getPrice(p.Price)}
-          </h4>
+          <h4 className={`${p.HasReduction ? "line-through" : "text-2xl"}`}>{getPrice(p.Price)}</h4>
           {p.HasReduction && (
-            <h4 className="text-2xl">
-              {getReductionPrice(p.Price, p.Reduction, p.ReductionType)}
-            </h4>
+            <h4 className="text-2xl">{getReductionPrice(p.Price, p.Reduction, p.ReductionType)}</h4>
           )}
         </div>
 
         {p.HasReduction && (
-          <h4 className="text-2xl">
-            {getReduction(p.Reduction, p.ReductionType)}
-          </h4>
+          <h4 className="text-2xl">{getReduction(p.Reduction, p.ReductionType)}</h4>
         )}
       </div>
       <div>
@@ -43,7 +33,7 @@ function ProductCard({ product }) {
         </Link>
 
         {p.OutOfStock || (
-          <button onClick={() => CartAdd(setState, p)}>
+          <button type="button" onClick={() => CartAdd(setState, p)}>
             Dodaj u košaricu{/* TODO icon */}
           </button>
         )}

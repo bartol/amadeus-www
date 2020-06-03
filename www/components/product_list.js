@@ -1,7 +1,7 @@
 import ProductCard from "./product_card";
 
 function ProductList({ products, limit, pagination, pageSize }) {
-  let list;
+  let list = [];
   if (products && limit) {
     list = products.slice(0, limit);
   } else {
