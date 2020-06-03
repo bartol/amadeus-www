@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import ProductsList from "../components/products_list.js";
+import ProductList from "../components/product_list.js";
 
 function Index({ categories }) {
   return (
@@ -27,7 +27,7 @@ function Index({ categories }) {
       </ul>
 
       <h2 className="text-5xl font-bold">Izdvojeni proizvodi</h2>
-      <ProductsList
+      <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
       />
     </div>
