@@ -29,6 +29,7 @@ function Index({ categories }) {
       <h2 className="text-5xl font-bold">Izdvojeni proizvodi</h2>
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
+        limit={5}
       />
     </div>
   );
