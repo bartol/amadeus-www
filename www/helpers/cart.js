@@ -14,4 +14,22 @@ function CartAdd(setState, product, Quantity = 1) {
   });
 }
 
-export { CartAdd };
+function CartSetQuantity(setState, product, Quantity) {
+  setState((prev) => {
+    const cart = prev.cart;
+    const i = cart.findIndex((p) => p.ID === product.ID);
+
+    cart[i].Quantity = Quantity;
+
+    return { ...prev, cart };
+  });
+}
+
+function CartRemove(setState, product) {
+  setState((prev) => {
+    const cart = prev.cart.filter((p) => p.ID !== product.ID);
+    return { ...prev, cart };
+  });
+}
+
+export { CartAdd, CartSetQuantity, CartRemove };
