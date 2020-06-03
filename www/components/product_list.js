@@ -1,17 +1,22 @@
-import Link from "next/link";
+import ProductCard from "./product_card";
 
-function ProductList({ products }) {
+function ProductList({ products, limit, pagination, pageSize }) {
+  let list;
+  if (limit) {
+    list = products.slice(0, limit);
+  } else {
+    list = products;
+  }
+
   return (
     <div>
       <ul>
-        {products.map((p) => {
-          return (
-            <li key={p.ID}>
-              <Link href={p.URL}>
-                <a>{p.Name}</a>
-              </Link>
-            </li>
-          );
+        {list.map((p) => {
+          if (!p.ID) {
+            return null;
+          }
+
+          return <ProductCard product={p} />;
         })}
       </ul>
     </div>
