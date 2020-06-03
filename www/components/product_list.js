@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-function ProductsList({ products }) {
+function ProductList({ products }) {
   return (
     <div>
       <ul>
@@ -18,4 +18,4 @@ function ProductsList({ products }) {
   );
 }
 
-export default ProductsList;
+export default ProductList;

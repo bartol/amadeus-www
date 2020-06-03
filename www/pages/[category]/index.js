@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import ProductsList from "../../components/products_list";
+import ProductList from "../../components/product_list";
 
 function Category({ category }) {
   const router = useRouter();
@@ -10,7 +10,7 @@ function Category({ category }) {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-5xl font-bold">{category.Name}</h1>
-      <ProductsList products={category.Products} />
+      <ProductList products={category.Products} />
     </div>
   );
 }
