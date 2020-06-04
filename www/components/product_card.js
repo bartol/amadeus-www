@@ -28,9 +28,9 @@ function ProductCard({ product, setCart }) {
             </div>
           )}
         </div>
-        <div className="flex mt-3">
+        <div className="flex h-10 mt-3">
           <Link href={"/" + p.URL}>
-            <a className="button ~info !normal text-lg flex-grow justify-center mr-4">
+            <a className="button ~info !normal text-lg flex-grow justify-center">
               Više informacija
             </a>
           </Link>
@@ -39,7 +39,7 @@ function ProductCard({ product, setCart }) {
             <button
               type="button"
               onClick={() => cartAdd(setCart, p)}
-              className="button ~positive !normal px-3 py-2"
+              className="button ~positive !normal px-3 py-2 ml-4"
             >
               <ShoppingCart />
             </button>
