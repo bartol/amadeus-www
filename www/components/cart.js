@@ -1,7 +1,7 @@
 import Drawer from "rc-drawer";
 import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction, getTotal } from "../helpers/price";
-import { CartSetQuantity, CartRemove } from "../helpers/cart";
+import { cartSetQuantity, cartRemove } from "../helpers/cart";
 
 function Cart({ cart, setCart }) {
   return (
@@ -53,7 +53,7 @@ function Cart({ cart, setCart }) {
                   <input
                     type="number"
                     value={p.Quantity}
-                    onChange={(e) => CartSetQuantity(setCart, p, e.target.value | 0)}
+                    onChange={(e) => cartSetQuantity(setCart, p, e.target.value | 0)}
                     min="1"
                     className="input"
                   />
@@ -61,7 +61,7 @@ function Cart({ cart, setCart }) {
                 <td>
                   <button
                     type="button"
-                    onClick={() => CartRemove(setCart, p)}
+                    onClick={() => cartRemove(setCart, p)}
                     className="button ~critical !normal"
                   >
                     del{/* TODO icon */}

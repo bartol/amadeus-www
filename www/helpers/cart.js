@@ -1,15 +1,15 @@
-function CartGet() {
+function cartGet() {
   if (!process.browser) return [];
 
   return JSON.parse(localStorage.getItem("cart")) || [];
 }
 
-function CartSave(cart) {
+function cartSave(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function CartAdd(setCart, product, Quantity = 1) {
-  const cart = CartGet();
+function cartAdd(setCart, product, Quantity = 1) {
+  const cart = cartGet();
   const i = cart.findIndex((p) => p.ID === product.ID);
 
   if (i !== -1) {
@@ -19,25 +19,25 @@ function CartAdd(setCart, product, Quantity = 1) {
     cart.push(product);
   }
 
-  CartSave(cart);
+  cartSave(cart);
   setCart(cart);
 }
 
-function CartSetQuantity(setCart, product, Quantity) {
-  const cart = CartGet();
+function cartSetQuantity(setCart, product, Quantity) {
+  const cart = cartGet();
   const i = cart.findIndex((p) => p.ID === product.ID);
 
   cart[i].Quantity = Quantity;
 
-  CartSave(cart);
+  cartSave(cart);
   setCart(cart);
 }
 
-function CartRemove(setCart, product) {
-  const cart = CartGet().filter((p) => p.ID !== product.ID);
+function cartRemove(setCart, product) {
+  const cart = cartGet().filter((p) => p.ID !== product.ID);
 
-  CartSave(cart);
+  cartSave(cart);
   setCart(cart);
 }
 
-export { CartGet, CartAdd, CartSetQuantity, CartRemove };
+export { cartGet, cartAdd, cartSetQuantity, cartRemove };
