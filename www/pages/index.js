@@ -29,7 +29,7 @@ function Index({ categories, setCart }) {
       <h2 className="heading">Izdvojeni proizvodi</h2>
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
-        limit={5}
+        limit={20}
         setCart={setCart}
       />
     </div>

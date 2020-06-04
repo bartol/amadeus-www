@@ -8,35 +8,30 @@ function CartRow({ product, setCart }) {
 
   return (
     <tr>
-      <td>
+      <td className="w-20 h-20">
         <Link href={"/" + p.URL}>
           <a>
-            <img src={p.DefaultImage.URL} alt="slika proizvoda" className="w-20" />
+            <img src={p.DefaultImage.URL} alt="slika proizvoda" />
           </a>
         </Link>
       </td>
       <td>
         <Link href={"/" + p.URL}>
-          <a>{p.Name}</a>
+          <a>
+            <h3>{p.Name}</h3>
+          </a>
         </Link>
       </td>
       <td>
-        <div>
-          <h4 className={`${p.HasReduction ? "line-through" : "subheading"}`}>
-            {getPrice(p.Price)}
-          </h4>
-          <div className="flex">
-            {p.HasReduction && (
-              <h4 className="subheading">
-                {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
-              </h4>
-            )}
-
-            {p.HasReduction && (
-              <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
-            )}
+        <h4 className={`${p.HasReduction ? "line-through" : "font-bold"}`}>{getPrice(p.Price)}</h4>
+        {p.HasReduction && (
+          <div className="flex whitespace-no-wrap">
+            <h4 className="font-bold mr-2">
+              {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
+            </h4>
+            <h4>({getReduction(p.Reduction, p.ReductionType)})</h4>
           </div>
-        </div>
+        )}
       </td>
       <td>
         <input

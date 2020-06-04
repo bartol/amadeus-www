@@ -19,17 +19,14 @@ function ProductCard({ product, setCart }) {
           <h4 className={`${p.HasReduction ? "line-through" : "subheading"}`}>
             {getPrice(p.Price)}
           </h4>
-          <div className="flex">
-            {p.HasReduction && (
+          {p.HasReduction && (
+            <div className="flex">
               <h4 className="subheading">
                 {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
               </h4>
-            )}
-
-            {p.HasReduction && (
               <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div className="flex mt-3">
           <Link href={"/" + p.URL}>
