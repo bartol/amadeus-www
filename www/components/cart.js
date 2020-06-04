@@ -6,6 +6,7 @@ import { CartSetQuantity, CartRemove } from "../helpers/cart";
 function Cart({ cart, setCart }) {
   return (
     <Drawer placement="right">
+      <h2 className="heading">Košarica</h2>
       <table className="table">
         <thead>
           <tr>
@@ -63,16 +64,22 @@ function Cart({ cart, setCart }) {
                     onClick={() => CartRemove(setCart, p)}
                     className="button ~critical !normal"
                   >
-                    izbaci iz kosarice{/* TODO icon */}
+                    del{/* TODO icon */}
                   </button>
                 </td>
               </tr>
             );
           })}
         </tbody>
+        <tfoot>
+          <tr>
+            <th colSpan="2" />
+            <th colSpan="3" className="subheading">
+              Ukupno: {getTotal(cart)}
+            </th>
+          </tr>
+        </tfoot>
       </table>
-      <hr />
-      <h4 className="text-2xl">Total: {getTotal(cart)}</h4>
     </Drawer>
   );
 }
