@@ -1,11 +1,11 @@
 import Drawer from "rc-drawer";
-import CartList from "./cart_list";
+import CartTable from "./cart_table";
 
 function Cart({ cart, setCart }) {
   return (
-    <Drawer placement="right">
+    <Drawer placement="right" width="1000px">
       <h2 className="heading">Košarica</h2>
-      <CartList cart={cart} setCart={setCart} />
+      <CartTable cart={cart} setCart={setCart} />
     </Drawer>
   );
 }

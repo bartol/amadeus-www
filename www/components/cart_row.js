@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
 import { cartSetQuantity, cartRemove } from "../helpers/cart";
 
-function CartCard({ product, setCart }) {
+function CartRow({ product, setCart }) {
   const p = product;
 
   return (
@@ -59,4 +59,4 @@ function CartCard({ product, setCart }) {
   );
 }
 
-export default CartCard;
+export default CartRow;
