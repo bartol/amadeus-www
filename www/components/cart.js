@@ -9,10 +9,10 @@ function Cart() {
 
   return (
     <Drawer placement="right">
-      <table>
+      <table className="table">
         {state.cart.map((p) => {
           return (
-            <tr>
+            <tr key={p.ID}>
               <td>
                 <Link href={"/" + p.URL}>
                   <a>
@@ -49,10 +49,15 @@ function Cart() {
                   value={p.Quantity}
                   onChange={(e) => CartSetQuantity(setState, p, e.target.value | 0)}
                   min="1"
+                  className="input"
                 />
               </td>
               <td>
-                <button type="button" onClick={() => CartRemove(setState, p)}>
+                <button
+                  type="button"
+                  onClick={() => CartRemove(setState, p)}
+                  className="button ~critical !normal"
+                >
                   izbaci iz kosarice{/* TODO icon */}
                 </button>
               </td>

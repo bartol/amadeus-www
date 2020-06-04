@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "a17t": "^0.1.4",
     "next": "9.4.2",
     "rc-drawer": "^4.0.0",
     "react": "16.13.1",
