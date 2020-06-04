@@ -1,35 +1,43 @@
-function CartAdd(setState, product, Quantity = 1) {
-  setState((prev) => {
-    const cart = prev.cart;
-    const i = cart.findIndex((p) => p.ID === product.ID);
+function CartGet() {
+  if (!process.browser) return [];
 
-    if (i !== -1) {
-      cart[i].Quantity += Quantity;
-    } else {
-      product = { ...product, Quantity };
-      cart.push(product);
-    }
-
-    return { ...prev, cart };
-  });
+  return JSON.parse(localStorage.getItem("cart")) || [];
 }
 
-function CartSetQuantity(setState, product, Quantity) {
-  setState((prev) => {
-    const cart = prev.cart;
-    const i = cart.findIndex((p) => p.ID === product.ID);
-
-    cart[i].Quantity = Quantity;
-
-    return { ...prev, cart };
-  });
+function CartSave(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function CartRemove(setState, product) {
-  setState((prev) => {
-    const cart = prev.cart.filter((p) => p.ID !== product.ID);
-    return { ...prev, cart };
-  });
+function CartAdd(setCart, product, Quantity = 1) {
+  const cart = CartGet();
+  const i = cart.findIndex((p) => p.ID === product.ID);
+
+  if (i !== -1) {
+    cart[i].Quantity += Quantity;
+  } else {
+    product = { ...product, Quantity };
+    cart.push(product);
+  }
+
+  CartSave(cart);
+  setCart(cart);
 }
 
-export { CartAdd, CartSetQuantity, CartRemove };
+function CartSetQuantity(setCart, product, Quantity) {
+  const cart = CartGet();
+  const i = cart.findIndex((p) => p.ID === product.ID);
+
+  cart[i].Quantity = Quantity;
+
+  CartSave(cart);
+  setCart(cart);
+}
+
+function CartRemove(setCart, product) {
+  const cart = CartGet().filter((p) => p.ID !== product.ID);
+
+  CartSave(cart);
+  setCart(cart);
+}
+
+export { CartGet, CartAdd, CartSetQuantity, CartRemove };

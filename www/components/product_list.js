@@ -1,6 +1,6 @@
 import ProductCard from "./product_card";
 
-function ProductList({ products, limit, pagination, pageSize }) {
+function ProductList({ products, limit, pagination, pageSize, setCart }) {
   let list = [];
   if (products && limit) {
     list = products.slice(0, limit);
@@ -17,7 +17,7 @@ function ProductList({ products, limit, pagination, pageSize }) {
             return null;
           }
 
-          return <ProductCard product={p} key={p.ID} />;
+          return <ProductCard product={p} key={p.ID} setCart={setCart} />;
         })}
       </ul>
     </div>

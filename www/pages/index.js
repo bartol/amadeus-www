@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import ProductList from "../components/product_list.js";
 
-function Index({ categories }) {
+function Index({ categories, setCart }) {
   return (
     <div className="container mx-auto px-4">
       <Head>
@@ -30,6 +30,7 @@ function Index({ categories }) {
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
         limit={5}
+        setCart={setCart}
       />
     </div>
   );

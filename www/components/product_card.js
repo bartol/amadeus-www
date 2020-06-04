@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
-import { useSharedState } from "../state/shared";
 import { CartAdd } from "../helpers/cart";
 
-function ProductCard({ product }) {
+function ProductCard({ product, setCart }) {
   const p = product;
-  const [, setState] = useSharedState();
 
   return (
     <li>
@@ -40,7 +38,7 @@ function ProductCard({ product }) {
           {p.OutOfStock || (
             <button
               type="button"
-              onClick={() => CartAdd(setState, p)}
+              onClick={() => CartAdd(setCart, p)}
               className="button ~positive !normal m-1"
             >
               Dodaj u košaricu{/* TODO icon */}
