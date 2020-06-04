@@ -9,8 +9,9 @@ function ProductList({ products, limit, pagination, pageSize }) {
   }
 
   return (
-    <div>
-      <ul>
+    <div className="flex">
+      <div className="w-1/6">kategorije</div>
+      <ul className="w-5/6 grid grid-cols-3 gap-4">
         {list.map((p) => {
           if (!p.ID) {
             return null;

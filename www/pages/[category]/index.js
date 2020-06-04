@@ -9,7 +9,7 @@ function Category({ category }) {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-5xl font-bold">{category.Name}</h1>
+      <h1 className="heading">{category.Name}</h1>
       <ProductList products={category.Products} limit={5} />
     </div>
   );
@@ -33,9 +33,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(
-    `http://localhost:8080/categories/${params.category}`
-  );
+  const res = await fetch(`http://localhost:8080/categories/${params.category}`);
   const category = await res.json();
 
   return {

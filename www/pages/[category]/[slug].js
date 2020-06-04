@@ -8,7 +8,7 @@ function Product({ product }) {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-5xl font-bold">{product.Name}</h1>
+      <h1 className="heading">{product.Name}</h1>
       <div dangerouslySetInnerHTML={{ __html: product.Description }}></div>
       <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
     </div>
