@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
 import { cartAdd } from "../helpers/cart";
+import { ShoppingCart } from "react-feather";
 
 function ProductCard({ product, setCart }) {
   const p = product;
@@ -30,18 +31,20 @@ function ProductCard({ product, setCart }) {
             )}
           </div>
         </div>
-        <div>
+        <div className="flex mt-3">
           <Link href={"/" + p.URL}>
-            <a className="button ~info !normal m-1">Više informacija</a>
+            <a className="button ~info !normal flex-grow justify-center mr-4 text-lg">
+              Više informacija
+            </a>
           </Link>
 
           {p.OutOfStock || (
             <button
               type="button"
               onClick={() => cartAdd(setCart, p)}
-              className="button ~positive !normal m-1"
+              className="button ~positive !normal px-3 py-2"
             >
-              Dodaj u košaricu{/* TODO icon */}
+              <ShoppingCart />
             </button>
           )}
         </div>

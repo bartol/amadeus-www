@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
 import { cartSetQuantity, cartRemove } from "../helpers/cart";
+import { Trash2 } from "react-feather";
 
 function CartRow({ product, setCart }) {
   const p = product;
@@ -43,16 +44,16 @@ function CartRow({ product, setCart }) {
           value={p.Quantity}
           onChange={(e) => cartSetQuantity(setCart, p, e.target.value | 0)}
           min="1"
-          className="input"
+          className="input w-16"
         />
       </td>
       <td>
         <button
           type="button"
           onClick={() => cartRemove(setCart, p)}
-          className="button ~critical !normal"
+          className="button ~critical !normal p-2"
         >
-          del{/* TODO icon */}
+          <Trash2 />
         </button>
       </td>
     </tr>
