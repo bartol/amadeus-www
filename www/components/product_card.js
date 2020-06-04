@@ -15,20 +15,20 @@ function ProductCard({ product, setCart }) {
           </a>
         </Link>
         <div>
-          <div>
-            <h4 className={`${p.HasReduction ? "line-through" : "subheading"}`}>
-              {getPrice(p.Price)}
-            </h4>
+          <h4 className={`${p.HasReduction ? "line-through" : "subheading"}`}>
+            {getPrice(p.Price)}
+          </h4>
+          <div className="flex">
             {p.HasReduction && (
               <h4 className="subheading">
                 {getReductionPrice(p.Price, p.Reduction, p.ReductionType)}
               </h4>
             )}
-          </div>
 
-          {p.HasReduction && (
-            <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
-          )}
+            {p.HasReduction && (
+              <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
+            )}
+          </div>
         </div>
         <div>
           <Link href={"/" + p.URL}>
