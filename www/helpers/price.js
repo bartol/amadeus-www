@@ -1,5 +1,7 @@
 function getPrice(price) {
-  return price / 100 + " kn";
+  const formatter = new Intl.NumberFormat("hr", { minimumFractionDigits: 2 });
+
+  return formatter.format(price / 100) + " kn";
 }
 
 function getReductionPrice(price, reduction, reductionType, returnInt) {
