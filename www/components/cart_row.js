@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
+import { getPrice, getReductedPrice, getReduction } from "../helpers/price";
 import { cartSetQuantity, cartRemove } from "../helpers/cart";
 import { Trash2 } from "react-feather";
 
@@ -28,7 +28,7 @@ function CartRow({ product, setCart }) {
           <div className="flex">
             {p.HasReduction && (
               <h4 className="subheading">
-                {getReductionPrice(p.Price, p.Reduction, p.ReductionType)}
+                {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
               </h4>
             )}
 

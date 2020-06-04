@@ -4,7 +4,7 @@ function getPrice(price) {
   return formatter.format(price / 100) + " kn";
 }
 
-function getReductionPrice(price, reduction, reductionType, returnInt) {
+function getReductedPrice(price, reduction, reductionType, returnInt) {
   let p;
   if (reductionType === "amount") {
     p = price - reduction;
@@ -29,10 +29,10 @@ function getReduction(reduction, reductionType) {
 
 function getTotal(products) {
   const t = products
-    .map((p) => getReductionPrice(p.Price, p.Reduction, p.ReductionType, true) * p.Quantity)
+    .map((p) => getReductedPrice(p.Price, p.Reduction, p.ReductionType, true) * p.Quantity)
     .reduce((a, v) => a + v, 0);
 
   return getPrice(t);
 }
 
-export { getPrice, getReductionPrice, getReduction, getTotal };
+export { getPrice, getReductedPrice, getReduction, getTotal };
