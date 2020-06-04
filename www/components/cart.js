@@ -1,16 +1,13 @@
 import Drawer from "rc-drawer";
 import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction, getTotal } from "../helpers/price";
-import { useSharedState } from "../state/shared";
 import { CartSetQuantity, CartRemove } from "../helpers/cart";
 
-function Cart() {
-  const [state, setState] = useSharedState();
-
+function Cart({ cart, setCart }) {
   return (
     <Drawer placement="right">
       <table className="table">
-        {state.cart.map((p) => {
+        {cart.map((p) => {
           return (
             <tr key={p.ID}>
               <td>
@@ -47,7 +44,7 @@ function Cart() {
                 <input
                   type="number"
                   value={p.Quantity}
-                  onChange={(e) => CartSetQuantity(setState, p, e.target.value | 0)}
+                  onChange={(e) => CartSetQuantity(setCart, p, e.target.value | 0)}
                   min="1"
                   className="input"
                 />
@@ -55,7 +52,7 @@ function Cart() {
               <td>
                 <button
                   type="button"
-                  onClick={() => CartRemove(setState, p)}
+                  onClick={() => CartRemove(setCart, p)}
                   className="button ~critical !normal"
                 >
                   izbaci iz kosarice{/* TODO icon */}
@@ -66,7 +63,7 @@ function Cart() {
         })}
       </table>
       <hr />
-      <h4 className="text-2xl">Total: {getTotal(state.cart)}</h4>
+      <h4 className="text-2xl">Total: {getTotal(cart)}</h4>
     </Drawer>
   );
 }
