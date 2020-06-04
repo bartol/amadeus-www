@@ -29,7 +29,11 @@ function getReduction(reduction, reductionType) {
 
 function getTotal(products) {
   const t = products
-    .map((p) => getReductedPrice(p.Price, p.Reduction, p.ReductionType, true) * p.Quantity)
+    .map(
+      (p) =>
+        (p.HasReduction ? getReductedPrice(p.Price, p.Reduction, p.ReductionType, true) : p.Price) *
+        p.Quantity
+    )
     .reduce((a, v) => a + v, 0);
 
   return getPrice(t);
