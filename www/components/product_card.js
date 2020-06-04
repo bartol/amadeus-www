@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getPrice, getReductionPrice, getReduction } from "../helpers/price";
-import { CartAdd } from "../helpers/cart";
+import { cartAdd } from "../helpers/cart";
 
 function ProductCard({ product, setCart }) {
   const p = product;
@@ -38,7 +38,7 @@ function ProductCard({ product, setCart }) {
           {p.OutOfStock || (
             <button
               type="button"
-              onClick={() => CartAdd(setCart, p)}
+              onClick={() => cartAdd(setCart, p)}
               className="button ~positive !normal m-1"
             >
               Dodaj u košaricu{/* TODO icon */}

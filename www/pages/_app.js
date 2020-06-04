@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Cart from "../components/cart";
-import { CartGet } from "../helpers/cart";
+import { cartGet } from "../helpers/cart";
 import "../public/styles.css";
 import "a17t";
 import "rc-drawer/assets/index.css";
 
 function App({ Component, pageProps }) {
-  const [cart, setCart] = useState(CartGet());
+  const [cart, setCart] = useState(cartGet());
 
   return (
     <div className="bg-gray-100">
