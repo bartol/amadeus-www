@@ -9,7 +9,7 @@ function Index({ categories }) {
         <title>Amadeus II shop</title>
       </Head>
 
-      <h2 className="text-5xl font-bold">Popularne kategorije</h2>
+      <h2 className="heading">Popularne kategorije</h2>
       <ul>
         {categories
           .filter((c) => c.Slug !== "amadeus-ii-shop")
@@ -26,7 +26,7 @@ function Index({ categories }) {
           })}
       </ul>
 
-      <h2 className="text-5xl font-bold">Izdvojeni proizvodi</h2>
+      <h2 className="heading">Izdvojeni proizvodi</h2>
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
         limit={5}

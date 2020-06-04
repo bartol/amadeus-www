@@ -8,7 +8,9 @@ function App({ Component, pageProps }) {
   return (
     <SharedStateProvider>
       <Cart />
-      <Component {...pageProps} />
+      <div className="bg-gray-100">
+        <Component {...pageProps} />
+      </div>
     </SharedStateProvider>
   );
 }

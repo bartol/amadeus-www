@@ -9,38 +9,44 @@ function ProductCard({ product }) {
 
   return (
     <li>
-      <Link href={"/" + p.URL}>
-        <a>
-          <img src={p.DefaultImage.URL} alt="slika proizvoda" className="w-56" />
-          <h3>{p.Name}</h3>
-        </a>
-      </Link>
-      <div>
+      <div className="card ~neutral !low">
+        <Link href={"/" + p.URL}>
+          <a>
+            <img src={p.DefaultImage.URL} alt="slika proizvoda" />
+            <h3 className="subheading">{p.Name}</h3>
+          </a>
+        </Link>
         <div>
-          <h4 className={`${p.HasReduction ? "line-through" : "text-2xl"}`}>{getPrice(p.Price)}</h4>
+          <div>
+            <h4 className={`${p.HasReduction ? "line-through" : "subheading"}`}>
+              {getPrice(p.Price)}
+            </h4>
+            {p.HasReduction && (
+              <h4 className="subheading">
+                {getReductionPrice(p.Price, p.Reduction, p.ReductionType)}
+              </h4>
+            )}
+          </div>
+
           {p.HasReduction && (
-            <h4 className="text-2xl">{getReductionPrice(p.Price, p.Reduction, p.ReductionType)}</h4>
+            <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
           )}
         </div>
+        <div>
+          <Link href={"/" + p.URL}>
+            <a className="button ~info !normal m-1">Više informacija</a>
+          </Link>
 
-        {p.HasReduction && (
-          <h4 className="text-2xl">{getReduction(p.Reduction, p.ReductionType)}</h4>
-        )}
-      </div>
-      <div>
-        <Link href={"/" + p.URL}>
-          <a className="button ~info !normal m-1">Više informacija</a>
-        </Link>
-
-        {p.OutOfStock || (
-          <button
-            type="button"
-            onClick={() => CartAdd(setState, p)}
-            className="button ~positive !normal m-1"
-          >
-            Dodaj u košaricu{/* TODO icon */}
-          </button>
-        )}
+          {p.OutOfStock || (
+            <button
+              type="button"
+              onClick={() => CartAdd(setState, p)}
+              className="button ~positive !normal m-1"
+            >
+              Dodaj u košaricu{/* TODO icon */}
+            </button>
+          )}
+        </div>
       </div>
     </li>
   );
