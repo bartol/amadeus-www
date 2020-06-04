@@ -30,7 +30,7 @@ function ProductCard({ product, setCart }) {
         </div>
         <div className="flex mt-3">
           <Link href={"/" + p.URL}>
-            <a className="button ~info !normal flex-grow justify-center mr-4 text-lg">
+            <a className="button ~info !normal text-lg flex-grow justify-center mr-4">
               Više informacija
             </a>
           </Link>
