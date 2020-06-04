@@ -6,7 +6,7 @@ function CartTable({ cart, setCart }) {
     <table className="table">
       <thead>
         <tr>
-          <th colSpan="2">Naziv</th>
+          <th colSpan="2">Proizvod</th>
           <th>Cijena</th>
           <th colSpan="2">Količina</th>
         </tr>
