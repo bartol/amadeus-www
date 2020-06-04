@@ -29,11 +29,15 @@ function ProductCard({ product }) {
       </div>
       <div>
         <Link href={"/" + p.URL}>
-          <a>Više informacija</a>
+          <a className="button ~info !normal m-1">Više informacija</a>
         </Link>
 
         {p.OutOfStock || (
-          <button type="button" onClick={() => CartAdd(setState, p)}>
+          <button
+            type="button"
+            onClick={() => CartAdd(setState, p)}
+            className="button ~positive !normal m-1"
+          >
             Dodaj u košaricu{/* TODO icon */}
           </button>
         )}

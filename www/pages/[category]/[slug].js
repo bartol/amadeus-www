@@ -34,9 +34,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(
-    `http://localhost:8080/products/${params.category}/${params.slug}`
-  );
+  const res = await fetch(`http://localhost:8080/products/${params.category}/${params.slug}`);
   const product = await res.json();
 
   return {
