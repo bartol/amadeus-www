@@ -1,7 +1,7 @@
-import CartCard from "./cart_card";
+import CartRow from "./cart_row";
 import { getTotal } from "../helpers/price";
 
-function CartList({ cart, setCart }) {
+function CartTable({ cart, setCart }) {
   return (
     <table className="table">
       <thead>
@@ -13,7 +13,7 @@ function CartList({ cart, setCart }) {
       </thead>
       <tbody>
         {cart.map((p) => {
-          return <CartCard product={p} setCart={setCart} key={p.ID} />;
+          return <CartRow product={p} setCart={setCart} key={p.ID} />;
         })}
       </tbody>
       <tfoot>
@@ -28,4 +28,4 @@ function CartList({ cart, setCart }) {
   );
 }
 
-export default CartList;
+export default CartTable;
