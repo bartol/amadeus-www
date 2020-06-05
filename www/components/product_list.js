@@ -1,6 +1,8 @@
 import ProductCard from "./product_card";
 import { getFilters } from "../helpers/filter";
-import { useState, Fragment } from "react";
+import { useState } from "react";
+import { Range } from "rc-slider";
+import { getPrice } from "../helpers/price";
 
 function ProductList({ products, limit, pagination, pageSize, showCategories, setCart }) {
   let list = [];
@@ -109,8 +111,24 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
             );
           })}
         </div>
+        <h3 className="subheading">Cijena</h3>
+        <div className="mx-2 my-1">
+          <Range
+            min={filters.price.min}
+            max={filters.price.max}
+            defaultValue={[filters.price.min, filters.price.max]}
+            onAfterChange={(p) => {
+              const [min, max] = p;
+              setSelected({ ...selected, price: { min, max } });
+            }}
+          />
+        </div>
+        <div className="flex justify-between m-1">
+          <h4>{getPrice(selected.price.min)}</h4>
+          <h4>{getPrice(selected.price.max)}</h4>
+        </div>
+
         <pre>{JSON.stringify(selected, null, 2)}</pre>
-        <pre>{JSON.stringify(filters, null, 2)}</pre>
       </div>
       <ul className="w-5/6 grid grid-cols-3 gap-4">
         {list.map((p) => {
