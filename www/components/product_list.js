@@ -1,6 +1,6 @@
 import ProductCard from "./product_card";
 import { getFilters } from "../helpers/filter";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 
 function ProductList({ products, limit, pagination, pageSize, setCart }) {
   let list = [];
@@ -42,6 +42,7 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
                 className={`button ${
                   selected.category === c ? "~positive" : "~neutral"
                 } !normal m-1`}
+                key={c}
               >
                 {c}
               </button>
@@ -52,7 +53,7 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
         <div>
           {filters.features.map((f) => {
             return (
-              <>
+              <div className="inline" key={f.name}>
                 <button
                   type="button"
                   onClick={() => {
@@ -91,6 +92,7 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
                           className={`button ${
                             selected.feature.value === v ? "~urge" : "~neutral"
                           } !normal m-1`}
+                          key={v}
                         >
                           {v}
                         </button>
@@ -99,7 +101,7 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
                     <hr className="m-1" />
                   </div>
                 )}
-              </>
+              </div>
             );
           })}
         </div>
