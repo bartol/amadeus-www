@@ -6,7 +6,7 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
   let list = [];
   if (products && limit) {
     list = products.slice(0, limit);
-  } else {
+  } else if (products) {
     list = products;
   }
 
