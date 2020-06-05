@@ -2,6 +2,7 @@ import { useState } from "react";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
 import "rc-drawer/assets/index.css";
+import "rc-slider/assets/index.css";
 import "a17t";
 import "../public/styles.css";
 
