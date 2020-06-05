@@ -33,7 +33,7 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
 
   return (
     <div className="flex">
-      <div className="w-1/6 mr-5">
+      <div className="xl:w-1/6 lg:w-1/4 lg:block hidden mr-5">
         {showCategories && (
           <div>
             <h3 className="subheading">Kategorije</h3>
@@ -134,7 +134,7 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
           <h4>{getPrice(selected.price.max)}</h4>
         </div>
       </div>
-      <ul className="w-5/6 grid grid-cols-3 gap-4">
+      <ul className="xl:w-5/6 lg:w-3/4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
         {filteredList.map((p) => {
           if (!p.ID) {
             return null;
