@@ -1,6 +1,6 @@
 import ProductCard from "./product_card";
-import { getFilters } from "../helpers/filter";
-import { useState } from "react";
+import { getFilters, getFilteredList } from "../helpers/filter";
+import { useState, useEffect } from "react";
 import { Range } from "rc-slider";
 import { getPrice } from "../helpers/price";
 
@@ -24,6 +24,12 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
       max: filters.price.max,
     },
   });
+
+  const [filteredList, setFilteredList] = useState(list);
+
+  useEffect(() => {
+    setFilteredList(getFilteredList(list, selected, filters.price));
+  }, [selected]);
 
   return (
     <div className="flex">
@@ -112,7 +118,7 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
           })}
         </div>
         <h3 className="subheading">Cijena</h3>
-        <div className="mx-2 my-1">
+        <div className="mx-3 my-1">
           <Range
             min={filters.price.min}
             max={filters.price.max}
@@ -127,11 +133,9 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
           <h4>{getPrice(selected.price.min)}</h4>
           <h4>{getPrice(selected.price.max)}</h4>
         </div>
-
-        <pre>{JSON.stringify(selected, null, 2)}</pre>
       </div>
       <ul className="w-5/6 grid grid-cols-3 gap-4">
-        {list.map((p) => {
+        {filteredList.map((p) => {
           if (!p.ID) {
             return null;
           }

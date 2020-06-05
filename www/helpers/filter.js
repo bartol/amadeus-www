@@ -46,4 +46,29 @@ function getFilters(list) {
   return filters;
 }
 
-export { getFilters };
+function getFilteredList(list, filters, defaultPrice) {
+  let filtered = list;
+
+  if (filters.category) {
+    filtered = filtered.filter((p) => p.Categories.some((c) => c.Name === filters.category));
+  }
+
+  if (filters.feature.value) {
+    filtered = filtered.filter((p) =>
+      p.Features.some((f) => f.Name === filters.feature.name && f.Value === filters.feature.value)
+    );
+  }
+
+  if (defaultPrice.min !== filters.price.min || defaultPrice.max !== filters.price.max) {
+    filtered = filtered.filter((p) => {
+      const price = p.HasReduction
+        ? getReductedPrice(p.Price, p.Reduction, p.ReductionType, true)
+        : p.Price;
+      return price >= filters.price.min && price <= filters.price.max;
+    });
+  }
+
+  return filtered;
+}
+
+export { getFilters, getFilteredList };
