@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import ProductList from "../../components/product_list";
 
-function Category({ category }) {
+function Category({ category, setCart }) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -10,7 +10,7 @@ function Category({ category }) {
   return (
     <div className="container mx-auto px-4">
       <h1 className="heading">{category.Name}</h1>
-      <ProductList products={category.Products} limit={5} />
+      <ProductList products={category.Products} limit={30} setCart={setCart} />
     </div>
   );
 }
