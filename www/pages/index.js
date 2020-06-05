@@ -30,6 +30,7 @@ function Index({ categories, setCart }) {
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
         limit={30}
+        showCategories
         setCart={setCart}
       />
     </div>

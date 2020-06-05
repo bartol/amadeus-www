@@ -2,7 +2,7 @@ import ProductCard from "./product_card";
 import { getFilters } from "../helpers/filter";
 import { useState, Fragment } from "react";
 
-function ProductList({ products, limit, pagination, pageSize, setCart }) {
+function ProductList({ products, limit, pagination, pageSize, showCategories, setCart }) {
   let list = [];
   if (products && limit) {
     list = products.slice(0, limit);
@@ -26,29 +26,33 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
   return (
     <div className="flex">
       <div className="w-1/6 mr-5">
-        <h3 className="subheading">Kategorije</h3>
-        <div>
-          {filters.categories.map((c) => {
-            return (
-              <button
-                type="button"
-                onClick={() => {
-                  const category = selected.category !== c ? c : "";
-                  setSelected({
-                    ...selected,
-                    category,
-                  });
-                }}
-                className={`button ${
-                  selected.category === c ? "~positive" : "~neutral"
-                } !normal m-1`}
-                key={c}
-              >
-                {c}
-              </button>
-            );
-          })}
-        </div>
+        {showCategories && (
+          <div>
+            <h3 className="subheading">Kategorije</h3>
+            <div>
+              {filters.categories.map((c) => {
+                return (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const category = selected.category !== c ? c : "";
+                      setSelected({
+                        ...selected,
+                        category,
+                      });
+                    }}
+                    className={`button ${
+                      selected.category === c ? "~positive" : "~neutral"
+                    } !normal m-1`}
+                    key={c}
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
         <h3 className="subheading">Značajke</h3>
         <div>
           {filters.features.map((f) => {
