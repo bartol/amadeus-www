@@ -1,4 +1,5 @@
 import ProductCard from "./product_card";
+import { getFilters } from "../helpers/filter";
 
 function ProductList({ products, limit, pagination, pageSize, setCart }) {
   let list = [];
@@ -10,7 +11,9 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
 
   return (
     <div className="flex">
-      <div className="w-1/6">kategorije</div>
+      <div className="w-1/6">
+        <pre>{JSON.stringify(getFilters(list), null, 2)}</pre>
+      </div>
       <ul className="w-5/6 grid grid-cols-3 gap-4">
         {list.map((p) => {
           if (!p.ID) {
