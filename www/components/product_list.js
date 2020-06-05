@@ -1,5 +1,6 @@
 import ProductCard from "./product_card";
 import { getFilters } from "../helpers/filter";
+import { useState } from "react";
 
 function ProductList({ products, limit, pagination, pageSize, setCart }) {
   let list = [];
@@ -9,10 +10,101 @@ function ProductList({ products, limit, pagination, pageSize, setCart }) {
     list = products;
   }
 
+  const filters = getFilters(list);
+  const [selected, setSelected] = useState({
+    category: "",
+    feature: {
+      name: "",
+      value: "",
+    },
+    price: {
+      min: filters.price.min,
+      max: filters.price.max,
+    },
+  });
+
   return (
     <div className="flex">
-      <div className="w-1/6">
-        <pre>{JSON.stringify(getFilters(list), null, 2)}</pre>
+      <div className="w-1/6 mr-5">
+        <h3 className="subheading">Kategorije</h3>
+        <div>
+          {filters.categories.map((c) => {
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  const category = selected.category !== c ? c : "";
+                  setSelected({
+                    ...selected,
+                    category,
+                  });
+                }}
+                className={`button ${
+                  selected.category === c ? "~positive" : "~neutral"
+                } !normal m-1`}
+              >
+                {c}
+              </button>
+            );
+          })}
+        </div>
+        <h3 className="subheading">Značajke</h3>
+        <div>
+          {filters.features.map((f) => {
+            return (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const name = selected.feature.name !== f.name ? f.name : "";
+                    setSelected({
+                      ...selected,
+                      feature: {
+                        name,
+                        value: "",
+                      },
+                    });
+                  }}
+                  className={`button ${
+                    selected.feature.name === f.name ? "~positive" : "~neutral"
+                  } !normal m-1`}
+                >
+                  {f.name}
+                </button>
+                {selected.feature.name === f.name && (
+                  <div>
+                    <hr className="m-1" />
+                    {f.values.map((v) => {
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const value = selected.feature.value !== v ? v : "";
+                            setSelected({
+                              ...selected,
+                              feature: {
+                                ...selected.feature,
+                                value,
+                              },
+                            });
+                          }}
+                          className={`button ${
+                            selected.feature.value === v ? "~urge" : "~neutral"
+                          } !normal m-1`}
+                        >
+                          {v}
+                        </button>
+                      );
+                    })}
+                    <hr className="m-1" />
+                  </div>
+                )}
+              </>
+            );
+          })}
+        </div>
+        <pre>{JSON.stringify(selected, null, 2)}</pre>
+        <pre>{JSON.stringify(filters, null, 2)}</pre>
       </div>
       <ul className="w-5/6 grid grid-cols-3 gap-4">
         {list.map((p) => {

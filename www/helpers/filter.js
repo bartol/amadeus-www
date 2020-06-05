@@ -18,8 +18,17 @@ function getFilters(list) {
     });
 
     p.Features.forEach((f) => {
-      if (!filters.features.includes(f.Name)) {
-        filters.features.push(f.Name);
+      const i = filters.features.findIndex((ft) => ft.name === f.Name);
+      if (i !== -1) {
+        const feature = filters.features[i];
+        if (!feature.values.includes(f.Value)) {
+          feature.values.push(f.Value);
+        }
+      } else {
+        filters.features.push({
+          name: f.Name,
+          values: [f.Value],
+        });
       }
     });
 
