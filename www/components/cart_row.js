@@ -9,14 +9,14 @@ function CartRow({ product, setCart }) {
   return (
     <tr>
       <td className="w-20 h-20">
-        <Link href={"/" + p.URL}>
+        <Link href="/[category]/[slug]" as={"/" + p.URL}>
           <a>
             <img src={p.DefaultImage.URL} alt="slika proizvoda" />
           </a>
         </Link>
       </td>
       <td>
-        <Link href={"/" + p.URL}>
+        <Link href="/[category]/[slug]" as={"/" + p.URL}>
           <a>
             <h3>{p.Name}</h3>
           </a>

@@ -18,7 +18,7 @@ function Index({ categories, setCart }) {
           .map((c) => {
             return (
               <li key={c.ID}>
-                <Link href={c.Slug}>
+                <Link href="/[category]" as={"/" + c.Slug}>
                   <a>{c.Name}</a>
                 </Link>
               </li>
