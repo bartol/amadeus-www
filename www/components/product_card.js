@@ -9,7 +9,7 @@ function ProductCard({ product, setCart }) {
   return (
     <li>
       <div className="card ~neutral !low">
-        <Link href={"/" + p.URL}>
+        <Link href="/[category]/[slug]" as={"/" + p.URL}>
           <a>
             <img src={p.DefaultImage.URL} alt="slika proizvoda" />
             <h3 className="subheading">{p.Name}</h3>
@@ -29,7 +29,7 @@ function ProductCard({ product, setCart }) {
           )}
         </div>
         <div className="flex h-10 mt-3">
-          <Link href={"/" + p.URL}>
+          <Link href="/[category]/[slug]" as={"/" + p.URL}>
             <a className="button ~info !normal text-lg flex-grow justify-center">
               Više informacija
             </a>
