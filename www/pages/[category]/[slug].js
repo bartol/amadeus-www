@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
+import Menu from "../../components/menu";
 
-function Product({ product }) {
+function Product({ product, categoriesTree }) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -11,6 +12,7 @@ function Product({ product }) {
       <h1 className="heading">{product.Name}</h1>
       <div dangerouslySetInnerHTML={{ __html: product.Description }} className="content"></div>
       <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
+      <Menu categories={categoriesTree} />
     </div>
   );
 }
@@ -34,12 +36,18 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(`http://localhost:8080/products/${params.category}/${params.slug}`);
-  const product = await res.json();
+  const productRes = await fetch(
+    `http://localhost:8080/products/${params.category}/${params.slug}`
+  );
+  const product = await productRes.json();
+
+  const categoriesTreeRes = await fetch("http://localhost:8080/categories/tree");
+  const categoriesTree = await categoriesTreeRes.json();
 
   return {
     props: {
       product,
+      categoriesTree,
     },
   };
 }

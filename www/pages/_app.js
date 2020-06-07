@@ -11,8 +11,8 @@ function App({ Component, pageProps }) {
 
   return (
     <div className="bg-gray-100">
-      <Cart cart={cart} setCart={setCart} />
       <Component {...pageProps} cart={cart} setCart={setCart} />
+      <Cart cart={cart} setCart={setCart} />
     </div>
   );
 }
