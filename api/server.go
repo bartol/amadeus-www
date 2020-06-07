@@ -36,6 +36,31 @@ func getBody(url string) ([]byte, error) {
 	return body, nil
 }
 
+func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
+	name := ""
+	slug := ""
+	children := []categoryTree{}
+	for _, c := range categoriesData.Categories {
+		if c.ID == ID {
+			name = c.Name
+			slug = c.LinkRewrite
+			continue
+		}
+
+		if c.ParentID == strconv.Itoa(ID) {
+			child := getCategoryTree(categoriesData, c.ID)
+			children = append(children, child)
+		}
+	}
+	tree := categoryTree{
+		ID:       ID,
+		Name:     name,
+		Slug:     slug,
+		Children: children,
+	}
+	return tree
+}
+
 type product struct {
 	ID            int
 	Name          string
@@ -102,10 +127,18 @@ type categoryWithProducts struct {
 	Categories []category
 }
 
+type categoryTree struct {
+	ID       int
+	Name     string
+	Slug     string
+	Children []categoryTree
+}
+
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
 var categoriesMap = make(map[string]categoryWithProducts)
 var categoriesSlice []categoryWithProducts
+var categoriesTree []categoryTree
 
 var blacklistedCategories = []string{
 	"1",  // Root
@@ -433,6 +466,9 @@ func reindex() error {
 		categoriesSlice = append(categoriesSlice, category)
 	}
 
+	categoryTree := getCategoryTree(categoriesData, 25)
+	categoriesTree = categoryTree.Children
+
 	return nil
 }
 
@@ -726,6 +762,11 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	slug := r.URL.Path[len("/categories/"):]
+	if slug == "tree" {
+		json.NewEncoder(w).Encode(categoriesTree)
+		return
+	}
+
 	if slug != "" {
 		category, ok := categoriesMap[slug]
 		if !ok {
