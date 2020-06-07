@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function Menu({ categories }) {
   return (
-    <Drawer placement="left" width="300px">
+    <Drawer placement="left" width="300px" level=".drawer-dont-push-content">
       <div className="m-5">
         <h2 className="heading">Kategorije</h2>
         <ul>{categories.map((c) => renderTreeNode(c))}</ul>
@@ -14,7 +14,7 @@ function Menu({ categories }) {
 
 function renderTreeNode(category) {
   return (
-    <li>
+    <li key={category.ID}>
       <h3>
         <Link href="/[category]" as={"/" + category.Slug}>
           <a>{category.Name}</a>
