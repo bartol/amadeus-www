@@ -18,7 +18,7 @@ func getURL(resource string) string {
 }
 
 func getImagePublicURL(productID int, imageID string) string {
-	return "http://localhost:8080/images/" + strconv.Itoa(productID) + "/" + imageID
+	return "https://api.amadeus2.hr/images/" + strconv.Itoa(productID) + "/" + imageID
 }
 
 func getBody(url string) ([]byte, error) {
