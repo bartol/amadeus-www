@@ -18,7 +18,7 @@ function Product({ product, categoriesTree }) {
 }
 
 export async function getStaticPaths() {
-  const res = await fetch("http://localhost:8080/products/");
+  const res = await fetch("https://api.amadeus2.hr/products/");
   const products = await res.json();
   const paths = products.map((p) => {
     return {
@@ -37,11 +37,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const productRes = await fetch(
-    `http://localhost:8080/products/${params.category}/${params.slug}`
+    `https://api.amadeus2.hr/products/${params.category}/${params.slug}`
   );
   const product = await productRes.json();
 
-  const categoriesTreeRes = await fetch("http://localhost:8080/categories/tree");
+  const categoriesTreeRes = await fetch("https://api.amadeus2.hr/categories/tree");
   const categoriesTree = await categoriesTreeRes.json();
 
   return {

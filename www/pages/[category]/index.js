@@ -18,7 +18,7 @@ function Category({ category, categoriesTree, setCart }) {
 }
 
 export async function getStaticPaths() {
-  const res = await fetch("http://localhost:8080/categories/");
+  const res = await fetch("https://api.amadeus2.hr/categories/");
   const categories = await res.json();
   const paths = categories.map((c) => {
     return {
@@ -35,10 +35,10 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const categoryRes = await fetch(`http://localhost:8080/categories/${params.category}`);
+  const categoryRes = await fetch(`https://api.amadeus2.hr/categories/${params.category}`);
   const category = await categoryRes.json();
 
-  const categoriesTreeRes = await fetch("http://localhost:8080/categories/tree");
+  const categoriesTreeRes = await fetch("https://api.amadeus2.hr/categories/tree");
   const categoriesTree = await categoriesTreeRes.json();
 
   return {

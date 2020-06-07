@@ -41,10 +41,10 @@ function Index({ categories, categoriesTree, setCart }) {
 }
 
 export async function getStaticProps() {
-  const categoriesRes = await fetch("http://localhost:8080/categories/");
+  const categoriesRes = await fetch("https://api.amadeus2.hr/categories/");
   const categories = await categoriesRes.json();
 
-  const categoriesTreeRes = await fetch("http://localhost:8080/categories/tree");
+  const categoriesTreeRes = await fetch("https://api.amadeus2.hr/categories/tree");
   const categoriesTree = await categoriesTreeRes.json();
 
   return {
