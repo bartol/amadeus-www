@@ -32,8 +32,8 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
   }, [selected]);
 
   return (
-    <div className="flex">
-      <div className="xl:w-1/6 lg:w-1/4 lg:block hidden mr-5">
+    <div className="flex lg:flex-row flex-col">
+      <div className="xl:w-1/6 lg:w-1/4 mr-5">
         {showCategories && (
           <div>
             <h3 className="subheading">Kategorije</h3>
