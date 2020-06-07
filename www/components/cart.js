@@ -3,7 +3,7 @@ import CartTable from "./cart_table";
 
 function Cart({ cart, setCart }) {
   return (
-    <Drawer placement="right" width="800px">
+    <Drawer placement="right" width="800px" level=".drawer-dont-push-content">
       <div className="m-5">
         <h2 className="heading">Košarica</h2>
         <CartTable cart={cart} setCart={setCart} />
