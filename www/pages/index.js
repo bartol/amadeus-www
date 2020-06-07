@@ -1,8 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import ProductList from "../components/product_list.js";
+import Menu from "../components/menu";
 
-function Index({ categories, setCart }) {
+function Index({ categories, categoriesTree, setCart }) {
   return (
     <div className="container mx-auto px-4">
       <Head>
@@ -33,17 +34,23 @@ function Index({ categories, setCart }) {
         showCategories
         setCart={setCart}
       />
+
+      <Menu categories={categoriesTree} />
     </div>
   );
 }
 
-export async function getStaticProps(context) {
-  const res = await fetch("http://localhost:8080/categories/");
-  const categories = await res.json();
+export async function getStaticProps() {
+  const categoriesRes = await fetch("http://localhost:8080/categories/");
+  const categories = await categoriesRes.json();
+
+  const categoriesTreeRes = await fetch("http://localhost:8080/categories/tree");
+  const categoriesTree = await categoriesTreeRes.json();
 
   return {
     props: {
       categories,
+      categoriesTree,
     },
   };
 }
