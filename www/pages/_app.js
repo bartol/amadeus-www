@@ -11,6 +11,7 @@ function App({ Component, pageProps }) {
 
   return (
     <div className="bg-gray-100">
+      Amadeus II shop
       <Component {...pageProps} cart={cart} setCart={setCart} />
       <Cart cart={cart} setCart={setCart} />
     </div>
