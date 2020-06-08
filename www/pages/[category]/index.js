@@ -10,7 +10,7 @@ function Category({ category, categoriesTree, setCart }) {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="heading">{category.Name}</h1>
+      <h1 className="heading text-4xl mt-12 mb-5">{category.Name}</h1>
       <ProductList products={category.Products} limit={30} setCart={setCart} />
       <Menu categories={categoriesTree} />
     </div>

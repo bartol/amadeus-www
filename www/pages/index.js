@@ -9,9 +9,8 @@ function Index({ categories, categoriesTree, setCart }) {
       <Head>
         <title>Amadeus II shop</title>
       </Head>
-
-      <h2 className="heading">Popularne kategorije</h2>
-      <ul>
+      <h2 className="heading text-4xl mt-12 mb-5">Popularne kategorije</h2>
+      <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
         {categories
           .filter((c) => c.Slug !== "amadeus-ii-shop")
           .sort((a, b) => a.Products.length < b.Products.length)
@@ -20,21 +19,23 @@ function Index({ categories, categoriesTree, setCart }) {
             return (
               <li key={c.ID}>
                 <Link href="/[category]" as={"/" + c.Slug}>
-                  <a>{c.Name}</a>
+                  <a>
+                    <div className="card ~neutral !low h-56">
+                      <h3 className="subheading">{c.Name}</h3>
+                    </div>
+                  </a>
                 </Link>
               </li>
             );
           })}
       </ul>
-
-      <h2 className="heading">Izdvojeni proizvodi</h2>
+      <h2 className="heading text-4xl mt-12 mb-5">Izdvojeni proizvodi</h2>
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
         limit={30}
         showCategories
         setCart={setCart}
       />
-
       <Menu categories={categoriesTree} />
     </div>
   );

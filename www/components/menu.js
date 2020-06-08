@@ -5,7 +5,7 @@ function Menu({ categories }) {
   return (
     <Drawer placement="left" width="300px" level=".drawer-dont-push-content">
       <div className="m-5">
-        <h2 className="heading">Kategorije</h2>
+        <h2 className="heading text-4xl my-5">Kategorije</h2>
         <ul>{categories.map((c) => renderTreeNode(c))}</ul>
       </div>
     </Drawer>

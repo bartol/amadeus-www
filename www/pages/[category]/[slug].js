@@ -9,7 +9,7 @@ function Product({ product, categoriesTree }) {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="heading">{product.Name}</h1>
+      <h1 className="heading text-4xl mt-12 mb-5">{product.Name}</h1>
       <div dangerouslySetInnerHTML={{ __html: product.Description }} className="content"></div>
       <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
       <Menu categories={categoriesTree} />
