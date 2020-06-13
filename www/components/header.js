@@ -11,7 +11,7 @@ function Header({ setCartOpened, setMenuOpened }) {
           onClick={() => setMenuOpened(true)}
         >
           <Menu />
-          <span className="text-lg ml-2">Kategorije</span>
+          <span className="text-lg ml-2 lg:block hidden">Kategorije</span>
         </button>
         <div className="flex items-center">
           <Link href="/">
@@ -31,7 +31,7 @@ function Header({ setCartOpened, setMenuOpened }) {
           onClick={() => setCartOpened(true)}
         >
           <ShoppingCart />
-          <span className="text-lg ml-2">Košarica</span>
+          <span className="text-lg ml-2 lg:block hidden">Košarica</span>
         </button>
       </div>
     </header>
