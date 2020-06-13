@@ -23,9 +23,13 @@ function renderTreeNode(category) {
   return (
     <li key={category.ID}>
       <h3>
-        <Link href="/[category]" as={"/" + category.Slug}>
-          <a>{category.Name}</a>
-        </Link>
+        {category.Slug ? (
+          <Link href="/[category]" as={"/" + category.Slug}>
+            <a>{category.Name}</a>
+          </Link>
+        ) : (
+          <span className="opacity-50">{category.Name}</span>
+        )}
       </h3>
       <ul className="ml-5">{category.Children.map((c) => renderTreeNode(c))}</ul>
     </li>
