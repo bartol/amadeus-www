@@ -6,11 +6,17 @@ import "rc-slider/assets/index.css";
 import "a17t";
 import "../public/css/styles.css";
 import Header from "../components/header";
+import { Router } from "next/router";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
+
+  Router.events.on("routeChangeStart", () => {
+    setCartOpened(false);
+    setMenuOpened(false);
+  });
 
   return (
     <div className="bg-gray-100">

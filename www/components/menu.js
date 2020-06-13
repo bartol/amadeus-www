@@ -13,23 +13,21 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
     >
       <div className="m-5">
         <h2 className="heading text-4xl my-5">Kategorije</h2>
-        <ul>{categories.map((c) => renderTreeNode(c, setMenuOpened))}</ul>
+        <ul>{categories.map((c) => renderTreeNode(c))}</ul>
       </div>
     </Drawer>
   );
 }
 
-function renderTreeNode(category, setMenuOpened) {
+function renderTreeNode(category) {
   return (
     <li key={category.ID}>
       <h3>
         <Link href="/[category]" as={"/" + category.Slug}>
-          <a>
-            <span onClick={() => setMenuOpened(false)}>{category.Name}</span>
-          </a>
+          <a>{category.Name}</a>
         </Link>
       </h3>
-      <ul className="ml-5">{category.Children.map((c) => renderTreeNode(c, setMenuOpened))}</ul>
+      <ul className="ml-5">{category.Children.map((c) => renderTreeNode(c))}</ul>
     </li>
   );
 }
