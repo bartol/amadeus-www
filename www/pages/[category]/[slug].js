@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Menu from "../../components/menu";
 
-function Product({ product, categoriesTree }) {
+function Product({ product, categoriesTree, menuOpened, setMenuOpened }) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -12,7 +12,7 @@ function Product({ product, categoriesTree }) {
       <h1 className="heading text-4xl mt-12 mb-5">{product.Name}</h1>
       <div dangerouslySetInnerHTML={{ __html: product.Description }} className="content"></div>
       <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
-      <Menu categories={categoriesTree} />
+      <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );
 }
