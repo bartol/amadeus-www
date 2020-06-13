@@ -48,6 +48,10 @@ func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 		}
 
 		if c.ParentID == strconv.Itoa(ID) {
+			if len(c.Associations.Products) == 0 {
+				continue
+			}
+
 			child := getCategoryTree(categoriesData, c.ID)
 			children = append(children, child)
 		}
@@ -439,6 +443,11 @@ func reindex() error {
 					break
 				}
 			}
+
+			if product.ID == 0 {
+				continue
+			}
+
 			products = append(products, product)
 		}
 
