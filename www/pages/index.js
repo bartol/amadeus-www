@@ -3,7 +3,7 @@ import Link from "next/link";
 import ProductList from "../components/product_list.js";
 import Menu from "../components/menu";
 
-function Index({ categories, categoriesTree, setCart }) {
+function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened }) {
   return (
     <div className="container mx-auto px-4">
       <Head>
@@ -36,7 +36,7 @@ function Index({ categories, categoriesTree, setCart }) {
         showCategories
         setCart={setCart}
       />
-      <Menu categories={categoriesTree} />
+      <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );
 }

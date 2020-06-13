@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import ProductList from "../../components/product_list";
 import Menu from "../../components/menu";
 
-function Category({ category, categoriesTree, setCart }) {
+function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened }) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -12,7 +12,7 @@ function Category({ category, categoriesTree, setCart }) {
     <div className="container mx-auto px-4">
       <h1 className="heading text-4xl mt-12 mb-5">{category.Name}</h1>
       <ProductList products={category.Products} limit={30} setCart={setCart} />
-      <Menu categories={categoriesTree} />
+      <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );
 }

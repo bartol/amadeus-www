@@ -9,12 +9,20 @@ import Header from "../components/header";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
+  const [cartOpened, setCartOpened] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false);
 
   return (
     <div className="bg-gray-100">
-      <Header />
-      <Component {...pageProps} cart={cart} setCart={setCart} />
-      <Cart cart={cart} setCart={setCart} />
+      <Header setCartOpened={setCartOpened} setMenuOpened={setMenuOpened} />
+      <Component
+        {...pageProps}
+        cart={cart}
+        setCart={setCart}
+        menuOpened={menuOpened}
+        setMenuOpened={setMenuOpened}
+      />
+      <Cart cart={cart} setCart={setCart} cartOpened={cartOpened} setCartOpened={setCartOpened} />
     </div>
   );
 }

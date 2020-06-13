@@ -1,9 +1,16 @@
 import Drawer from "rc-drawer";
 import Link from "next/link";
 
-function Menu({ categories }) {
+function Menu({ categories, menuOpened, setMenuOpened }) {
   return (
-    <Drawer placement="left" width="300px" level=".drawer-dont-push-content">
+    <Drawer
+      placement="left"
+      width="300px"
+      open={menuOpened}
+      onClose={() => setMenuOpened(false)}
+      level={null}
+      handler={false}
+    >
       <div className="m-5">
         <h2 className="heading text-4xl my-5">Kategorije</h2>
         <ul>{categories.map((c) => renderTreeNode(c))}</ul>
