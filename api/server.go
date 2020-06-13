@@ -44,14 +44,15 @@ func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 		if c.ID == ID {
 			name = c.Name
 			slug = c.LinkRewrite
+
+			if len(c.Associations.Products) == 0 {
+				slug = ""
+			}
+
 			continue
 		}
 
 		if c.ParentID == strconv.Itoa(ID) {
-			if len(c.Associations.Products) == 0 {
-				continue
-			}
-
 			child := getCategoryTree(categoriesData, c.ID)
 			children = append(children, child)
 		}
