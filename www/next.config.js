@@ -1,9 +1,6 @@
-module.exports = {
-  experimental: {
-    modern: true,
-    polyfillsOptimization: true,
-  },
+const withPrefresh = require("@prefresh/next");
 
+const config = {
   webpack(config, { dev, isServer }) {
     const splitChunks = config.optimization && config.optimization.splitChunks;
     if (splitChunks) {
@@ -40,3 +37,5 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = withPrefresh(config);
