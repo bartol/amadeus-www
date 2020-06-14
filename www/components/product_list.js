@@ -4,13 +4,16 @@ import { useState, useEffect } from "react";
 import { Range } from "rc-slider";
 import { getPrice } from "../helpers/price";
 
-function ProductList({ products, pagination, pageSize, setCart }) {
+function ProductList({ products, setCart }) {
   if (!products || !products.length) {
     return <div>no products</div>;
   }
 
   const filters = getFilters(products);
   const [selected, setSelected] = useState({
+    page: {
+      current: filters.page.current,
+    },
     category: "",
     feature: {
       name: "",
@@ -22,7 +25,9 @@ function ProductList({ products, pagination, pageSize, setCart }) {
     },
   });
 
-  const [filteredList, setFilteredList] = useState(products);
+  const [filteredList, setFilteredList] = useState(
+    getFilteredList(products, selected, filters.price)
+  );
   useEffect(() => {
     setFilteredList(getFilteredList(products, selected, filters.price));
   }, [products, selected]);

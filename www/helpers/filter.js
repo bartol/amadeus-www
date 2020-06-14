@@ -2,6 +2,10 @@ import { getReductedPrice } from "./price";
 
 function getFilters(list) {
   const filters = {
+    page: {
+      current: 1,
+      max: Math.floor(list.length / 30) + 1,
+    },
     categories: [],
     features: [],
     price: {
@@ -67,6 +71,9 @@ function getFilteredList(list, filters, defaultPrice) {
       return price >= filters.price.min && price <= filters.price.max;
     });
   }
+
+  const startIndex = (filters.page.current - 1) * 30;
+  filtered = filtered.slice(startIndex, startIndex + 30);
 
   return filtered;
 }
