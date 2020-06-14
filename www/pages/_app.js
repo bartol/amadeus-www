@@ -2,7 +2,6 @@ import { useState } from "react";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
 import "rc-drawer/assets/index.css";
-import "rc-slider/assets/index.css";
 import "a17t";
 import "../public/css/styles.css";
 import Header from "../components/header";
@@ -36,3 +35,17 @@ function App({ Component, pageProps }) {
 }
 
 export default App;
+
+/*
+TODO:
+	sortiranje
+	filters spacing and overflow
+	square images in product cards
+	images in popular categories cards
+	footer (links, legal docs in md)
+	search (suggestions popup and full interface)
+	front page (google maps, contact, contact form)
+	product page (image gallery, similar products)
+	checkout
+	category tree styles
+*/
