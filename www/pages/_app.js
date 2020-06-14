@@ -7,6 +7,7 @@ import "a17t";
 import "../public/css/styles.css";
 import Header from "../components/header";
 import { Router } from "next/router";
+import Footer from "../components/footer";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
@@ -28,6 +29,7 @@ function App({ Component, pageProps }) {
         menuOpened={menuOpened}
         setMenuOpened={setMenuOpened}
       />
+      <Footer />
       <Cart cart={cart} setCart={setCart} cartOpened={cartOpened} setCartOpened={setCartOpened} />
     </div>
   );
