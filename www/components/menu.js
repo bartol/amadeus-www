@@ -28,7 +28,9 @@ function renderTreeNode(category) {
       <h3>
         {category.HasProducts && !category.Children.length ? (
           <Link href="/[category]" as={"/" + category.Slug}>
-            <a>{category.Name}</a>
+            <a>
+              {category.Name} ({category.ProductCount})
+            </a>
           </Link>
         ) : (
           <span className="opacity-50">{category.Name}</span>
