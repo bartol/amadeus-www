@@ -1,6 +1,7 @@
 import ProductCard from "./product_card";
 import { getFilters, getFilteredList } from "../helpers/filter";
 import { useState, useEffect } from "react";
+import { ArrowDown } from "react-feather";
 
 function ProductList({ products, setCart, showCategories }) {
   if (!products || !products.length) {
@@ -120,18 +121,19 @@ function ProductList({ products, setCart, showCategories }) {
             return <ProductCard product={p} key={p.ID} setCart={setCart} />;
           })}
         </ul>
-        <div>
-          <span>
+        <div className="flex justify-center items-center flex-wrap mt-10">
+          <span className="mx-5 my-2">
             Prikazano {limit < filteredList.length ? limit : filteredList.length} od{" "}
             {filteredList.length} proizvoda
           </span>
           {limit < filteredList.length && (
             <button
               type="button"
-              className="button ~neutral !normal text-lg"
+              className="button ~neutral !normal px-3 py-2 mx-5"
               onClick={() => setLimit(limit + pageSize)}
             >
-              Prikaži više proizvoda
+              <ArrowDown />
+              <span className="text-lg ml-2">Prikaži više proizvoda</span>
             </button>
           )}
         </div>
