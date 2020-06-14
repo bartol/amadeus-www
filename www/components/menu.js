@@ -21,12 +21,12 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
 
 function renderTreeNode(category) {
   // don't show tree leafs without products
-  if (!category.Slug && !category.Children.length) return;
+  if (!category.HasProducts && !category.Children.length) return;
 
   return (
     <li key={category.ID}>
       <h3>
-        {category.Slug ? (
+        {category.HasProducts && !category.Children.length ? (
           <Link href="/[category]" as={"/" + category.Slug}>
             <a>{category.Name}</a>
           </Link>
