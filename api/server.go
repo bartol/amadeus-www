@@ -40,7 +40,7 @@ func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 	name := ""
 	slug := ""
 	hasProducts := false
-	productsCount := 0
+	productCount := 0
 	children := []categoryTree{}
 	for _, c := range categoriesData.Categories {
 		isAmadeus := true
@@ -57,7 +57,7 @@ func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 			name = c.Name
 			slug = c.LinkRewrite
 			hasProducts = len(c.Associations.Products) > 0
-			productsCount = len(c.Associations.Products)
+			productCount = len(c.Associations.Products)
 			continue
 		}
 
@@ -67,12 +67,12 @@ func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 		}
 	}
 	tree := categoryTree{
-		ID:            ID,
-		Name:          name,
-		Slug:          slug,
-		HasProducts:   hasProducts,
-		ProductsCount: productsCount,
-		Children:      children,
+		ID:           ID,
+		Name:         name,
+		Slug:         slug,
+		HasProducts:  hasProducts,
+		ProductCount: productCount,
+		Children:     children,
 	}
 	return tree
 }
@@ -144,12 +144,12 @@ type categoryWithProducts struct {
 }
 
 type categoryTree struct {
-	ID            int
-	Name          string
-	Slug          string
-	HasProducts   bool
-	ProductsCount int
-	Children      []categoryTree
+	ID           int
+	Name         string
+	Slug         string
+	HasProducts  bool
+	ProductCount int
+	Children     []categoryTree
 }
 
 var productsMap = make(map[string]product)
