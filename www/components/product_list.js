@@ -9,7 +9,6 @@ function ProductList({ products, setCart, showCategories }) {
 
   const filters = getFilters(products);
   const [selected, setSelected] = useState({
-    page: filters.page,
     category: "",
     feature: {
       name: "",
@@ -25,7 +24,7 @@ function ProductList({ products, setCart, showCategories }) {
   return (
     <div className="flex lg:flex-row flex-col">
       <div className="xl:w-1/6 lg:w-1/4 mr-5">
-        {filters.categories.length && showCategories && (
+        {filters.categories.length > 0 && showCategories && (
           <div>
             <h3 className="subheading">Kategorije</h3>
             <div>
@@ -52,7 +51,7 @@ function ProductList({ products, setCart, showCategories }) {
             </div>
           </div>
         )}
-        {filters.features.length && (
+        {filters.features.length > 0 && (
           <div>
             <h3 className="subheading">Značajke</h3>
             <div>
@@ -113,11 +112,13 @@ function ProductList({ products, setCart, showCategories }) {
           </div>
         )}
       </div>
-      <ul className="xl:w-5/6 lg:w-3/4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
-        {filteredList.map((p) => {
-          return <ProductCard product={p} key={p.ID} setCart={setCart} />;
-        })}
-      </ul>
+      <div className="xl:w-5/6 lg:w-3/4">
+        <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
+          {filteredList.map((p) => {
+            return <ProductCard product={p} key={p.ID} setCart={setCart} />;
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

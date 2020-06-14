@@ -1,9 +1,5 @@
 function getFilters(list) {
   const filters = {
-    page: {
-      current: 1,
-      max: Math.floor(list.length / 30) + 1,
-    },
     categories: [],
     features: [],
   };
@@ -34,7 +30,7 @@ function getFilters(list) {
   return filters;
 }
 
-function getFilteredList(list, filters, defaultPrice) {
+function getFilteredList(list, filters) {
   let filtered = list;
 
   if (filters.category) {
@@ -46,9 +42,6 @@ function getFilteredList(list, filters, defaultPrice) {
       p.Features.some((f) => f.Name === filters.feature.name && f.Value === filters.feature.value)
     );
   }
-
-  const pageStartIndex = (filters.page.current - 1) * 30;
-  filtered = filtered.slice(pageStartIndex, pageStartIndex + 30);
 
   return filtered;
 }
