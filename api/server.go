@@ -39,16 +39,23 @@ func getBody(url string) ([]byte, error) {
 func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 	name := ""
 	slug := ""
+	hasProducts := true
 	children := []categoryTree{}
 	for _, c := range categoriesData.Categories {
+		isAmadeus := true
+		for _, blc := range blacklistedCategories {
+			if blc == strconv.Itoa(c.ID) {
+				isAmadeus = false
+			}
+		}
+		if !isAmadeus {
+			continue
+		}
+
 		if c.ID == ID {
 			name = c.Name
 			slug = c.LinkRewrite
-
-			if len(c.Associations.Products) == 0 {
-				slug = ""
-			}
-
+			hasProducts = len(c.Associations.Products) > 0
 			continue
 		}
 
@@ -58,10 +65,11 @@ func getCategoryTree(categoriesData getCategoriesResp, ID int) categoryTree {
 		}
 	}
 	tree := categoryTree{
-		ID:       ID,
-		Name:     name,
-		Slug:     slug,
-		Children: children,
+		ID:          ID,
+		Name:        name,
+		Slug:        slug,
+		HasProducts: hasProducts,
+		Children:    children,
 	}
 	return tree
 }
@@ -133,10 +141,11 @@ type categoryWithProducts struct {
 }
 
 type categoryTree struct {
-	ID       int
-	Name     string
-	Slug     string
-	Children []categoryTree
+	ID          int
+	Name        string
+	Slug        string
+	HasProducts bool
+	Children    []categoryTree
 }
 
 var productsMap = make(map[string]product)
