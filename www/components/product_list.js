@@ -4,15 +4,12 @@ import { useState, useEffect } from "react";
 import { Range } from "rc-slider";
 import { getPrice } from "../helpers/price";
 
-function ProductList({ products, limit, pagination, pageSize, showCategories, setCart }) {
-  let list = [];
-  if (products && limit) {
-    list = products.slice(0, limit);
-  } else if (products) {
-    list = products;
+function ProductList({ products, pagination, pageSize, showCategories, setCart }) {
+  if (!products.length) {
+    return <div>no products</div>;
   }
 
-  const filters = getFilters(list);
+  const filters = getFilters(products);
   const [selected, setSelected] = useState({
     category: "",
     feature: {
@@ -25,10 +22,9 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
     },
   });
 
-  const [filteredList, setFilteredList] = useState(list);
-
+  const [filteredList, setFilteredList] = useState(products);
   useEffect(() => {
-    setFilteredList(getFilteredList(list, selected, filters.price));
+    setFilteredList(getFilteredList(products, selected, filters.price));
   }, [selected]);
 
   return (
@@ -136,10 +132,6 @@ function ProductList({ products, limit, pagination, pageSize, showCategories, se
       </div>
       <ul className="xl:w-5/6 lg:w-3/4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
         {filteredList.map((p) => {
-          if (!p.ID) {
-            return null;
-          }
-
           return <ProductCard product={p} key={p.ID} setCart={setCart} />;
         })}
       </ul>
