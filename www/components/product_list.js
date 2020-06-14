@@ -1,41 +1,31 @@
 import ProductCard from "./product_card";
 import { getFilters, getFilteredList } from "../helpers/filter";
 import { useState, useEffect } from "react";
-import { Range } from "rc-slider";
-import { getPrice } from "../helpers/price";
 
-function ProductList({ products, setCart }) {
+function ProductList({ products, setCart, showCategories }) {
   if (!products || !products.length) {
     return <div>no products</div>;
   }
 
   const filters = getFilters(products);
   const [selected, setSelected] = useState({
-    page: {
-      current: filters.page.current,
-    },
+    page: filters.page,
     category: "",
     feature: {
       name: "",
       value: "",
     },
-    price: {
-      min: filters.price.min,
-      max: filters.price.max,
-    },
   });
 
-  const [filteredList, setFilteredList] = useState(
-    getFilteredList(products, selected, filters.price)
-  );
+  const [filteredList, setFilteredList] = useState(getFilteredList(products, selected));
   useEffect(() => {
-    setFilteredList(getFilteredList(products, selected, filters.price));
+    setFilteredList(getFilteredList(products, selected));
   }, [products, selected]);
 
   return (
     <div className="flex lg:flex-row flex-col">
       <div className="xl:w-1/6 lg:w-1/4 mr-5">
-        {filters.categories.length > 1 && (
+        {filters.categories.length && showCategories && (
           <div>
             <h3 className="subheading">Kategorije</h3>
             <div>
@@ -62,7 +52,7 @@ function ProductList({ products, setCart }) {
             </div>
           </div>
         )}
-        {filters.features.length > 0 && (
+        {filters.features.length && (
           <div>
             <h3 className="subheading">Značajke</h3>
             <div>
@@ -122,22 +112,6 @@ function ProductList({ products, setCart }) {
             </div>
           </div>
         )}
-        <h3 className="subheading">Cijena</h3>
-        <div className="mx-3 my-1">
-          <Range
-            min={filters.price.min}
-            max={filters.price.max}
-            defaultValue={[filters.price.min, filters.price.max]}
-            onAfterChange={(p) => {
-              const [min, max] = p;
-              setSelected({ ...selected, price: { min, max } });
-            }}
-          />
-        </div>
-        <div className="flex justify-between m-1">
-          <h4>{getPrice(selected.price.min)}</h4>
-          <h4>{getPrice(selected.price.max)}</h4>
-        </div>
       </div>
       <ul className="xl:w-5/6 lg:w-3/4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
         {filteredList.map((p) => {
