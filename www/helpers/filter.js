@@ -1,5 +1,3 @@
-import { getReductedPrice } from "./price";
-
 function getFilters(list) {
   const filters = {
     page: {
@@ -8,10 +6,6 @@ function getFilters(list) {
     },
     categories: [],
     features: [],
-    price: {
-      min: 0,
-      max: 0,
-    },
   };
 
   list.forEach((p) => {
@@ -35,16 +29,6 @@ function getFilters(list) {
         });
       }
     });
-
-    const price = p.HasReduction
-      ? getReductedPrice(p.Price, p.Reduction, p.ReductionType, true)
-      : p.Price;
-    if (price < filters.price.min || filters.price.min === 0) {
-      filters.price.min = price;
-    }
-    if (price > filters.price.max) {
-      filters.price.max = price;
-    }
   });
 
   return filters;
@@ -63,17 +47,8 @@ function getFilteredList(list, filters, defaultPrice) {
     );
   }
 
-  if (defaultPrice.min !== filters.price.min || defaultPrice.max !== filters.price.max) {
-    filtered = filtered.filter((p) => {
-      const price = p.HasReduction
-        ? getReductedPrice(p.Price, p.Reduction, p.ReductionType, true)
-        : p.Price;
-      return price >= filters.price.min && price <= filters.price.max;
-    });
-  }
-
-  const startIndex = (filters.page.current - 1) * 30;
-  filtered = filtered.slice(startIndex, startIndex + 30);
+  const pageStartIndex = (filters.page.current - 1) * 30;
+  filtered = filtered.slice(pageStartIndex, pageStartIndex + 30);
 
   return filtered;
 }
