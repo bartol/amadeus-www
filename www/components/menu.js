@@ -20,6 +20,9 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
 }
 
 function renderTreeNode(category) {
+  // don't show tree leafs without products
+  if (!category.Slug && !category.Children.length) return;
+
   return (
     <li key={category.ID}>
       <h3>
