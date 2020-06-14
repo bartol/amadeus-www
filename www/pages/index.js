@@ -32,7 +32,6 @@ function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened 
       <h2 className="heading text-4xl mt-12 mb-5">Izdvojeni proizvodi</h2>
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
-        showCategories
         setCart={setCart}
       />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
