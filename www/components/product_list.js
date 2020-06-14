@@ -8,6 +8,7 @@ function ProductList({ products, setCart, showCategories }) {
   }
 
   const filters = getFilters(products);
+  const pageSize = 30;
   const [selected, setSelected] = useState({
     category: "",
     feature: {
@@ -15,8 +16,9 @@ function ProductList({ products, setCart, showCategories }) {
       value: "",
     },
   });
-
+  const [limit, setLimit] = useState(pageSize);
   const [filteredList, setFilteredList] = useState(getFilteredList(products, selected));
+
   useEffect(() => {
     setFilteredList(getFilteredList(products, selected));
   }, [products, selected]);
@@ -114,10 +116,25 @@ function ProductList({ products, setCart, showCategories }) {
       </div>
       <div className="xl:w-5/6 lg:w-3/4">
         <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
-          {filteredList.map((p) => {
+          {filteredList.slice(0, limit).map((p) => {
             return <ProductCard product={p} key={p.ID} setCart={setCart} />;
           })}
         </ul>
+        <div>
+          <span>
+            Prikazano {limit < filteredList.length ? limit : filteredList.length} od{" "}
+            {filteredList.length} proizvoda
+          </span>
+          {limit < filteredList.length && (
+            <button
+              type="button"
+              className="button ~neutral !normal text-lg"
+              onClick={() => setLimit(limit + pageSize)}
+            >
+              Prikaži više proizvoda
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
