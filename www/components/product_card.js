@@ -11,7 +11,7 @@ function ProductCard({ product, setCart }) {
       <div className="card ~neutral !low">
         <Link href="/[category]/[slug]" as={"/" + p.URL}>
           <a>
-            <div className="pb-full relative">
+            <div className="relative" style={{ paddingBottom: "100%" }}>
               <img
                 src={p.DefaultImage.URL + "?options=75,quality=low"}
                 data-src={p.DefaultImage.URL + "?options=400"}
