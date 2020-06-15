@@ -124,8 +124,9 @@ function ProductList({ products, setCart, showCategories }) {
         </ul>
         <div className="flex justify-center items-center flex-wrap mt-10">
           <span className="mx-5 my-2">
-            Prikazano {limit < filteredList.length ? limit : filteredList.length} od{" "}
-            {filteredList.length} proizvoda
+            Prikazan{filteredList.length != 1 && "o"}{" "}
+            {limit < filteredList.length ? limit : filteredList.length} od {filteredList.length}{" "}
+            proizvod{filteredList.length != 1 && "a"}
           </span>
           {limit < filteredList.length && (
             <button
