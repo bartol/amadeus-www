@@ -797,11 +797,17 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		json.NewEncoder(w).Encode(product)
+		err := json.NewEncoder(w).Encode(product)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+		}
 		return
 	}
 
-	json.NewEncoder(w).Encode(productsLiteSlice)
+	err := json.NewEncoder(w).Encode(productsLiteSlice)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
 
 func categoriesHandler(w http.ResponseWriter, r *http.Request) {
@@ -810,7 +816,10 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 
 	slug := r.URL.Path[len("/categories/"):]
 	if slug == "tree" {
-		json.NewEncoder(w).Encode(categoriesTree)
+		err := json.NewEncoder(w).Encode(categoriesTree)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+		}
 		return
 	}
 
@@ -821,12 +830,17 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// TODO handle err
-		json.NewEncoder(w).Encode(category)
+		err := json.NewEncoder(w).Encode(category)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+		}
 		return
 	}
 
-	json.NewEncoder(w).Encode(categoriesSlice)
+	err := json.NewEncoder(w).Encode(categoriesSlice)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
 
 func imagesHandler(w http.ResponseWriter, r *http.Request) {
