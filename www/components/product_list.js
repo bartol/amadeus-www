@@ -22,6 +22,7 @@ function ProductList({ products, setCart, showCategories }) {
 
   useEffect(() => {
     setFilteredList(getFilteredList(products, selected));
+    setLimit(pageSize);
   }, [products, selected]);
 
   return (
