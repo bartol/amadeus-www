@@ -11,7 +11,14 @@ function ProductCard({ product, setCart }) {
       <div className="card ~neutral !low">
         <Link href="/[category]/[slug]" as={"/" + p.URL}>
           <a>
-            <img src={p.DefaultImage.URL} alt="slika proizvoda" />
+            <div className="pb-full relative">
+              <img
+                src={p.DefaultImage.URL + "?options=75,quality=low"}
+                data-src={p.DefaultImage.URL + "?options=400"}
+                alt="slika proizvoda"
+                className="lazyload absolute h-full w-full object-contain"
+              />
+            </div>
             <h3 className="subheading">{p.Name}</h3>
           </a>
         </Link>
