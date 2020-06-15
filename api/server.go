@@ -770,8 +770,8 @@ func main() {
 	http.HandleFunc("/categories/", categoriesHandler)
 	http.HandleFunc("/images/", imagesHandler)
 
-	log.Println("server listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("server listening on :8081")
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
 func reindexHandler(w http.ResponseWriter, r *http.Request) {
