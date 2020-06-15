@@ -1,5 +1,6 @@
 api/api
 api/key
+api/keys
 
 www/node_modules
 www/.next

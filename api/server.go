@@ -5,16 +5,30 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
-var key = os.Getenv("PIONEER_API_KEY")
+var pioneerKey = os.Getenv("PIONEER_API_KEY")
+var imageOptimKey = os.Getenv("IMAGEOPTIM_API_KEY")
+var imageOptimKeys = strings.Split(imageOptimKey, ",")
 
-func getURL(resource string) string {
-	return "https://" + key + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
+func getPioneerURL(resource string) string {
+	return "https://" + pioneerKey + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
+}
+
+func getImageOptimURL(url string) string {
+	rand.Seed(time.Now().Unix())
+
+	return "https://img.gs/" + imageOptimKeys[rand.Intn(len(imageOptimKeys))] + "/full/" + url
+}
+
+func getImagePrivateURL(imgPath string) string {
+	return getImageOptimURL("https://" + pioneerKey + "@pioneer.hr/api/images/products/" + imgPath)
 }
 
 func getImagePublicURL(productID int, imageID string) string {
@@ -523,7 +537,7 @@ type getProductsResp struct {
 }
 
 func getProducts() (getProductsResp, error) {
-	body, err := getBody(getURL("products"))
+	body, err := getBody(getPioneerURL("products"))
 	if err != nil {
 		return getProductsResp{}, err
 	}
@@ -546,7 +560,7 @@ type getSpecificPricesResp struct {
 }
 
 func getSpecificPrices() (getSpecificPricesResp, error) {
-	body, err := getBody(getURL("specific_prices"))
+	body, err := getBody(getPioneerURL("specific_prices"))
 	if err != nil {
 		return getSpecificPricesResp{}, err
 	}
@@ -570,7 +584,7 @@ type getStockAvailablesResp struct {
 }
 
 func getStockAvailables() (getStockAvailablesResp, error) {
-	body, err := getBody(getURL("stock_availables"))
+	body, err := getBody(getPioneerURL("stock_availables"))
 	if err != nil {
 		return getStockAvailablesResp{}, err
 	}
@@ -599,7 +613,7 @@ type getCategoriesResp struct {
 }
 
 func getCategories() (getCategoriesResp, error) {
-	body, err := getBody(getURL("categories"))
+	body, err := getBody(getPioneerURL("categories"))
 	if err != nil {
 		return getCategoriesResp{}, err
 	}
@@ -621,7 +635,7 @@ type getProductFeaturesResp struct {
 }
 
 func getProductFeatures() (getProductFeaturesResp, error) {
-	body, err := getBody(getURL("product_features"))
+	body, err := getBody(getPioneerURL("product_features"))
 	if err != nil {
 		return getProductFeaturesResp{}, err
 	}
@@ -643,7 +657,7 @@ type getProductFeatureValuesResp struct {
 }
 
 func getProductFeatureValues() (getProductFeatureValuesResp, error) {
-	body, err := getBody(getURL("product_feature_values"))
+	body, err := getBody(getPioneerURL("product_feature_values"))
 	if err != nil {
 		return getProductFeatureValuesResp{}, err
 	}
@@ -665,7 +679,7 @@ type getProductOptionResp struct {
 }
 
 func getProductOptions() (getProductOptionResp, error) {
-	body, err := getBody(getURL("product_options"))
+	body, err := getBody(getPioneerURL("product_options"))
 	if err != nil {
 		return getProductOptionResp{}, err
 	}
@@ -688,7 +702,7 @@ type getProductOptionValuesResp struct {
 }
 
 func getProductOptionValues() (getProductOptionValuesResp, error) {
-	body, err := getBody(getURL("product_option_values"))
+	body, err := getBody(getPioneerURL("product_option_values"))
 	if err != nil {
 		return getProductOptionValuesResp{}, err
 	}
@@ -715,7 +729,7 @@ type getCombinationsResp struct {
 }
 
 func getCombinations() (getCombinationsResp, error) {
-	body, err := getBody(getURL("combinations"))
+	body, err := getBody(getPioneerURL("combinations"))
 	if err != nil {
 		return getCombinationsResp{}, err
 	}
@@ -730,8 +744,11 @@ func getCombinations() (getCombinationsResp, error) {
 }
 
 func main() {
-	if key == "" {
+	if pioneerKey == "" {
 		log.Fatal("add key in PIONEER_API_KEY")
+	}
+	if imageOptimKey == "" {
+		log.Fatal("add key in IMAGEOPTIM_API_KEY")
 	}
 
 	log.Println("reindexing...")
@@ -808,14 +825,14 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 // TODO implement caching
 func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	imgPath := r.URL.Path[len("/images/"):]
-	img, err := http.Get("https://" + key + "@pioneer.hr/api/images/products/" + imgPath)
+	img, err := http.Get(getImagePrivateURL(imgPath))
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 	defer img.Body.Close()
 
-	if !strings.HasPrefix(img.Header.Get("Content-Type"), "image/") {
+	if img.StatusCode != http.StatusOK {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("404"))
 		return
