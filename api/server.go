@@ -20,14 +20,14 @@ func getPioneerURL(resource string) string {
 	return "https://" + pioneerKey + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
 }
 
-func getImageOptimURL(imgURL string) string {
+func getImageOptimURL(imgURL, options string) string {
 	rand.Seed(time.Now().Unix())
 
-	return "https://img.gs/" + imageOptimKeys[rand.Intn(len(imageOptimKeys))] + "/full/" + imgURL
+	return "https://img.gs/" + imageOptimKeys[rand.Intn(len(imageOptimKeys))] + "/" + options + "/" + imgURL
 }
 
-func getImagePrivateURL(imgPath string) string {
-	return getImageOptimURL("https://" + pioneerKey + "@pioneer.hr/api/images/products/" + imgPath)
+func getImagePrivateURL(imgPath, options string) string {
+	return getImageOptimURL("https://"+pioneerKey+"@pioneer.hr/api/images/products/"+imgPath, options)
 }
 
 func getImagePublicURL(productID int, imageID string) string {
@@ -845,7 +845,8 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 
 func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	imgPath := r.URL.Path[len("/images/"):]
-	img, ok := cachedImages[imgPath]
+	options := r.URL.Query().Get("options")
+	img, ok := cachedImages[imgPath+"-"+options]
 	if ok {
 		w.Header().Set("Content-Type", img.ContentType)
 		w.Write(img.Body)
@@ -853,7 +854,7 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for {
-		img, err := http.Get(getImagePrivateURL(imgPath))
+		img, err := http.Get(getImagePrivateURL(imgPath, options))
 		if err != nil {
 			w.Write([]byte(err.Error()))
 			return
@@ -871,7 +872,7 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", contentType)
 			w.Write(body)
 
-			cachedImages[imgPath] = cachedImage{
+			cachedImages[imgPath+"-"+options] = cachedImage{
 				Body:        body,
 				ContentType: contentType,
 			}
