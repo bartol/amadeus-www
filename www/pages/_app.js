@@ -41,7 +41,6 @@ export default App;
 TODO:
 	sortiranje
 	filters spacing and overflow
-	square images in product cards
 	images in popular categories cards
 	footer (links, legal docs in md)
 	search (suggestions popup and full interface)
