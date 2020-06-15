@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -21,10 +20,10 @@ func getPioneerURL(resource string) string {
 	return "https://" + pioneerKey + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
 }
 
-func getImageOptimURL(url string) string {
+func getImageOptimURL(imgURL string) string {
 	rand.Seed(time.Now().Unix())
 
-	return "https://img.gs/" + imageOptimKeys[rand.Intn(len(imageOptimKeys))] + "/full/" + url
+	return "https://img.gs/" + imageOptimKeys[rand.Intn(len(imageOptimKeys))] + "/full/" + imgURL
 }
 
 func getImagePrivateURL(imgPath string) string {
@@ -35,8 +34,8 @@ func getImagePublicURL(productID int, imageID string) string {
 	return "https://api.amadeus2.hr/images/" + strconv.Itoa(productID) + "/" + imageID
 }
 
-func getBody(url string) ([]byte, error) {
-	resp, err := http.Get(url)
+func getBody(URL string) ([]byte, error) {
+	resp, err := http.Get(URL)
 	if err != nil {
 		return []byte(""), err
 	}
@@ -166,11 +165,17 @@ type categoryTree struct {
 	Children     []categoryTree
 }
 
+type cachedImage struct {
+	Body        []byte
+	ContentType string
+}
+
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
 var categoriesMap = make(map[string]categoryWithProducts)
 var categoriesSlice []categoryWithProducts
 var categoriesTree []categoryTree
+var cachedImages = make(map[string]cachedImage)
 
 var blacklistedCategories = []string{
 	"1",  // Root
@@ -249,6 +254,8 @@ func reindex() error {
 	productsLiteSlice = []productLite{}
 	categoriesMap = make(map[string]categoryWithProducts)
 	categoriesSlice = []categoryWithProducts{}
+	categoriesTree = []categoryTree{}
+	cachedImages = make(map[string]cachedImage)
 
 	for _, p := range productsData.Products {
 		isAmadeus := true
@@ -822,26 +829,46 @@ func categoriesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(categoriesSlice)
 }
 
-// TODO implement caching
 func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	imgPath := r.URL.Path[len("/images/"):]
-	img, err := http.Get(getImagePrivateURL(imgPath))
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-	defer img.Body.Close()
-
-	if img.StatusCode != http.StatusOK {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("404"))
+	img, ok := cachedImages[imgPath]
+	if ok {
+		w.Header().Set("Content-Type", img.ContentType)
+		w.Write(img.Body)
 		return
 	}
 
-	w.Header().Set("Content-Type", img.Header.Get("Content-Type"))
-	_, err = io.Copy(w, img.Body)
-	if err != nil {
-		w.Write([]byte(err.Error()))
+	for {
+		img, err := http.Get(getImagePrivateURL(imgPath))
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+		defer img.Body.Close()
+
+		if img.StatusCode == http.StatusOK {
+			contentType := img.Header.Get("Content-Type")
+			body, err := ioutil.ReadAll(img.Body)
+			if err != nil {
+				w.Write([]byte(err.Error()))
+				return
+			}
+
+			w.Header().Set("Content-Type", contentType)
+			w.Write(body)
+
+			cachedImages[imgPath] = cachedImage{
+				Body:        body,
+				ContentType: contentType,
+			}
+			return
+		}
+
+		if img.StatusCode != http.StatusPaymentRequired {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("404"))
+			return
+		}
 	}
 }
 
