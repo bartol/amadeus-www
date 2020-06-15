@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { Router } from "next/router";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import "lazysizes";
 import "rc-drawer/assets/index.css";
 import "a17t";
 import "../public/css/styles.css";
-import Header from "../components/header";
-import { Router } from "next/router";
-import Footer from "../components/footer";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
