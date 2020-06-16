@@ -15,8 +15,8 @@ function Header({ setCartOpened, setMenuOpened }) {
         </button>
         <div className="flex items-center">
           <Link href="/">
-            <a className="mr-4">
-              <img src="/img/logo.png" alt="Amadeus II" className="h-8" />
+            <a className="w-40 h-8 mr-4">
+              <img src="/img/logo.png" alt="Amadeus II" />
             </a>
           </Link>
           <input
