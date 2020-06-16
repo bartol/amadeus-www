@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -10,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/sahilm/fuzzy"
 )
 
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
@@ -170,8 +173,10 @@ type cachedImage struct {
 	ContentType string
 }
 
+type productsLite []productLite
+
 var productsMap = make(map[string]product)
-var productsLiteSlice []productLite
+var productsLiteSlice productsLite
 var categoriesMap = make(map[string]categoryWithProducts)
 var categoriesSlice []categoryWithProducts
 var categoriesTree []categoryTree
@@ -251,7 +256,7 @@ func reindex() error {
 	}
 
 	productsMap = make(map[string]product)
-	productsLiteSlice = []productLite{}
+	productsLiteSlice = productsLite{}
 	categoriesMap = make(map[string]categoryWithProducts)
 	categoriesSlice = []categoryWithProducts{}
 	categoriesTree = []categoryTree{}
@@ -770,6 +775,8 @@ func main() {
 	http.HandleFunc("/categories/", categoriesHandler)
 	http.HandleFunc("/images/", imagesHandler)
 
+	http.HandleFunc("/search/", searchHandler)
+
 	log.Println("server listening on :8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
@@ -884,6 +891,22 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("404"))
 			return
 		}
+	}
+}
+
+func (p productsLite) String(i int) string {
+	return p[i].Name
+}
+
+func (p productsLite) Len() int {
+	return len(p)
+}
+
+func searchHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("query")
+	results := fuzzy.FindFrom(query, productsLiteSlice)
+	for _, r := range results {
+		fmt.Fprintln(w, productsLiteSlice[r.Index].Name)
 	}
 }
 
