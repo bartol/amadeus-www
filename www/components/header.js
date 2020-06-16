@@ -94,7 +94,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
               </tbody>
               <tfoot>
                 <tr>
-                  <th colSpan="3">
+                  <th colSpan="3" className="px-0 pb-0">
                     <button
                       type="button"
                       className="button ~neutral !normal px-3 py-2 float-right"
