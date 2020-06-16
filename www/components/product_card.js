@@ -16,7 +16,7 @@ function ProductCard({ product, setCart }) {
                 src={p.DefaultImage.URL + "?options=75,quality=low"}
                 data-src={p.DefaultImage.URL + "?options=400"}
                 alt="slika proizvoda"
-                className="lazyload absolute h-full w-full object-contain"
+                className="lazyload absolute w-full h-full object-contain"
               />
             </div>
             <h3 className="subheading">{p.Name}</h3>

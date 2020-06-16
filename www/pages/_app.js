@@ -11,17 +11,24 @@ import "../public/css/styles.css";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
+  const [query, setQuery] = useState("");
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
 
   Router.events.on("routeChangeStart", () => {
     setCartOpened(false);
     setMenuOpened(false);
+    setQuery("");
   });
 
   return (
     <div className="bg-gray-100">
-      <Header setCartOpened={setCartOpened} setMenuOpened={setMenuOpened} />
+      <Header
+        query={query}
+        setQuery={setQuery}
+        setCartOpened={setCartOpened}
+        setMenuOpened={setMenuOpened}
+      />
       <Component
         {...pageProps}
         cart={cart}

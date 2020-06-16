@@ -1,10 +1,29 @@
-import { Menu, ShoppingCart } from "react-feather";
+import { useState, useEffect } from "react";
+import { Menu, ShoppingCart, ArrowRight, X } from "react-feather";
 import Link from "next/link";
+import { getPrice, getReductedPrice } from "../helpers/price";
 
-function Header({ setCartOpened, setMenuOpened }) {
+function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    if (!query) {
+      setResults([]);
+      return;
+    }
+
+    (async function () {
+      const data = await fetch(
+        `https://api.amadeus2.hr/search/?query=${encodeURIComponent(query)}&limit=3`
+      );
+      const products = await data.json();
+      setResults(products);
+    })();
+  }, [query]);
+
   return (
     <header className="container mx-auto sticky top-0 z-10 p-4">
-      <div className="card ~neutral !low flex justify-between align-center">
+      <div className="card ~neutral !low flex justify-between align-center overflow-visible">
         <button
           type="button"
           className="button ~info !normal px-3 py-2"
@@ -13,17 +32,77 @@ function Header({ setCartOpened, setMenuOpened }) {
           <Menu />
           <span className="text-lg ml-2 lg:block hidden">Kategorije</span>
         </button>
-        <div className="flex items-center">
-          <Link href="/">
-            <a className="w-40 h-8 mr-4">
-              <img src="/img/logo.png" alt="Amadeus II" />
-            </a>
-          </Link>
-          <input
-            type="search"
-            className="input ~neutral !normal w-auto px-3 text-xl"
-            placeholder="Pretraži proizvode"
-          />
+        <div className="relative">
+          <div className="flex items-center">
+            <Link href="/">
+              <a className="w-40 h-8 mr-4">
+                <img src="/img/logo.png" alt="Amadeus II" />
+              </a>
+            </Link>
+            <input
+              type="search"
+              className="input ~neutral !normal w-auto px-3 text-xl"
+              placeholder="Pretraži proizvode"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <div
+            className="card ~neutral !low w-full p-0 mt-1 absolute"
+            style={{ visibility: results.length ? "visible" : "hidden" }}
+          >
+            <table className="table">
+              <tbody>
+                {results.map((p) => {
+                  return (
+                    <tr key={p.ID}>
+                      <td>
+                        <Link href="/[category]/[slug]" as={"/" + p.URL}>
+                          <a>
+                            <div className="relative w-16 h-16">
+                              <img
+                                src={p.DefaultImage.URL + "?options=25,quality=low"}
+                                data-src={p.DefaultImage.URL + "?options=64,quality=low"}
+                                alt="slika proizvoda"
+                                className="lazyload absolute w-full h-full object-contain"
+                              />
+                            </div>
+                          </a>
+                        </Link>
+                      </td>
+                      <td>
+                        <Link href="/[category]/[slug]" as={"/" + p.URL}>
+                          <a>
+                            <h3>{p.Name}</h3>
+                          </a>
+                        </Link>
+                      </td>
+                      <td>
+                        <h4 className={`${p.HasReduction ? "line-through" : "font-bold"}`}>
+                          {getPrice(p.Price)}
+                        </h4>
+                        {p.HasReduction && (
+                          <h4 className="font-bold whitespace-no-wrap">
+                            {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
+                          </h4>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colSpan="3">
+                    <button type="button" className="button ~neutral !normal px-3 py-2 float-right">
+                      <span className="text-lg mr-2">Prikaži više rezultata</span>
+                      <ArrowRight />
+                    </button>
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
         <button
           type="button"
