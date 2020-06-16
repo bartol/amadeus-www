@@ -898,8 +898,13 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("query")
 	results := fuzzy.RankFindNormalizedFold(query, productsIndex)
+	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 	products := []productLite{}
-	for _, r := range results {
+	for i, r := range results {
+		if i == limit && limit != 0 {
+			break
+		}
+
 		products = append(products, productsLiteSlice[r.OriginalIndex])
 	}
 
