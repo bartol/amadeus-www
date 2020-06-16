@@ -32,7 +32,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
           <Menu />
           <span className="text-lg ml-2 lg:block hidden">Kategorije</span>
         </button>
-        <div className="relative">
+        <div className="relative px-4">
           <div className="flex items-center">
             <Link href="/">
               <a className="w-40 h-8 mr-4">
@@ -48,7 +48,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
             />
           </div>
           <div
-            className="card ~neutral !low w-full p-0 mt-1 absolute"
+            className="card ~neutral !low absolute w-full -mx-4 mt-1"
             style={{ visibility: results.length ? "visible" : "hidden" }}
           >
             <table className="table">
