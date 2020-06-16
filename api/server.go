@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -12,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sahilm/fuzzy"
+	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
@@ -173,10 +172,9 @@ type cachedImage struct {
 	ContentType string
 }
 
-type productsLite []productLite
-
 var productsMap = make(map[string]product)
-var productsLiteSlice productsLite
+var productsLiteSlice []productLite
+var productsIndex []string
 var categoriesMap = make(map[string]categoryWithProducts)
 var categoriesSlice []categoryWithProducts
 var categoriesTree []categoryTree
@@ -256,7 +254,8 @@ func reindex() error {
 	}
 
 	productsMap = make(map[string]product)
-	productsLiteSlice = productsLite{}
+	productsLiteSlice = []productLite{}
+	productsIndex = []string{}
 	categoriesMap = make(map[string]categoryWithProducts)
 	categoriesSlice = []categoryWithProducts{}
 	categoriesTree = []categoryTree{}
@@ -457,6 +456,8 @@ func reindex() error {
 		}
 
 		productsLiteSlice = append(productsLiteSlice, productLite)
+
+		productsIndex = append(productsIndex, p.Name)
 	}
 
 	for _, c := range categoriesData.Categories {
@@ -894,32 +895,24 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (p productsLite) String(i int) string {
-	return normalize(p[i].Name)
-}
-
-func (p productsLite) Len() int {
-	return len(p)
-}
-
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("query")
-	results := fuzzy.FindFrom(query, productsLiteSlice)
+	results := fuzzy.RankFindNormalizedFold(query, productsIndex)
+	products := []productLite{}
 	for _, r := range results {
-		fmt.Fprintln(w, productsLiteSlice[r.Index].Name)
+		products = append(products, productsLiteSlice[r.OriginalIndex])
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	err := json.NewEncoder(w).Encode(products)
+	if err != nil {
+		w.Write([]byte(err.Error()))
 	}
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("404"))
-}
-
-func normalize(str string) string {
-	str = strings.ReplaceAll(str, "č", "čc")
-	str = strings.ReplaceAll(str, "ć", "ćc")
-	str = strings.ReplaceAll(str, "š", "šs")
-	str = strings.ReplaceAll(str, "đ", "đd")
-	str = strings.ReplaceAll(str, "ž", "žz")
-	return str
 }
