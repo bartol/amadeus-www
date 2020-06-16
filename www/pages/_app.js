@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Router from "next/router";
+import NProgress from "nprogress";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import "lazysizes";
 import "rc-drawer/assets/index.css";
+import "nprogress/nprogress.css";
 import "a17t";
 import "../public/css/styles.css";
 
@@ -19,7 +21,10 @@ function App({ Component, pageProps }) {
     setCartOpened(false);
     setMenuOpened(false);
     setQuery("");
+    NProgress.start();
   });
+  Router.events.on("routeChangeComplete", () => NProgress.done());
+  Router.events.on("routeChangeError", () => NProgress.done());
 
   return (
     <div className="bg-gray-100">
