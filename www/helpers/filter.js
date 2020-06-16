@@ -1,3 +1,5 @@
+import { getReductedPrice } from "./price";
+
 function getFilters(list) {
   const filters = {
     categories: [],
@@ -46,4 +48,43 @@ function getFilteredList(list, filters) {
   return filtered;
 }
 
-export { getFilters, getFilteredList };
+function getSortedList(list, sort) {
+  switch (sort) {
+    case "a-z":
+      return [...list].sort((a, b) => {
+        if (a.Name.toLowerCase() > b.Name.toLowerCase()) return 1;
+        if (a.Name.toLowerCase() < b.Name.toLowerCase()) return -1;
+        return 0;
+      });
+    case "z-a":
+      return [...list].sort((a, b) => {
+        if (a.Name.toLowerCase() > b.Name.toLowerCase()) return -1;
+        if (a.Name.toLowerCase() < b.Name.toLowerCase()) return 1;
+        return 0;
+      });
+    case "min-max":
+      return [...list].sort((a, b) => {
+        const aPrice = a.HasReduction
+          ? getReductedPrice(a.Price, a.Reduction, a.ReductionType, true)
+          : a.Price;
+        const bPrice = b.HasReduction
+          ? getReductedPrice(b.Price, b.Reduction, b.ReductionType, true)
+          : b.Price;
+        return aPrice - bPrice;
+      });
+    case "max-min":
+      return [...list].sort((a, b) => {
+        const aPrice = a.HasReduction
+          ? getReductedPrice(a.Price, a.Reduction, a.ReductionType, true)
+          : a.Price;
+        const bPrice = b.HasReduction
+          ? getReductedPrice(b.Price, b.Reduction, b.ReductionType, true)
+          : b.Price;
+        return bPrice - aPrice;
+      });
+    default:
+      return list;
+  }
+}
+
+export { getFilters, getFilteredList, getSortedList };
