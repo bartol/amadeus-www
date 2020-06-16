@@ -17,14 +17,15 @@ function App({ Component, pageProps }) {
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
 
-  Router.events.on("routeChangeStart", () => {
+  const cleanup = () => {
     setCartOpened(false);
     setMenuOpened(false);
     setQuery("");
-    NProgress.start();
-  });
-  Router.events.on("routeChangeComplete", () => NProgress.done());
-  Router.events.on("routeChangeError", () => NProgress.done());
+    NProgress.done();
+  };
+  Router.events.on("routeChangeStart", () => NProgress.start());
+  Router.events.on("routeChangeComplete", () => cleanup());
+  Router.events.on("routeChangeError", () => cleanup());
 
   return (
     <div className="bg-gray-100">
@@ -51,7 +52,6 @@ export default App;
 
 /*
 TODO:
-	sortiranje
 	filters spacing and overflow
 	images in popular categories cards
 	footer (links, legal docs in md)
@@ -59,5 +59,7 @@ TODO:
 	front page (google maps, contact, contact form)
 	product page (image gallery, similar products)
 	checkout
+	alerts (add to cart...) left bottom corner
 	category tree styles
+	getCheckoutPrice (to replace if p.HasReduction...)
 */

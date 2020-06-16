@@ -1,7 +1,8 @@
 import ProductCard from "./product_card";
-import { getFilters, getFilteredList } from "../helpers/filter";
+import { getFilters, getFilteredList, getSortedList } from "../helpers/filter";
 import { useState, useEffect } from "react";
 import { ArrowDown } from "react-feather";
+import Router from "next/router";
 
 function ProductList({ products, setCart, showCategories }) {
   if (!products || !products.length) {
@@ -19,6 +20,10 @@ function ProductList({ products, setCart, showCategories }) {
   });
   const [limit, setLimit] = useState(pageSize);
   const [filteredList, setFilteredList] = useState(getFilteredList(products, selected));
+  const [sort, setSort] = useState("");
+
+  Router.events.on("routeChangeComplete", () => setSort(""));
+  Router.events.on("routeChangeError", () => setSort(""));
 
   useEffect(() => {
     setFilteredList(getFilteredList(products, selected));
@@ -28,6 +33,18 @@ function ProductList({ products, setCart, showCategories }) {
   return (
     <div className="flex lg:flex-row flex-col">
       <div className="xl:w-1/6 lg:w-1/4 mr-5 overflow-hidden">
+        <div>
+          <h3 className="subheading">Sortiraj po</h3>
+          <div className="select !normal m-1">
+            <select value={sort} defaultValue="" onChange={(e) => setSort(e.target.value)}>
+              <option value="">Relevantnosti</option>
+              <option value="a-z">Nazivu: A do Z</option>
+              <option value="z-a">Nazivu: Z do A</option>
+              <option value="min-max">Cijeni: niža prema višoj</option>
+              <option value="max-min">Cijeni: viša prema nižoj</option>
+            </select>
+          </div>
+        </div>
         {filters.categories.length > 0 && showCategories && (
           <div>
             <h3 className="subheading">Kategorije</h3>
@@ -118,9 +135,11 @@ function ProductList({ products, setCart, showCategories }) {
       </div>
       <div className="xl:w-5/6 lg:w-3/4">
         <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
-          {filteredList.slice(0, limit).map((p) => {
-            return <ProductCard product={p} key={p.ID} setCart={setCart} />;
-          })}
+          {getSortedList(filteredList, sort)
+            .slice(0, limit)
+            .map((p) => {
+              return <ProductCard product={p} key={p.ID} setCart={setCart} />;
+            })}
         </ul>
         <div className="flex justify-center items-center flex-wrap mt-10">
           <span className="mx-5 my-2">
