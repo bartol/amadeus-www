@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Router } from "next/router";
+import Router from "next/router";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
 import Header from "../components/header";

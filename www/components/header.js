@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, ShoppingCart, ArrowRight, X } from "react-feather";
 import Link from "next/link";
 import { getPrice, getReductedPrice } from "../helpers/price";
+import Router from "next/router";
 
 function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
   const [results, setResults] = useState([]);
@@ -94,7 +95,11 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
               <tfoot>
                 <tr>
                   <th colSpan="3">
-                    <button type="button" className="button ~neutral !normal px-3 py-2 float-right">
+                    <button
+                      type="button"
+                      className="button ~neutral !normal px-3 py-2 float-right"
+                      onClick={() => Router.push(`/search?q=${encodeURIComponent(query)}`)}
+                    >
                       <span className="text-lg mr-2">Prikaži više rezultata</span>
                       <ArrowRight />
                     </button>
