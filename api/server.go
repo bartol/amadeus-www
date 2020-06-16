@@ -895,7 +895,7 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p productsLite) String(i int) string {
-	return p[i].Name
+	return normalize(p[i].Name)
 }
 
 func (p productsLite) Len() int {
@@ -913,4 +913,13 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("404"))
+}
+
+func normalize(str string) string {
+	str = strings.ReplaceAll(str, "č", "čc")
+	str = strings.ReplaceAll(str, "ć", "ćc")
+	str = strings.ReplaceAll(str, "š", "šs")
+	str = strings.ReplaceAll(str, "đ", "đd")
+	str = strings.ReplaceAll(str, "ž", "žz")
+	return str
 }
