@@ -7,7 +7,7 @@ function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened 
   return (
     <div className="container mx-auto px-4">
       <Head>
-        <title>Amadeus II shop</title>
+        <title>Amadeus II d.o.o. shop</title>
       </Head>
       <h2 className="heading text-4xl mt-12 mb-5">Popularne kategorije</h2>
       <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
