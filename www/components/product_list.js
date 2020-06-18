@@ -20,8 +20,9 @@ function ProductList({ products, setCart, showCategories }) {
   });
   const [limit, setLimit] = useState(pageSize);
   const [filteredList, setFilteredList] = useState(getFilteredList(products, selected));
-  const [sort, setSort] = useState("");
+  const [sort, setSort] = useState("/");
 
+  useEffect(() => setSort(""), []);
   Router.events.on("routeChangeComplete", () => setSort(""));
   Router.events.on("routeChangeError", () => setSort(""));
 
@@ -36,7 +37,7 @@ function ProductList({ products, setCart, showCategories }) {
         <div>
           <h3 className="subheading">Sortiraj po</h3>
           <div className="select !normal m-1">
-            <select value={sort} defaultValue="" onChange={(e) => setSort(e.target.value)}>
+            <select value={sort} onChange={(e) => setSort(e.target.value)}>
               <option value="">Relevantnosti</option>
               <option value="a-z">Nazivu: A do Z</option>
               <option value="z-a">Nazivu: Z do A</option>
