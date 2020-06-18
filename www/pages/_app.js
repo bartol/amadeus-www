@@ -60,6 +60,7 @@ TODO:
 	product page (image gallery, similar products)
 	checkout
 	alerts (add to cart...) left bottom corner
+	mobile design
 	category tree styles
 	getCheckoutPrice (to replace if p.HasReduction...)
 */
