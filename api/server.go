@@ -319,6 +319,7 @@ func reindex() error {
 		}
 
 		categories := []category{}
+		flatCategories := []string{}
 		for _, categoryFromAssociations := range p.Associations.Categories {
 			for _, categoryFromData := range categoriesData.Categories {
 				if categoryFromAssociations.ID == strconv.Itoa(categoryFromData.ID) {
@@ -328,6 +329,7 @@ func reindex() error {
 					}
 					if category.Slug != "amadeus-ii-shop" {
 						categories = append(categories, category)
+						flatCategories = append(flatCategories, categoryFromData.Name)
 					}
 					break
 				}
@@ -457,7 +459,9 @@ func reindex() error {
 
 		productsLiteSlice = append(productsLiteSlice, productLite)
 
-		productsIndex = append(productsIndex, p.Name)
+		productIndex := p.Name + " - " + strings.Join(flatCategories[:], " - ")
+
+		productsIndex = append(productsIndex, productIndex)
 	}
 
 	for _, c := range categoriesData.Categories {
