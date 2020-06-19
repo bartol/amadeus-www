@@ -1,11 +1,19 @@
 import ProductList from "../components/product_list";
 import Menu from "../components/menu";
 
-function Search({ query, results, categoriesTree, setCart, menuOpened, setMenuOpened }) {
+function Search({
+  query,
+  results,
+  categoriesTree,
+  setCart,
+  menuOpened,
+  setMenuOpened,
+  dispatchAlert,
+}) {
   return (
     <div className="container mx-auto px-4">
       <h1 className="heading text-4xl mt-12 mb-5">Rezultati pretrage "{query}"</h1>
-      <ProductList products={results} setCart={setCart} />
+      <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );

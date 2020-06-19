@@ -3,7 +3,7 @@ import Link from "next/link";
 import ProductList from "../components/product_list.js";
 import Menu from "../components/menu";
 
-function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened }) {
+function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened, dispatchAlert }) {
   return (
     <div className="container mx-auto px-4">
       <Head>
@@ -33,6 +33,7 @@ function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened 
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
         setCart={setCart}
+        dispatchAlert={dispatchAlert}
       />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
