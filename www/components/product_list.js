@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ArrowDown } from "react-feather";
 import Router from "next/router";
 
-function ProductList({ products, setCart, hideCategories }) {
+function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
   if (!products || !products.length) {
     return <div>no products</div>;
   }
@@ -139,7 +139,14 @@ function ProductList({ products, setCart, hideCategories }) {
           {getSortedList(filteredList, sort)
             .slice(0, limit)
             .map((p) => {
-              return <ProductCard product={p} key={p.ID} setCart={setCart} />;
+              return (
+                <ProductCard
+                  product={p}
+                  setCart={setCart}
+                  dispatchAlert={dispatchAlert}
+                  key={p.ID}
+                />
+              );
             })}
         </ul>
         <div className="flex justify-center items-center flex-wrap mt-10">

@@ -3,7 +3,7 @@ import { getPrice, getReductedPrice, getReduction } from "../helpers/price";
 import { cartAdd } from "../helpers/cart";
 import { ShoppingCart } from "react-feather";
 
-function ProductCard({ product, setCart }) {
+function ProductCard({ product, setCart, dispatchAlert }) {
   const p = product;
 
   return (
@@ -45,7 +45,10 @@ function ProductCard({ product, setCart }) {
           {p.OutOfStock || (
             <button
               type="button"
-              onClick={() => cartAdd(setCart, p)}
+              onClick={() => {
+                cartAdd(setCart, p);
+                dispatchAlert("Proizvod dodan u košaricu");
+              }}
               className="button ~positive !normal px-3 py-2 ml-4"
             >
               <ShoppingCart />
