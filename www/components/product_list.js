@@ -35,7 +35,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
     <div className="flex lg:flex-row flex-col">
       <div className="xl:w-1/6 lg:w-1/4 mr-5 overflow-hidden">
         <div>
-          <h3 className="subheading">Sortiraj po</h3>
+          <h3 className="subheading mx-1 mt-1 mb-2">Sortiraj po</h3>
           <div className="select !normal m-1">
             <select value={sort} onChange={(e) => setSort(e.target.value)}>
               <option value="">Relevantnosti</option>
@@ -48,7 +48,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
         </div>
         {filters.categories.length > 0 && !hideCategories && (
           <div>
-            <h3 className="subheading">Kategorije</h3>
+            <h3 className="subheading mx-1 mt-6 mb-2">Kategorije</h3>
             <div>
               {filters.categories.map((c) => {
                 return (
@@ -75,7 +75,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
         )}
         {filters.features.length > 0 && (
           <div>
-            <h3 className="subheading">Značajke</h3>
+            <h3 className="subheading mx-1 mt-6 mb-2">Značajke</h3>
             <div>
               {filters.features.map((f) => {
                 return (
