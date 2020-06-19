@@ -70,7 +70,6 @@ export default App;
 
 /*
 TODO:
-	filters spacing and overflow
 	images in popular categories cards
 	footer (links, legal docs in md)
 	front page (google maps, contact, contact form)
