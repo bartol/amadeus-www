@@ -46,6 +46,9 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
               placeholder="Pretraži proizvode"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyUp={(e) =>
+                e.keyCode === 13 && Router.push(`/search?q=${encodeURIComponent(query)}`)
+              }
             />
           </div>
           <div
