@@ -33,7 +33,6 @@ function Index({ categories, categoriesTree, setCart, menuOpened, setMenuOpened 
       <ProductList
         products={categories.find((c) => c.Slug === "amadeus-ii-shop").Products}
         setCart={setCart}
-        showCategories
       />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
