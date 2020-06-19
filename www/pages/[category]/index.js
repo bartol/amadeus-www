@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import ProductList from "../../components/product_list";
 import Menu from "../../components/menu";
 
-function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened }) {
+function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened, dispatchAlert }) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
