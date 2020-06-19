@@ -8,10 +8,17 @@ function CartRow({ product, setCart }) {
 
   return (
     <tr>
-      <td className="w-20 h-20">
+      <td>
         <Link href="/[category]/[slug]" as={"/" + p.URL}>
           <a>
-            <img src={p.DefaultImage.URL} alt="slika proizvoda" />
+            <div className="relative w-16 h-16">
+              <img
+                src={p.DefaultImage.URL + "?options=25,quality=low"}
+                data-src={p.DefaultImage.URL + "?options=64,quality=low"}
+                alt="slika proizvoda"
+                className="lazyload absolute w-full h-full object-contain"
+              />
+            </div>
           </a>
         </Link>
       </td>
