@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ArrowDown } from "react-feather";
 import Router from "next/router";
 
-function ProductList({ products, setCart, showCategories }) {
+function ProductList({ products, setCart, hideCategories }) {
   if (!products || !products.length) {
     return <div>no products</div>;
   }
@@ -46,7 +46,7 @@ function ProductList({ products, setCart, showCategories }) {
             </select>
           </div>
         </div>
-        {filters.categories.length > 0 && showCategories && (
+        {filters.categories.length > 0 && !hideCategories && (
           <div>
             <h3 className="subheading">Kategorije</h3>
             <div>

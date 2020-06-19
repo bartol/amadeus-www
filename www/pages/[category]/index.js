@@ -10,8 +10,8 @@ function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="heading text-4xl mt-12 mb-5">{category.Name}</h1>
-      <ProductList products={category.Products} setCart={setCart} />
+      <h1 className="heading text-4xl mt-12 mb-5">Proizvodi u kategoriji "{category.Name}"</h1>
+      <ProductList products={category.Products} setCart={setCart} hideCategories />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );
