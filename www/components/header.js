@@ -24,7 +24,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
 
   return (
     <header className="container mx-auto sticky top-0 z-10 p-4">
-      <div className="card ~neutral !low flex justify-between align-center overflow-visible">
+      <div className="card ~neutral !low flex justify-between items-center overflow-visible">
         <button
           type="button"
           className="button ~info !normal px-3 py-2"
@@ -40,16 +40,30 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
                 <img src="/img/logo.png" alt="Amadeus II" />
               </a>
             </Link>
-            <input
-              type="search"
-              className="input ~neutral !normal w-auto px-3 text-xl"
-              placeholder="Pretraži proizvode"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyUp={(e) =>
-                e.keyCode === 13 && Router.push(`/search?q=${encodeURIComponent(query)}`)
-              }
-            />
+            <div className="relative">
+              <input
+                type="search"
+                className="input ~neutral !normal w-auto px-3 text-xl"
+                placeholder="Pretraži proizvode"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyUp={(e) =>
+                  e.keyCode === 13 && Router.push(`/search?q=${encodeURIComponent(query)}`)
+                }
+              />
+              <div
+                className="absolute inset-y-0 right-0 flex items-center mr-2"
+                style={{ visibility: query ? "visible" : "hidden" }}
+              >
+                <button
+                  type="button"
+                  className="button ~neutral !normal p-1"
+                  onClick={() => setQuery("")}
+                >
+                  <X />
+                </button>
+              </div>
+            </div>
           </div>
           <div
             className="card ~neutral !low absolute w-full -mx-4 mt-1"
