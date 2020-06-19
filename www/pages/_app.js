@@ -55,7 +55,6 @@ TODO:
 	filters spacing and overflow
 	images in popular categories cards
 	footer (links, legal docs in md)
-	search (suggestions popup and full interface)
 	front page (google maps, contact, contact form)
 	product page (image gallery, similar products)
 	checkout
