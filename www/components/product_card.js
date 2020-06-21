@@ -47,7 +47,7 @@ function ProductCard({ product, setCart, dispatchAlert }) {
               type="button"
               onClick={() => {
                 cartAdd(setCart, p);
-                dispatchAlert("Proizvod dodan u košaricu");
+                dispatchAlert("Proizvod dodan u košaricu", "positive", ShoppingCart);
               }}
               className="button ~positive !normal px-3 py-2 ml-4"
             >

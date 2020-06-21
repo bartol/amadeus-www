@@ -5,12 +5,12 @@ import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import Alert from "../components/alert";
 import "lazysizes";
 import "rc-drawer/assets/index.css";
 import "nprogress/nprogress.css";
 import "a17t";
 import "../public/css/styles.css";
-import Alert from "../components/alert";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
@@ -29,9 +29,9 @@ function App({ Component, pageProps }) {
   Router.events.on("routeChangeComplete", () => cleanup());
   Router.events.on("routeChangeError", () => cleanup());
 
-  const dispatchAlert = (message) => {
-    const id = alerts.length > 0 ? alerts[alerts.length - 1].id++ : 0;
-    setAlerts([...alerts, { id, message }]);
+  const dispatchAlert = (message, colorClass, Icon) => {
+    const id = alerts.length > 0 ? alerts[alerts.length - 1].id + 1 : 0;
+    setAlerts([...alerts, { id, message, colorClass, Icon }]);
   };
   const removeAlert = (id) => {
     setAlerts(alerts.filter((a) => a.id != id));
@@ -58,7 +58,16 @@ function App({ Component, pageProps }) {
         {alerts
           .sort((a, b) => a.id - b.id)
           .map((a) => {
-            return <Alert message={a.message} id={a.id} removeAlert={removeAlert} key={a.id} />;
+            return (
+              <Alert
+                message={a.message}
+                id={a.id}
+                colorClass={a.colorClass}
+                Icon={a.Icon}
+                removeAlert={removeAlert}
+                key={a.id}
+              />
+            );
           })}
       </ul>
       <Cart cart={cart} setCart={setCart} cartOpened={cartOpened} setCartOpened={setCartOpened} />
@@ -70,10 +79,10 @@ export default App;
 
 /*
 TODO:
-	images in popular categories cards
-	footer (links, legal docs in md)
 	front page (google maps, contact, contact form)
 	product page (image gallery, similar products)
+	images in popular categories cards
+	footer (links, legal docs in md)
 	checkout
 	mobile design
 	category tree styles
