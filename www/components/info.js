@@ -9,7 +9,7 @@ function Info({ h1Heading, dispatchAlert }) {
     <div className="flex mt-12">
       <div className="relative w-1/2" style={{ paddingBottom: "50%" }}>
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=17.43017435073853%2C43.05097977136855%2C17.44060277938843%2C43.05585217535902&amp;marker=43.0534178%2C17.4353940"
+          src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;q=Amadeus+II+d.o.o.%2c+Ulica+Vladimira+Nazora%2c+Plo%c4%8de&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed"
           className="absolute w-full h-full"
           style={{ filter: "grayscale(1) contrast(1.2) opacity(0.4)" }}
         ></iframe>
