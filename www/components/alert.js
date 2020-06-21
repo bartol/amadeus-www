@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { ShoppingCart } from "react-feather";
 
-function Alert({ message, id, removeAlert }) {
+function Alert({ message, id, colorClass, Icon, removeAlert }) {
   const total = 5000;
   const step = 100;
   const [timer, setTimer] = useState(total);
@@ -19,13 +18,13 @@ function Alert({ message, id, removeAlert }) {
       <button
         type="button"
         onClick={() => removeAlert(id)}
-        className="card ~positive !normal flex items-center"
+        className={`card ~${colorClass} !normal flex items-center`}
         style={{
-          color: "var(--color-positive-normal-content)",
-          backgroundColor: "var(--color-positive-normal-fill)",
+          color: `var(--color-${colorClass}-normal-content)`,
+          backgroundColor: `var(--color-${colorClass}-normal-fill)`,
         }}
       >
-        <ShoppingCart />
+        <Icon />
         <span className="text-lg ml-3">{message}</span>
       </button>
     </li>
