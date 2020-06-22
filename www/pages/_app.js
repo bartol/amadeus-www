@@ -86,7 +86,6 @@ TODO:
 	front page (google maps, contact, contact form)
 	product page (image gallery, similar products)
 	images in popular categories cards
-	footer (links, legal docs in md)
 	checkout
 	mobile design
 	category tree styles

@@ -7,8 +7,8 @@ function Footer({ dispatchAlert }) {
 
   return (
     <footer className="container mx-auto p-4 mt-12">
-      <div className="card ~neutral !low flex justify-around">
-        <div className="flex flex-col items-center">
+      <div className="card ~neutral !low flex justify-between">
+        <div className="flex flex-col items-center mx-2">
           <div className="flex flex-col items-start">
             <h3 className="subheading text-2xl mb-2">Prijavi se na newsletter</h3>
             <input
@@ -37,8 +37,8 @@ function Footer({ dispatchAlert }) {
             </Link>
           </div>
         </div>
-        <div>
-          <h3 className="subheading text-2xl mx-2">Informacije</h3>
+        <div className="mx-2">
+          <h3 className="subheading text-2xl mx-2 mb-1">Informacije</h3>
           <ul>
             <li>
               <Link href="/info/dostava">
@@ -77,8 +77,8 @@ function Footer({ dispatchAlert }) {
             </li>
           </ul>
         </div>
-        <div>
-          <h3 className="subheading text-2xl mx-2 mb-px">Kontaktirajte nas</h3>
+        <div className="mx-2">
+          <h3 className="subheading text-2xl mx-2 mb-1">Kontaktirajte nas</h3>
           <ul>
             <li>
               <a href="mailto:amadeus@pioneer.hr" className="portal">
