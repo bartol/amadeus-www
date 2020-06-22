@@ -91,7 +91,7 @@ function Footer({ dispatchAlert }) {
               </a>
             </li>
             <li>
-              <address>
+              <address className="not-italic">
                 <a href="https://goo.gl/maps/74YCcjpq3PBWpKZK9" target="_blank" className="portal">
                   <MapPin /> <span className="ml-2">Vladimira Nazora 45 Ploče</span>
                 </a>
