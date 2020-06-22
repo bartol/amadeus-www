@@ -83,7 +83,7 @@ export default App;
 
 /*
 TODO:
-	front page (google maps, contact, contact form)
+	contact form backend, newsletter form backend
 	product page (image gallery, similar products)
 	images in popular categories cards
 	checkout
