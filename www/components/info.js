@@ -45,7 +45,7 @@ function Info({ h1Heading, dispatchAlert }) {
               }}
             >
               <Send />
-              <span className="text-lg ml-2 lg:block hidden">Pošalji</span>
+              <span className="text-lg ml-2">Pošalji</span>
             </button>
           </div>
         </div>

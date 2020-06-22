@@ -57,7 +57,7 @@ function App({ Component, pageProps }) {
         setMenuOpened={setMenuOpened}
         dispatchAlert={dispatchAlert}
       />
-      <Footer />
+      <Footer dispatchAlert={dispatchAlert} />
       <ul className="fixed bottom-0 ml-5 mb-5">
         {alerts
           .sort((a, b) => a.id - b.id)
