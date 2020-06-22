@@ -28,7 +28,7 @@ function SearchBox({ query, setQuery }) {
       <div className="flex items-center">
         <Link href="/">
           <a className="w-40 h-8 mr-4">
-            <img src="/img/logo.png" alt="Amadeus II" />
+            <img src="/img/logo.png" alt="Amadeus II d.o.o." />
           </a>
         </Link>
         <div className="relative">

@@ -32,13 +32,13 @@ function Footer({ dispatchAlert }) {
           <div className="w-56 mt-8">
             <Link href="/">
               <a>
-                <img src="/img/logo.png" alt="Amadeus II" />
+                <img src="/img/logo.png" alt="Amadeus II d.o.o." />
               </a>
             </Link>
           </div>
         </div>
         <div>
-          <h3 className="subheading text-2xl mb-1">Informacije</h3>
+          <h3 className="subheading text-2xl mx-2">Informacije</h3>
           <ul>
             <li>
               <Link href="/info/dostava">
@@ -78,7 +78,7 @@ function Footer({ dispatchAlert }) {
           </ul>
         </div>
         <div>
-          <h3 className="subheading text-2xl mb-1">Kontaktirajte nas</h3>
+          <h3 className="subheading text-2xl mx-2 mb-px">Kontaktirajte nas</h3>
           <ul>
             <li>
               <a href="mailto:amadeus@pioneer.hr" className="portal">
