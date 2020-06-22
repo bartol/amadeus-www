@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Router from "next/router";
-import NProgress, { remove } from "nprogress";
+import NProgress from "nprogress";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
 import Header from "../components/header";
@@ -36,6 +36,10 @@ function App({ Component, pageProps }) {
   const removeAlert = (id) => {
     setAlerts(alerts.filter((a) => a.id != id));
   };
+
+  useEffect(() => {
+    document.body.classList.add("bg-gray-100");
+  }, []);
 
   return (
     <div className="bg-gray-100">
@@ -86,4 +90,6 @@ TODO:
 	checkout
 	mobile design
 	category tree styles
+	seo (social images, structured data...)
+	breadcrumbs
 */
