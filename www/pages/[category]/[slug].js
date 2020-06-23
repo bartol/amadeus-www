@@ -71,6 +71,7 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
                   }
                 }}
                 className={`mr-1 ${selectedSlide === index ? "border-4 rounded" : "px-1"}`}
+                key={img.URL}
               >
                 <div className="relative w-16 h-16 bg-white">
                   <img
