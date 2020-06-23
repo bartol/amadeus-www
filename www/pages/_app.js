@@ -8,6 +8,7 @@ import Footer from "../components/footer";
 import Alert from "../components/alert";
 import "lazysizes";
 import "rc-drawer/assets/index.css";
+import "glider-js/glider.min.css";
 import "nprogress/nprogress.css";
 import "a17t";
 import "../public/css/styles.css";
@@ -90,5 +91,4 @@ TODO:
 	mobile design
 	category tree styles
 	seo (social images, structured data...)
-	breadcrumbs
 */

@@ -14,7 +14,7 @@ function CartRow({ product, setCart }) {
             <div className="relative w-16 h-16">
               <img
                 src={p.DefaultImage.URL + "?options=25,quality=low"}
-                data-src={p.DefaultImage.URL + "?options=64,quality=low"}
+                data-src={p.DefaultImage.URL + "?options=80"}
                 alt="slika proizvoda"
                 className="lazyload absolute w-full h-full object-contain"
               />
