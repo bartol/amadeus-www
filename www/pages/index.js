@@ -1,10 +1,8 @@
-import Head from "next/head";
 import Link from "next/link";
 import ProductList from "../components/product_list.js";
 import Menu from "../components/menu";
 import Info from "../components/info.js";
-// src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;q=Amadeus+II+d.o.o.%2c+Ulica+Vladimira+Nazora%2c+Plo%c4%8de&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed"
-// src="https://www.openstreetmap.org/export/embed.html?bbox=17.43017435073853%2C43.05097977136855%2C17.44060277938843%2C43.05585217535902&amp;layer=mapnik&amp;marker=43.05341602175221%2C17.435388565063477#map=18"
+import SEO from "../components/seo.js";
 
 function Index({
   products,
@@ -17,9 +15,7 @@ function Index({
 }) {
   return (
     <div className="container mx-auto px-4">
-      <Head>
-        <title>Amadeus II d.o.o. shop</title>
-      </Head>
+      <SEO title="Amadeus II d.o.o. shop" />
       <Info h1Heading dispatchAlert={dispatchAlert} />
       <h2 className="heading text-4xl mt-12 mb-5">Popularne kategorije</h2>
       <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">

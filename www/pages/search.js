@@ -1,5 +1,6 @@
 import ProductList from "../components/product_list";
 import Menu from "../components/menu";
+import SEO from "../components/seo.js";
 
 function Search({
   query,
@@ -12,6 +13,7 @@ function Search({
 }) {
   return (
     <div className="container mx-auto px-4">
+      <SEO title={`Rezultati pretrage "${query}" | Amadeus II d.o.o. shop`} />
       <h1 className="heading text-4xl mt-12 mb-5">Rezultati pretrage "{query}"</h1>
       <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
