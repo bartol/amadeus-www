@@ -46,7 +46,7 @@ function CartRow({ product, setCart }) {
           value={p.Quantity}
           onChange={(e) => cartSetQuantity(setCart, p, e.target.value | 0)}
           min="1"
-          className="input w-16"
+          className="input ~neutral !normal w-16"
         />
       </td>
       <td>
