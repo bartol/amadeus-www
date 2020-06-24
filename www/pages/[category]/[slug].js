@@ -60,17 +60,19 @@ function Product({
           <div className="relative" style={{ paddingBottom: "100%" }}>
             <div className="card ~neutral !low absolute w-full h-full">
               <div ref={gliderContainerRef} className="glider-wrap h-full">
-                {p.Images.map((i) => {
-                  return (
-                    <img
-                      src={i.URL + "?options=150,quality=low"}
-                      data-src={i.URL + "?options=600"}
-                      alt="slika proizvoda"
-                      className="lazyload w-full h-full object-contain"
-                      key={i.URL}
-                    />
-                  );
-                })}
+                <div className="glider-track h-full">
+                  {p.Images.map((i) => {
+                    return (
+                      <img
+                        src={i.URL + "?options=150,quality=low"}
+                        data-src={i.URL + "?options=600"}
+                        alt="slika proizvoda"
+                        className="lazyload w-full h-full object-contain"
+                        key={i.URL}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
