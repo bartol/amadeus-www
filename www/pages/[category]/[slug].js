@@ -1,10 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { getPrice, getReductedPrice, getReduction } from "../../helpers/price";
+import { cartAdd } from "../../helpers/cart";
+import { ShoppingCart } from "react-feather";
 import Menu from "../../components/menu";
 import Info from "../../components/info";
 import Glider from "glider-js";
 
-function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchAlert }) {
+function Product({ product, categoriesTree, setCart, menuOpened, setMenuOpened, dispatchAlert }) {
   const p = product;
 
   const router = useRouter();
@@ -30,6 +33,8 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
       setSelectedSlide(e.detail.slide);
     });
   }, []);
+
+  const [quantity, setQuantity] = useState(1);
 
   return (
     <div className="container mx-auto px-4">
@@ -80,7 +85,54 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
             })}
           </div>
         </div>
-        <div className="w-1/2">2nd half</div>
+        <div className="w-1/2 m-5">
+          <div className="card ~neutral !low">
+            <div>
+              <h4 className={`${p.HasReduction ? "line-through" : "subheading font-bold"}`}>
+                {getPrice(p.Price)}
+              </h4>
+              {p.HasReduction && (
+                <div className="flex">
+                  <h4 className="subheading font-bold">
+                    {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
+                  </h4>
+                  <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
+                </div>
+              )}
+            </div>
+            {!p.OutOfStock ? (
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  className="button ~positive !normal justify-center flex-grow px-3 py-2"
+                  onClick={() => {
+                    for (let i = 0; i < quantity; i++) {
+                      cartAdd(setCart, p);
+                    }
+                    dispatchAlert("Proizvod dodan u košaricu", "positive", ShoppingCart);
+                  }}
+                >
+                  <ShoppingCart />
+                  <span className="text-lg ml-2">Dodaj u košaricu</span>
+                </button>
+                <div className="flex flex-col ml-4">
+                  <span>Količina</span>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value | 0)}
+                    min="1"
+                    className="input ~neutral !normal w-16 mb-px"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="button ~critical !normal w-full justify-center text-lg px-3 py-2">
+                Proizvod trenutno nije dostupan
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       <div dangerouslySetInnerHTML={{ __html: p.Description }} className="content"></div>
       <pre>DEBUG: {JSON.stringify(p, null, 2)}</pre>
