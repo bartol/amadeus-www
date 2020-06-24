@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import ProductList from "../../components/product_list";
 import Menu from "../../components/menu";
+import SEO from "../../components/seo.js";
 
 function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened, dispatchAlert }) {
   const router = useRouter();
@@ -10,6 +11,7 @@ function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened
 
   return (
     <div className="container mx-auto px-4">
+      <SEO title={`${category.Name} | Amadeus II d.o.o. shop`} />
       <h1 className="heading text-4xl mt-12 mb-5">Proizvodi u kategoriji "{category.Name}"</h1>
       <ProductList
         products={category.Products}

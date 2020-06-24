@@ -6,6 +6,7 @@ import { ShoppingCart } from "react-feather";
 import Menu from "../../components/menu";
 import Info from "../../components/info";
 import ProductCard from "../../components/product_card";
+import SEO from "../../components/seo.js";
 import Glider from "glider-js";
 
 function Product({
@@ -48,6 +49,9 @@ function Product({
 
   return (
     <div className="container mx-auto px-4">
+      <SEO
+        title={`${p.Name} | ${p.Categories[p.Categories.length - 1].Name} | Amadeus II d.o.o. shop`}
+      />
       <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
       <div className="flex">
         <div className="w-1/2">
