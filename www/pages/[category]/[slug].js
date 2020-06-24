@@ -8,6 +8,7 @@ import Info from "../../components/info";
 import ProductCard from "../../components/product_card";
 import SEO from "../../components/seo.js";
 import Glider from "glider-js";
+import Link from "next/link";
 
 function Product({
   product,
@@ -19,6 +20,7 @@ function Product({
   dispatchAlert,
 }) {
   const p = product;
+  const c = p.Categories[p.Categories.length - 1];
 
   const router = useRouter();
   if (router.isFallback) {
@@ -49,9 +51,18 @@ function Product({
 
   return (
     <div className="container mx-auto px-4">
-      <SEO
-        title={`${p.Name} | ${p.Categories[p.Categories.length - 1].Name} | Amadeus II d.o.o. shop`}
-      />
+      <SEO title={`${p.Name} | ${c.Name} | Amadeus II d.o.o. shop`} />
+      <div>
+        <Link href="/">
+          <a className="portal">Home</a>
+        </Link>
+        <span> / </span>
+        <Link href="/[category]" as={"/" + c.Slug}>
+          <a className="portal">{c.Name}</a>
+        </Link>
+        <span> / </span>
+        <span className="portal select-none">{p.Name}</span>
+      </div>
       <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
       <div className="flex">
         <div className="w-1/2">
@@ -143,7 +154,7 @@ function Product({
                 </div>
               </div>
             ) : (
-              <div className="button ~critical !normal w-full justify-center text-lg px-3 py-2">
+              <div className="button ~critical !normal w-full justify-center text-lg px-3 py-2 select-none">
                 Proizvod trenutno nije dostupan
               </div>
             )}
