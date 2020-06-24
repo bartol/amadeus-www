@@ -235,6 +235,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
+      key: product.ID,
       product,
       similarProducts,
       categoriesTree,

@@ -48,6 +48,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
+      key: category.ID || "",
       category,
       categoriesTree,
     },
