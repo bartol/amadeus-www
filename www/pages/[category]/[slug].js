@@ -35,12 +35,19 @@ function Product({
     const glider = new Glider(gliderContainerRef.current, {
       draggable: true,
       dragVelocity: 2,
+      skipTrack: true,
     });
     gliderRef.current = glider;
 
     gliderContainerRef.current.addEventListener("glider-slide-visible", (e) => {
       setSelectedSlide(e.detail.slide);
     });
+
+    return () => {
+      if (gliderRef.current) {
+        gliderRef.current.destroy();
+      }
+    };
   }, []);
 
   const [quantity, setQuantity] = useState(1);
