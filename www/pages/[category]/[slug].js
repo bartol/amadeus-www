@@ -5,9 +5,18 @@ import { cartAdd } from "../../helpers/cart";
 import { ShoppingCart } from "react-feather";
 import Menu from "../../components/menu";
 import Info from "../../components/info";
+import ProductCard from "../../components/product_card";
 import Glider from "glider-js";
 
-function Product({ product, categoriesTree, setCart, menuOpened, setMenuOpened, dispatchAlert }) {
+function Product({
+  product,
+  similarProducts,
+  categoriesTree,
+  setCart,
+  menuOpened,
+  setMenuOpened,
+  dispatchAlert,
+}) {
   const p = product;
 
   const router = useRouter();
@@ -134,8 +143,48 @@ function Product({ product, categoriesTree, setCart, menuOpened, setMenuOpened, 
           </div>
         </div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: p.Description }} className="content"></div>
-      <pre>DEBUG: {JSON.stringify(p, null, 2)}</pre>
+      <div className="flex">
+        <div className="w-3/4 mr-4">
+          {p.Features.length > 0 && (
+            <div>
+              <h2 className="subheading text-2xl mt-6 mb-2">Značajke</h2>
+              <div className="card ~neutral !low content">
+                <table className="table">
+                  <tbody>
+                    {p.Features.map((f) => {
+                      return (
+                        <tr>
+                          <td>{f.Name}</td>
+                          <td>{f.Value}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          <h2 className="subheading text-2xl mt-6 mb-2">Opis</h2>
+          <div className="card ~neutral !low content">
+            <div dangerouslySetInnerHTML={{ __html: p.Description }}></div>
+          </div>
+        </div>
+        <div className="w-1/4">
+          <h2 className="subheading text-2xl mt-6 mb-2">Slični proizvodi</h2>
+          <ul className="grid grid-cols-1 gap-4">
+            {similarProducts.map((p) => {
+              return (
+                <ProductCard
+                  product={p}
+                  setCart={setCart}
+                  dispatchAlert={dispatchAlert}
+                  key={p.ID}
+                />
+              );
+            })}
+          </ul>
+        </div>
+      </div>
       <Info dispatchAlert={dispatchAlert} />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
@@ -166,12 +215,17 @@ export async function getStaticProps({ params }) {
   );
   const product = await productRes.json();
 
+  const similarProductsRes = await fetch(`https://api.amadeus2.hr/categories/${params.category}`);
+  let similarProducts = await similarProductsRes.json();
+  similarProducts = similarProducts.Products.sort(() => Math.random() - 0.5).slice(0, 3);
+
   const categoriesTreeRes = await fetch("https://api.amadeus2.hr/categories/tree");
   const categoriesTree = await categoriesTreeRes.json();
 
   return {
     props: {
       product,
+      similarProducts,
       categoriesTree,
     },
   };
