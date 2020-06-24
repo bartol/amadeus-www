@@ -38,28 +38,19 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
         <div className="w-1/2">
           <div className="relative" style={{ paddingBottom: "100%" }}>
             <div className="card ~neutral !low absolute w-full h-full">
-              {product.Images.length > 1 ? (
-                <div ref={gliderRef} className="glider-wrap">
-                  {product.Images.map((i) => {
-                    return (
-                      <img
-                        src={i.URL + "?options=150,quality=low"}
-                        data-src={i.URL + "?options=600"}
-                        alt="slika proizvoda"
-                        className="lazyload object-contain"
-                        key={i.URL}
-                      />
-                    );
-                  })}
-                </div>
-              ) : (
-                <img
-                  src={product.Images[0].URL + "?options=150,quality=low"}
-                  data-src={product.Images[0].URL + "?options=600"}
-                  alt="slika proizvoda"
-                  className="lazyload h-full object-contain"
-                />
-              )}
+              <div ref={gliderRef} className="glider-wrap h-full">
+                {p.Images.map((i) => {
+                  return (
+                    <img
+                      src={i.URL + "?options=150,quality=low"}
+                      data-src={i.URL + "?options=600"}
+                      alt="slika proizvoda"
+                      className="lazyload object-contain"
+                      key={i.URL}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
           <div className="flex mt-4">
