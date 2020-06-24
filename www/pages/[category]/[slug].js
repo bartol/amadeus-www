@@ -5,6 +5,8 @@ import Info from "../../components/info";
 import Glider from "glider-js";
 
 function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchAlert }) {
+  const p = product;
+
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -31,7 +33,7 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="heading text-4xl mt-12 mb-5">{product.Name}</h1>
+      <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
       <div className="flex">
         <div className="w-1/2">
           <div className="relative" style={{ paddingBottom: "100%" }}>
@@ -61,12 +63,12 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
             </div>
           </div>
           <div className="flex mt-4">
-            {product.Images.map((img, index) => {
+            {p.Images.map((img, index) => {
               return (
                 <button
                   type="button"
                   onClick={() => {
-                    if (product.Images.length > 1) {
+                    if (p.Images.length > 1) {
                       glider.scrollItem(index);
                       setSelectedSlide(index);
                     }
@@ -89,8 +91,8 @@ function Product({ product, categoriesTree, menuOpened, setMenuOpened, dispatchA
         </div>
         <div className="w-1/2">2nd half</div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: product.Description }} className="content"></div>
-      <pre>DEBUG: {JSON.stringify(product, null, 2)}</pre>
+      <div dangerouslySetInnerHTML={{ __html: p.Description }} className="content"></div>
+      <pre>DEBUG: {JSON.stringify(p, null, 2)}</pre>
       <Info dispatchAlert={dispatchAlert} />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
