@@ -107,14 +107,12 @@ function SearchBox({ query, setQuery }) {
           <tfoot>
             <tr>
               <th colSpan="3" className="px-0 pb-0">
-                <button
-                  type="button"
-                  className="button ~neutral !normal px-3 py-2 float-right"
-                  onClick={() => Router.push(`/search?q=${encodeURIComponent(query)}`)}
-                >
-                  <span className="text-lg mr-2">Prikaži više rezultata</span>
-                  <ArrowRight />
-                </button>
+                <Link href={`/search?q=${encodeURIComponent(query)}`}>
+                  <a className="button ~neutral !normal px-3 py-2 float-right">
+                    <span className="text-lg font-normal mr-2">Prikaži više rezultata</span>
+                    <ArrowRight />
+                  </a>
+                </Link>
               </th>
             </tr>
           </tfoot>
