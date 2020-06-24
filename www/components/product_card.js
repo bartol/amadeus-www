@@ -23,12 +23,12 @@ function ProductCard({ product, setCart, dispatchAlert }) {
           </a>
         </Link>
         <div>
-          <h4 className={`${p.HasReduction ? "line-through" : "subheading"}`}>
+          <h4 className={`${p.HasReduction ? "line-through" : "subheading font-bold"}`}>
             {getPrice(p.Price)}
           </h4>
           {p.HasReduction && (
             <div className="flex">
-              <h4 className="subheading">
+              <h4 className="subheading font-bold">
                 {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
               </h4>
               <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
