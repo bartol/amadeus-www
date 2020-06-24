@@ -20,7 +20,6 @@ function Product({
   dispatchAlert,
 }) {
   const p = product;
-  const c = p.Categories[p.Categories.length - 1];
 
   const router = useRouter();
   if (router.isFallback) {
@@ -51,14 +50,16 @@ function Product({
 
   return (
     <div className="container mx-auto px-4">
-      <SEO title={`${p.Name} | ${c.Name} | Amadeus II d.o.o. shop`} />
+      <SEO
+        title={`${p.Name} | ${p.Categories[p.Categories.length - 1].Name} | Amadeus II d.o.o. shop`}
+      />
       <div>
         <Link href="/">
           <a className="portal">Home</a>
         </Link>
         <span> / </span>
-        <Link href="/[category]" as={"/" + c.Slug}>
-          <a className="portal">{c.Name}</a>
+        <Link href="/[category]" as={"/" + p.Categories[p.Categories.length - 1].Slug}>
+          <a className="portal">{p.Categories[p.Categories.length - 1].Name}</a>
         </Link>
         <span> / </span>
         <span className="portal select-none">{p.Name}</span>
