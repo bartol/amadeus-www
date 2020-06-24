@@ -21,7 +21,7 @@ function Product({
 
   const router = useRouter();
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <div className="container mx-auto px-4">Loading...</div>;
   }
 
   const gliderContainerRef = useRef(null);
@@ -42,12 +42,6 @@ function Product({
     gliderContainerRef.current.addEventListener("glider-slide-visible", (e) => {
       setSelectedSlide(e.detail.slide);
     });
-
-    return () => {
-      if (gliderRef.current) {
-        gliderRef.current.destroy();
-      }
-    };
   }, []);
 
   const [quantity, setQuantity] = useState(1);
@@ -103,7 +97,7 @@ function Product({
             })}
           </div>
         </div>
-        <div className="w-1/2 m-5">
+        <div className="w-1/2 mx-4">
           <div className="card ~neutral !low">
             <div>
               <h4 className={`${p.HasReduction ? "line-through" : "subheading font-bold"}`}>
