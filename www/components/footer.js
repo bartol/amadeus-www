@@ -10,7 +10,7 @@ function Footer({ dispatchAlert }) {
       <div className="card ~neutral !low flex justify-between">
         <div className="flex flex-col items-center mx-2">
           <div className="flex flex-col items-start">
-            <h3 className="subheading text-2xl mb-2">Prijavi se na newsletter</h3>
+            <h3 className="subheading text-2xl mb-2">Prijavite se na newsletter</h3>
             <input
               type="email"
               placeholder="Vaš email"
