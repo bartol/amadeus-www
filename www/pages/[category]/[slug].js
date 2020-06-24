@@ -144,7 +144,7 @@ function Product({
         </div>
       </div>
       <div className="flex">
-        <div className="w-3/4 mr-4">
+        <div className={`${similarProducts.length > 0 ? "w-3/4" : "w-full"} mr-4`}>
           {p.Features.length > 0 && (
             <div>
               <h2 className="subheading text-2xl mt-6 mb-2">Značajke</h2>
@@ -153,7 +153,7 @@ function Product({
                   <tbody>
                     {p.Features.map((f) => {
                       return (
-                        <tr>
+                        <tr key={f.Name}>
                           <td>{f.Name}</td>
                           <td>{f.Value}</td>
                         </tr>
@@ -169,21 +169,23 @@ function Product({
             <div dangerouslySetInnerHTML={{ __html: p.Description }}></div>
           </div>
         </div>
-        <div className="w-1/4">
-          <h2 className="subheading text-2xl mt-6 mb-2">Slični proizvodi</h2>
-          <ul className="grid grid-cols-1 gap-4">
-            {similarProducts.map((p) => {
-              return (
-                <ProductCard
-                  product={p}
-                  setCart={setCart}
-                  dispatchAlert={dispatchAlert}
-                  key={p.ID}
-                />
-              );
-            })}
-          </ul>
-        </div>
+        {similarProducts.length > 0 && (
+          <div className="w-1/4">
+            <h2 className="subheading text-2xl mt-6 mb-2">Slični proizvodi</h2>
+            <ul className="grid grid-cols-1 gap-4">
+              {similarProducts.map((p) => {
+                return (
+                  <ProductCard
+                    product={p}
+                    setCart={setCart}
+                    dispatchAlert={dispatchAlert}
+                    key={p.ID}
+                  />
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
       <Info dispatchAlert={dispatchAlert} />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
@@ -217,7 +219,9 @@ export async function getStaticProps({ params }) {
 
   const similarProductsRes = await fetch(`https://api.amadeus2.hr/categories/${params.category}`);
   let similarProducts = await similarProductsRes.json();
-  similarProducts = similarProducts.Products.sort(() => Math.random() - 0.5).slice(0, 3);
+  similarProducts = similarProducts.Products.filter((p) => p.ID != product.ID)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
 
   const categoriesTreeRes = await fetch("https://api.amadeus2.hr/categories/tree");
   const categoriesTree = await categoriesTreeRes.json();
