@@ -86,6 +86,7 @@ export default App;
 TODO:
 	contact form backend, newsletter form backend
 	product page (image gallery, similar products)
+	product image zoom
 	images in popular categories cards
 	checkout
 	mobile design
