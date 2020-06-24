@@ -24,21 +24,21 @@ function Product({
     return <div>Loading...</div>;
   }
 
+  const gliderContainerRef = useRef(null);
   const gliderRef = useRef(null);
-  const [glider, setGlider] = useState({});
   const [selectedSlide, setSelectedSlide] = useState(0);
   useEffect(() => {
-    if (!gliderRef.current) {
+    if (!gliderContainerRef.current) {
       return;
     }
 
-    const glider = new Glider(gliderRef.current, {
+    const glider = new Glider(gliderContainerRef.current, {
       draggable: true,
       dragVelocity: 2,
     });
-    setGlider(glider);
+    gliderRef.current = glider;
 
-    gliderRef.current.addEventListener("glider-slide-visible", (e) => {
+    gliderContainerRef.current.addEventListener("glider-slide-visible", (e) => {
       setSelectedSlide(e.detail.slide);
     });
   }, []);
@@ -52,7 +52,7 @@ function Product({
         <div className="w-1/2">
           <div className="relative" style={{ paddingBottom: "100%" }}>
             <div className="card ~neutral !low absolute w-full h-full">
-              <div ref={gliderRef} className="glider-wrap h-full">
+              <div ref={gliderContainerRef} className="glider-wrap h-full">
                 {p.Images.map((i) => {
                   return (
                     <img
@@ -74,7 +74,7 @@ function Product({
                   type="button"
                   onClick={() => {
                     if (p.Images.length > 1) {
-                      glider.scrollItem(index);
+                      gliderRef.current.scrollItem(index);
                       setSelectedSlide(index);
                     }
                   }}
