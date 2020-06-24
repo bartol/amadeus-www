@@ -66,7 +66,7 @@ function Product({
                       src={i.URL + "?options=150,quality=low"}
                       data-src={i.URL + "?options=600"}
                       alt="slika proizvoda"
-                      className="lazyload object-contain"
+                      className="lazyload w-full h-full object-contain"
                       key={i.URL}
                     />
                   );
