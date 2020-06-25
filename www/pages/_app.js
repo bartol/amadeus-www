@@ -84,10 +84,11 @@ export default App;
 
 /*
 TODO:
+	products last update
+	404 page
 	contact form backend, newsletter form backend
 	handle no products in products list and search list
 	product page (image gallery, similar products)
-	product image zoom
 	images in popular categories cards
 	checkout
 	mobile design
