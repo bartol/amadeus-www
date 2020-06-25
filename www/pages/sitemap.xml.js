@@ -1,19 +1,13 @@
-function getSitemap(paths) {
-  const date = new Date().toISOString().substring(0, 10);
-
+function getSitemap(pages) {
   return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${paths
-        .map((path) => {
-          let priority = "0.80";
-          if (path === "") priority = "1";
-          if (path.startsWith("info")) priority = "0.20";
-
+      ${pages
+        .map((p) => {
           return `
 			<url>
-			  <loc>https://amadeus2.hr/${path}</loc>
-			  <lastmod>${date}</lastmod>
-			  <priority>${priority}</priority>
+			  <loc>https://amadeus2.hr/${p.path}</loc>
+			  <lastmod>${p.date}</lastmod>
+			  <priority>${p.priority}</priority>
 			</url>`;
         })
         .join("")}
@@ -21,32 +15,39 @@ function getSitemap(paths) {
 }
 
 export async function getServerSideProps({ res }) {
-  const paths = [];
+  const today = new Date().toISOString();
+  const pages = [];
 
-  paths.push(""); // index
-
-  paths.push("info/dostava");
-  paths.push("info/uvjeti-poslovanja");
-  paths.push("info/o-nama");
-  paths.push("info/sigurnost-placanja");
-  paths.push("info/izjava-o-zastiti-prijenosa-osobnih-podataka");
-  paths.push("info/kako-kupovati");
-  paths.push("info/povrat-i-zamjena");
+  // index pages
+  pages.push({ path: "", date: today, priority: "1" });
 
   const categoriesRes = await fetch("https://api.amadeus2.hr/categories/");
   const categories = await categoriesRes.json();
   categories.forEach((c) => {
-    paths.push(c.Slug);
+    pages.push({ path: c.Slug, date: c.LastUpdated, priority: "0.80" });
   });
 
   const productsRes = await fetch("https://api.amadeus2.hr/products/");
   const products = await productsRes.json();
   products.forEach((p) => {
-    paths.push(p.URL);
+    pages.push({ path: p.URL, date: p.LastUpdated, priority: "0.80" });
+  });
+
+  const infoPages = [
+    "info/dostava",
+    "info/uvjeti-poslovanja",
+    "info/o-nama",
+    "info/sigurnost-placanja",
+    "info/izjava-o-zastiti-prijenosa-osobnih-podataka",
+    "info/kako-kupovati",
+    "info/povrat-i-zamjena",
+  ];
+  infoPages.forEach((path) => {
+    pages.push({ path, date: today, priority: "0.20" });
   });
 
   res.setHeader("Content-Type", "text/xml");
-  res.write(getSitemap(paths));
+  res.write(getSitemap(pages));
   res.end();
 }
 
