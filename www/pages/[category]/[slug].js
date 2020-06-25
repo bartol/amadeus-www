@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, Fragment } from "react";
 import { useRouter } from "next/router";
 import { getPrice, getReductedPrice, getReduction } from "../../helpers/price";
 import { cartAdd } from "../../helpers/cart";
@@ -73,12 +73,12 @@ function Product({
         </Link>
         <span> / </span>
         {p.Categories.filter((c) => c.Slug !== "home").map((c) => (
-          <>
+          <Fragment key={c.Slug}>
             <Link href="/[category]" as={"/" + c.Slug}>
               <a className="portal">{c.Name}</a>
             </Link>
             <span> / </span>
-          </>
+          </Fragment>
         ))}
         <span className="portal select-none">{p.Name}</span>
       </div>
