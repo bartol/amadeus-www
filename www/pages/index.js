@@ -15,7 +15,10 @@ function Index({
 }) {
   return (
     <div className="container mx-auto px-4">
-      <SEO title="Amadeus II d.o.o. shop" />
+      <SEO
+        title="Amadeus II d.o.o. shop"
+        description="Amadeus II d.o.o. je trgovina specijalizirana za prodaju putem interneta i nudi više od 10000 raspoloživih artikala iz različitih područja informatike, potrošačke elektronike..."
+      />
       <Info h1Heading dispatchAlert={dispatchAlert} />
       <h2 className="heading text-4xl mt-12 mb-5">Popularne kategorije</h2>
       <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
