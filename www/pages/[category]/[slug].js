@@ -55,7 +55,7 @@ function Product({
       />
       <div>
         <Link href="/">
-          <a className="portal">Home</a>
+          <a className="portal">Početna</a>
         </Link>
         <span> / </span>
         <Link href="/[category]" as={"/" + p.Categories[p.Categories.length - 1].Slug}>
