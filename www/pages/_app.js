@@ -93,5 +93,5 @@ TODO:
 	checkout
 	mobile design
 	category tree styles
-	seo (social images, structured data...)
+	seo (structured data...)
 */
