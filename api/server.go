@@ -103,6 +103,7 @@ type product struct {
 	Quantity      int
 	Slug          string
 	URL           string
+	LastUpdated   string
 	Description   string
 	DefaultImage  image
 	Images        []image
@@ -122,6 +123,7 @@ type productLite struct {
 	Quantity      int
 	Slug          string
 	URL           string
+	LastUpdated   string
 	DefaultImage  image
 	Categories    []category
 	Features      []feature
@@ -431,6 +433,7 @@ func reindex() error {
 			Quantity:      quantity,
 			Slug:          p.LinkRewrite,
 			URL:           URL,
+			LastUpdated:   p.DateUpd,
 			Description:   p.Description,
 			DefaultImage:  defaultImage,
 			Images:        images,
@@ -452,6 +455,7 @@ func reindex() error {
 			Quantity:      quantity,
 			Slug:          p.LinkRewrite,
 			URL:           URL,
+			LastUpdated:   p.DateUpd,
 			DefaultImage:  defaultImage,
 			Categories:    categories,
 			Features:      features,
@@ -533,6 +537,7 @@ type getProductsResp struct {
 		Price          string
 		LinkRewrite    string `json:"link_rewrite"`
 		Description    string
+		DateUpd        string `json:"date_upd"`
 		DefaultImageID string `json:"id_default_image"`
 		Associations   struct {
 			Images []struct {
