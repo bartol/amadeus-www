@@ -152,12 +152,13 @@ type option struct {
 }
 
 type categoryWithProducts struct {
-	ID         int
-	Name       string
-	Slug       string
-	Image      image
-	Products   []productLite
-	Categories []category
+	ID          int
+	Name        string
+	Slug        string
+	LastUpdated string
+	Image       image
+	Products    []productLite
+	Categories  []category
 }
 
 type categoryTree struct {
@@ -512,12 +513,13 @@ func reindex() error {
 		}
 
 		category := categoryWithProducts{
-			ID:         c.ID,
-			Name:       c.Name,
-			Slug:       c.LinkRewrite,
-			Image:      image,
-			Products:   products,
-			Categories: categories,
+			ID:          c.ID,
+			Name:        c.Name,
+			Slug:        c.LinkRewrite,
+			LastUpdated: c.DateUpd,
+			Image:       image,
+			Products:    products,
+			Categories:  categories,
 		}
 
 		categoriesMap[category.Slug] = category
@@ -626,6 +628,7 @@ type getCategoriesResp struct {
 		ParentID     string `json:"id_parent"`
 		Name         string
 		LinkRewrite  string `json:"link_rewrite"`
+		DateUpd      string `json:"date_upd"`
 		Associations struct {
 			Products []struct {
 				ID string
