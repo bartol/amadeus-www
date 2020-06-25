@@ -13,7 +13,11 @@ function Search({
 }) {
   return (
     <div className="container mx-auto px-4">
-      <SEO title={`Rezultati pretrage "${query}" | Amadeus II d.o.o. shop`} />
+      <SEO
+        title={`Rezultati pretrage "${query}" | Amadeus II d.o.o. shop`}
+        description={`Rezultati pretrage "${query}"`}
+        path={`search/?q=${encodeURIComponent(query)}`}
+      />
       <h1 className="heading text-4xl mt-12 mb-5">Rezultati pretrage "{query}"</h1>
       <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />

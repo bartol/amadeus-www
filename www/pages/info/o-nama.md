@@ -4,7 +4,7 @@ import Static from "../../components/static"
 
 # O nama
 
-Amadeus II d.o.o. je trgovina koja je specijalizirana za prodaju putem interneta i nudi više od 10000 raspoloživih artikala iz različitih područja informatike, potrošačke elektronike... Kontinuirano ćemo obogaćivati našu ponudu, a uskoro će se na portalu naći i velika ponuda knjiga i poklona za svaku prigodu!
+Amadeus II d.o.o. je trgovina specijalizirana za prodaju putem interneta i nudi više od 10000 raspoloživih artikala iz različitih područja informatike, potrošačke elektronike... Kontinuirano ćemo obogaćivati našu ponudu, a uskoro će se na portalu naći i velika ponuda knjiga i poklona za svaku prigodu!
 
 Ukoliko nemate vremena za odlazak u kupnju i rado biste je obavili od kuće, iz udobnosti vlastitoga doma, rješenje za Vas je www.amadeus-ploce.eu
 

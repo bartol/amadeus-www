@@ -52,6 +52,14 @@ function Product({
     <div className="container mx-auto px-4">
       <SEO
         title={`${p.Name} | ${p.Categories[p.Categories.length - 1].Name} | Amadeus II d.o.o. shop`}
+        description={
+          p.Name +
+          " | " +
+          p.Categories[p.Categories.length - 1].Name +
+          p.Features.map((f) => " | " + f.Name + ": " + f.Value)
+        }
+        image={p.DefaultImage}
+        path={p.URL}
       />
       <div>
         <Link href="/">
