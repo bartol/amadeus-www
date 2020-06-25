@@ -58,18 +58,27 @@ function Product({
           p.Categories[p.Categories.length - 1].Name +
           p.Features.map((f) => " | " + f.Name + ": " + f.Value)
         }
-        image={p.DefaultImage}
+        image={p.DefaultImage.URL}
         path={p.URL}
+        breadcrumbs={[
+          { Name: "Početna", Slug: "" },
+          ...p.Categories.filter((c) => c.Slug !== "home"),
+          { Name: p.Name },
+        ]}
       />
       <div>
         <Link href="/">
           <a className="portal">Početna</a>
         </Link>
         <span> / </span>
-        <Link href="/[category]" as={"/" + p.Categories[p.Categories.length - 1].Slug}>
-          <a className="portal">{p.Categories[p.Categories.length - 1].Name}</a>
-        </Link>
-        <span> / </span>
+        {p.Categories.filter((c) => c.Slug !== "home").map((c) => (
+          <>
+            <Link href="/[category]" as={"/" + c.Slug}>
+              <a className="portal">{c.Name}</a>
+            </Link>
+            <span> / </span>
+          </>
+        ))}
         <span className="portal select-none">{p.Name}</span>
       </div>
       <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
