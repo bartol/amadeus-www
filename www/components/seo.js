@@ -1,6 +1,14 @@
 import Head from "next/head";
+import { getReductedPrice } from "../helpers/price";
 
-function SEO({ title, description, image = "/img/logo.png", path = "", breadcrumbs }) {
+function SEO({
+  title,
+  description,
+  image = "https://amadeus2.hr/img/logo.png",
+  path = "",
+  breadcrumbs,
+  product,
+}) {
   return (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,7 +31,7 @@ function SEO({ title, description, image = "/img/logo.png", path = "", breadcrum
 
       <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
-      {breadcrumbs.length > 0 && (
+      {breadcrumbs && (
         <script type="application/ld+json">{`
 			{
 			  "@context": "https://schema.org",
@@ -40,6 +48,40 @@ function SEO({ title, description, image = "/img/logo.png", path = "", breadcrum
           .join(",")}]
 			}
 			`}</script>
+      )}
+
+      {product && (
+        <script type="application/ld+json">
+          {`
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "${product.Name}",
+      "image": [${product.Images.map((i) => `"${i.URL}"`).join(",")}],
+      "description": "${
+        product.Name +
+        " | " +
+        product.Categories[product.Categories.length - 1].Name +
+        product.Features.map((f) => " | " + f.Name + ": " + f.Value)
+      }",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://amadeus2.hr/${product.URL}",
+        "priceCurrency": "kn",
+        "price": "${
+          product.HasReduction
+            ? getReductedPrice(product.Price, product.Reduction, product.ReductionType, true)
+            : product.Price
+        }",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Amadeus II d.o.o."
+        }
+      }
+    }`}
+        </script>
       )}
     </Head>
   );

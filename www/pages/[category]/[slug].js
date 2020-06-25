@@ -65,6 +65,7 @@ function Product({
           ...p.Categories.filter((c) => c.Slug !== "home"),
           { Name: p.Name },
         ]}
+        product={p}
       />
       <div>
         <Link href="/">
