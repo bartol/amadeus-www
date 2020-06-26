@@ -84,7 +84,6 @@ export default App;
 
 /*
 TODO:
-	products last update
 	contact form backend, newsletter form backend
 	handle no products in products list and search list
 	product page (image gallery, similar products)
