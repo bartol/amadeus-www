@@ -6,16 +6,16 @@ function Info({ h1Heading, dispatchAlert }) {
   const [message, setMessage] = useState("");
 
   return (
-    <div className="flex mt-12">
-      <div className="relative w-1/2" style={{ paddingBottom: "50%" }}>
+    <div className="flex lg:flex-row flex-col-reverse">
+      <div className="relative lg:w-1/2 lg:pb-1/2 pb-full mt-12">
         <iframe
           src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;q=Amadeus+II+d.o.o.%2c+Ulica+Vladimira+Nazora%2c+Plo%c4%8de&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed"
           className="absolute w-full h-full"
           style={{ filter: "grayscale(1) contrast(1.2) opacity(0.4)" }}
         ></iframe>
       </div>
-      <div className="w-1/2 flex justify-center items-center">
-        <div className="w-2/3">
+      <div className="lg:w-1/2 flex justify-center items-center">
+        <div className="xl:w-2/3 lg:w-5/6">
           {h1Heading ? (
             <h1 className="heading text-4xl ml-2 mt-12 mb-5">Amadeus II d.o.o. shop</h1>
           ) : (

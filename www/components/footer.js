@@ -7,7 +7,7 @@ function Footer({ dispatchAlert }) {
 
   return (
     <footer className="container mx-auto p-4 mt-12">
-      <div className="card ~neutral !low flex justify-between">
+      <div className="card ~neutral !low flex justify-between flex-wrap">
         <div className="flex flex-col items-center mx-2">
           <div className="flex flex-col items-start">
             <h3 className="subheading text-2xl mb-2">Prijavite se na newsletter</h3>
@@ -37,7 +37,7 @@ function Footer({ dispatchAlert }) {
             </Link>
           </div>
         </div>
-        <div className="mx-2">
+        <div className="mx-2 md:mt-0 mt-4">
           <h3 className="subheading text-2xl mx-2 mb-1">Informacije</h3>
           <ul>
             <li>
@@ -62,7 +62,9 @@ function Footer({ dispatchAlert }) {
             </li>
             <li>
               <Link href="/info/izjava-o-zastiti-prijenosa-osobnih-podataka">
-                <a className="portal">Izjava o zaštiti prijenosa osobnih podataka</a>
+                <a className="portal whitespace-normal">
+                  Izjava o zaštiti prijenosa osobnih podataka
+                </a>
               </Link>
             </li>
             <li>
@@ -77,7 +79,7 @@ function Footer({ dispatchAlert }) {
             </li>
           </ul>
         </div>
-        <div className="mx-2">
+        <div className="mx-2 md:mt-0 mt-4">
           <h3 className="subheading text-2xl mx-2 mb-1">Kontaktirajte nas</h3>
           <ul>
             <li>

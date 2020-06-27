@@ -33,7 +33,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
 
   return (
     <div className="flex lg:flex-row flex-col">
-      <div className="xl:w-1/6 lg:w-1/4 mr-5 overflow-hidden">
+      <div className="xl:w-1/6 lg:w-1/4 lg:mr-5 mb-6 overflow-hidden">
         <div>
           <h3 className="subheading mx-1 mt-1 mb-2">Sortiraj po</h3>
           <div className="select !normal m-1">
