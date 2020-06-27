@@ -1,5 +1,5 @@
 import { Menu, ShoppingCart } from "react-feather";
-import SearchBox from "./search";
+import Search from "./search";
 
 function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
   return (
@@ -13,7 +13,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
           <Menu />
           <span className="text-lg ml-2 lg:block hidden">Kategorije</span>
         </button>
-        <SearchBox query={query} setQuery={setQuery} />
+        <Search query={query} setQuery={setQuery} />
         <button
           type="button"
           className="button ~positive !normal px-3 py-2"
