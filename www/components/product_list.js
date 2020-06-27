@@ -135,7 +135,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
         )}
       </div>
       <div className="xl:w-5/6 lg:w-3/4">
-        <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
+        <ul className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
           {getSortedList(filteredList, sort)
             .slice(0, limit)
             .map((p) => {
