@@ -1,5 +1,5 @@
 import { Menu, ShoppingCart } from "react-feather";
-import SearchBox from "./search_box";
+import SearchBox from "./search";
 
 function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
   return (
