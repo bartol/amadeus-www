@@ -85,7 +85,7 @@ function Product({
       <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
       <div className="flex">
         <div className="w-1/2">
-          <div className="relative" style={{ paddingBottom: "100%" }}>
+          <div className="relative pb-full">
             <div className="card ~neutral !low absolute w-full h-full">
               <div ref={gliderContainerRef} className="glider-wrap h-full">
                 <div className="glider-track h-full">
