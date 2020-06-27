@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, X } from "react-feather";
+import { ArrowRight, X, Search } from "react-feather";
 import Link from "next/link";
 import { getPrice, getReductedPrice } from "../helpers/price";
 import Router from "next/router";
@@ -27,11 +27,12 @@ function SearchBox({ query, setQuery }) {
     <div className="relative px-4">
       <div className="flex items-center">
         <Link href="/">
-          <a className="w-40 h-8 mr-4">
-            <img src="/img/logo.png" alt="Amadeus II d.o.o." />
+          <a className="mr-4">
+            <img src="/img/logo.png" alt="Amadeus II d.o.o." className="w-40 sm:block hidden" />
+            <img src="/img/icon.png" alt="Amadeus II d.o.o." className="w-10 sm:hidden" />
           </a>
         </Link>
-        <div className="relative">
+        <div className="relative md:block hidden">
           <input
             type="search"
             className="input ~neutral !normal w-auto px-3 text-xl"
@@ -59,6 +60,11 @@ function SearchBox({ query, setQuery }) {
             </button>
           </div>
         </div>
+        <Link href="/search">
+          <a className="button ~neutral !normal px-3 py-2 md:hidden">
+            <Search />
+          </a>
+        </Link>
       </div>
       <div
         className="card ~neutral !low absolute w-full -mx-4 mt-1"
