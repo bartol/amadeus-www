@@ -5,7 +5,7 @@ import { ArrowRight } from "react-feather";
 function SearchSuggestions({ results, query }) {
   return (
     <div
-      className="card ~neutral !low absolute w-full -mx-4 mt-1"
+      className="card ~neutral !low absolute w-full -mx-4 mt-1 z-50"
       style={{ visibility: results.length ? "visible" : "hidden" }}
     >
       <table className="table">
@@ -13,7 +13,7 @@ function SearchSuggestions({ results, query }) {
           {results.map((p) => {
             return (
               <tr key={p.ID}>
-                <td>
+                <td className="xs:block hidden">
                   <Link href="/[category]/[slug]" as={"/" + p.URL}>
                     <a>
                       <div className="relative w-16 h-16">

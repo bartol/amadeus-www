@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
 import ProductList from "../components/product_list";
 import Menu from "../components/menu";
 import SEO from "../components/seo.js";
+import SearchBox from "../components/search_box.js";
+import SearchSuggestions from "../components/search_suggestions";
 
 function Search({
   query,
@@ -12,6 +15,24 @@ function Search({
   setMenuOpened,
   dispatchAlert,
 }) {
+  const [localQuery, setLocalQuery] = useState("");
+  const [localResults, setLocalResults] = useState([]);
+
+  useEffect(() => {
+    if (!localQuery) {
+      setLocalResults([]);
+      return;
+    }
+
+    (async function () {
+      const data = await fetch(
+        `https://api.amadeus2.hr/search/?query=${encodeURIComponent(localQuery)}&limit=3`
+      );
+      const products = await data.json();
+      setLocalResults(products);
+    })();
+  }, [localQuery]);
+
   return (
     <div className="container mx-auto px-4">
       {hasResults ? (
@@ -25,7 +46,12 @@ function Search({
           <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
         </div>
       ) : (
-        <div>search box</div>
+        <div className="mt-12">
+          <div className="relative w-full max-w-lg mx-auto px-4">
+            <SearchBox query={localQuery} setQuery={setLocalQuery} fullWidth />
+            <SearchSuggestions query={localQuery} results={localResults} />
+          </div>
+        </div>
       )}
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>

@@ -2,14 +2,14 @@ import { X } from "react-feather";
 import Router from "next/router";
 import { useRef } from "react";
 
-function SearchBox({ query, setQuery }) {
+function SearchBox({ query, setQuery, fullWidth }) {
   const inputRef = useRef(null);
 
   return (
-    <div>
+    <div className="relative">
       <input
         type="search"
-        className="input ~neutral !normal w-auto px-3 text-xl"
+        className={`input ~neutral !normal ${fullWidth ? "w-full" : "w-auto"} px-3 text-xl`}
         placeholder="Pretraži proizvode"
         value={query}
         onChange={(e) => setQuery(e.target.value)}

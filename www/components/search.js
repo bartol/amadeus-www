@@ -31,7 +31,7 @@ function Search({ query, setQuery }) {
             <img src="/img/icon.png" alt="Amadeus II d.o.o." className="w-10 xs:hidden" />
           </a>
         </Link>
-        <div className="relative md:block hidden">
+        <div className="md:block hidden">
           <SearchBox query={query} setQuery={setQuery} />
         </div>
         <Link href="/search">
