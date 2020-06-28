@@ -33,7 +33,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
 
   return (
     <div className="flex lg:flex-row flex-col">
-      <div className="xl:w-1/6 lg:w-1/4 lg:mr-5 mb-6 overflow-hidden">
+      <div className="xl:w-1/6 lg:w-1/4 lg:mr-5 mb-6">
         <div>
           <h3 className="subheading mx-1 mt-1 mb-2">Sortiraj po</h3>
           <div className="select !normal m-1">
@@ -64,9 +64,10 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
                     className={`button ${
                       selected.category === c ? "~positive" : "~neutral"
                     } !normal m-1`}
+                    style={{ maxWidth: "calc(100% - 0.5rem)" /* full width - margin */ }}
                     key={c}
                   >
-                    {c}
+                    <span className="truncate">{c}</span>
                   </button>
                 );
               })}
@@ -95,8 +96,9 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
                       className={`button ${
                         selected.feature.name === f.name ? "~positive" : "~neutral"
                       } !normal m-1`}
+                      style={{ maxWidth: "calc(100% - 0.5rem)" /* full width - margin */ }}
                     >
-                      {f.name}
+                      <span className="truncate">{f.name}</span>
                     </button>
                     {selected.feature.name === f.name && (
                       <div>
@@ -118,9 +120,10 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
                               className={`button ${
                                 selected.feature.value === v ? "~urge" : "~neutral"
                               } !normal m-1`}
+                              style={{ maxWidth: "calc(100% - 0.5rem)" /* full width - margin */ }}
                               key={v}
                             >
-                              {v}
+                              <span className="truncate">{v}</span>
                             </button>
                           );
                         })}
