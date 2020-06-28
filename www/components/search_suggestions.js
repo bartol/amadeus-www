@@ -6,7 +6,7 @@ function SearchSuggestions({ results, query }) {
   return (
     <div
       className="card ~neutral !low absolute w-full -mx-4 mt-1 z-50"
-      style={{ visibility: results.length ? "visible" : "hidden" }}
+      style={{ visibility: query && results.length ? "visible" : "hidden" }}
     >
       <table className="table">
         <tbody>

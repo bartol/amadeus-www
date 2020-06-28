@@ -11,7 +11,7 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
       handler={false}
     >
       <div className="m-5">
-        <h2 className="heading text-4xl my-5">Kategorije</h2>
+        <h2 className="heading text-4xl mb-5">Kategorije</h2>
         <ul>{categories.map((c) => renderTreeNode(c))}</ul>
       </div>
     </Drawer>

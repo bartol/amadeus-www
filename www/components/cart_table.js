@@ -1,11 +1,20 @@
 import CartRow from "./cart_row";
 import { getTotal } from "../helpers/price";
 
-function CartTable({ cart, setCart }) {
+function CartTable({ cart, setCart, setScroll, tableRef }) {
   return (
     <div>
-      <div className="overflow-x-scroll">
-        <table className="table" style={{ minWidth: "calc(640px - 2.5rem)" }}>
+      <div
+        className="overflow-x-auto"
+        ref={tableRef}
+        onScroll={() => {
+          setScroll(tableRef.current.scrollLeft);
+        }}
+      >
+        <table
+          className="table"
+          style={{ minWidth: "calc(640px - 2.5rem)" /* sm breakpoint - margin */ }}
+        >
           <thead>
             <tr>
               <th colSpan="2">Proizvod</th>
