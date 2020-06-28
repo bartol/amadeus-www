@@ -49,7 +49,7 @@ function ProductCard({ product, setCart, dispatchAlert }) {
                 cartAdd(setCart, p);
                 dispatchAlert("Proizvod dodan u košaricu", "positive", ShoppingCart);
               }}
-              className="button ~positive !normal px-3 py-2 ml-4"
+              className="button ~positive !normal md:px-3 p-2 ml-4"
             >
               <ShoppingCart />
             </button>

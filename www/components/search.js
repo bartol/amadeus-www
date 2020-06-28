@@ -35,7 +35,7 @@ function Search({ query, setQuery }) {
           <SearchBox query={query} setQuery={setQuery} />
         </div>
         <Link href="/search">
-          <a className="button ~neutral !normal px-3 py-2 md:hidden">
+          <a className="button ~neutral !normal lg:px-3 p-2 md:hidden">
             <SearchIcon />
           </a>
         </Link>
