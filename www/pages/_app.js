@@ -86,9 +86,7 @@ export default App;
 TODO:
 	contact form backend, newsletter form backend
 	handle no products in products list and search list
-	product page (image gallery, similar products)
 	images in popular categories cards
 	checkout
-	mobile design
 	category tree styles
 */
