@@ -17,9 +17,9 @@ function Info({ h1Heading, dispatchAlert }) {
       <div className="lg:w-1/2 flex justify-center items-center">
         <div className="xl:w-2/3 lg:w-5/6">
           {h1Heading ? (
-            <h1 className="heading text-4xl ml-2 mt-12 mb-5">Amadeus II d.o.o. shop</h1>
+            <h1 className="heading text-4xl mx-2 mt-12 mb-5">Amadeus II d.o.o. shop</h1>
           ) : (
-            <h2 className="heading text-4xl ml-2 mt-12 mb-5">Amadeus II d.o.o. shop</h2>
+            <h2 className="heading text-4xl mx-2 mt-12 mb-5">Amadeus II d.o.o. shop</h2>
           )}
           <div className="card ~neutral !low flex flex-col items-start">
             <h3 className="subheading text-2xl mb-2">Kontaktirajte nas</h3>
