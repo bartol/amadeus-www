@@ -7,7 +7,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
       <div className="card ~neutral !low flex justify-between items-center overflow-visible">
         <button
           type="button"
-          className="button ~info !normal px-3 py-2"
+          className="button ~info !normal md:px-3 p-2"
           onClick={() => setMenuOpened(true)}
         >
           <Menu />
@@ -16,7 +16,7 @@ function Header({ query, setQuery, setCartOpened, setMenuOpened }) {
         <Search query={query} setQuery={setQuery} />
         <button
           type="button"
-          className="button ~positive !normal px-3 py-2"
+          className="button ~positive !normal md:px-3 p-2"
           onClick={() => setCartOpened(true)}
         >
           <ShoppingCart />
