@@ -84,7 +84,7 @@ function Product({
             </div>
           </Fragment>
         ))}
-        <span className="portal whitespace-normal select-none">{p.Name}</span>
+        <span className="portal whitespace-normal select-none lg:block hidden">{p.Name}</span>
       </div>
       <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
       <div className="flex md:flex-row flex-col">

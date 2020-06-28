@@ -11,9 +11,9 @@ function NotFound() {
       />
       <h1 className="heading text-4xl mt-12 mb-5">Stranica nije pronađena</h1>
       <Link href="/">
-        <a className="button ~neutral !normal px-3 py-2">
+        <a className="button ~neutral !normal px-3 py-2 max-w-full">
           <ArrowLeft />
-          <span className="text-lg ml-2">Povratak na početnu stranicu</span>
+          <span className="text-lg ml-2 truncate">Povratak na početnu stranicu</span>
         </a>
       </Link>
     </div>
