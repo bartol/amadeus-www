@@ -5,7 +5,6 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
   return (
     <Drawer
       placement="left"
-      width="300px"
       open={menuOpened}
       onClose={() => setMenuOpened(false)}
       level={null}
