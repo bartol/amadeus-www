@@ -8,7 +8,7 @@ function SearchBox({ query, setQuery, fullWidth }) {
   return (
     <div className="relative">
       <input
-        type="search"
+        type="text"
         className={`input ~neutral !normal ${fullWidth ? "w-full" : "w-auto"} px-3 text-xl`}
         placeholder="Pretraži proizvode"
         value={query}
