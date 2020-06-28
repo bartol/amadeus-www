@@ -67,24 +67,28 @@ function Product({
         ]}
         product={p}
       />
-      <div>
-        <Link href="/">
-          <a className="portal">Početna</a>
-        </Link>
-        <span> / </span>
+      <div className="flex flex-wrap">
+        <div>
+          <Link href="/">
+            <a className="portal">Početna</a>
+          </Link>
+          <span> / </span>
+        </div>
         {p.Categories.filter((c) => c.Slug !== "home").map((c) => (
           <Fragment key={c.Slug}>
-            <Link href="/[category]" as={"/" + c.Slug}>
-              <a className="portal">{c.Name}</a>
-            </Link>
-            <span> / </span>
+            <div>
+              <Link href="/[category]" as={"/" + c.Slug}>
+                <a className="portal">{c.Name}</a>
+              </Link>
+              <span> / </span>
+            </div>
           </Fragment>
         ))}
-        <span className="portal select-none">{p.Name}</span>
+        <span className="portal whitespace-normal select-none">{p.Name}</span>
       </div>
       <h1 className="heading text-4xl mt-12 mb-5">{p.Name}</h1>
-      <div className="flex">
-        <div className="w-1/2">
+      <div className="flex md:flex-row flex-col">
+        <div className="md:w-1/2">
           <div className="relative pb-full">
             <div className="card ~neutral !low absolute w-full h-full">
               <div ref={gliderContainerRef} className="glider-wrap h-full">
@@ -131,7 +135,7 @@ function Product({
             })}
           </div>
         </div>
-        <div className="w-1/2 mx-4">
+        <div className="md:w-1/2 md:mx-4 md:mt-0 mt-5">
           <div className="card ~neutral !low">
             <div>
               <h4 className={`${p.HasReduction ? "line-through" : "subheading font-bold"}`}>
@@ -180,8 +184,8 @@ function Product({
           </div>
         </div>
       </div>
-      <div className="flex">
-        <div className={`${similarProducts.length > 0 ? "w-3/4" : "w-full"} mr-4`}>
+      <div className="flex xl:flex-row flex-col">
+        <div className={`${similarProducts.length > 0 ? "xl:w-3/4" : "w-full"} mr-4`}>
           {p.Features.length > 0 && (
             <div>
               <h2 className="subheading text-2xl mt-6 mb-2">Značajke</h2>
@@ -207,9 +211,9 @@ function Product({
           </div>
         </div>
         {similarProducts.length > 0 && (
-          <div className="w-1/4">
+          <div className="xl:w-1/4">
             <h2 className="subheading text-2xl mt-6 mb-2">Slični proizvodi</h2>
-            <ul className="grid grid-cols-1 gap-4">
+            <ul className="grid xl:grid-cols-1 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
               {similarProducts.map((p) => {
                 return (
                   <ProductCard
