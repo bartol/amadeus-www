@@ -1,5 +1,6 @@
 import Drawer from "rc-drawer";
 import Link from "next/link";
+import { X } from "react-feather";
 
 function Menu({ categories, menuOpened, setMenuOpened }) {
   return (
@@ -11,7 +12,16 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
       handler={false}
     >
       <div className="m-5">
-        <h2 className="heading text-4xl mb-5">Kategorije</h2>
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="heading text-4xl">Kategorije</h2>
+          <button
+            type="button"
+            onClick={() => setMenuOpened(false)}
+            className="button ~neutral !normal p-2"
+          >
+            <X />
+          </button>
+        </div>
         <ul>{categories.map((c) => renderTreeNode(c))}</ul>
       </div>
     </Drawer>
