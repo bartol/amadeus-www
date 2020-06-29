@@ -280,7 +280,7 @@ func reindex() error {
 		if err != nil {
 			return err
 		}
-		price := int((priceFloat * 100) + ((priceFloat * 100) * (pdv / 100)))
+		price := int((priceFloat + (priceFloat * (pdv / 100))) * 100)
 
 		hasReduction := false
 		reduction := 0
