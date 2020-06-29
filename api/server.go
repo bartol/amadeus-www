@@ -14,6 +14,7 @@ import (
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
+var pdv float64 = 25
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
 var imageOptimKey = os.Getenv("IMAGEOPTIM_API_KEY")
 var imageOptimKeys = strings.Split(imageOptimKey, ",")
@@ -279,7 +280,7 @@ func reindex() error {
 		if err != nil {
 			return err
 		}
-		price := int(priceFloat * 100)
+		price := int((priceFloat * 100) + ((priceFloat * 100) * (pdv / 100)))
 
 		hasReduction := false
 		reduction := 0
