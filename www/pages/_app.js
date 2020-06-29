@@ -85,7 +85,6 @@ export default App;
 /*
 TODO:
 	contact form backend, newsletter form backend
-	handle no products in products list and search list
 	images in popular categories cards
 	checkout
 	category tree styles

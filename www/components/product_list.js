@@ -6,7 +6,7 @@ import Router from "next/router";
 
 function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
   if (!products || !products.length) {
-    return <div>no products</div>;
+    return <div>Učitavanje proizvoda...</div>;
   }
 
   const filters = getFilters(products);
