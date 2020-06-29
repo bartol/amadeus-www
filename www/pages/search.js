@@ -8,6 +8,7 @@ import SearchSuggestions from "../components/search_suggestions";
 function Search({
   query,
   results,
+  hasQuery,
   hasResults,
   categoriesTree,
   setCart,
@@ -35,7 +36,7 @@ function Search({
 
   return (
     <div className="container mx-auto px-4">
-      {hasResults ? (
+      {hasQuery ? (
         <div>
           <SEO
             title={`Rezultati pretrage "${query}" | Amadeus II d.o.o. shop`}
@@ -43,7 +44,11 @@ function Search({
             path={`search/?q=${encodeURIComponent(query)}`}
           />
           <h1 className="heading text-4xl mt-12 mb-5">Rezultati pretrage "{query}"</h1>
-          <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
+          {hasResults ? (
+            <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
+          ) : (
+            <div>Za Vašu pretragu pronađeno je 0 rezultata.</div>
+          )}
         </div>
       ) : (
         <div className="mt-12">
@@ -67,6 +72,7 @@ export async function getServerSideProps({ query: { q } }) {
       props: {
         query: "",
         results: [],
+        hasQuery: false,
         hasResults: false,
         categoriesTree,
       },
@@ -80,7 +86,8 @@ export async function getServerSideProps({ query: { q } }) {
     props: {
       query: q,
       results,
-      hasResults: true,
+      hasQuery: true,
+      hasResults: results.length > 0,
       categoriesTree,
     },
   };

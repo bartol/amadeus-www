@@ -2,6 +2,10 @@ import CartRow from "./cart_row";
 import { getTotal } from "../helpers/price";
 
 function CartTable({ cart, setCart, setScroll, tableRef }) {
+  if (!cart.length) {
+    return <div>Vaša košarica je prazna.</div>;
+  }
+
   return (
     <div>
       <div
