@@ -24,7 +24,9 @@ function Alert({ message, id, colorClass, Icon, removeAlert }) {
           backgroundColor: `var(--color-${colorClass}-normal-fill)`,
         }}
       >
-        <Icon />
+        <div>
+          <Icon />
+        </div>
         <span className="text-lg ml-3">{message}</span>
       </button>
     </li>

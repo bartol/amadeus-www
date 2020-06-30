@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send } from "react-feather";
+import { Send, AlertCircle } from "react-feather";
 
 function Info({ h1Heading, dispatchAlert }) {
   const [email, setEmail] = useState("");
@@ -40,8 +40,28 @@ function Info({ h1Heading, dispatchAlert }) {
             <button
               type="button"
               className="button ~info !normal px-3 py-2"
-              onClick={() => {
-                dispatchAlert("Poruka uspješno poslana", "info", Send);
+              onClick={async () => {
+                const formData = new URLSearchParams();
+                formData.append("email", email);
+                formData.append("message", message);
+
+                const data = await fetch("http://localhost:8081/contact/", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  body: formData.toString(),
+                });
+                const json = await data.json();
+                if (json.status === "success") {
+                  dispatchAlert("Poruka uspješno poslana", "info", Send);
+                  return;
+                }
+                dispatchAlert(
+                  "Pogreška prilikom slanja poruke. Molimo pokušajte ponovo.",
+                  "critical",
+                  AlertCircle
+                );
               }}
             >
               <Send />
