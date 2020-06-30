@@ -84,7 +84,6 @@ export default App;
 
 /*
 TODO:
-	contact form backend, newsletter form backend
 	images in popular categories cards
 	checkout
 	category tree styles
