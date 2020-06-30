@@ -25,7 +25,7 @@ var imageOptimKeys = strings.Split(imageOptimKey, ",")
 var smtpPassword = os.Getenv("SMTP_PASSWORD")
 var smtpEmail = "prodaja@amadeus2.hr"
 var smtpHost = "mail.amadeus2.hr"
-var smtpPort = ":25"
+var smtpPort = ":587"
 var smtpAuth = smtp.PlainAuth("", smtpEmail, smtpPassword, smtpHost)
 
 func getPioneerURL(resource string) string {
