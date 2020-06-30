@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
-import { Send, Mail, Phone, MapPin, Instagram, Facebook, Globe } from "react-feather";
+import { Send, Mail, Phone, MapPin, Instagram, Facebook, Globe, AlertCircle } from "react-feather";
 
 function Footer({ dispatchAlert }) {
   const [email, setEmail] = useState("");
@@ -21,8 +21,27 @@ function Footer({ dispatchAlert }) {
             <button
               type="button"
               className="button ~info !normal px-3 py-2"
-              onClick={() => {
-                dispatchAlert("Prijava na newsletter uspješno poslana", "info", Send);
+              onClick={async () => {
+                const formData = new URLSearchParams();
+                formData.append("email", email);
+
+                const data = await fetch("https://api.amadeus2.hr/newsletter/", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  body: formData.toString(),
+                });
+                const json = await data.json();
+                if (json.status === "success") {
+                  dispatchAlert("Prijava na newsletter uspješno poslana", "info", Send);
+                  return;
+                }
+                dispatchAlert(
+                  "Pogreška prilikom prijave na newsletter. Molimo pokušajte ponovo.",
+                  "critical",
+                  AlertCircle
+                );
               }}
             >
               <Send />

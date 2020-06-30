@@ -807,7 +807,7 @@ func main() {
 
 	http.HandleFunc("/search/", searchHandler)
 	http.HandleFunc("/contact/", contactHandler)
-	// http.HandleFunc("/newsletter/", newsletterHandler)
+	http.HandleFunc("/newsletter/", newsletterHandler)
 
 	log.Println("server listening on :8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
@@ -998,11 +998,82 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 	adminSubject := "[amadeus2.hr] Nova poruka"
 	adminBuf := new(bytes.Buffer)
 	adminData := contactEmailAdminTemplateData{
-		subject,
+		adminSubject,
 		customerEmail,
 		customerMessage,
 	}
 	err = contactEmailAdminTemplates.Execute(adminBuf, adminData)
+	adminHTML := []byte(adminBuf.String())
+
+	adminE := email.NewEmail()
+	adminE.From = "Amadeus II d.o.o. <web@amadeus2.hr>"
+	adminE.To = []string{"prodaja@amadeus2.hr"}
+	adminE.ReplyTo = []string{customerEmail}
+	adminE.Subject = adminSubject
+	adminE.HTML = adminHTML
+	_, err = adminE.AttachFile("../www/public/img/logo.png")
+	err = adminE.Send(smtpHost+smtpPort, smtpAuth)
+	// err = adminE.Send("127.0.0.1:1025", nil)
+
+	status := "success"
+	if err != nil {
+		status = "failure"
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	err = json.NewEncoder(w).Encode(response{status})
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
+}
+
+var newsletterEmailTemplates = template.Must(template.ParseFiles(
+	"emails/base.html",
+	"emails/newsletter.html",
+))
+var newsletterEmailAdminTemplates = template.Must(template.ParseFiles(
+	"emails/base.html",
+	"emails/newsletter_admin.html",
+))
+
+type newsletterEmailTemplateData struct {
+	Subject string
+	Email   string
+}
+
+func newsletterHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+
+	customerEmail := r.FormValue("email")
+
+	subject := "[amadeus2.hr] Vaša prijava na newsletter je uspješno poslana"
+	buf := new(bytes.Buffer)
+	data := newsletterEmailTemplateData{
+		subject,
+		customerEmail,
+	}
+	err := newsletterEmailTemplates.Execute(buf, data)
+	html := []byte(buf.String())
+
+	e := email.NewEmail()
+	e.From = "Amadeus II d.o.o. <prodaja@amadeus2.hr>"
+	e.To = []string{customerEmail}
+	e.Subject = subject
+	e.HTML = html
+	_, err = e.AttachFile("../www/public/img/logo.png")
+	err = e.Send(smtpHost+smtpPort, smtpAuth)
+	// err = e.Send("127.0.0.1:1025", nil)
+
+	adminSubject := "[amadeus2.hr] Nova prijava na newsletter"
+	adminBuf := new(bytes.Buffer)
+	adminData := newsletterEmailTemplateData{
+		adminSubject,
+		customerEmail,
+	}
+	err = newsletterEmailAdminTemplates.Execute(adminBuf, adminData)
 	adminHTML := []byte(adminBuf.String())
 
 	adminE := email.NewEmail()
