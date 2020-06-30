@@ -1,3 +1,5 @@
+github.com/jordan-wright/email v0.0.0-20200602115436-fd8a7622303e h1:OGunVjqY7y4U4laftpEHv+mvZBlr7UGimJXKEGQtg48=
+github.com/jordan-wright/email v0.0.0-20200602115436-fd8a7622303e/go.mod h1:Fy2gCFfZhay8jplf/Csj6cyH/oshQTkLQYZbKkcV+SY=
 github.com/lithammer/fuzzysearch v1.1.0 h1:go9v8tLCrNTTlH42OAaq4eHFe81TDHEnlrMEb6R4f+A=
 github.com/lithammer/fuzzysearch v1.1.0/go.mod h1:Bqx4wo8lTOFcJr3ckpY6HA9lEIOO0H5HrkJ5CsN56HQ=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=

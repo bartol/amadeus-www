@@ -1,16 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
+	"net/smtp"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/jordan-wright/email"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
@@ -18,6 +22,11 @@ var pdv float64 = 25
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
 var imageOptimKey = os.Getenv("IMAGEOPTIM_API_KEY")
 var imageOptimKeys = strings.Split(imageOptimKey, ",")
+var smtpPassword = os.Getenv("SMTP_PASSWORD")
+var smtpEmail = "prodaja@amadeus2.hr"
+var smtpHost = "mail.amadeus2.hr"
+var smtpPort = ":25"
+var smtpAuth = smtp.PlainAuth("", smtpEmail, smtpPassword, smtpHost)
 
 func getPioneerURL(resource string) string {
 	return "https://" + pioneerKey + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
@@ -174,6 +183,10 @@ type categoryTree struct {
 type cachedImage struct {
 	Body        []byte
 	ContentType string
+}
+
+type response struct {
+	Status string `json:"status"`
 }
 
 var productsMap = make(map[string]product)
@@ -776,6 +789,9 @@ func main() {
 	if imageOptimKey == "" {
 		log.Fatal("add key in IMAGEOPTIM_API_KEY")
 	}
+	if smtpPassword == "" {
+		log.Fatal("add key in SMTP_PASSWORD")
+	}
 
 	log.Println("reindexing...")
 	err := reindex()
@@ -790,6 +806,8 @@ func main() {
 	http.HandleFunc("/images/", imagesHandler)
 
 	http.HandleFunc("/search/", searchHandler)
+	http.HandleFunc("/contact/", contactHandler)
+	// http.HandleFunc("/newsletter/", newsletterHandler)
 
 	log.Println("server listening on :8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
@@ -925,6 +943,85 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	err := json.NewEncoder(w).Encode(products)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
+}
+
+var contactEmailTemplates = template.Must(template.ParseFiles(
+	"emails/base.html",
+	"emails/contact.html",
+))
+var contactEmailAdminTemplates = template.Must(template.ParseFiles(
+	"emails/base.html",
+	"emails/contact_admin.html",
+))
+
+type contactEmailTemplateData struct {
+	Subject string
+	Message string
+}
+
+type contactEmailAdminTemplateData struct {
+	Subject string
+	Email   string
+	Message string
+}
+
+func contactHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+
+	customerEmail := r.FormValue("email")
+	customerMessage := r.FormValue("message")
+
+	subject := "[amadeus2.hr] Vaša poruka je uspješno poslana"
+	buf := new(bytes.Buffer)
+	data := contactEmailTemplateData{
+		subject,
+		customerMessage,
+	}
+	err := contactEmailTemplates.Execute(buf, data)
+	html := []byte(buf.String())
+
+	e := email.NewEmail()
+	e.From = "Amadeus II d.o.o. <prodaja@amadeus2.hr>"
+	e.To = []string{customerEmail}
+	e.Subject = subject
+	e.HTML = html
+	_, err = e.AttachFile("../www/public/img/logo.png")
+	err = e.Send(smtpHost+smtpPort, smtpAuth)
+	// err = e.Send("127.0.0.1:1025", nil)
+
+	adminSubject := "[amadeus2.hr] Nova poruka"
+	adminBuf := new(bytes.Buffer)
+	adminData := contactEmailAdminTemplateData{
+		subject,
+		customerEmail,
+		customerMessage,
+	}
+	err = contactEmailAdminTemplates.Execute(adminBuf, adminData)
+	adminHTML := []byte(adminBuf.String())
+
+	adminE := email.NewEmail()
+	adminE.From = "Amadeus II d.o.o. <web@amadeus2.hr>"
+	adminE.To = []string{"prodaja@amadeus2.hr"}
+	adminE.ReplyTo = []string{customerEmail}
+	adminE.Subject = adminSubject
+	adminE.HTML = adminHTML
+	_, err = adminE.AttachFile("../www/public/img/logo.png")
+	err = adminE.Send(smtpHost+smtpPort, smtpAuth)
+	// err = adminE.Send("127.0.0.1:1025", nil)
+
+	status := "success"
+	if err != nil {
+		status = "failure"
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	err = json.NewEncoder(w).Encode(response{status})
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
