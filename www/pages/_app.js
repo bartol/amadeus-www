@@ -59,7 +59,7 @@ function App({ Component, pageProps }) {
         dispatchAlert={dispatchAlert}
       />
       <Footer dispatchAlert={dispatchAlert} />
-      <ul className="fixed bottom-0 ml-5 mb-5">
+      <ul className="fixed bottom-0 m-4">
         {alerts
           .sort((a, b) => a.id - b.id)
           .map((a) => {
