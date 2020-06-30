@@ -45,7 +45,7 @@ function Info({ h1Heading, dispatchAlert }) {
                 formData.append("email", email);
                 formData.append("message", message);
 
-                const data = await fetch("http://localhost:8081/contact/", {
+                const data = await fetch("https://api.amadeus2.hr/contact/", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
