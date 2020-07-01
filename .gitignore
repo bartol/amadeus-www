@@ -1,6 +1,6 @@
 api/api
-api/key
-api/keys
+api/pioneer_api
+api/imageoptim_api
 
 www/node_modules
 www/.next
