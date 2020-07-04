@@ -3,10 +3,20 @@
 @tailwind utilities;
 
 @media (min-width: 400px) {
-  .xs\:block { display: block !important; }
-  .xs\:hidden { display: none !important; }
+  .xs\:block {
+    display: block !important;
+  }
+  .xs\:hidden {
+    display: none !important;
+  }
 }
 
 .drawer-content-wrapper {
-	max-width: 100%;
+  max-width: 100%;
+}
+
+.highlightKeywords em {
+  font-style: normal;
+  color: var(--color-info-normal-content);
+  background-color: var(--color-info-normal-fill);
 }
