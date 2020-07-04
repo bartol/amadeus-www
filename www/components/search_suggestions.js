@@ -30,7 +30,10 @@ function SearchSuggestions({ results, query }) {
                 <td>
                   <Link href="/[category]/[slug]" as={"/" + p.URL}>
                     <a>
-                      <h3>{p.Name}</h3>
+                      <h3
+                        dangerouslySetInnerHTML={{ __html: p.Name }}
+                        className="highlightKeywords"
+                      />
                     </a>
                   </Link>
                 </td>

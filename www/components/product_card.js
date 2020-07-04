@@ -19,7 +19,10 @@ function ProductCard({ product, setCart, dispatchAlert }) {
                 className="lazyload absolute w-full h-full object-contain"
               />
             </div>
-            <h3 className="subheading">{p.Name}</h3>
+            <h3
+              dangerouslySetInnerHTML={{ __html: p.Name }}
+              className="subheading highlightKeywords"
+            />
           </a>
         </Link>
         <div>
