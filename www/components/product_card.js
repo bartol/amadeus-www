@@ -21,7 +21,7 @@ function ProductCard({ product, setCart, dispatchAlert }) {
             </div>
             <h3
               dangerouslySetInnerHTML={{ __html: p.Name }}
-              className="subheading highlightKeywords"
+              className="subheading my-2 highlightKeywords"
             />
           </a>
         </Link>
@@ -35,18 +35,18 @@ function ProductCard({ product, setCart, dispatchAlert }) {
                 {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
               </h4>
               <h4
-                className="subheading text-lg rounded px-1"
+                className="subheading rounded px-2"
                 style={{
                   color: "var(--color-critical-normal-content)",
                   backgroundColor: "var(--color-critical-normal-fill)",
                 }}
               >
-                <span className="px-px">{getReduction(p.Reduction, p.ReductionType)}</span>
+                {getReduction(p.Reduction, p.ReductionType)}
               </h4>
             </div>
           )}
         </div>
-        <div className="flex h-10 mt-3">
+        <div className="flex h-10 mt-4">
           <Link href="/[category]/[slug]" as={"/" + p.URL}>
             <a className="button ~info !normal text-lg flex-grow justify-center">
               Više informacija
