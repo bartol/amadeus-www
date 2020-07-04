@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/smtp"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -942,7 +943,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		limit = "60"
 	}
 
-	url := "http://127.0.0.1:7700/indexes/products/search?q=" + query + "&limit=" + limit + "&attributesToHighlight=Name"
+	url := "http://127.0.0.1:7700/indexes/products/search?q=" + url.QueryEscape(query) + "&limit=" + limit + "&attributesToHighlight=Name"
 
 	body, err := getBody(url)
 	if err != nil {
