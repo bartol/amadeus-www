@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/jordan-wright/email"
-	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 var pdv float64 = 25
@@ -191,7 +190,6 @@ type response struct {
 
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
-var productsIndex []string
 var categoriesMap = make(map[string]categoryWithProducts)
 var categoriesSlice []categoryWithProducts
 var categoriesTree []categoryTree
@@ -272,7 +270,6 @@ func reindex() error {
 
 	productsMap = make(map[string]product)
 	productsLiteSlice = []productLite{}
-	productsIndex = []string{}
 	categoriesMap = make(map[string]categoryWithProducts)
 	categoriesSlice = []categoryWithProducts{}
 	categoriesTree = []categoryTree{}
@@ -477,10 +474,13 @@ func reindex() error {
 		}
 
 		productsLiteSlice = append(productsLiteSlice, productLite)
+	}
 
-		productIndex := p.Name + " - " + strings.Join(flatCategories[:], " - ")
-
-		productsIndex = append(productsIndex, productIndex)
+	buf := new(bytes.Buffer)
+	err = json.NewEncoder(buf).Encode(productsLiteSlice)
+	_, err = http.Post("http://127.0.0.1:7700/indexes/products/documents", "application/json", buf)
+	if err != nil {
+		log.Println("failed to add products to search index", err.Error())
 	}
 
 	for _, c := range categoriesData.Categories {
@@ -926,23 +926,43 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func searchHandler(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query().Get("query")
-	results := fuzzy.RankFindNormalizedFold(query, productsIndex)
-	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
-	products := []productLite{}
-	for i, r := range results {
-		if i == limit && limit != 0 {
-			break
-		}
-
-		products = append(products, productsLiteSlice[r.OriginalIndex])
+type searchResp struct {
+	Hits []struct {
+		Formatted productLite `json:"_formatted"`
 	}
+}
 
+func searchHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	err := json.NewEncoder(w).Encode(products)
+	query := r.URL.Query().Get("query")
+	limit := r.URL.Query().Get("limit")
+	if limit == "" {
+		limit = "60"
+	}
+
+	url := "http://127.0.0.1:7700/indexes/products/search?q=" + query + "&limit=" + limit + "&attributesToHighlight=Name"
+
+	body, err := getBody(url)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	data := searchResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	hits := []productLite{}
+	for _, h := range data.Hits {
+		hits = append(hits, h.Formatted)
+	}
+
+	err = json.NewEncoder(w).Encode(hits)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
