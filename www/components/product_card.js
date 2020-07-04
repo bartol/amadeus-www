@@ -30,11 +30,19 @@ function ProductCard({ product, setCart, dispatchAlert }) {
             {getPrice(p.Price)}
           </h4>
           {p.HasReduction && (
-            <div className="flex">
+            <div className="flex justify-between items-center">
               <h4 className="subheading font-bold">
                 {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
               </h4>
-              <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
+              <h4
+                className="subheading text-lg rounded px-1"
+                style={{
+                  color: "var(--color-critical-normal-content)",
+                  backgroundColor: "var(--color-critical-normal-fill)",
+                }}
+              >
+                <span className="px-px">{getReduction(p.Reduction, p.ReductionType)}</span>
+              </h4>
             </div>
           )}
         </div>
