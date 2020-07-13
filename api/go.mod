@@ -4,6 +4,5 @@ go 1.13
 
 require (
 	github.com/jordan-wright/email v0.0.0-20200602115436-fd8a7622303e
-	github.com/lithammer/fuzzysearch v1.1.0
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 )
