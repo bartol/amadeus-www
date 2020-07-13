@@ -2,6 +2,9 @@ package main
 
 import (
 	"bytes"
+	"crypto/sha512"
+	"database/sql"
+	"encoding/hex"
 	"encoding/json"
 	"html/template"
 	"io/ioutil"
@@ -16,10 +19,13 @@ import (
 	"time"
 
 	"github.com/jordan-wright/email"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var pdv float64 = 25
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
+var wsPayKey = os.Getenv("WSPAY_KEY")
+var wsPayShopID = "PIONEERHR"
 var imageOptimKey = os.Getenv("IMAGEOPTIM_API_KEY")
 var imageOptimKeys = strings.Split(imageOptimKey, ",")
 var smtpPassword = os.Getenv("SMTP_PASSWORD")
@@ -27,6 +33,7 @@ var smtpEmail = "prodaja@amadeus2.hr"
 var smtpHost = "mail.amadeus2.hr"
 var smtpPort = ":587"
 var smtpAuth = smtp.PlainAuth("", smtpEmail, smtpPassword, smtpHost)
+var db *sql.DB
 
 func getPioneerURL(resource string) string {
 	return "https://" + pioneerKey + "@pioneer.hr/api/" + resource + "/?io_format=JSON&display=full"
@@ -787,6 +794,9 @@ func main() {
 	if pioneerKey == "" {
 		log.Fatal("add key in PIONEER_API_KEY")
 	}
+	if wsPayKey == "" {
+		log.Fatal("add key in WSPAY_KEY")
+	}
 	if imageOptimKey == "" {
 		log.Fatal("add key in IMAGEOPTIM_API_KEY")
 	}
@@ -794,8 +804,25 @@ func main() {
 		log.Fatal("add key in SMTP_PASSWORD")
 	}
 
+	var err error
+	db, err = sql.Open("sqlite3", "./data.sqlite")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(`
+	CREATE TABLE IF NOT EXISTS
+		carts (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			products TEXT
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	log.Println("reindexing...")
-	err := reindex()
+	err = reindex()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -806,6 +833,7 @@ func main() {
 	http.HandleFunc("/categories/", categoriesHandler)
 	http.HandleFunc("/images/", imagesHandler)
 
+	http.HandleFunc("/cart/", cartHandler)
 	http.HandleFunc("/search/", searchHandler)
 	http.HandleFunc("/contact/", contactHandler)
 	http.HandleFunc("/newsletter/", newsletterHandler)
@@ -924,6 +952,125 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("404"))
 			return
 		}
+	}
+}
+
+type cartResp struct {
+	ShopID      string
+	CartID      string
+	TotalAmount int
+	Signature   string
+	Products    []productLite
+}
+
+func cartHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+
+	productURLs := strings.Split(r.FormValue("products"), ",")
+	products := []productLite{}
+	productsForStorage := ""
+	totalAmount := 0
+
+	if len(productURLs) == 0 || (len(productURLs) == 1 && productURLs[0] == "") {
+		err := json.NewEncoder(w).Encode(cartResp{})
+		if err != nil {
+			w.Write([]byte(err.Error()))
+		}
+		return
+	}
+
+	for _, URL := range productURLs {
+		splitURL := strings.Split(URL, "|")
+
+		if splitURL[0] == "" || splitURL[1] == "" {
+			w.Write([]byte("url and quantity not present"))
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		quantity, err := strconv.Atoi(splitURL[1])
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		p := productsMap[splitURL[0]]
+		products = append(products, productLite{
+			ID:            p.ID,
+			Name:          p.Name,
+			Price:         p.Price,
+			HasReduction:  p.HasReduction,
+			Reduction:     p.Reduction,
+			ReductionType: p.ReductionType,
+			OutOfStock:    p.OutOfStock,
+			Quantity:      quantity,
+			Slug:          p.Slug,
+			URL:           p.URL,
+			LastUpdated:   p.LastUpdated,
+			DefaultImage:  p.DefaultImage,
+			Categories:    p.Categories,
+			Features:      p.Features,
+		})
+
+		if p.HasReduction {
+			if p.ReductionType == "amount" {
+				totalAmount += ((p.Price - p.Reduction) * quantity)
+			}
+			if p.ReductionType == "percentage" {
+				totalAmount += (((p.Price * (100 - p.Reduction)) / 100) * quantity)
+			}
+		} else {
+			totalAmount += (p.Price * quantity)
+		}
+
+		hasReduction := "1"
+		if !p.HasReduction {
+			hasReduction = "0"
+		}
+
+		productsForStorage += "|||" + strconv.Itoa(p.ID) + "|" +
+			hasReduction + "|" + strconv.Itoa(p.Price) + "|" + strconv.Itoa(p.Reduction) +
+			"|" + splitURL[1] + "|" + p.ReductionType + "|" + p.URL
+	}
+
+	result, err := db.Exec(`
+	INSERT INTO
+		carts (products)
+		VALUES (?)
+	`, productsForStorage)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	cartID := strconv.Itoa(int(id))
+
+	plainSignature := wsPayShopID + wsPayKey + cartID +
+		wsPayKey + strconv.Itoa(totalAmount) + wsPayKey
+
+	h := sha512.New()
+	h.Write([]byte(plainSignature))
+	signature := hex.EncodeToString(h.Sum(nil))
+
+	resp := cartResp{
+		wsPayShopID,
+		cartID,
+		totalAmount,
+		signature,
+		products,
+	}
+
+	err = json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		w.Write([]byte(err.Error()))
 	}
 }
 

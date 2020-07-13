@@ -3,6 +3,8 @@ api
 pioneer_api
 imageoptim_api
 smtp_password
+wspay_key
 
 meilisearch
 data.ms
+data.sqlite
