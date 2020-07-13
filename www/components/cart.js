@@ -1,11 +1,46 @@
 import Drawer from "rc-drawer";
 import CartTable from "./cart_table";
 import { X, ArrowRight, ArrowLeft } from "react-feather";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function Cart({ cart, setCart, cartOpened, setCartOpened }) {
   const [scroll, setScroll] = useState(0);
   const tableRef = useRef(null);
+
+  const [checkoutData, setCheckoutData] = useState({
+    shopID: "",
+    cartID: "",
+    totalAmount: "",
+    signature: "",
+  });
+
+  useEffect(() => {
+    async function a() {
+      const formData = new URLSearchParams();
+      formData.append("products", cart.map((p) => p.URL + "|" + p.Quantity).join(","));
+
+      // const data = await fetch("http://localhost:8081/cart/", {
+      const data = await fetch("https://api.amadeus2.hr/cart/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString(),
+      });
+
+      const json = await data.json();
+      const totalAmountArr = [...("" + json.TotalAmount)];
+      totalAmountArr.splice(totalAmountArr.length - 2, 0, ",");
+      setCheckoutData({
+        shopID: json.ShopID,
+        cartID: json.CartID,
+        totalAmount: totalAmountArr.join(""),
+        signature: json.Signature,
+      });
+      // TODO update cart
+    }
+    a();
+  }, [cart]);
 
   return (
     <Drawer
@@ -43,6 +78,17 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
           </div>
         </div>
         <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
+        <form name="pay" action="https://formtest.wspay.biz/Authorization.aspx" method="POST">
+          <input type="hidden" name="ShopID" value={checkoutData.shopID} />
+          <input type="hidden" name="ShoppingCartID" value={checkoutData.cartID} />
+          <input type="hidden" name="Version" value="2.0" />
+          <input type="hidden" name="TotalAmount" value={checkoutData.totalAmount} />
+          <input type="hidden" name="Signature" value={checkoutData.signature} />
+          <input type="hidden" name="ReturnURL" value="https://bartol.dev/success" />
+          <input type="hidden" name="CancelURL" value="https://bartol.dev/cancel" />
+          <input type="hidden" name="ReturnErrorURL" value="https://bartol.dev/error" />
+          <input type="submit" value="Pay" />
+        </form>
       </div>
     </Drawer>
   );
