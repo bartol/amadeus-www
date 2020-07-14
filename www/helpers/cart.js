@@ -40,4 +40,4 @@ function cartRemove(setCart, product) {
   setCart(cart);
 }
 
-export { cartGet, cartAdd, cartSetQuantity, cartRemove };
+export { cartGet, cartAdd, cartSetQuantity, cartRemove, cartSave };

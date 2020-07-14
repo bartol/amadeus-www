@@ -2,6 +2,7 @@ import Drawer from "rc-drawer";
 import CartTable from "./cart_table";
 import { X, ArrowRight, ArrowLeft } from "react-feather";
 import { useState, useRef, useEffect } from "react";
+import { cartSave } from "../helpers/cart";
 
 function Cart({ cart, setCart, cartOpened, setCartOpened }) {
   const [scroll, setScroll] = useState(0);
@@ -37,7 +38,22 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
         totalAmount: totalAmountArr.join(""),
         signature: json.Signature,
       });
-      // TODO update cart
+
+      cart.forEach((p, i) => {
+        const updatedProduct = json.Products.find((uP) => uP.ID === p.ID);
+        const refreshIfNeeded = (property) => {
+          if (p[property] !== updatedProduct[property]) {
+            const updatedCart = cart;
+            updatedCart[i][property] = updatedProduct[property];
+            cartSave(updatedCart);
+            setCart(updatedCart);
+          }
+        };
+        refreshIfNeeded("Price");
+        refreshIfNeeded("HasReduction");
+        refreshIfNeeded("Reduction");
+        refreshIfNeeded("ReductionType");
+      });
     }
     a();
   }, [cart]);
