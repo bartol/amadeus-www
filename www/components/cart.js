@@ -1,8 +1,9 @@
 import Drawer from "rc-drawer";
 import CartTable from "./cart_table";
-import { X, ArrowRight, ArrowLeft } from "react-feather";
+import { X, ArrowRight, ArrowLeft, CreditCard } from "react-feather";
 import { useState, useRef, useEffect } from "react";
 import { cartSave } from "../helpers/cart";
+import Link from "next/link";
 
 function Cart({ cart, setCart, cartOpened, setCartOpened }) {
   const [scroll, setScroll] = useState(0);
@@ -58,6 +59,8 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
     a();
   }, [cart]);
 
+  const [terms, setTerms] = useState(false);
+
   return (
     <Drawer
       placement="right"
@@ -94,6 +97,15 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
           </div>
         </div>
         <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
+        <label className="flex">
+          <input type="checkbox" checked={terms} onChange={() => setTerms(!terms)} />
+          <span className="p-1">
+            Prihvaćam{" "}
+            <Link href="/info/uvjeti-poslovanja">
+              <a className="portal p-0">uvjete poslovanja</a>
+            </Link>
+          </span>
+        </label>
         <form name="pay" action="https://formtest.wspay.biz/Authorization.aspx" method="POST">
           <input type="hidden" name="ShopID" value={checkoutData.shopID} />
           <input type="hidden" name="ShoppingCartID" value={checkoutData.cartID} />
@@ -103,7 +115,11 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
           <input type="hidden" name="ReturnURL" value="https://bartol.dev/success" />
           <input type="hidden" name="CancelURL" value="https://bartol.dev/cancel" />
           <input type="hidden" name="ReturnErrorURL" value="https://bartol.dev/error" />
-          <input type="submit" value="Pay" />
+
+          <button type="submit" className="button ~positive !normal px-3 py-2">
+            <CreditCard />
+            <span className="text-lg ml-2">Plaćanje</span>
+          </button>
         </form>
       </div>
     </Drawer>
