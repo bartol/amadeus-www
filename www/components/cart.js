@@ -59,6 +59,7 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
     a();
   }, [cart]);
 
+  const [paymentMethod, setPaymentMethod] = useState("uplatom_po_ponudi");
   const [terms, setTerms] = useState(false);
 
   return (
@@ -97,9 +98,34 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
           </div>
         </div>
         <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
-        <label className="flex">
+        <h3 className="subheading mt-12 sm:mt-2 mb-2">Način plaćanja</h3>
+        <label className="flex my-1 ml-1">
+          <input
+            type="radio"
+            checked={paymentMethod === "uplatom_po_ponudi"}
+            onChange={() => setPaymentMethod("uplatom_po_ponudi")}
+          />
+          <span className="px-1">Plaćanje uplatom po ponudi</span>
+        </label>
+        <label className="flex my-1 ml-1">
+          <input
+            type="radio"
+            checked={paymentMethod === "pouzecem"}
+            onChange={() => setPaymentMethod("pouzecem")}
+          />
+          <span className="px-1">Plaćanje pouzećem</span>
+        </label>
+        <label className="flex my-1 ml-1">
+          <input
+            type="radio"
+            checked={paymentMethod === "karticom"}
+            onChange={() => setPaymentMethod("karticom")}
+          />
+          <span className="px-1">Plaćanje karticom</span>
+        </label>
+        <label className="flex mt-6 mb-2">
           <input type="checkbox" checked={terms} onChange={() => setTerms(!terms)} />
-          <span className="p-1">
+          <span className="px-1">
             Prihvaćam{" "}
             <Link href="/info/uvjeti-poslovanja">
               <a className="portal p-0">uvjete poslovanja</a>
@@ -118,7 +144,7 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
 
           <button type="submit" className="button ~positive !normal px-3 py-2">
             <CreditCard />
-            <span className="text-lg ml-2">Plaćanje</span>
+            <span className="text-lg ml-2">Izvrši kupnju</span>
           </button>
         </form>
       </div>

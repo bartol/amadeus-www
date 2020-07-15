@@ -86,5 +86,6 @@ export default App;
 TODO:
 	images in popular categories cards
 	checkout
-	category tree styles
+  category tree styles
+  kuponi
 */
