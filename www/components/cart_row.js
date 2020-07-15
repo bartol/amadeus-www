@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPrice, getReductedPrice, getReduction } from "../helpers/price";
+import { getPrice, getReductedPrice } from "../helpers/price";
 import { cartSetQuantity, cartRemove } from "../helpers/cart";
 import { Trash2 } from "react-feather";
 
@@ -30,14 +30,13 @@ function CartRow({ product, setCart }) {
         </Link>
       </td>
       <td>
-        <h4 className={`${p.HasReduction ? "line-through" : "font-bold"}`}>{getPrice(p.Price)}</h4>
+        <h4 className={`${p.HasReduction ? "line-through" : "font-bold"} whitespace-no-wrap`}>
+          {getPrice(p.Price)}
+        </h4>
         {p.HasReduction && (
-          <div className="flex whitespace-no-wrap">
-            <h4 className="font-bold mr-2">
-              {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
-            </h4>
-            <h4>({getReduction(p.Reduction, p.ReductionType)})</h4>
-          </div>
+          <h4 className="font-bold mr-2 whitespace-no-wrap">
+            {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
+          </h4>
         )}
       </td>
       <td>
