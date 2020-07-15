@@ -59,7 +59,7 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
     a();
   }, [cart]);
 
-  const [paymentMethod, setPaymentMethod] = useState("uplatom_po_ponudi");
+  const [paymentMethod, setPaymentMethod] = useState("uplatom-po-ponudi");
   const [terms, setTerms] = useState(false);
 
   return (
@@ -102,8 +102,8 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
         <label className="flex my-1 ml-1">
           <input
             type="radio"
-            checked={paymentMethod === "uplatom_po_ponudi"}
-            onChange={() => setPaymentMethod("uplatom_po_ponudi")}
+            checked={paymentMethod === "uplatom-po-ponudi"}
+            onChange={() => setPaymentMethod("uplatom-po-ponudi")}
           />
           <span className="px-1">Plaćanje uplatom po ponudi</span>
         </label>
