@@ -1,66 +1,12 @@
 import Drawer from "rc-drawer";
 import CartTable from "./cart_table";
 import { X, ArrowRight, ArrowLeft, CreditCard } from "react-feather";
-import { useState, useRef, useEffect } from "react";
-import { cartSave } from "../helpers/cart";
+import { useState, useRef } from "react";
 import Link from "next/link";
 
 function Cart({ cart, setCart, cartOpened, setCartOpened }) {
   const [scroll, setScroll] = useState(0);
   const tableRef = useRef(null);
-
-  const [checkoutData, setCheckoutData] = useState({
-    shopID: "",
-    cartID: "",
-    totalAmount: "",
-    signature: "",
-  });
-
-  useEffect(() => {
-    async function a() {
-      const formData = new URLSearchParams();
-      formData.append("products", cart.map((p) => p.URL + "|" + p.Quantity).join(","));
-
-      // const data = await fetch("http://localhost:8081/cart/", {
-      const data = await fetch("https://api.amadeus2.hr/cart/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: formData.toString(),
-      });
-
-      const json = await data.json();
-      const totalAmountArr = [...("" + json.TotalAmount)];
-      totalAmountArr.splice(totalAmountArr.length - 2, 0, ",");
-      setCheckoutData({
-        shopID: json.ShopID,
-        cartID: json.CartID,
-        totalAmount: totalAmountArr.join(""),
-        signature: json.Signature,
-      });
-
-      cart.forEach((p, i) => {
-        const updatedProduct = json.Products.find((uP) => uP.ID === p.ID);
-        const refreshIfNeeded = (property) => {
-          if (p[property] !== updatedProduct[property]) {
-            const updatedCart = cart;
-            updatedCart[i][property] = updatedProduct[property];
-            cartSave(updatedCart);
-            setCart(updatedCart);
-          }
-        };
-        refreshIfNeeded("Price");
-        refreshIfNeeded("HasReduction");
-        refreshIfNeeded("Reduction");
-        refreshIfNeeded("ReductionType");
-      });
-    }
-    a();
-  }, [cart]);
-
-  const [paymentMethod, setPaymentMethod] = useState("uplatom-po-ponudi");
-  const [terms, setTerms] = useState(false);
 
   return (
     <Drawer
@@ -98,55 +44,12 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
           </div>
         </div>
         <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
-        <h3 className="subheading mt-12 sm:mt-2 mb-2">Način plaćanja</h3>
-        <label className="flex my-1 ml-1">
-          <input
-            type="radio"
-            checked={paymentMethod === "uplatom-po-ponudi"}
-            onChange={() => setPaymentMethod("uplatom-po-ponudi")}
-          />
-          <span className="px-1">Plaćanje uplatom po ponudi</span>
-        </label>
-        <label className="flex my-1 ml-1">
-          <input
-            type="radio"
-            checked={paymentMethod === "pouzecem"}
-            onChange={() => setPaymentMethod("pouzecem")}
-          />
-          <span className="px-1">Plaćanje pouzećem</span>
-        </label>
-        <label className="flex my-1 ml-1">
-          <input
-            type="radio"
-            checked={paymentMethod === "karticom"}
-            onChange={() => setPaymentMethod("karticom")}
-          />
-          <span className="px-1">Plaćanje karticom</span>
-        </label>
-        <label className="flex mt-6 mb-2">
-          <input type="checkbox" checked={terms} onChange={() => setTerms(!terms)} />
-          <span className="px-1">
-            Prihvaćam{" "}
-            <Link href="/info/uvjeti-poslovanja">
-              <a className="portal p-0">uvjete poslovanja</a>
-            </Link>
-          </span>
-        </label>
-        <form name="pay" action="https://formtest.wspay.biz/Authorization.aspx" method="POST">
-          <input type="hidden" name="ShopID" value={checkoutData.shopID} />
-          <input type="hidden" name="ShoppingCartID" value={checkoutData.cartID} />
-          <input type="hidden" name="Version" value="2.0" />
-          <input type="hidden" name="TotalAmount" value={checkoutData.totalAmount} />
-          <input type="hidden" name="Signature" value={checkoutData.signature} />
-          <input type="hidden" name="ReturnURL" value="https://bartol.dev/success" />
-          <input type="hidden" name="CancelURL" value="https://bartol.dev/cancel" />
-          <input type="hidden" name="ReturnErrorURL" value="https://bartol.dev/error" />
-
-          <button type="submit" className="button ~positive !normal px-3 py-2">
+        <Link href="/checkout">
+          <a className="button ~positive !normal justify-center w-full sm:w-auto px-3 py-2 mt-2 sm:mt-0">
             <CreditCard />
             <span className="text-lg ml-2">Izvrši kupnju</span>
-          </button>
-        </form>
+          </a>
+        </Link>
       </div>
     </Drawer>
   );

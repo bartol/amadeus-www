@@ -41,7 +41,7 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
           </tfoot>
         </table>
       </div>
-      <h3 className="subheading font-bold float-right sm:hidden">Ukupno: {getTotal(cart)}</h3>
+      <h3 className="subheading font-bold sm:hidden">Ukupno: {getTotal(cart)}</h3>
     </div>
   );
 }
