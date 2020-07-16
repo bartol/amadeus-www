@@ -14,7 +14,7 @@ function Footer({ dispatchAlert }) {
             <input
               type="email"
               placeholder="Vaš email"
-              className="input ~neutral !normal mb-3 w-auto"
+              className="input ~neutral !normal mb-3"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
