@@ -44,12 +44,14 @@ function Cart({ cart, setCart, cartOpened, setCartOpened }) {
           </div>
         </div>
         <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
-        <Link href="/checkout">
-          <a className="button ~positive !normal justify-center w-full sm:w-auto px-3 py-2 mt-2 sm:mt-0">
-            <CreditCard />
-            <span className="text-lg ml-2">Izvrši kupnju</span>
-          </a>
-        </Link>
+        {cart.length > 0 && (
+          <Link href="/checkout">
+            <a className="button ~positive !normal justify-center w-full sm:w-auto px-3 py-2 mt-2 sm:mt-0">
+              <CreditCard />
+              <span className="text-lg ml-2">Izvrši kupnju</span>
+            </a>
+          </Link>
+        )}
       </div>
     </Drawer>
   );
