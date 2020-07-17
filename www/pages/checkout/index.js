@@ -21,7 +21,7 @@ const initData = {
 const TextInput = ({ property, placeholder, type = "text", data, setData }) => {
   return (
     <label>
-      <span class="support ml-1">{placeholder}</span>
+      <span className="support ml-1">{placeholder}</span>
       <input
         type={type}
         value={data[property]}
@@ -74,7 +74,7 @@ const DataForm = ({ data, setData }) => {
       <TextInput property="postalCode" placeholder="Poštanski broj" data={data} setData={setData} />
       <TextInput property="city" placeholder="Mjesto" data={data} setData={setData} />
 
-      <span class="support ml-1">Država</span>
+      <span className="support ml-1">Država</span>
       <div className="select !normal mb-3">
         <select
           value={data.country}
@@ -90,7 +90,7 @@ const DataForm = ({ data, setData }) => {
   );
 };
 
-function Checkout({ categoriesTree, menuOpened, setMenuOpened }) {
+function Checkout({ categoriesTree, cart, setOrder, menuOpened, setMenuOpened }) {
   const [paymentData, setPaymentData] = useState(initData);
   const [shippingData, setShippingData] = useState(initData);
   const [useShippingData, setUseShippingData] = useState(false);
@@ -137,7 +137,6 @@ function Checkout({ categoriesTree, menuOpened, setMenuOpened }) {
         <input
           type="radio"
           name="paymentMethod"
-          defaultChecked
           checked={paymentMethod === "uplata-po-ponudi"}
           onChange={() => setPaymentMethod("uplata-po-ponudi")}
         />
@@ -164,7 +163,7 @@ function Checkout({ categoriesTree, menuOpened, setMenuOpened }) {
 
       {paymentMethod === "kartica" && (
         <>
-          <span class="support ml-1">Odaberite karticu</span>
+          <span className="support ml-1">Odaberite karticu</span>
           <div className="select !normal mb-3">
             <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
               <option value="amex">American Express</option>
@@ -175,7 +174,7 @@ function Checkout({ categoriesTree, menuOpened, setMenuOpened }) {
             </select>
           </div>
 
-          <span class="support ml-1">Broj rata</span>
+          <span className="support ml-1">Broj rata</span>
           <div className="select !normal mb-3">
             <select
               value={installments}
@@ -211,7 +210,7 @@ function Checkout({ categoriesTree, menuOpened, setMenuOpened }) {
       )}
 
       <label>
-        <span class="support ml-1">Kupon</span>
+        <span className="support ml-1">Kupon</span>
         <input
           type="text"
           value={coupon}
@@ -221,12 +220,33 @@ function Checkout({ categoriesTree, menuOpened, setMenuOpened }) {
         />
       </label>
 
-      <Link href={`/checkout/${paymentMethod}`}>
-        <a className="button ~positive !normal justify-center w-full sm:w-auto px-3 py-2 mt-4">
-          <Eye />
-          <span className="text-lg ml-2">Pregledaj narudžbu</span>
-        </a>
-      </Link>
+      <button
+        type="button"
+        className="button ~positive !normal justify-center w-full sm:w-auto px-3 py-2 mt-4"
+        onClick={async () => {
+          const data = {
+            paymentData,
+            shippingData,
+            useShippingData,
+            additionalInfo,
+            paymentMethod,
+            cardType,
+            installments,
+            coupon,
+            cart: cart.map((p) => p.URL + "|" + p.Quantity).join(","),
+          };
+          const res = await fetch("https://api.amadeus2.hr/checkout/", {
+            method: "POST",
+            body: JSON.stringify(data),
+          });
+          const json = await res.json();
+          setOrder(json);
+          // TODO redirect to /checkout/kartica ...
+        }}
+      >
+        <Eye />
+        <span className="text-lg ml-2">Pregled narudžbe</span>
+      </button>
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );
