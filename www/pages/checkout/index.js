@@ -1,7 +1,7 @@
 import Menu from "../../components/menu";
 import SEO from "../../components/seo.js";
 import { useState } from "react";
-import Link from "next/link";
+import Router from "next/router";
 import { Eye } from "react-feather";
 
 const initData = {
@@ -103,7 +103,7 @@ function Checkout({ categoriesTree, cart, setOrder, menuOpened, setMenuOpened })
   return (
     <div className="container mx-auto px-4">
       <SEO
-        title="Amadeus II d.o.o. shop"
+        title="Narudžba | Amadeus II d.o.o. shop"
         description="Amadeus II d.o.o. je trgovina specijalizirana za prodaju putem interneta i nudi više od 10000 raspoloživih artikala iz različitih područja informatike, potrošačke elektronike..."
       />
       <h2 className="heading text-4xl mt-12 mb-5">Podaci za plaćanje</h2>
@@ -241,7 +241,7 @@ function Checkout({ categoriesTree, cart, setOrder, menuOpened, setMenuOpened })
           });
           const json = await res.json();
           setOrder(json);
-          // TODO redirect to /checkout/kartica ...
+          Router.push(`/checkout/${paymentMethod}`);
         }}
       >
         <Eye />
