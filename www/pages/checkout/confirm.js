@@ -145,3 +145,4 @@ export default Confirm;
 // rename to /order
 // prodizvodi, porez, dostava 0kn, ukupno
 // optionally save payment info
+// (re)move cart table scroll button

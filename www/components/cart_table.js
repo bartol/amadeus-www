@@ -1,29 +1,6 @@
 import CartRow from "./cart_row";
 import { getTotal, getPrice } from "../helpers/price";
 
-const TotalTable = ({ cart }) => {
-  return (
-    <table className="table font-normal mt-1" style={{ color: "var(--color-content)" }}>
-      <tr>
-        <td className="px-0 py-px">Proizvodi:</td>
-        <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.75)}</td>
-      </tr>
-      <tr>
-        <td className="px-0 py-px">Porez:</td>
-        <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.25)}</td>
-      </tr>
-      <tr>
-        <td className="px-0 py-px">Dostava:</td>
-        <td className="px-0 py-px">{getPrice(0)}</td>
-      </tr>
-      <tr className="font-bold">
-        <td className="px-0 py-px">Ukupno:</td>
-        <td className="px-0 py-px">{getTotal(cart)}</td>
-      </tr>
-    </table>
-  );
-};
-
 function CartTable({ cart, setCart, setScroll, tableRef }) {
   if (!cart.length) {
     return <div>Vaša košarica je prazna.</div>;
@@ -72,5 +49,28 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
     </div>
   );
 }
+
+const TotalTable = ({ cart }) => {
+  return (
+    <table className="table font-normal mt-1" style={{ color: "var(--color-content)" }}>
+      <tr>
+        <td className="px-0 py-px">Proizvodi:</td>
+        <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.75)}</td>
+      </tr>
+      <tr>
+        <td className="px-0 py-px">Porez:</td>
+        <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.25)}</td>
+      </tr>
+      <tr>
+        <td className="px-0 py-px">Dostava:</td>
+        <td className="px-0 py-px">{getPrice(0)}</td>
+      </tr>
+      <tr className="font-bold">
+        <td className="px-0 py-px">Ukupno:</td>
+        <td className="px-0 py-px">{getTotal(cart)}</td>
+      </tr>
+    </table>
+  );
+};
 
 export default CartTable;
