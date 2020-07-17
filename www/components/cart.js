@@ -1,10 +1,10 @@
 import Drawer from "rc-drawer";
 import CartTable from "./cart_table";
 import { X, ArrowRight, ArrowLeft } from "react-feather";
-import { useState, useRef } from "react";
+import { useState, useRef, useReducer } from "react";
 import CartForm from "./cart_form";
 
-function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened }) {
+function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispatchAlert }) {
   const [scroll, setScroll] = useState(0);
   const tableRef = useRef(null);
 
@@ -44,7 +44,15 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened }) {
           </div>
         </div>
         <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
-        {cart.length > 0 && <CartForm order={order} setOrder={setOrder} />}
+        {cart.length > 0 && (
+          <CartForm
+            cart={cart}
+            setCart={setCart}
+            order={order}
+            setOrder={setOrder}
+            dispatchAlert={dispatchAlert}
+          />
+        )}
       </div>
     </Drawer>
   );
