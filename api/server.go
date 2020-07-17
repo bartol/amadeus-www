@@ -970,6 +970,8 @@ type checkoutData struct {
 	Country     string `json:"country"`
 	PhoneNumber string `json:"phoneNumber"`
 	EmailAdress string `json:"emailAdress"`
+	Save        bool   `json:"save"`
+	Terms       bool   `json:"terms"`
 }
 
 type checkoutReq struct {
@@ -985,13 +987,20 @@ type checkoutReq struct {
 }
 
 type checkoutResp struct {
-	Success     bool
+	Status  bool   `json:"status"`
+	Error   string `json:"error"`
+	OrderID string
+	Cart    []productLite
+}
+
+type cardCheckoutResp struct {
+	Status      bool   `json:"status"`
+	Error       string `json:"error"`
 	ShopID      string
-	CartID      string
+	OrderID     string
 	TotalAmount int
 	Signature   string
-	Data        checkoutReq
-	Products    []productLite
+	Cart        []productLite
 }
 
 func checkoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -1000,12 +1009,27 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Content-Type", "application/json")
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
 	data := checkoutReq{}
-	_ = json.Unmarshal(body, &data)
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
 
 	if data.Cart == "" {
-		_ = json.NewEncoder(w).Encode(checkoutResp{})
+		data := checkoutResp{}
+		data.Error = "cart not present"
+		json.NewEncoder(w).Encode(data)
 		return
 	}
 
@@ -1017,18 +1041,25 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		splitURL := strings.Split(URL, "|")
 
 		if splitURL[0] == "" || splitURL[1] == "" {
-			w.Write([]byte("url and quantity not present"))
-			w.WriteHeader(http.StatusBadRequest)
+			data := checkoutResp{}
+			data.Error = "product not valid"
+			json.NewEncoder(w).Encode(data)
 			return
 		}
 
 		quantity, err := strconv.Atoi(splitURL[1])
 		if err != nil {
-			w.Write([]byte(err.Error()))
+			data := checkoutResp{}
+			data.Error = err.Error()
+			json.NewEncoder(w).Encode(data)
 			return
 		}
 
-		p := productsMap[splitURL[0]]
+		p, ok := productsMap[splitURL[0]]
+		if !ok {
+			continue
+		}
+
 		products = append(products, productLite{
 			ID:            p.ID,
 			Name:          p.Name,
@@ -1058,42 +1089,74 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	dbData, _ := json.Marshal(data)
-	dbProducts, _ := json.Marshal(products)
-	result, _ := db.Exec(`
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	jsonProducts, err := json.Marshal(products)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	result, err := db.Exec(`
 	INSERT INTO
-		orders (status,data, products, totalAmount)
+		orders (status,data,products,totalAmount)
 		VALUES (?,?,?,?)
-	`, "processing", string(dbData), string(dbProducts), totalAmount)
+	`, "processing", string(jsonData), string(jsonProducts), totalAmount)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
 		return
 	}
-	cartID := strconv.Itoa(int(id))
+	orderID := strconv.Itoa(int(id))
 
-	plainSignature := wsPayShopID + wsPayKey + cartID +
-		wsPayKey + strconv.Itoa(totalAmount) + wsPayKey
+	// send mail
 
-	h := sha512.New()
-	h.Write([]byte(plainSignature))
-	signature := hex.EncodeToString(h.Sum(nil))
+	if data.PaymentMethod == "kartica" {
+		plainSignature := wsPayShopID + wsPayKey + orderID +
+			wsPayKey + strconv.Itoa(totalAmount) + wsPayKey
 
-	resp := checkoutResp{
-		true,
-		wsPayShopID,
-		cartID,
-		totalAmount,
-		signature,
-		data,
-		products,
+		h := sha512.New()
+		h.Write([]byte(plainSignature))
+		signature := hex.EncodeToString(h.Sum(nil))
+
+		resp := cardCheckoutResp{
+			true,
+			"",
+			wsPayShopID,
+			orderID,
+			totalAmount,
+			signature,
+			products,
+		}
+
+		err = json.NewEncoder(w).Encode(resp)
+		if err != nil {
+			data := checkoutResp{}
+			data.Error = err.Error()
+			json.NewEncoder(w).Encode(data)
+		}
+		return
 	}
 
-	err = json.NewEncoder(w).Encode(resp)
-	if err != nil {
-		w.Write([]byte(err.Error()))
-	}
+	// handle other payment methods
+
 }
 
 type searchResp struct {
