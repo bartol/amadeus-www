@@ -141,3 +141,6 @@ export default Confirm;
 // terms
 // dodatne napomene
 // order_info component
+// cart form
+// rename to /order
+// prodizvodi, porez, dostava 0kn, ukupno
