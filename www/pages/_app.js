@@ -128,4 +128,5 @@ TODO:
   save order info
   fix allow origin
   cart alert on click go to cart
+  alert higher than cart
 */
