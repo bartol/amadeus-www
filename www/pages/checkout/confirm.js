@@ -138,11 +138,5 @@ export async function getStaticProps() {
 
 export default Confirm;
 
-// terms
-// dodatne napomene
-// order_info component
-// cart form
-// rename to /order
-// prodizvodi, porez, dostava 0kn, ukupno
-// optionally save payment info
+// TODO:
 // (re)move cart table scroll button
