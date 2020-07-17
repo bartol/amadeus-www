@@ -53,6 +53,7 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
 const TotalTable = ({ cart }) => {
   return (
     <table className="table font-normal mt-1" style={{ color: "var(--color-content)" }}>
+      <tbody>
         <tr>
           <td className="px-0 py-px">Proizvodi:</td>
           <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.75)}</td>
@@ -69,6 +70,7 @@ const TotalTable = ({ cart }) => {
           <td className="px-0 py-px">Ukupno:</td>
           <td className="px-0 py-px">{getTotal(cart)}</td>
         </tr>
+      </tbody>
     </table>
   );
 };
