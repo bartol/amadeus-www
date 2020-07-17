@@ -19,6 +19,7 @@ function App({ Component, pageProps }) {
   const [alerts, setAlerts] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
+  const [order, setOrder] = useState({});
 
   const cleanup = () => {
     setCartOpened(false);
@@ -54,6 +55,8 @@ function App({ Component, pageProps }) {
         {...pageProps}
         cart={cart}
         setCart={setCart}
+        order={order}
+        setOrder={setOrder}
         menuOpened={menuOpened}
         setMenuOpened={setMenuOpened}
         dispatchAlert={dispatchAlert}
