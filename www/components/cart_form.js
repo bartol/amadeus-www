@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CreditCard, ShoppingBag, AlertCircle } from "react-feather";
 import { cartSave } from "../helpers/cart";
+import { Fragment } from "react";
 
 function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
   const setOrderProperty = (property) => (data) => {
@@ -160,6 +161,20 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             );
           }
 
+          if (order.paymentMethod === "kartica") {
+            const totalAmountArr = [...("" + json.TotalAmount)];
+            totalAmountArr.splice(totalAmountArr.length - 2, 0, ",");
+            const totalAmount = totalAmountArr.join("");
+
+            document.querySelector("[name=ShopID]").value = json.ShopID;
+            document.querySelector("[name=ShoppingCartID]").value = json.OrderID;
+            document.querySelector("[name=TotalAmount]").value = totalAmount;
+            document.querySelector("[name=Signature]").value = json.Signature;
+            document.querySelector("[name=pay]").submit();
+          }
+
+          console.log(json);
+
           // handle redirects based on paymentMethod
         }}
       >
@@ -168,6 +183,39 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           {order.paymentMethod === "kartica" ? "Plati karticom" : "Naruči"}
         </span>
       </button>
+
+      {order.paymentMethod === "kartica" && (
+        <form name="pay" action="https://formtest.wspay.biz/Authorization.aspx" method="POST">
+          <input type="hidden" name="ShopID" value="" />
+          <input type="hidden" name="ShoppingCartID" value="" />
+          <input type="hidden" name="Version" value="2.0" />
+          <input type="hidden" name="TotalAmount" value="" />
+          <input type="hidden" name="Signature" value="" />
+          <input type="hidden" name="ReturnURL" value="https://bartol.dev/success" />
+          <input type="hidden" name="CancelURL" value="https://bartol.dev/cancel" />
+          <input type="hidden" name="ReturnErrorURL" value="https://bartol.dev/error" />
+          {order.paymentData.isCompany ? (
+            <input type="hidden" name="CustomerFirstName" value={order.paymentData.companyName} />
+          ) : (
+            <Fragment>
+              <input type="hidden" name="CustomerFirstName" value={order.paymentData.firstName} />
+              <input type="hidden" name="CustomerLastName" value={order.paymentData.lastName} />
+            </Fragment>
+          )}
+          <input type="hidden" name="CustomerEmail" value={order.paymentData.emailAdress} />
+          <input type="hidden" name="CustomerAddress" value={order.paymentData.address} />
+          <input type="hidden" name="CustomerCity" value={order.paymentData.city} />
+          <input type="hidden" name="CustomerZIP" value={order.paymentData.postalCode} />
+          <input type="hidden" name="CustomerCountry" value={order.paymentData.country} />
+          <input type="hidden" name="CustomerPhone" value={order.paymentData.phoneNumber} />
+          <input
+            type="hidden"
+            name="PaymentPlan"
+            value={order.installments.padStart(2, "0") + "00"}
+          />
+          <input type="hidden" name="CreditCardName" value={order.cardType} />
+        </form>
+      )}
     </div>
   );
 }
@@ -250,7 +298,7 @@ const DataForm = ({ data, setData }) => {
           value={data.country}
           onChange={(e) => setData({ ...data, country: e.target.value })}
         >
-          <option value="HR">Hrvatska</option>
+          <option>Hrvatska</option>
         </select>
       </div>
 
@@ -301,18 +349,17 @@ const CardSubForm = ({ cardType, setCardType, installments, setInstallments }) =
       <span className="support ml-1">Kartica</span>
       <div className="select !normal mb-3">
         <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
-          <option value="amex">American Express</option>
-          <option value="maestro">Maestro</option>
-          <option value="master">MasterCard</option>
-          <option value="visa">Visa</option>
-          <option value="visapremium">Visa Premium</option>
+          <option value="AMEX">American Express</option>
+          <option value="MASTERCARD">MasterCard</option>
+          <option value="MAESTRO">Maestro</option>
+          <option value="VISA">Visa</option>
         </select>
       </div>
 
       <span className="support ml-1">Broj rata</span>
       <div className="select !normal mb-3">
-        <select value={installments} onChange={(e) => setInstallments(parseInt(e.target.value))}>
-          <option value="1">Jednokratno</option>
+        <select value={installments} onChange={(e) => setInstallments(e.target.value)}>
+          <option value="0">Jednokratno</option>
           <option value="2">2 rate</option>
           <option value="3">3 rate</option>
           <option value="4">4 rate</option>
