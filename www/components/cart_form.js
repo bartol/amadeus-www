@@ -28,10 +28,10 @@ function CartForm({ order, setOrder }) {
         </div>
       )}
 
-      <h2 className="heading text-4xl mt-6 mb-3">Dodatna napomena</h2>
+      <h2 className="heading text-4xl mt-6 mb-3">Dodatne napomene</h2>
       <textarea
         rows="4"
-        placeholder="Napomena vezana uz proizvode koje naručujete ili dodatna uputa za našu službu dostave"
+        placeholder="Napomene vezane uz proizvode koje naručujete ili dostavu"
         value={order.additionalInfo}
         onChange={(e) => setOrderProperty("additionalInfo")(e.target.value)}
         className="textarea ~neutral !normal"
@@ -104,7 +104,7 @@ function CartForm({ order, setOrder }) {
         <span className="px-1">
           Prihvaćam{" "}
           <Link href="/info/uvjeti-poslovanja">
-            <a className="portal p-0">uvjete poslovanja</a>
+            <a className="underline hover:no-underline">uvjete poslovanja</a>
           </Link>
         </span>
       </label>
