@@ -137,7 +137,15 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             }),
           });
           const json = await res.json();
-          console.log(json);
+
+          if (!json.status) {
+            dispatchAlert(
+              "Pogreška prilikom obrade narudžbe. Molimo pokušajte ponovo.",
+              "critical",
+              AlertCircle
+            );
+            console.log(json.error);
+          }
 
           if (JSON.stringify(cart) !== JSON.stringify(json.Cart)) {
             cartSave(json.Cart);
