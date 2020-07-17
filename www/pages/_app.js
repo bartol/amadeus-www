@@ -31,9 +31,9 @@ function App({ Component, pageProps }) {
   Router.events.on("routeChangeComplete", () => cleanup());
   Router.events.on("routeChangeError", () => cleanup());
 
-  const dispatchAlert = (message, colorClass, Icon) => {
+  const dispatchAlert = (message, colorClass, Icon, timeout) => {
     const id = alerts.length > 0 ? alerts[alerts.length - 1].id + 1 : 0;
-    setAlerts([...alerts, { id, message, colorClass, Icon }]);
+    setAlerts([...alerts, { id, message, colorClass, Icon, timeout }]);
   };
   const removeAlert = (id) => {
     setAlerts(alerts.filter((a) => a.id != id));
@@ -70,6 +70,7 @@ function App({ Component, pageProps }) {
                 id={a.id}
                 colorClass={a.colorClass}
                 Icon={a.Icon}
+                timeout={a.timeout}
                 removeAlert={removeAlert}
                 key={a.id}
               />
@@ -83,6 +84,7 @@ function App({ Component, pageProps }) {
         setOrder={setOrder}
         cartOpened={cartOpened}
         setCartOpened={setCartOpened}
+        dispatchAlert={dispatchAlert}
       />
     </div>
   );
@@ -123,4 +125,7 @@ TODO:
 	checkout
   category tree styles
   kuponi
+  save order info
+  fix allow origin
+  cart alert on click go to cart
 */

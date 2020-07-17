@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 
-function Alert({ message, id, colorClass, Icon, removeAlert }) {
-  const total = 5000;
+function Alert({ message, id, colorClass, Icon, removeAlert, timeout = 5000 }) {
   const step = 100;
-  const [timer, setTimer] = useState(total);
+  const [timer, setTimer] = useState(timeout);
 
   useEffect(() => {
     if (timer > 0) {

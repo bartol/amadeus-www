@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { CreditCard, ShoppingBag } from "react-feather";
+import { CreditCard, ShoppingBag, AlertCircle } from "react-feather";
+import { cartSave } from "../helpers/cart";
 
-function CartForm({ order, setOrder }) {
+function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
   const setOrderProperty = (property) => (data) => {
     setOrder({
       ...order,
@@ -112,9 +113,10 @@ function CartForm({ order, setOrder }) {
       <button
         type="button"
         className="button ~positive !normal justify-center w-full px-3 py-2"
-        onClick={() => {
+        onClick={async () => {
           const required = document.getElementById("form").querySelectorAll("[required]");
           let scrolled = false;
+          let valid = true;
           required.forEach((n) => {
             if (!n.checkValidity()) {
               if (!scrolled) {
@@ -122,10 +124,35 @@ function CartForm({ order, setOrder }) {
                 scrolled = true;
               }
               n.classList.add("~critical");
+              valid = false;
             }
           });
           if (!order.terms) document.getElementById("terms").required = true;
-          if (required.length > 0) return;
+          if (!valid) return;
+          const res = await fetch("http://localhost:8081/checkout/", {
+            method: "POST",
+            body: JSON.stringify({
+              ...order,
+              cart: cart.map((p) => p.URL + "|" + p.Quantity).join(","),
+            }),
+          });
+          const json = await res.json();
+          console.log(json);
+
+          if (JSON.stringify(cart) !== JSON.stringify(json.Cart)) {
+            cartSave(json.Cart);
+            setCart(json.Cart);
+            document.querySelector(".drawer-content").scroll({ top: 0, behavior: "smooth" });
+            dispatchAlert(
+              "Cijene proizvoda ažurirane. Molimo da provjerite nove cijene i ponovo kliknete tipku " +
+                (order.paymentMethod === "kartica" ? '"Plati karticom"' : '"Naruči"'),
+              "critical",
+              AlertCircle,
+              10000
+            );
+          }
+
+          // handle redirects based on paymentMethod
         }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
