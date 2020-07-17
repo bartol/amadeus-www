@@ -3,22 +3,22 @@ import { getTotal, getPrice } from "../helpers/price";
 
 const TotalTable = ({ cart }) => {
   return (
-    <table className="table font-normal mt-2" style={{ color: "var(--color-content)" }}>
+    <table className="table font-normal mt-1" style={{ color: "var(--color-content)" }}>
       <tr>
-        <td>Proizvodi:</td>
-        <td>{getPrice(getTotal(cart, true) * 0.75)}</td>
+        <td className="px-0 py-px">Proizvodi:</td>
+        <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.75)}</td>
       </tr>
       <tr>
-        <td>Porez:</td>
-        <td>{getPrice(getTotal(cart, true) * 0.25)}</td>
+        <td className="px-0 py-px">Porez:</td>
+        <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.25)}</td>
       </tr>
       <tr>
-        <td>Dostava:</td>
-        <td>{getPrice(0)}</td>
+        <td className="px-0 py-px">Dostava:</td>
+        <td className="px-0 py-px">{getPrice(0)}</td>
       </tr>
       <tr className="font-bold">
-        <td>Ukupno:</td>
-        <td>{getTotal(cart)}</td>
+        <td className="px-0 py-px">Ukupno:</td>
+        <td className="px-0 py-px">{getTotal(cart)}</td>
       </tr>
     </table>
   );
@@ -40,7 +40,7 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
       >
         <table
           className="table"
-          style={{ minWidth: "calc(640px - 2.5rem)" /* sm breakpoint - margin */ }}
+          style={{ minWidth: "calc(550px - 2.5rem)" /* sm breakpoint - margin */ }}
         >
           <thead>
             <tr>
