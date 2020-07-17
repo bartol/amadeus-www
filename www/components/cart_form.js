@@ -10,7 +10,7 @@ function CartForm({ order, setOrder }) {
   };
 
   return (
-    <div>
+    <div id="form">
       <h2 className="heading text-4xl mt-6 mb-3">Podaci za plaćanje</h2>
       <DataForm data={order.paymentData} setData={setOrderProperty("paymentData")} />
       <label className="flex">
@@ -89,13 +89,17 @@ function CartForm({ order, setOrder }) {
           checked={order.save}
           onChange={() => setOrderProperty("save")(!order.save)}
         />
-        <span className="px-1">Spremi podatke</span>
+        <span className="px-1">Zapamti podatke</span>
       </label>
       <label className="flex mb-3">
         <input
           type="checkbox"
           checked={order.terms}
-          onChange={() => setOrderProperty("terms")(!order.terms)}
+          onChange={(e) => {
+            setOrderProperty("terms")(!order.terms);
+            e.target.required = false;
+          }}
+          id="terms"
         />
         <span className="px-1">
           Prihvaćam{" "}
@@ -108,7 +112,17 @@ function CartForm({ order, setOrder }) {
       <button
         type="button"
         className="button ~positive !normal justify-center w-full px-3 py-2"
-        onClick={() => {}}
+        onClick={() => {
+          const required = document.getElementById("form").querySelectorAll("[required]");
+          required.forEach((n) => {
+            if (!n.checkValidity()) {
+              n.classList.add("~critical");
+            }
+          });
+          if (!order.terms) {
+            document.getElementById("terms").required = true;
+          }
+        }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
         <span className="text-lg ml-2">
@@ -144,21 +158,52 @@ const DataForm = ({ data, setData }) => {
           <TextInput
             property="companyName"
             placeholder="Naziv tvrtke"
+            required
             data={data}
             setData={setData}
           />
-          <TextInput property="oib" placeholder="OIB tvrtke" data={data} setData={setData} />
+          <TextInput
+            property="oib"
+            placeholder="OIB tvrtke"
+            required
+            data={data}
+            setData={setData}
+          />
         </div>
       ) : (
         <div>
-          <TextInput property="firstName" placeholder="Vaše ime" data={data} setData={setData} />
-          <TextInput property="lastName" placeholder="Vaše prezime" data={data} setData={setData} />
+          <TextInput
+            property="firstName"
+            placeholder="Vaše ime"
+            required
+            data={data}
+            setData={setData}
+          />
+          <TextInput
+            property="lastName"
+            placeholder="Vaše prezime"
+            required
+            data={data}
+            setData={setData}
+          />
         </div>
       )}
 
-      <TextInput property="address" placeholder="Ulica i broj" data={data} setData={setData} />
-      <TextInput property="postalCode" placeholder="Poštanski broj" data={data} setData={setData} />
-      <TextInput property="city" placeholder="Mjesto" data={data} setData={setData} />
+      <TextInput
+        property="address"
+        placeholder="Ulica i broj"
+        required
+        data={data}
+        setData={setData}
+      />
+      <TextInput
+        property="postalCode"
+        placeholder="Poštanski broj"
+        required
+        data={data}
+        setData={setData}
+      />
+      <TextInput property="city" placeholder="Mjesto" required data={data} setData={setData} />
 
       <span className="support ml-1">Država</span>
       <div className="select !normal mb-3">
@@ -173,6 +218,7 @@ const DataForm = ({ data, setData }) => {
       <TextInput
         property="emailAdress"
         placeholder="E-mail adresa"
+        required
         type="email"
         data={data}
         setData={setData}
@@ -180,6 +226,7 @@ const DataForm = ({ data, setData }) => {
       <TextInput
         property="phoneNumber"
         placeholder="Mobitel"
+        required
         type="tel"
         data={data}
         setData={setData}
@@ -188,16 +235,22 @@ const DataForm = ({ data, setData }) => {
   );
 };
 
-const TextInput = ({ property, placeholder, type = "text", data, setData }) => {
+const TextInput = ({ property, placeholder, required, type = "text", data, setData }) => {
   return (
     <label>
       <span className="support ml-1">{placeholder}</span>
       <input
         type={type}
         value={data[property]}
-        onChange={(e) => setData({ ...data, [property]: e.target.value })}
+        onChange={(e) => {
+          setData({ ...data, [property]: e.target.value });
+          if (e.target.checkValidity()) {
+            e.target.classList.remove("~critical");
+          }
+        }}
         placeholder={placeholder}
         className="input ~neutral !normal mb-3"
+        required={required}
       />
     </label>
   );
