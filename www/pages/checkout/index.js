@@ -241,7 +241,7 @@ function Checkout({ categoriesTree, cart, setOrder, menuOpened, setMenuOpened })
           });
           const json = await res.json();
           setOrder(json);
-          Router.push(`/checkout/${paymentMethod}`);
+          Router.push("/checkout/confirm");
         }}
       >
         <Eye />
