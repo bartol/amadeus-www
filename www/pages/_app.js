@@ -19,7 +19,7 @@ function App({ Component, pageProps }) {
   const [alerts, setAlerts] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState(orderInit);
 
   const cleanup = () => {
     setCartOpened(false);
@@ -78,10 +78,42 @@ function App({ Component, pageProps }) {
             );
           })}
       </ul>
-      <Cart cart={cart} setCart={setCart} cartOpened={cartOpened} setCartOpened={setCartOpened} />
+      <Cart
+        cart={cart}
+        setCart={setCart}
+        order={order}
+        setOrder={setOrder}
+        cartOpened={cartOpened}
+        setCartOpened={setCartOpened}
+      />
     </div>
   );
 }
+
+const dataInit = {
+  isCompany: false,
+  companyName: "",
+  oib: "",
+  firstName: "",
+  lastName: "",
+  address: "",
+  postalCode: "",
+  city: "",
+  country: "HR",
+  phoneNumber: "",
+  emailAdress: "",
+};
+
+const orderInit = {
+  paymentData: dataInit,
+  shippingData: dataInit,
+  useShippingData: false,
+  additionalInfo: "",
+  paymentMethod: "uplata-po-ponudi",
+  cardType: "amex",
+  installments: 1,
+  coupon: "",
+};
 
 export default App;
 
