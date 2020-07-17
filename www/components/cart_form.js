@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { CreditCard, ShoppingBag } from "react-feather";
+
 function CartForm({ order, setOrder }) {
   const setOrderProperty = (property) => (data) => {
     setOrder({
@@ -18,7 +21,6 @@ function CartForm({ order, setOrder }) {
         />
         <span className="px-1">Koristi iste podatke za dostavu</span>
       </label>
-
       {order.useShippingData && (
         <div>
           <h2 className="heading text-4xl mt-6 mb-3">Podaci za dostavu</h2>
@@ -81,7 +83,38 @@ function CartForm({ order, setOrder }) {
         />
       </label>
 
-      <pre>{JSON.stringify(order, null, 2)}</pre>
+      <label className="flex mt-3 mb-1">
+        <input
+          type="checkbox"
+          checked={order.save}
+          onChange={() => setOrderProperty("save")(!order.save)}
+        />
+        <span className="px-1">Spremi podatke</span>
+      </label>
+      <label className="flex mb-3">
+        <input
+          type="checkbox"
+          checked={order.terms}
+          onChange={() => setOrderProperty("terms")(!order.terms)}
+        />
+        <span className="px-1">
+          Prihvaćam{" "}
+          <Link href="/info/uvjeti-poslovanja">
+            <a className="portal p-0">uvjete poslovanja</a>
+          </Link>
+        </span>
+      </label>
+
+      <button
+        type="button"
+        className="button ~positive !normal justify-center w-full px-3 py-2"
+        onClick={() => {}}
+      >
+        {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
+        <span className="text-lg ml-2">
+          {order.paymentMethod === "kartica" ? "Plati karticom" : "Naruči"}
+        </span>
+      </button>
     </div>
   );
 }

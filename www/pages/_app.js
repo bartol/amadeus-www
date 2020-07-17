@@ -55,8 +55,6 @@ function App({ Component, pageProps }) {
         {...pageProps}
         cart={cart}
         setCart={setCart}
-        order={order}
-        setOrder={setOrder}
         menuOpened={menuOpened}
         setMenuOpened={setMenuOpened}
         dispatchAlert={dispatchAlert}
@@ -113,6 +111,8 @@ const orderInit = {
   cardType: "amex",
   installments: 1,
   coupon: "",
+  save: false,
+  terms: false,
 };
 
 export default App;
