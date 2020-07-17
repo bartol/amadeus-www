@@ -25,7 +25,7 @@ function Info({ h1Heading, dispatchAlert }) {
             <h3 className="subheading text-2xl mb-2">Kontaktirajte nas</h3>
             <input
               type="email"
-              placeholder="Vaš email"
+              placeholder="E-mail adresa"
               className="input ~neutral !normal mb-3"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
