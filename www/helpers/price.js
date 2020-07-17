@@ -27,7 +27,7 @@ function getReduction(reduction, reductionType) {
   }
 }
 
-function getTotal(products) {
+function getTotal(products, returnInt) {
   const t = products
     .map(
       (p) =>
@@ -35,6 +35,8 @@ function getTotal(products) {
         p.Quantity
     )
     .reduce((a, v) => a + v, 0);
+
+  if (returnInt) return t;
 
   return getPrice(t);
 }

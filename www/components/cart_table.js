@@ -1,5 +1,28 @@
 import CartRow from "./cart_row";
-import { getTotal } from "../helpers/price";
+import { getTotal, getPrice } from "../helpers/price";
+
+const TotalTable = ({ cart }) => {
+  return (
+    <table className="table font-normal mt-2" style={{ color: "var(--color-content)" }}>
+      <tr>
+        <td>Proizvodi:</td>
+        <td>{getPrice(getTotal(cart, true) * 0.75)}</td>
+      </tr>
+      <tr>
+        <td>Porez:</td>
+        <td>{getPrice(getTotal(cart, true) * 0.25)}</td>
+      </tr>
+      <tr>
+        <td>Dostava:</td>
+        <td>{getPrice(0)}</td>
+      </tr>
+      <tr className="font-bold">
+        <td>Ukupno:</td>
+        <td>{getTotal(cart)}</td>
+      </tr>
+    </table>
+  );
+};
 
 function CartTable({ cart, setCart, setScroll, tableRef }) {
   if (!cart.length) {
@@ -34,14 +57,18 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
           <tfoot>
             <tr>
               <th colSpan="2" />
-              <th colSpan="3">
-                <h3 className="subheading sm:block hidden">Ukupno: {getTotal(cart)}</h3>
+              <th colSpan="2">
+                <div className="sm:block hidden">
+                  <TotalTable cart={cart} />
+                </div>
               </th>
             </tr>
           </tfoot>
         </table>
       </div>
-      <h3 className="subheading font-bold sm:hidden">Ukupno: {getTotal(cart)}</h3>
+      <div className="w-2/3 sm:hidden">
+        <TotalTable cart={cart} />
+      </div>
     </div>
   );
 }
