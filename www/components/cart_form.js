@@ -114,14 +114,18 @@ function CartForm({ order, setOrder }) {
         className="button ~positive !normal justify-center w-full px-3 py-2"
         onClick={() => {
           const required = document.getElementById("form").querySelectorAll("[required]");
+          let scrolled = false;
           required.forEach((n) => {
             if (!n.checkValidity()) {
+              if (!scrolled) {
+                n.scrollIntoView({ behavior: "smooth", block: "center" });
+                scrolled = true;
+              }
               n.classList.add("~critical");
             }
           });
-          if (!order.terms) {
-            document.getElementById("terms").required = true;
-          }
+          if (!order.terms) document.getElementById("terms").required = true;
+          if (required.length > 0) return;
         }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
