@@ -981,7 +981,7 @@ type checkoutReq struct {
 	AdditionalInfo  string       `json:"additionalInfo"`
 	PaymentMethod   string       `json:"paymentMethod"`
 	CardType        string       `json:"cardType"`
-	Installments    int          `json:"installments"`
+	Installments    string       `json:"installments"`
 	Coupon          string       `json:"coupon"`
 	Cart            string       `json:"cart"`
 }

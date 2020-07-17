@@ -99,7 +99,7 @@ const dataInit = {
   address: "",
   postalCode: "",
   city: "",
-  country: "HR",
+  country: "Hrvatska",
   phoneNumber: "",
   emailAdress: "",
 };
@@ -110,8 +110,8 @@ const orderInit = {
   useShippingData: false,
   additionalInfo: "",
   paymentMethod: "uplata-po-ponudi",
-  cardType: "amex",
-  installments: 1,
+  cardType: "AMEX",
+  installments: "0",
   coupon: "",
   save: false,
   terms: false,
@@ -129,4 +129,5 @@ TODO:
   fix allow origin
   cart alert on click go to cart
   alert higher than cart
+  form validacija
 */
