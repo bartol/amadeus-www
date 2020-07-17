@@ -35,6 +35,52 @@ function CartForm({ order, setOrder }) {
         className="textarea ~neutral !normal"
       ></textarea>
 
+      <h2 className="heading text-4xl mt-6 mb-3">Način plaćanja</h2>
+      <label className="flex mb-1">
+        <input
+          type="radio"
+          checked={order.paymentMethod === "uplata-po-ponudi"}
+          onChange={() => setOrderProperty("paymentMethod")("uplata-po-ponudi")}
+        />
+        <span className="px-1">Plaćanje uplatom po ponudi</span>
+      </label>
+      <label className="flex mb-1">
+        <input
+          type="radio"
+          checked={order.paymentMethod === "pouzece"}
+          onChange={() => setOrderProperty("paymentMethod")("pouzece")}
+        />
+        <span className="px-1">Plaćanje pouzećem</span>
+      </label>
+      <label className="flex mb-3">
+        <input
+          type="radio"
+          checked={order.paymentMethod === "kartica"}
+          onChange={() => setOrderProperty("paymentMethod")("kartica")}
+        />
+        <span className="px-1">Plaćanje karticom</span>
+      </label>
+
+      {order.paymentMethod === "kartica" && (
+        <CardSubForm
+          cardType={order.cardType}
+          setCardType={setOrderProperty("cardType")}
+          installments={order.installments}
+          setInstallments={setOrderProperty("installments")}
+        />
+      )}
+
+      <label>
+        <span className="support ml-1">Kupon</span>
+        <input
+          type="text"
+          value={order.coupon}
+          onChange={(e) => setOrderProperty("coupon")(e.target.value)}
+          placeholder="Kupon"
+          className="input ~neutral !normal mb-3"
+        />
+      </label>
+
       <pre>{JSON.stringify(order, null, 2)}</pre>
     </div>
   );
@@ -121,6 +167,53 @@ const TextInput = ({ property, placeholder, type = "text", data, setData }) => {
         className="input ~neutral !normal mb-3"
       />
     </label>
+  );
+};
+
+const CardSubForm = ({ cardType, setCardType, installments, setInstallments }) => {
+  return (
+    <div>
+      <span className="support ml-1">Kartica</span>
+      <div className="select !normal mb-3">
+        <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
+          <option value="amex">American Express</option>
+          <option value="maestro">Maestro</option>
+          <option value="master">MasterCard</option>
+          <option value="visa">Visa</option>
+          <option value="visapremium">Visa Premium</option>
+        </select>
+      </div>
+
+      <span className="support ml-1">Broj rata</span>
+      <div className="select !normal mb-3">
+        <select value={installments} onChange={(e) => setInstallments(parseInt(e.target.value))}>
+          <option value="1">Jednokratno</option>
+          <option value="2">2 rate</option>
+          <option value="3">3 rate</option>
+          <option value="4">4 rate</option>
+          <option value="5">5 rata</option>
+          <option value="6">6 rata</option>
+          <option value="7">7 rata</option>
+          <option value="8">8 rata</option>
+          <option value="9">9 rata</option>
+          <option value="10">10 rata</option>
+          <option value="11">11 rata</option>
+          <option value="12">12 rata</option>
+          <option value="13">13 rata</option>
+          <option value="14">14 rata</option>
+          <option value="15">15 rata</option>
+          <option value="16">16 rata</option>
+          <option value="17">17 rata</option>
+          <option value="18">18 rata</option>
+          <option value="19">19 rata</option>
+          <option value="20">20 rata</option>
+          <option value="21">21 rata</option>
+          <option value="22">22 rate</option>
+          <option value="23">23 rate</option>
+          <option value="24">24 rate</option>
+        </select>
+      </div>
+    </div>
   );
 };
 
