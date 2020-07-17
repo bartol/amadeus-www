@@ -812,9 +812,12 @@ func main() {
 
 	_, err = db.Exec(`
 	CREATE TABLE IF NOT EXISTS
-		carts (
+		orders (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			products TEXT
+			status TEXT,
+			data TEXT,
+			products TEXT,
+			totalAmount INT
 		);
 	`)
 	if err != nil {
@@ -833,7 +836,7 @@ func main() {
 	http.HandleFunc("/categories/", categoriesHandler)
 	http.HandleFunc("/images/", imagesHandler)
 
-	http.HandleFunc("/cart/", cartHandler)
+	http.HandleFunc("/checkout/", checkoutHandler)
 	http.HandleFunc("/search/", searchHandler)
 	http.HandleFunc("/contact/", contactHandler)
 	http.HandleFunc("/newsletter/", newsletterHandler)
@@ -955,32 +958,60 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type cartResp struct {
+type checkoutData struct {
+	IsCompany   bool   `json:"isCompany"`
+	CompanyName string `json:"companyName"`
+	OIB         string `json:"oib"`
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	Address     string `json:"address"`
+	PostalCode  string `json:"postalCode"`
+	City        string `json:"city"`
+	Country     string `json:"country"`
+	PhoneNumber string `json:"phoneNumber"`
+	EmailAdress string `json:"emailAdress"`
+}
+
+type checkoutReq struct {
+	PaymentData     checkoutData `json:"paymentData"`
+	ShippingData    checkoutData `json:"shippingData"`
+	UseShippingData bool         `json:"useShippingData"`
+	AdditionalInfo  string       `json:"additionalInfo"`
+	PaymentMethod   string       `json:"paymentMethod"`
+	CardType        string       `json:"cardType"`
+	Installments    int          `json:"installments"`
+	Coupon          string       `json:"coupon"`
+	Cart            string       `json:"cart"`
+}
+
+type checkoutResp struct {
+	Success     bool
 	ShopID      string
 	CartID      string
 	TotalAmount int
 	Signature   string
+	Data        checkoutReq
 	Products    []productLite
 }
 
-func cartHandler(w http.ResponseWriter, r *http.Request) {
+func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Content-Type", "application/json")
 
-	productURLs := strings.Split(r.FormValue("products"), ",")
-	products := []productLite{}
-	productsForStorage := ""
-	totalAmount := 0
+	body, _ := ioutil.ReadAll(r.Body)
+	data := checkoutReq{}
+	_ = json.Unmarshal(body, &data)
 
-	if len(productURLs) == 0 || (len(productURLs) == 1 && productURLs[0] == "") {
-		err := json.NewEncoder(w).Encode(cartResp{})
-		if err != nil {
-			w.Write([]byte(err.Error()))
-		}
+	if data.Cart == "" {
+		_ = json.NewEncoder(w).Encode(checkoutResp{})
 		return
 	}
+
+	productURLs := strings.Split(data.Cart, ",")
+	products := []productLite{}
+	totalAmount := 0
 
 	for _, URL := range productURLs {
 		splitURL := strings.Split(URL, "|")
@@ -1025,26 +1056,15 @@ func cartHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			totalAmount += (p.Price * quantity)
 		}
-
-		hasReduction := "1"
-		if !p.HasReduction {
-			hasReduction = "0"
-		}
-
-		productsForStorage += "|||" + strconv.Itoa(p.ID) + "|" +
-			hasReduction + "|" + strconv.Itoa(p.Price) + "|" + strconv.Itoa(p.Reduction) +
-			"|" + splitURL[1] + "|" + p.ReductionType + "|" + p.URL
 	}
 
-	result, err := db.Exec(`
+	dbData, _ := json.Marshal(data)
+	dbProducts, _ := json.Marshal(products)
+	result, _ := db.Exec(`
 	INSERT INTO
-		carts (products)
-		VALUES (?)
-	`, productsForStorage)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+		orders (status,data, products, totalAmount)
+		VALUES (?,?,?,?)
+	`, "processing", string(dbData), string(dbProducts), totalAmount)
 
 	id, err := result.LastInsertId()
 	if err != nil {
@@ -1060,11 +1080,13 @@ func cartHandler(w http.ResponseWriter, r *http.Request) {
 	h.Write([]byte(plainSignature))
 	signature := hex.EncodeToString(h.Sum(nil))
 
-	resp := cartResp{
+	resp := checkoutResp{
+		true,
 		wsPayShopID,
 		cartID,
 		totalAmount,
 		signature,
+		data,
 		products,
 	}
 
