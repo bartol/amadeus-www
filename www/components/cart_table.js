@@ -65,7 +65,7 @@ const TotalTable = ({ cart, order }) => {
           <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.75)}</td>
         </tr>
         <tr>
-          <td className="px-0 py-px">Porez:</td>
+          <td className="px-0 py-px">PDV:</td>
           <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.25)}</td>
         </tr>
         {order.paymentMethod === "kartica" && parseInt(order.installments) > 0 && (
