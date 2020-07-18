@@ -182,7 +182,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           });
           if (!order.terms) document.getElementById("terms").required = true;
           if (!valid) return;
-          const res = await fetch("http://localhost:8081/checkout/", {
+          const res = await fetch("https://api.amadeus2.hr/checkout/", {
             method: "POST",
             body: JSON.stringify({
               ...order,
