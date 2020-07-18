@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function Alert({ message, id, colorClass, Icon, removeAlert, timeout = 5000 }) {
+function Alert({ message, id, colorClass, Icon, removeAlert, timeout = 5000, onClick = () => {} }) {
   const step = 100;
   const [timer, setTimer] = useState(timeout);
 
@@ -16,7 +16,10 @@ function Alert({ message, id, colorClass, Icon, removeAlert, timeout = 5000 }) {
     <li className="mt-3">
       <button
         type="button"
-        onClick={() => removeAlert(id)}
+        onClick={() => {
+          onClick();
+          removeAlert(id);
+        }}
         className={`card ~${colorClass} !normal flex items-center`}
         style={{
           color: `var(--color-${colorClass}-normal-content)`,

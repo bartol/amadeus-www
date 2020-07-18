@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ArrowDown } from "react-feather";
 import Router from "next/router";
 
-function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
+function ProductList({ products, setCart, setCartOpened, dispatchAlert, hideCategories }) {
   if (!products || !products.length) {
     return <div>Učitavanje proizvoda...</div>;
   }
@@ -147,6 +147,7 @@ function ProductList({ products, setCart, dispatchAlert, hideCategories }) {
                   product={p}
                   setCart={setCart}
                   dispatchAlert={dispatchAlert}
+                  setCartOpened={setCartOpened}
                   key={p.ID}
                 />
               );

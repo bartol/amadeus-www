@@ -32,9 +32,9 @@ function App({ Component, pageProps }) {
   Router.events.on("routeChangeComplete", () => cleanup());
   Router.events.on("routeChangeError", () => cleanup());
 
-  const dispatchAlert = (message, colorClass, Icon, timeout) => {
+  const dispatchAlert = (message, colorClass, Icon, timeout, onClick) => {
     const id = alerts.length > 0 ? alerts[alerts.length - 1].id + 1 : 0;
-    setAlerts([...alerts, { id, message, colorClass, Icon, timeout }]);
+    setAlerts([...alerts, { id, message, colorClass, Icon, timeout, onClick }]);
   };
   const removeAlert = (id) => {
     setAlerts(alerts.filter((a) => a.id != id));
@@ -58,6 +58,7 @@ function App({ Component, pageProps }) {
         setCart={setCart}
         menuOpened={menuOpened}
         setMenuOpened={setMenuOpened}
+        setCartOpened={setCartOpened}
         dispatchAlert={dispatchAlert}
       />
       <Footer dispatchAlert={dispatchAlert} />
@@ -72,6 +73,7 @@ function App({ Component, pageProps }) {
                 colorClass={a.colorClass}
                 Icon={a.Icon}
                 timeout={a.timeout}
+                onClick={a.onClick}
                 removeAlert={removeAlert}
                 key={a.id}
               />
@@ -100,7 +102,5 @@ TODO:
   category tree styles
   kuponi
   fix allow origin
-  cart alert on click go to cart
   alert higher than cart
-  form validacija
 */

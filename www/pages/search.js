@@ -12,6 +12,7 @@ function Search({
   hasResults,
   categoriesTree,
   setCart,
+  setCartOpened,
   menuOpened,
   setMenuOpened,
   dispatchAlert,
@@ -45,7 +46,12 @@ function Search({
           />
           <h1 className="heading text-4xl mt-12 mb-5">Rezultati pretrage "{query}"</h1>
           {hasResults ? (
-            <ProductList products={results} setCart={setCart} dispatchAlert={dispatchAlert} />
+            <ProductList
+              products={results}
+              setCart={setCart}
+              setCartOpened={setCartOpened}
+              dispatchAlert={dispatchAlert}
+            />
           ) : (
             <div>Za Vašu pretragu pronađeno je 0 rezultata.</div>
           )}

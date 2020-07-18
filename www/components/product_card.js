@@ -3,7 +3,7 @@ import { getPrice, getReductedPrice, getReduction } from "../helpers/price";
 import { cartAdd } from "../helpers/cart";
 import { ShoppingCart } from "react-feather";
 
-function ProductCard({ product, setCart, dispatchAlert }) {
+function ProductCard({ product, setCart, setCartOpened, dispatchAlert }) {
   const p = product;
 
   return (
@@ -58,7 +58,13 @@ function ProductCard({ product, setCart, dispatchAlert }) {
               type="button"
               onClick={() => {
                 cartAdd(setCart, p);
-                dispatchAlert("Proizvod dodan u košaricu", "positive", ShoppingCart);
+                dispatchAlert(
+                  "Proizvod dodan u košaricu",
+                  "positive",
+                  ShoppingCart,
+                  undefined,
+                  () => setCartOpened(true)
+                );
               }}
               className="button ~positive !normal md:px-3 p-2 ml-4"
             >

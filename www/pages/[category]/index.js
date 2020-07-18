@@ -3,7 +3,15 @@ import ProductList from "../../components/product_list";
 import Menu from "../../components/menu";
 import SEO from "../../components/seo.js";
 
-function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened, dispatchAlert }) {
+function Category({
+  category,
+  categoriesTree,
+  setCart,
+  setCartOpened,
+  menuOpened,
+  setMenuOpened,
+  dispatchAlert,
+}) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -20,6 +28,7 @@ function Category({ category, categoriesTree, setCart, menuOpened, setMenuOpened
       <ProductList
         products={category.Products}
         setCart={setCart}
+        setCartOpened={setCartOpened}
         dispatchAlert={dispatchAlert}
         hideCategories
       />
