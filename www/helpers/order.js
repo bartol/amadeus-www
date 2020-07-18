@@ -40,7 +40,7 @@ const orderInit = {
   useShippingData: false,
   additionalInfo: "",
   paymentMethod: "uplata-po-ponudi",
-  cardType: "AMEX",
+  cardType: "VISA",
   installments: "0",
   coupon: "",
   save: false,
