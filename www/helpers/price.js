@@ -1,5 +1,8 @@
 function getPrice(price) {
-  const formatter = new Intl.NumberFormat("hr", { minimumFractionDigits: 2 });
+  const formatter = new Intl.NumberFormat("hr", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   return formatter.format(price / 100) + " kn";
 }

@@ -440,10 +440,12 @@ const CardSubForm = ({ cardType, setCardType, installments, setInstallments, car
         </div>
         {parseInt(installments) > 0 && (
           <span className="mr-1 ml-3">
-            +
-            {parseInt(installments) < 13
-              ? getPrice(getTotal(cart) * 0.08)
-              : getPrice(getTotal(cart) * 0.1)}
+            {getPrice(
+              (getTotal(cart) *
+                (parseInt(installments) > 0 ? (parseInt(installments) < 13 ? 1.08 : 1.1) : 1)) /
+                parseInt(installments)
+            )}
+            /mj.
           </span>
         )}
       </div>
