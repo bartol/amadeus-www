@@ -3,6 +3,7 @@ import { CreditCard, ShoppingBag, AlertCircle } from "react-feather";
 import { cartSave } from "../helpers/cart";
 import { Fragment, useState } from "react";
 import { orderSave, ordersGet, orderGet, ordersClear } from "../helpers/order";
+import { getTotal, getPrice } from "../helpers/price";
 
 function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
   const setOrderProperty = (property) => (data) => {
@@ -105,6 +106,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           setCardType={setOrderProperty("cardType")}
           installments={order.installments}
           setInstallments={setOrderProperty("installments")}
+          cart={cart}
         />
       )}
 
@@ -393,7 +395,7 @@ const TextInput = ({ property, placeholder, required, type = "text", data, setDa
   );
 };
 
-const CardSubForm = ({ cardType, setCardType, installments, setInstallments }) => {
+const CardSubForm = ({ cardType, setCardType, installments, setInstallments, cart }) => {
   return (
     <div>
       <span className="support ml-1">Kartica</span>
@@ -407,33 +409,43 @@ const CardSubForm = ({ cardType, setCardType, installments, setInstallments }) =
       </div>
 
       <span className="support ml-1">Broj rata</span>
-      <div className="select !normal mb-3">
-        <select value={installments} onChange={(e) => setInstallments(e.target.value)}>
-          <option value="0">Jednokratno</option>
-          <option value="2">2 rate</option>
-          <option value="3">3 rate</option>
-          <option value="4">4 rate</option>
-          <option value="5">5 rata</option>
-          <option value="6">6 rata</option>
-          <option value="7">7 rata</option>
-          <option value="8">8 rata</option>
-          <option value="9">9 rata</option>
-          <option value="10">10 rata</option>
-          <option value="11">11 rata</option>
-          <option value="12">12 rata</option>
-          <option value="13">13 rata</option>
-          <option value="14">14 rata</option>
-          <option value="15">15 rata</option>
-          <option value="16">16 rata</option>
-          <option value="17">17 rata</option>
-          <option value="18">18 rata</option>
-          <option value="19">19 rata</option>
-          <option value="20">20 rata</option>
-          <option value="21">21 rata</option>
-          <option value="22">22 rate</option>
-          <option value="23">23 rate</option>
-          <option value="24">24 rate</option>
-        </select>
+      <div className="flex items-center mb-3">
+        <div className="select !normal flex-grow">
+          <select value={installments} onChange={(e) => setInstallments(e.target.value)}>
+            <option value="0">Jednokratno</option>
+            <option value="2">2 rate</option>
+            <option value="3">3 rate</option>
+            <option value="4">4 rate</option>
+            <option value="5">5 rata</option>
+            <option value="6">6 rata</option>
+            <option value="7">7 rata</option>
+            <option value="8">8 rata</option>
+            <option value="9">9 rata</option>
+            <option value="10">10 rata</option>
+            <option value="11">11 rata</option>
+            <option value="12">12 rata</option>
+            <option value="13">13 rata</option>
+            <option value="14">14 rata</option>
+            <option value="15">15 rata</option>
+            <option value="16">16 rata</option>
+            <option value="17">17 rata</option>
+            <option value="18">18 rata</option>
+            <option value="19">19 rata</option>
+            <option value="20">20 rata</option>
+            <option value="21">21 rata</option>
+            <option value="22">22 rate</option>
+            <option value="23">23 rate</option>
+            <option value="24">24 rate</option>
+          </select>
+        </div>
+        {parseInt(installments) > 0 && (
+          <span className="mr-1 ml-3">
+            +
+            {parseInt(installments) < 13
+              ? getPrice(getTotal(cart) * 0.08)
+              : getPrice(getTotal(cart) * 0.1)}
+          </span>
+        )}
       </div>
     </div>
   );
