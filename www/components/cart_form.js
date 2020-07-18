@@ -217,11 +217,13 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             const totalAmountArr = [...("" + json.TotalAmount)];
             totalAmountArr.splice(totalAmountArr.length - 2, 0, ",");
             const totalAmount = totalAmountArr.join("");
+            const installments = ("" + json.Installments).padStart(2, "0") + "00";
 
             document.querySelector("[name=ShopID]").value = json.ShopID;
             document.querySelector("[name=ShoppingCartID]").value = json.OrderID;
             document.querySelector("[name=TotalAmount]").value = totalAmount;
             document.querySelector("[name=Signature]").value = json.Signature;
+            document.querySelector("[name=PaymentPlan]").value = installments;
             document.querySelector("[name=pay]").submit();
           }
 
@@ -260,11 +262,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           <input type="hidden" name="CustomerZIP" value={order.paymentData.postalCode} />
           <input type="hidden" name="CustomerCountry" value={order.paymentData.country} />
           <input type="hidden" name="CustomerPhone" value={order.paymentData.phoneNumber} />
-          <input
-            type="hidden"
-            name="PaymentPlan"
-            value={order.installments.padStart(2, "0") + "00"}
-          />
+          <input type="hidden" name="PaymentPlan" value="" />
           <input type="hidden" name="CreditCardName" value={order.cardType} />
         </form>
       )}
