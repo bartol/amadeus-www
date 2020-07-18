@@ -62,11 +62,11 @@ const TotalTable = ({ cart }) => {
       <tbody>
         <tr>
           <td className="px-0 py-px">Proizvodi:</td>
-          <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.75)}</td>
+          <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.75)}</td>
         </tr>
         <tr>
           <td className="px-0 py-px">Porez:</td>
-          <td className="px-0 py-px">{getPrice(getTotal(cart, true) * 0.25)}</td>
+          <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.25)}</td>
         </tr>
         <tr>
           <td className="px-0 py-px">Dostava:</td>
@@ -74,7 +74,7 @@ const TotalTable = ({ cart }) => {
         </tr>
         <tr className="font-bold">
           <td className="px-0 py-px">Ukupno:</td>
-          <td className="px-0 py-px">{getTotal(cart)}</td>
+          <td className="px-0 py-px">{getPrice(getTotal(cart))}</td>
         </tr>
       </tbody>
     </table>
