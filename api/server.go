@@ -23,6 +23,7 @@ import (
 )
 
 var pdv float64 = 25
+var orderIDPrefix = "test-"
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
 var wsPayKey = os.Getenv("WSPAY_KEY")
 var wsPayShopID = "PIONEERHR"
@@ -1151,7 +1152,7 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 	// send mail
 
 	if data.PaymentMethod == "kartica" {
-		plainSignature := wsPayShopID + wsPayKey + orderID +
+		plainSignature := wsPayShopID + wsPayKey + orderIDPrefix + orderID +
 			wsPayKey + strconv.Itoa(totalAmount) + wsPayKey
 
 		h := sha512.New()
