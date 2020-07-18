@@ -52,7 +52,13 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
 
 const TotalTable = ({ cart }) => {
   return (
-    <table className="table font-normal mt-1" style={{ color: "var(--color-content)" }}>
+    <table
+      className="table font-normal mt-1"
+      style={{
+        color: "var(--color-content)",
+        "--table-background-alternating": "var(--color-transparent)",
+      }}
+    >
       <tbody>
         <tr>
           <td className="px-0 py-px">Proizvodi:</td>
