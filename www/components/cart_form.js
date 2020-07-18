@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { CreditCard, ShoppingBag, AlertCircle } from "react-feather";
 import { cartSave } from "../helpers/cart";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import { orderSave, ordersGet, orderGet, ordersClear } from "../helpers/order";
 
 function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
   const setOrderProperty = (property) => (data) => {
@@ -11,8 +12,41 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
     });
   };
 
+  const [saves, setSaves] = useState(ordersGet());
+
   return (
     <div id="form">
+      {saves.length > 0 && (
+        <div>
+          <h3 className="subheading mx-1 mt-6 mb-2">Učitaj pohranjene podatke</h3>
+          {saves.map((s) => {
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  orderGet(s, setOrder);
+                  setSaves(ordersGet());
+                }}
+                className={`button ~neutral !normal m-1`}
+                key={s}
+              >
+                {s}
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => {
+              ordersClear();
+              setSaves([]);
+            }}
+            className="button ~critical !normal m-1"
+          >
+            Obriši pohranjene podatke
+          </button>
+        </div>
+      )}
+
       <h2 className="heading text-4xl mt-6 mb-3">Podaci za plaćanje</h2>
       <DataForm data={order.paymentData} setData={setOrderProperty("paymentData")} />
       <label className="flex">
@@ -93,6 +127,19 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
         />
         <span className="px-1">Zapamti podatke</span>
       </label>
+      {order.save && (
+        <label>
+          <span className="support ml-1">Naziv pohranjenih podataka</span>
+          <input
+            type="text"
+            value={order.saveName}
+            onChange={(e) => setOrderProperty("saveName")(e.target.value)}
+            placeholder="Naziv pohranjenih podataka"
+            className="input ~neutral !normal mb-3"
+          />
+        </label>
+      )}
+
       <label className="flex mb-3">
         <input
           type="checkbox"
@@ -115,6 +162,11 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
         type="button"
         className="button ~positive !normal justify-center w-full px-3 py-2"
         onClick={async () => {
+          if (order.save) {
+            orderSave(order);
+            setSaves(ordersGet());
+          }
+
           const required = document.getElementById("form").querySelectorAll("[required]");
           let scrolled = false;
           let valid = true;

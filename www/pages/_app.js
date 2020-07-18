@@ -12,14 +12,15 @@ import "glider-js/glider.min.css";
 import "nprogress/nprogress.css";
 import "a17t";
 import "../public/css/styles.css";
+import { orderInit } from "../helpers/order";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
+  const [order, setOrder] = useState(orderInit);
   const [query, setQuery] = useState("");
   const [alerts, setAlerts] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
-  const [order, setOrder] = useState(orderInit);
 
   const cleanup = () => {
     setCartOpened(false);
@@ -89,33 +90,6 @@ function App({ Component, pageProps }) {
     </div>
   );
 }
-
-const dataInit = {
-  isCompany: false,
-  companyName: "",
-  oib: "",
-  firstName: "",
-  lastName: "",
-  address: "",
-  postalCode: "",
-  city: "",
-  country: "Hrvatska",
-  phoneNumber: "",
-  emailAdress: "",
-};
-
-const orderInit = {
-  paymentData: dataInit,
-  shippingData: dataInit,
-  useShippingData: false,
-  additionalInfo: "",
-  paymentMethod: "uplata-po-ponudi",
-  cardType: "AMEX",
-  installments: "0",
-  coupon: "",
-  save: false,
-  terms: false,
-};
 
 export default App;
 
