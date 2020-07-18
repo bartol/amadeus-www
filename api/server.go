@@ -970,8 +970,6 @@ type checkoutData struct {
 	Country     string `json:"country"`
 	PhoneNumber string `json:"phoneNumber"`
 	EmailAdress string `json:"emailAdress"`
-	Save        bool   `json:"save"`
-	Terms       bool   `json:"terms"`
 }
 
 type checkoutReq struct {
@@ -983,6 +981,9 @@ type checkoutReq struct {
 	CardType        string       `json:"cardType"`
 	Installments    string       `json:"installments"`
 	Coupon          string       `json:"coupon"`
+	Save            bool         `json:"save"`
+	SaveName        string       `json:"saveName"`
+	Terms           bool         `json:"terms"`
 	Cart            string       `json:"cart"`
 }
 
