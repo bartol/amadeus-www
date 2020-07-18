@@ -1163,7 +1163,7 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 			true,
 			"",
 			wsPayShopID,
-			orderID,
+			orderIDPrefix + orderID,
 			totalAmount,
 			installments,
 			signature,
