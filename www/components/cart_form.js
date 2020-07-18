@@ -399,10 +399,10 @@ const CardSubForm = ({ cardType, setCardType, installments, setInstallments }) =
       <span className="support ml-1">Kartica</span>
       <div className="select !normal mb-3">
         <select value={cardType} onChange={(e) => setCardType(e.target.value)}>
-          <option value="AMEX">American Express</option>
+          <option value="VISA">Visa</option>
           <option value="MASTERCARD">MasterCard</option>
           <option value="MAESTRO">Maestro</option>
-          <option value="VISA">Visa</option>
+          <option value="DINERS">Diners</option>
         </select>
       </div>
 
