@@ -99,7 +99,6 @@ TODO:
 	checkout
   category tree styles
   kuponi
-  save order info
   fix allow origin
   cart alert on click go to cart
   alert higher than cart
