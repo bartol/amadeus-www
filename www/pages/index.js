@@ -9,6 +9,7 @@ function Index({
   categories,
   categoriesTree,
   setCart,
+  setCartOpened,
   menuOpened,
   setMenuOpened,
   dispatchAlert,
@@ -38,7 +39,12 @@ function Index({
         })}
       </ul>
       <h2 className="heading text-4xl mt-12 mb-5">Izdvojeni proizvodi</h2>
-      <ProductList products={products} setCart={setCart} dispatchAlert={dispatchAlert} />
+      <ProductList
+        products={products}
+        setCart={setCart}
+        setCartOpened={setCartOpened}
+        dispatchAlert={dispatchAlert}
+      />
       <Menu categories={categoriesTree} menuOpened={menuOpened} setMenuOpened={setMenuOpened} />
     </div>
   );

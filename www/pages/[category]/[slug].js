@@ -17,6 +17,7 @@ function Product({
   setCart,
   menuOpened,
   setMenuOpened,
+  setCartOpened,
   dispatchAlert,
 }) {
   const p = product;
@@ -159,7 +160,13 @@ function Product({
                     for (let i = 0; i < quantity; i++) {
                       cartAdd(setCart, p);
                     }
-                    dispatchAlert("Proizvod dodan u košaricu", "positive", ShoppingCart);
+                    dispatchAlert(
+                      "Proizvod dodan u košaricu",
+                      "positive",
+                      ShoppingCart,
+                      undefined,
+                      () => setCartOpened(true)
+                    );
                   }}
                 >
                   <ShoppingCart />
@@ -219,6 +226,7 @@ function Product({
                   <ProductCard
                     product={p}
                     setCart={setCart}
+                    setCartOpened={setCartOpened}
                     dispatchAlert={dispatchAlert}
                     key={p.ID}
                   />
