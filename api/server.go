@@ -995,13 +995,14 @@ type checkoutResp struct {
 }
 
 type cardCheckoutResp struct {
-	Status      bool   `json:"status"`
-	Error       string `json:"error"`
-	ShopID      string
-	OrderID     string
-	TotalAmount int
-	Signature   string
-	Cart        []productLite
+	Status       bool   `json:"status"`
+	Error        string `json:"error"`
+	ShopID       string
+	OrderID      string
+	TotalAmount  int
+	Installments int
+	Signature    string
+	Cart         []productLite
 }
 
 func checkoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -1090,6 +1091,26 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	installments, err := strconv.Atoi(data.Installments)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	if installments > 24 {
+		installments = 24
+	}
+
+	if installments > 0 {
+		if installments < 13 {
+			totalAmount = int(float64(totalAmount) * 1.08)
+		} else {
+			totalAmount = int(float64(totalAmount) * 1.1)
+		}
+	}
+
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		data := checkoutResp{}
@@ -1143,6 +1164,7 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 			wsPayShopID,
 			orderID,
 			totalAmount,
+			installments,
 			signature,
 			products,
 		}
