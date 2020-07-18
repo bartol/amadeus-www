@@ -103,5 +103,4 @@ TODO:
   cart alert on click go to cart
   alert higher than cart
   form validacija
-  broj rata uvecaj cijenu
 */
