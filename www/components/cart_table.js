@@ -1,7 +1,7 @@
 import CartRow from "./cart_row";
 import { getTotal, getPrice } from "../helpers/price";
 
-function CartTable({ cart, setCart, setScroll, tableRef }) {
+function CartTable({ cart, setCart, order, setScroll, tableRef }) {
   if (!cart.length) {
     return <div>Vaša košarica je prazna.</div>;
   }
@@ -34,9 +34,9 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
           <tfoot>
             <tr>
               <th colSpan="2" />
-              <th colSpan="2">
+              <th colSpan="3">
                 <div className="sm:block hidden">
-                  <TotalTable cart={cart} />
+                  <TotalTable cart={cart} order={order} />
                 </div>
               </th>
             </tr>
@@ -44,13 +44,13 @@ function CartTable({ cart, setCart, setScroll, tableRef }) {
         </table>
       </div>
       <div className="w-2/3 sm:hidden">
-        <TotalTable cart={cart} />
+        <TotalTable cart={cart} order={order} />
       </div>
     </div>
   );
 }
 
-const TotalTable = ({ cart }) => {
+const TotalTable = ({ cart, order }) => {
   return (
     <table
       className="table font-normal mt-1"
@@ -68,13 +68,37 @@ const TotalTable = ({ cart }) => {
           <td className="px-0 py-px">Porez:</td>
           <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.25)}</td>
         </tr>
+        {order.paymentMethod === "kartica" && parseInt(order.installments) > 0 && (
+          <tr>
+            {parseInt(order.installments) < 13 ? (
+              <>
+                <td className="px-0 py-px">Rate (2-12):</td>
+                <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.08)}</td>
+              </>
+            ) : (
+              <>
+                <td className="px-0 py-px">Rate (13-24):</td>
+                <td className="px-0 py-px">{getPrice(getTotal(cart) * 0.1)}</td>
+              </>
+            )}
+          </tr>
+        )}
         <tr>
           <td className="px-0 py-px">Dostava:</td>
           <td className="px-0 py-px">{getPrice(0)}</td>
         </tr>
         <tr className="font-bold">
           <td className="px-0 py-px">Ukupno:</td>
-          <td className="px-0 py-px">{getPrice(getTotal(cart))}</td>
+          <td className="px-0 py-px">
+            {getPrice(
+              getTotal(cart) *
+                (parseInt(order.installments) > 0
+                  ? parseInt(order.installments) < 13
+                    ? 1.08
+                    : 1.1
+                  : 1)
+            )}
+          </td>
         </tr>
       </tbody>
     </table>

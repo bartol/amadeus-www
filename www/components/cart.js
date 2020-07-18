@@ -43,7 +43,13 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispa
             </button>
           </div>
         </div>
-        <CartTable cart={cart} setCart={setCart} setScroll={setScroll} tableRef={tableRef} />
+        <CartTable
+          cart={cart}
+          setCart={setCart}
+          order={order}
+          setScroll={setScroll}
+          tableRef={tableRef}
+        />
         {cart.length > 0 && (
           <CartForm
             cart={cart}
