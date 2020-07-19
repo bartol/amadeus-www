@@ -1011,11 +1011,15 @@ type cardCheckoutResp struct {
 var checkoutEmailTemplates = template.Must(template.ParseFiles(
 	"emails/base.html",
 	"emails/checkout.html",
+	"emails/table.html",
+	"emails/info.html",
 ))
 
 var checkoutEmailAdminTemplates = template.Must(template.ParseFiles(
 	"emails/base.html",
 	"emails/checkout_admin.html",
+	"emails/table.html",
+	"emails/info.html",
 ))
 
 type checkoutEmailTemplateData struct {
@@ -1025,7 +1029,7 @@ type checkoutEmailTemplateData struct {
 	Data         checkoutReq
 	Cart         []productLite
 	ProductPrice func(productLite) int
-	TotalPrice   func([]productLite) int
+	TotalPrice   func([]productLite, int, bool) int
 	FormatPrice  func(int, float64) string
 }
 
@@ -1042,10 +1046,17 @@ func productPrice(p productLite) int {
 	return price
 }
 
-func totalPrice(products []productLite) int {
+func totalPrice(products []productLite, installments int, calcInstallments bool) int {
 	total := 0
 	for _, p := range products {
 		total += productPrice(p)
+	}
+	if calcInstallments && installments > 0 {
+		if installments < 13 {
+			total = int(float64(total) * 1.08)
+		} else {
+			total = int(float64(total) * 1.1)
+		}
 	}
 	return total
 }
@@ -1265,8 +1276,8 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// err = e.Send(smtpHost+smtpPort, smtpAuth)
-	err = e.Send("127.0.0.1:1025", nil)
+	err = e.Send(smtpHost+smtpPort, smtpAuth)
+	// err = e.Send("127.0.0.1:1025", nil)
 	if err != nil {
 		data := checkoutResp{}
 		data.Error = err.Error()
@@ -1304,8 +1315,8 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// err = adminE.Send(smtpHost+smtpPort, smtpAuth)
-	err = adminE.Send("127.0.0.1:1025", nil)
+	err = adminE.Send(smtpHost+smtpPort, smtpAuth)
+	// err = adminE.Send("127.0.0.1:1025", nil)
 	if err != nil {
 		data := checkoutResp{}
 		data.Error = err.Error()
