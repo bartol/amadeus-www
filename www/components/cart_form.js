@@ -2,8 +2,9 @@ import Link from "next/link";
 import { CreditCard, ShoppingBag, AlertCircle } from "react-feather";
 import { cartSave } from "../helpers/cart";
 import { Fragment, useState } from "react";
-import { orderSave, ordersGet, orderGet, ordersClear } from "../helpers/order";
+import { orderSave, ordersGet, orderGet, ordersClear, orderInit } from "../helpers/order";
 import { getTotal, getPrice } from "../helpers/price";
+import Router from "next/router";
 
 function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
   const setOrderProperty = (property) => (data) => {
@@ -185,6 +186,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           if (!order.terms) document.getElementById("terms").required = true;
           if (!valid) return;
           const res = await fetch("https://api.amadeus2.hr/checkout/", {
+            // const res = await fetch("http://localhost:8081/checkout/", {
             method: "POST",
             body: JSON.stringify({
               ...order,
@@ -230,9 +232,20 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             document.querySelector("[name=pay]").submit();
           }
 
-          console.log(json);
+          const total =
+            getTotal(cart) *
+            (order.paymentMethod === "kartica" && parseInt(order.installments) > 0
+              ? parseInt(order.installments) < 13
+                ? 1.08
+                : 1.1
+              : 1);
+          Router.push(
+            `/checkout/success?orderID=${json.OrderID}&paymentMethod=${order.paymentMethod}&totalAmount=${total}`
+          );
 
-          // handle redirects based on paymentMethod
+          setOrder(orderInit);
+          cartSave([]);
+          setCart([]);
         }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
@@ -248,9 +261,13 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           <input type="hidden" name="Version" value="2.0" />
           <input type="hidden" name="TotalAmount" value="" />
           <input type="hidden" name="Signature" value="" />
-          <input type="hidden" name="ReturnURL" value="https://bartol.dev/success" />
-          <input type="hidden" name="CancelURL" value="https://bartol.dev/cancel" />
-          <input type="hidden" name="ReturnErrorURL" value="https://bartol.dev/error" />
+          <input type="hidden" name="ReturnURL" value="http://localhost:3000/checkout/success" />
+          <input type="hidden" name="CancelURL" value="http://localhost:3000" />
+          <input
+            type="hidden"
+            name="ReturnErrorURL"
+            value="http://localhost:3000/checkout/failure"
+          />
           {order.paymentData.isCompany ? (
             <input type="hidden" name="CustomerFirstName" value={order.paymentData.companyName} />
           ) : (
