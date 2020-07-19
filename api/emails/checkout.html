@@ -1,5 +1,21 @@
 {{define "content"}}
 <h1 style="color: #1a202c">Vaša narudžba ({{.OrderID}})</h1>
+
+{{if eq .Data.PaymentMethod "uplata-po-ponudi"}}
+<strong>Narudžba će biti isporučena nakon što primimo Vašu uplatu.</strong><br>
+<br>
+Podaci o banci za prijenos sredstava:<br>
+<strong>Iznos:</strong> {{call $.FormatPrice (call $.TotalPrice .Cart .Installments true) 1.0}}<br>
+<strong>Vlasnik računa:</strong> Amadeus II d.o.o.<br>
+<strong>Adresa banke:</strong> HR0823400091100187471 kod Privredna banka d.d., Zagreb<br>
+<br>
+Prilikom plaćanja po ponudi molimo pozovite se na broj ponude ({{.OrderID}}). Da biste
+ubrzali proces slanja proizvoda molimo Vas ako ste u mogućnosti proslijedite nam na mail
+potvrdu o uspješnoj uplati. Sve uspješno provedene uplate do 15h šaljemo odmah isti dan
+brzom poštom prema Vama.
+<div style="margin-bottom: 1.5rem;"></div>
+{{end}}
+
 {{template "table" .}}
 
 <h2 style="color: #1a202c">Podaci za plaćanje</h2>
