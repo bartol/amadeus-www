@@ -200,6 +200,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
               AlertCircle
             );
             console.log(json.error);
+            return;
           }
 
           if (JSON.stringify(cart) !== JSON.stringify(json.Cart)) {
@@ -207,7 +208,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             setCart(json.Cart);
             document.querySelector(".drawer-content").scroll({ top: 0, behavior: "smooth" });
             dispatchAlert(
-              "Cijene proizvoda ažurirane. Molimo da provjerite nove cijene i ponovo kliknete tipku " +
+              "Podaci o proizvodima u košarici ažurirani. Molimo da provjerite nove informacije i ponovo kliknete tipku " +
                 (order.paymentMethod === "kartica" ? '"Plati karticom"' : '"Naruči"'),
               "critical",
               AlertCircle,

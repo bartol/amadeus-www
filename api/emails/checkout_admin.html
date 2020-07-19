@@ -1,3 +1,43 @@
 {{define "content"}}
-<h1 style="color: #1a202c">Nova narudžba</h1>
+<h1 style="color: #1a202c">Nova narudžba ({{.OrderID}})</h1>
+{{template "table" .}}
+
+<h2 style="color: #1a202c">Podaci za plaćanje</h2>
+{{template "info" .Data.PaymentData}}
+
+<h2 style="color: #1a202c">Podaci za dostavu</h2>
+{{if .Data.UseShippingData}}
+    {{template "info" .Data.ShippingData}}
+{{else}}
+    {{template "info" .Data.PaymentData}}
+{{end}}
+
+{{if ne .Data.AdditionalInfo ""}}
+    <h2 style="color: #1a202c">Dodatne napomene</h2>
+    <span>{{.Data.AdditionalInfo}}</span><br>
+{{end}}
+
+<h2 style="color: #1a202c">Način plaćanja</h2>
+<span>
+    {{if eq .Data.PaymentMethod "uplata-po-ponudi"}}
+    Plaćanje uplatom po ponudi
+    {{end}}
+    {{if eq .Data.PaymentMethod "pouzece"}}
+    Plaćanje pouzećem
+    {{end}}
+    {{if eq .Data.PaymentMethod "kartica"}}
+    Plaćanje karticom
+    {{end}}
+</span><br>
+
+{{if eq .Data.PaymentMethod "kartica"}}
+    <span>Kartica: {{.Data.CardType}}</span><br>
+    {{if gt .Installments 0}}
+        <span>Broj rata: {{.Installments}}</span><br>
+    {{end}}
+{{end}}
+
+{{if ne .Data.Coupon ""}}
+    <span>Kupon: {{.Data.Coupon}}</span><br>
+{{end}}
 {{end}}
