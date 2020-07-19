@@ -20,6 +20,8 @@ import (
 
 	"github.com/jordan-wright/email"
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 var pdv float64 = 25
@@ -1006,6 +1008,53 @@ type cardCheckoutResp struct {
 	Cart         []productLite
 }
 
+var checkoutEmailTemplates = template.Must(template.ParseFiles(
+	"emails/base.html",
+	"emails/checkout.html",
+))
+
+var checkoutEmailAdminTemplates = template.Must(template.ParseFiles(
+	"emails/base.html",
+	"emails/checkout_admin.html",
+))
+
+type checkoutEmailTemplateData struct {
+	Subject      string
+	OrderID      string
+	Installments int
+	Data         checkoutReq
+	Cart         []productLite
+	ProductPrice func(productLite) int
+	TotalPrice   func([]productLite) int
+	FormatPrice  func(int, float64) string
+}
+
+func productPrice(p productLite) int {
+	price := p.Price
+	if p.HasReduction {
+		if p.ReductionType == "amount" {
+			price = p.Price - p.Reduction
+		}
+		if p.ReductionType == "percentage" {
+			price = (p.Price * (100 - p.Reduction)) / 100
+		}
+	}
+	return price
+}
+
+func totalPrice(products []productLite) int {
+	total := 0
+	for _, p := range products {
+		total += productPrice(p)
+	}
+	return total
+}
+
+func formatPrice(price int, p float64) string {
+	printer := message.NewPrinter(language.Croatian)
+	return printer.Sprintf("%.2f kn\n", (float64(price)*p)/100)
+}
+
 func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")
@@ -1149,8 +1198,6 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	orderID := strconv.Itoa(int(id))
 
-	// send mail
-
 	if data.PaymentMethod == "kartica" {
 		plainSignature := wsPayShopID + wsPayKey + orderIDPrefix + orderID +
 			wsPayKey + strconv.Itoa(totalAmount) + wsPayKey
@@ -1179,8 +1226,106 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// handle other payment methods
+	subject := "[amadeus2.hr] Vaša narudžba (" + orderIDPrefix + orderID + ")"
+	buf := new(bytes.Buffer)
+	emailData := checkoutEmailTemplateData{
+		subject,
+		orderIDPrefix + orderID,
+		installments,
+		data,
+		products,
+		productPrice,
+		totalPrice,
+		formatPrice,
+	}
+	err = checkoutEmailTemplates.Execute(buf, emailData)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
 
+	html := []byte(buf.String())
+
+	e := email.NewEmail()
+	e.From = "Amadeus II d.o.o. <prodaja@amadeus2.hr>"
+	to := []string{data.PaymentData.EmailAdress}
+	if data.UseShippingData && data.PaymentData.EmailAdress != data.ShippingData.EmailAdress {
+		to = append(to, data.ShippingData.EmailAdress)
+	}
+	e.To = to
+	e.Subject = subject
+	e.HTML = html
+	_, err = e.AttachFile("../www/public/img/logo.png")
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	// err = e.Send(smtpHost+smtpPort, smtpAuth)
+	err = e.Send("127.0.0.1:1025", nil)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	adminSubject := "[amadeus2.hr] Nova narudžba (" + orderIDPrefix + orderID + ")"
+	adminBuf := new(bytes.Buffer)
+	err = checkoutEmailAdminTemplates.Execute(adminBuf, emailData)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	adminHTML := []byte(adminBuf.String())
+
+	adminE := email.NewEmail()
+	adminE.From = "Amadeus II d.o.o. <web@amadeus2.hr>"
+	adminE.To = []string{"prodaja@amadeus2.hr"}
+	replyTo := []string{data.PaymentData.EmailAdress}
+	if data.UseShippingData && data.PaymentData.EmailAdress != data.ShippingData.EmailAdress {
+		replyTo = append(replyTo, data.ShippingData.EmailAdress)
+	}
+	adminE.ReplyTo = replyTo
+	adminE.Subject = adminSubject
+	adminE.HTML = adminHTML
+	_, err = adminE.AttachFile("../www/public/img/logo.png")
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	// err = adminE.Send(smtpHost+smtpPort, smtpAuth)
+	err = adminE.Send("127.0.0.1:1025", nil)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	resp := checkoutResp{
+		true,
+		"",
+		orderIDPrefix + orderID,
+		products,
+	}
+
+	err = json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		data := checkoutResp{}
+		data.Error = err.Error()
+		json.NewEncoder(w).Encode(data)
+	}
 }
 
 type searchResp struct {
