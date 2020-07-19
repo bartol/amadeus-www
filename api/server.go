@@ -1049,7 +1049,7 @@ func productPrice(p productLite) int {
 func totalPrice(products []productLite, installments int, calcInstallments bool) int {
 	total := 0
 	for _, p := range products {
-		total += productPrice(p)
+		total += productPrice(p) * p.Quantity
 	}
 	if calcInstallments && installments > 0 {
 		if installments < 13 {
