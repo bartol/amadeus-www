@@ -1,0 +1,53 @@
+{{define "content"}}
+<h1 style="color: #1a202c">Vaša narudžba ({{.OrderID}})</h1>
+<table class="table" style="margin: 0 -8px;">
+    <thead>
+        <tr style="font-weight: bold; color: #1a202c">
+            <td style="border-bottom: 1px solid #e2e8f0;">Proizvod</td>
+            <td style="border-bottom: 1px solid #e2e8f0;">Cijena</td>
+            <td style="border-bottom: 1px solid #e2e8f0;">kom.</td>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .Cart}}
+        <tr>
+            <td>
+                <a href="https://amadeus2.hr/{{.URL}}">{{.Name}}</a>
+            </td>
+            <td style="white-space: nowrap; height: 40px;">
+            {{if .HasReduction}}
+                <div>
+                    <span style="text-decoration: line-through;">{{call $.FormatPrice .Price 1.0}}</span><br>
+                    <strong>{{call $.FormatPrice (call $.ProductPrice .) 1.0}}</strong>
+                </div>
+            {{else}}
+                <strong>{{call $.FormatPrice .Price 1.0}}</strong>
+            {{end}}
+            </td>
+            <td style="text-align: center;">{{.Quantity}}</td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+<hr size="1" color="#e2e8f0" style="margin: 0;">   
+<table class="table-sm" style="margin: 8px -2px;">
+    <tbody>
+        <tr>
+            <td>Proizvodi:</td>
+            <td>{{call $.FormatPrice (call $.TotalPrice .Cart) 0.75}}</td>
+        </tr>
+        <tr>
+            <td>PDV:</td>
+            <td>{{call $.FormatPrice (call $.TotalPrice .Cart) 0.25}}</td>
+        </tr>
+        <tr>
+            <td>Dostava:</td>
+            <td>{{call $.FormatPrice 0 1.0}}</td>
+        </tr>
+        <tr style="font-weight: bold;">
+            <td>Ukupno:</td>
+            <td>{{call $.FormatPrice (call $.TotalPrice .Cart) 1.0}}</td>
+        </tr>
+    </tbody>
+</table>
+{{end}}
