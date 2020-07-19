@@ -92,7 +92,7 @@ const TotalTable = ({ cart, order }) => {
           <td className="px-0 py-px">
             {getPrice(
               getTotal(cart) *
-                (parseInt(order.installments) > 0
+                (order.paymentMethod === "kartica" && parseInt(order.installments) > 0
                   ? parseInt(order.installments) < 13
                     ? 1.08
                     : 1.1
