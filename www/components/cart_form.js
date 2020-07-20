@@ -6,7 +6,7 @@ import { orderSave, ordersGet, orderGet, ordersClear, orderInit } from "../helpe
 import { getTotal, getPrice } from "../helpers/price";
 import Router from "next/router";
 
-function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
+function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert }) {
   const setOrderProperty = (property) => (data) => {
     setOrder({
       ...order,
@@ -186,7 +186,6 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           if (!order.terms) document.getElementById("terms").required = true;
           if (!valid) return;
           const res = await fetch("https://api.amadeus2.hr/checkout/", {
-            // const res = await fetch("http://localhost:8081/checkout/", {
             method: "POST",
             body: JSON.stringify({
               ...order,
@@ -230,6 +229,7 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             document.querySelector("[name=Signature]").value = json.Signature;
             document.querySelector("[name=PaymentPlan]").value = installments;
             document.querySelector("[name=pay]").submit();
+            return;
           }
 
           const total =
@@ -243,9 +243,8 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
             `/checkout/success?orderID=${json.OrderID}&paymentMethod=${order.paymentMethod}&totalAmount=${total}`
           );
 
+          setCartOpened(false);
           setOrder(orderInit);
-          cartSave([]);
-          setCart([]);
         }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
@@ -261,12 +260,12 @@ function CartForm({ cart, setCart, order, setOrder, dispatchAlert }) {
           <input type="hidden" name="Version" value="2.0" />
           <input type="hidden" name="TotalAmount" value="" />
           <input type="hidden" name="Signature" value="" />
-          <input type="hidden" name="ReturnURL" value="http://localhost:3000/checkout/success" />
-          <input type="hidden" name="CancelURL" value="http://localhost:3000" />
+          <input type="hidden" name="ReturnURL" value="https://api.amadeus2.hr/checkout/success" />
+          <input type="hidden" name="CancelURL" value="https://api.amadeus2.hr/checkout/cancel" />
           <input
             type="hidden"
             name="ReturnErrorURL"
-            value="http://localhost:3000/checkout/failure"
+            value="https://api.amadeus2.hr/checkout/failure"
           />
           {order.paymentData.isCompany ? (
             <input type="hidden" name="CustomerFirstName" value={order.paymentData.companyName} />
