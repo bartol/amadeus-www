@@ -25,7 +25,7 @@ import (
 )
 
 var pdv float64 = 25
-var orderIDPrefix = "test-"
+var orderIDPrefix = "testweb-"
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
 var wsPayKey = os.Getenv("WSPAY_KEY")
 var wsPayShopID = "PIONEERHR"
@@ -820,7 +820,8 @@ func main() {
 			status TEXT,
 			data TEXT,
 			products TEXT,
-			totalAmount INT
+			totalAmount INT,
+			installments INT
 		);
 	`)
 	if err != nil {
@@ -840,6 +841,9 @@ func main() {
 	http.HandleFunc("/images/", imagesHandler)
 
 	http.HandleFunc("/checkout/", checkoutHandler)
+	http.HandleFunc("/checkout/success", checkoutSuccessHandler)
+	http.HandleFunc("/checkout/failure", checkoutFailureHandler)
+	http.HandleFunc("/checkout/cancel", checkoutCancelHandler)
 	http.HandleFunc("/search/", searchHandler)
 	http.HandleFunc("/contact/", contactHandler)
 	http.HandleFunc("/newsletter/", newsletterHandler)
@@ -1190,9 +1194,9 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	result, err := db.Exec(`
 	INSERT INTO
-		orders (status,data,products,totalAmount)
-		VALUES (?,?,?,?)
-	`, "processing", string(jsonData), string(jsonProducts), totalAmount)
+		orders (status,data,products,totalAmount,installments)
+		VALUES (?,?,?,?,?)
+	`, "processing", string(jsonData), string(jsonProducts), totalAmount, installments)
 	if err != nil {
 		data := checkoutResp{}
 		data.Error = err.Error()
@@ -1337,6 +1341,156 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		data.Error = err.Error()
 		json.NewEncoder(w).Encode(data)
 	}
+}
+
+func checkoutSuccessHandler(w http.ResponseWriter, r *http.Request) {
+	orderID := r.URL.Query().Get("ShoppingCartID")
+	id := orderID[len(orderIDPrefix):]
+
+	_, err := db.Exec(`UPDATE orders SET status = "success" WHERE id=?;`, id)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	var dataString string
+	var productsString string
+	var installments int
+	row := db.QueryRow(`SELECT data,products,installments FROM orders WHERE id=?;`, id)
+	err = row.Scan(&dataString, &productsString, &installments)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	var data checkoutReq
+	err = json.Unmarshal([]byte(dataString), &data)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+	var products []productLite
+	err = json.Unmarshal([]byte(productsString), &products)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	subject := "[amadeus2.hr] Vaša narudžba (" + orderID + ")"
+	buf := new(bytes.Buffer)
+	emailData := checkoutEmailTemplateData{
+		subject,
+		orderID,
+		installments,
+		data,
+		products,
+		productPrice,
+		totalPrice,
+		formatPrice,
+	}
+	err = checkoutEmailTemplates.Execute(buf, emailData)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	html := []byte(buf.String())
+
+	e := email.NewEmail()
+	e.From = "Amadeus II d.o.o. <prodaja@amadeus2.hr>"
+	to := []string{data.PaymentData.EmailAdress}
+	if data.UseShippingData && data.PaymentData.EmailAdress != data.ShippingData.EmailAdress {
+		to = append(to, data.ShippingData.EmailAdress)
+	}
+	e.To = to
+	e.Subject = subject
+	e.HTML = html
+	_, err = e.AttachFile("../www/public/img/logo.png")
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	err = e.Send(smtpHost+smtpPort, smtpAuth)
+	// err = e.Send("127.0.0.1:1025", nil)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	adminSubject := "[amadeus2.hr] Nova narudžba (" + orderID + ")"
+	adminBuf := new(bytes.Buffer)
+	err = checkoutEmailAdminTemplates.Execute(adminBuf, emailData)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	adminHTML := []byte(adminBuf.String())
+
+	adminE := email.NewEmail()
+	adminE.From = "Amadeus II d.o.o. <web@amadeus2.hr>"
+	adminE.To = []string{"prodaja@amadeus2.hr"}
+	replyTo := []string{data.PaymentData.EmailAdress}
+	if data.UseShippingData && data.PaymentData.EmailAdress != data.ShippingData.EmailAdress {
+		replyTo = append(replyTo, data.ShippingData.EmailAdress)
+	}
+	adminE.ReplyTo = replyTo
+	adminE.Subject = adminSubject
+	adminE.HTML = adminHTML
+	_, err = adminE.AttachFile("../www/public/img/logo.png")
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	err = adminE.Send(smtpHost+smtpPort, smtpAuth)
+	// err = adminE.Send("127.0.0.1:1025", nil)
+	if err != nil {
+		log.Println(err)
+		w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+		w.WriteHeader(http.StatusSeeOther)
+		return
+	}
+
+	w.Header().Add("Location", "https://amadeus2.hr/checkout/success?orderID="+orderID)
+	w.WriteHeader(http.StatusSeeOther)
+}
+
+func checkoutFailureHandler(w http.ResponseWriter, r *http.Request) {
+	orderID := r.URL.Query().Get("ShoppingCartID")
+	id := orderID[len(orderIDPrefix):]
+
+	db.Exec(`UPDATE orders SET status = "failure" WHERE id=?;`, id)
+	w.Header().Add("Location", "https://amadeus2.hr/checkout/failure")
+	w.WriteHeader(http.StatusSeeOther)
+}
+
+func checkoutCancelHandler(w http.ResponseWriter, r *http.Request) {
+	orderID := r.URL.Query().Get("ShoppingCartID")
+	id := orderID[len(orderIDPrefix):]
+
+	db.Exec(`UPDATE orders SET status = "cancel" WHERE id=?;`, id)
+	w.Header().Add("Location", "https://amadeus2.hr")
+	w.WriteHeader(http.StatusSeeOther)
 }
 
 type searchResp struct {
