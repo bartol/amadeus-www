@@ -3,14 +3,17 @@ import { CheckCircle } from "react-feather";
 import { getPrice } from "../../helpers/price";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import { cartSave } from "../../helpers/cart";
 
 function Success(params) {
-  const [{ orderID, paymentMethod, totalAmount }] = useState(params);
+  const [{ orderID, paymentMethod, totalAmount, setCart }] = useState(params);
 
   useEffect(() => {
     if (window && window.location.search) {
       Router.replace("/checkout/success");
     }
+    cartSave([]);
+    setCart([]);
   }, []);
 
   return (
