@@ -215,6 +215,7 @@ function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert
               AlertCircle,
               10000
             );
+            return;
           }
 
           if (order.paymentMethod === "kartica") {
