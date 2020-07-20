@@ -54,6 +54,7 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispa
           <CartForm
             cart={cart}
             setCart={setCart}
+            setCartOpened={setCartOpened}
             order={order}
             setOrder={setOrder}
             dispatchAlert={dispatchAlert}
