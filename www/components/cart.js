@@ -1,7 +1,7 @@
 import Drawer from "rc-drawer";
 import CartTable from "./cart_table";
 import { X, ArrowRight, ArrowLeft } from "react-feather";
-import { useState, useRef, useReducer } from "react";
+import { useState, useRef } from "react";
 import CartForm from "./cart_form";
 
 function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispatchAlert }) {
