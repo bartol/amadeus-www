@@ -204,7 +204,10 @@ function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert
             return;
           }
 
-          if (JSON.stringify(cart) !== JSON.stringify(json.Cart)) {
+          if (
+            JSON.stringify([...cart].sort((a, b) => a.ID - b.ID)) !==
+            JSON.stringify([...json.Cart].sort((a, b) => a.ID - b.ID))
+          ) {
             cartSave(json.Cart);
             setCart(json.Cart);
             document.querySelector(".drawer-content").scroll({ top: 0, behavior: "smooth" });
