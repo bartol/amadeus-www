@@ -98,9 +98,11 @@ export default App;
 /*
 TODO:
 	images in popular categories cards
-	checkout
   category tree styles
   kuponi
   fix allow origin
   alert higher than cart
+  cart scroll right button
+  /reindex
+  reindex trigger now.sh deployment
 */
