@@ -24,7 +24,8 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispa
             <button
               type="button"
               onClick={() => {
-                const location = scroll === 0 ? tableRef.current.scrollLeftMax : 0;
+                const location =
+                  scroll === 0 ? tableRef.current.scrollWidth - tableRef.current.clientWidth : 0;
                 tableRef.current.scroll({
                   left: location,
                   behavior: "smooth",
