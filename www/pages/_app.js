@@ -100,9 +100,6 @@ TODO:
 	images in popular categories cards
   category tree styles
   kuponi
-  fix allow origin
   alert higher than cart
   cart scroll right button
-  /reindex
-  reindex trigger now.sh deployment
 */
