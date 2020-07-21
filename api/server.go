@@ -854,6 +854,8 @@ func main() {
 func reindexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
+	http.Get("https://api.vercel.com/v1/integrations/deploy/QmR7XoYVzAkNp4kTUHiqGZ2wJrfNqLYBS7acLxQwyxLUmF/QyCIeYs9dW")
+
 	err := reindex()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
