@@ -21,20 +21,22 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispa
         <div className="flex justify-between items-center mb-5">
           <h2 className="heading text-4xl">Košarica</h2>
           <div>
-            <button
-              type="button"
-              onClick={() => {
-                const location =
-                  scroll === 0 ? tableRef.current.scrollWidth - tableRef.current.clientWidth : 0;
-                tableRef.current.scroll({
-                  left: location,
-                  behavior: "smooth",
-                });
-              }}
-              className="button ~neutral !normal p-2 mr-5 sm:hidden"
-            >
-              {scroll === 0 ? <ArrowRight /> : <ArrowLeft />}
-            </button>
+            {cart.length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  const location =
+                    scroll === 0 ? tableRef.current.scrollWidth - tableRef.current.clientWidth : 0;
+                  tableRef.current.scroll({
+                    left: location,
+                    behavior: "smooth",
+                  });
+                }}
+                className="button ~neutral !normal p-2 mr-5 sm:hidden"
+              >
+                {scroll === 0 ? <ArrowRight /> : <ArrowLeft />}
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setCartOpened(false)}
