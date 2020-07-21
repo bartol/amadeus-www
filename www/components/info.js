@@ -15,11 +15,15 @@ function Info({ h1Heading, dispatchAlert }) {
         ></iframe>
       </div>
       <div className="lg:w-1/2 flex justify-center items-center">
-        <div className="xl:w-2/3 lg:w-5/6">
+        <div className="xl:w-2/3 lg:w-5/6 sm:w-auto w-full">
           {h1Heading ? (
-            <h1 className="heading text-4xl mx-2 mt-12 mb-5">Amadeus II d.o.o. shop</h1>
+            <h1 className="heading text-4xl mx-2 mt-12 mb-5 text-center">
+              Amadeus II d.o.o.<span className="sm:inline hidden"> shop</span>
+            </h1>
           ) : (
-            <h2 className="heading text-4xl mx-2 mt-12 mb-5">Amadeus II d.o.o. shop</h2>
+            <h2 className="heading text-4xl mx-2 mt-12 mb-5 text-center">
+              Amadeus II d.o.o.<span className="sm:inline hidden"> shop</span>
+            </h2>
           )}
           <div className="card ~neutral !low flex flex-col items-start">
             <h3 className="subheading text-2xl mb-2">Kontaktirajte nas</h3>
