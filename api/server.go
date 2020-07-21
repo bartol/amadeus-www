@@ -284,7 +284,6 @@ func reindex() error {
 	categoriesMap = make(map[string]categoryWithProducts)
 	categoriesSlice = []categoryWithProducts{}
 	categoriesTree = []categoryTree{}
-	cachedImages = make(map[string]cachedImage)
 
 	for _, p := range productsData.Products {
 		isAmadeus := true
