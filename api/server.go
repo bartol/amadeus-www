@@ -853,6 +853,8 @@ func main() {
 }
 
 func reindexHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	err := reindex()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
