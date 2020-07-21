@@ -62,7 +62,7 @@ function App({ Component, pageProps }) {
         dispatchAlert={dispatchAlert}
       />
       <Footer dispatchAlert={dispatchAlert} />
-      <ul className="fixed bottom-0 m-4">
+      <ul className="fixed bottom-0 m-4" style={{ zIndex: 10000 }}>
         {alerts
           .sort((a, b) => a.id - b.id)
           .map((a) => {
@@ -100,5 +100,4 @@ TODO:
 	images in popular categories cards
   category tree styles
   kuponi
-  alert higher than cart
 */
