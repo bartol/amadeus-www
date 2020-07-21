@@ -101,5 +101,4 @@ TODO:
   category tree styles
   kuponi
   alert higher than cart
-  cart scroll right button
 */
