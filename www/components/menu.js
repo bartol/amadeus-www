@@ -1,19 +1,96 @@
 import Drawer from "rc-drawer";
 import Link from "next/link";
-import { X } from "react-feather";
+import { X, ChevronRight, ArrowLeft } from "react-feather";
+import { useState } from "react";
 
 function Menu({ categories, menuOpened, setMenuOpened }) {
+  const [selected, setSelected] = useState(["root"]);
+  const [titles, setTitles] = useState(["Kategorije"]);
+
+  const page = (c) => {
+    return (
+      <ul
+        className="absolute w-full h-full overflow-y-auto"
+        style={{
+          transform:
+            selected.slice(-1)[0] === c.ID
+              ? "translateX(0)"
+              : selected.includes(c.ID)
+              ? "translateX(-400px)"
+              : "translateX(400px)",
+          visibility: selected.slice(-1)[0] === c.ID ? "visible" : "hidden",
+          transitionDuration: "0.25s",
+          willChange: "transform",
+        }}
+      >
+        {c.ID !== "root" && (
+          <li className="m-px">
+            <button
+              type="button"
+              onClick={() => {
+                setSelected(selected.slice(0, -1));
+                setTitles(titles.slice(0, -1));
+              }}
+              className="button ~urge !normal w-full justify-center px-3 py-2 mb-3"
+            >
+              <ArrowLeft /> <span className="text-lg ml-2">Natrag</span>
+            </button>
+          </li>
+        )}
+        {c.Children.map((c) => {
+          if (!c.Children.length && !c.HasProducts) return <></>;
+          return (
+            <li key={c.ID} className="m-px">
+              {c.Children.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelected([...selected, c.ID]);
+                    setTitles([...titles, c.Name]);
+                  }}
+                  className="button ~neutral !normal w-full px-3 py-2 mb-3"
+                >
+                  <span className="text-lg">{c.Name}</span> <ChevronRight />
+                </button>
+              ) : (
+                <Link href="/[category]" as={"/" + c.Slug}>
+                  <a
+                    onClick={() => setMenuOpened(false)}
+                    className="button ~neutral !normal w-full px-3 py-2 mb-3"
+                  >
+                    <span className="text-lg truncate mr-2">{c.Name}</span> ({c.ProductCount})
+                  </a>
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
+
+  const allCategories = [];
+  const a = (categories) => {
+    categories.forEach((c) => {
+      allCategories.push(c);
+      a(c.Children);
+    });
+  };
+  a(categories);
+
   return (
     <Drawer
       placement="left"
+      width="400px"
       open={menuOpened}
       onClose={() => setMenuOpened(false)}
       level={null}
       handler={false}
+      className="overflow-hidden"
     >
-      <div className="m-5">
+      <div className="m-5 flex flex-col" style={{ height: "calc(100% - 2.5rem)" }}>
         <div className="flex justify-between items-center mb-5">
-          <h2 className="heading text-4xl">Kategorije</h2>
+          <h2 className="heading text-4xl truncate mr-2">{titles.slice(-1)[0]}</h2>
           <button
             type="button"
             onClick={() => setMenuOpened(false)}
@@ -22,31 +99,18 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
             <X />
           </button>
         </div>
-        <ul>{categories.map((c) => renderTreeNode(c))}</ul>
+
+        <div className="flex-grow overflow-hidden">
+          <div className="relative h-full">
+            {page({
+              ID: "root",
+              Children: categories,
+            })}
+            {allCategories.map((c) => page(c))}
+          </div>
+        </div>
       </div>
     </Drawer>
-  );
-}
-
-function renderTreeNode(category) {
-  // don't show tree leafs without products
-  if (!category.HasProducts && !category.Children.length) return;
-
-  return (
-    <li key={category.ID}>
-      <h3>
-        {category.HasProducts && !category.Children.length ? (
-          <Link href="/[category]" as={"/" + category.Slug}>
-            <a>
-              {category.Name} ({category.ProductCount})
-            </a>
-          </Link>
-        ) : (
-          <span className="opacity-50">{category.Name}</span>
-        )}
-      </h3>
-      <ul className="ml-5">{category.Children.map((c) => renderTreeNode(c))}</ul>
-    </li>
   );
 }
 
