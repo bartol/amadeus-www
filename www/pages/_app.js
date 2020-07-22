@@ -98,6 +98,6 @@ export default App;
 /*
 TODO:
 	images in popular categories cards
-  category tree styles
   kuponi
+  pioneer.hr card
 */
