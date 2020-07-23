@@ -504,8 +504,13 @@ func reindex() error {
 			continue
 		}
 
+		imgURL := "https://pioneer.hr/c/" + strconv.Itoa(c.ID) + "-medium_default/" + c.LinkRewrite + ".jpg"
+		img, err := http.Get(imgURL)
+		if err != nil || img.StatusCode != http.StatusOK {
+			imgURL = ""
+		}
 		image := image{
-			URL: "", // TODO
+			URL: imgURL,
 		}
 
 		products := []productLite{}
