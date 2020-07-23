@@ -11,7 +11,6 @@ function Info({ h1Heading, dispatchAlert }) {
         <iframe
           src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;q=Amadeus+II+d.o.o.%2c+Ulica+Vladimira+Nazora%2c+Plo%c4%8de&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed"
           className="absolute w-full h-full"
-          style={{ filter: "grayscale(1) contrast(1.2) opacity(0.4)" }}
         ></iframe>
       </div>
       <div className="lg:w-1/2 flex justify-center items-center">
