@@ -1,7 +1,7 @@
 import Drawer from "rc-drawer";
 import Link from "next/link";
 import { X, ChevronRight, ArrowLeft } from "react-feather";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 
 function Menu({ categories, menuOpened, setMenuOpened }) {
   const [selected, setSelected] = useState(["root"]);
@@ -22,6 +22,7 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
           transitionDuration: "0.25s",
           willChange: "transform",
         }}
+        key={c.ID}
       >
         {c.ID !== "root" && (
           <li className="m-px">
@@ -38,7 +39,7 @@ function Menu({ categories, menuOpened, setMenuOpened }) {
           </li>
         )}
         {c.Children.map((c) => {
-          if (!c.Children.length && !c.HasProducts) return <></>;
+          if (!c.Children.length && !c.HasProducts) return <Fragment key={c.ID}></Fragment>;
           return (
             <li key={c.ID} className="m-px">
               {c.Children.length > 0 ? (
