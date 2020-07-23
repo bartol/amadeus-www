@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Router from "next/router";
+import Head from "next/head";
 import NProgress from "nprogress";
 import Cart from "../components/cart";
 import { cartGet } from "../helpers/cart";
@@ -46,6 +47,19 @@ function App({ Component, pageProps }) {
 
   return (
     <div className="bg-gray-100">
+      <Head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173407510-1"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'UA-173407510-1');
+        `,
+          }}
+        />
+      </Head>
       <Header
         query={query}
         setQuery={setQuery}
