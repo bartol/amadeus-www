@@ -111,7 +111,5 @@ export default App;
 
 /*
 TODO:
-	images in popular categories cards
   kuponi
-  pioneer.hr card
 */
