@@ -81,11 +81,17 @@ export async function getStaticProps() {
   let categories = await categoriesRes.json();
 
   const products = categories.find((c) => c.Slug === "amadeus-ii-shop").Products;
+
+  const whitelistedCategories = [
+    "klima-uredaji",
+    "televizori",
+    "ps4-gaming",
+    "racunala",
+    "pametni-mobiteli-smartphone",
+  ];
   categories = categories
-    .filter((c) => c.Slug !== "amadeus-ii-shop")
-    .filter((c) => c.Image.URL !== "")
-    .sort((a, b) => b.Products.length - a.Products.length)
-    .slice(0, 5);
+    .filter((c) => whitelistedCategories.includes(c.Slug))
+    .sort((a, b) => b.Products.length - a.Products.length);
 
   const categoriesTreeRes = await fetch("https://api.amadeus2.hr/categories/tree");
   const categoriesTree = await categoriesTreeRes.json();
