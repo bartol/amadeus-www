@@ -23,15 +23,18 @@ function App({ Component, pageProps }) {
   const [cartOpened, setCartOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
 
-  const cleanup = () => {
+  const cleanup = (url) => {
     setCartOpened(false);
     setMenuOpened(false);
     setQuery("");
+    window.gtag("config", "UA-173407510-1", {
+      page_path: url,
+    });
     NProgress.done();
   };
   Router.events.on("routeChangeStart", () => NProgress.start());
-  Router.events.on("routeChangeComplete", () => cleanup());
-  Router.events.on("routeChangeError", () => cleanup());
+  Router.events.on("routeChangeComplete", cleanup);
+  Router.events.on("routeChangeError", cleanup);
 
   const dispatchAlert = (message, colorClass, Icon, timeout, onClick) => {
     const id = alerts.length > 0 ? alerts[alerts.length - 1].id + 1 : 0;
@@ -55,7 +58,9 @@ function App({ Component, pageProps }) {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'UA-173407510-1');
+              gtag('config', 'UA-173407510-1', {
+                page_path: window.location.pathname,
+              });
         `,
           }}
         />
