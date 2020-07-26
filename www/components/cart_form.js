@@ -130,7 +130,7 @@ function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert
         />
         <span className="px-1">Zapamti podatke</span>
       </label>
-      {order.save && (
+      {/* {order.save && (
         <label>
           <span className="support ml-1">Naziv pohranjenih podataka</span>
           <input
@@ -141,7 +141,7 @@ function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert
             className="input ~neutral !normal mb-3"
           />
         </label>
-      )}
+      )} */}
 
       <label className="flex mb-3">
         <input
