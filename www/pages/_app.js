@@ -117,5 +117,4 @@ export default App;
 /*
 TODO:
   kuponi
-  product page price
 */
