@@ -48,6 +48,7 @@ function Product({
   }, []);
 
   const [quantity, setQuantity] = useState(1);
+  const [installments, setInstallments] = useState("2");
 
   return (
     <div className="container mx-auto px-4">
@@ -138,18 +139,80 @@ function Product({
         </div>
         <div className="md:w-1/2 md:mx-4 md:mt-0 mt-5">
           <div className="card ~neutral !low">
-            <div>
-              <h4 className={`${p.HasReduction ? "line-through" : "subheading font-bold"}`}>
+            <div className="mb-4">
+              <div className="font-bold mb-2">Cijena za jednokratno plaćanje:</div>
+              {p.HasReduction && "MPC: "}
+              <h4
+                className={`${
+                  p.HasReduction ? "line-through inline" : "subheading font-bold lg:text-4xl"
+                }`}
+              >
                 {getPrice(p.Price)}
               </h4>
               {p.HasReduction && (
-                <div className="flex">
-                  <h4 className="subheading font-bold">
+                <div className="flex justify-between items-center">
+                  <h4 className="subheading font-bold lg:text-4xl">
                     {getReductedPrice(p.Price, p.Reduction, p.ReductionType)}
                   </h4>
-                  <h4 className="subheading">{getReduction(p.Reduction, p.ReductionType)}</h4>
+                  <h4
+                    className="subheading lg:text-2xl rounded px-2"
+                    style={{
+                      color: "var(--color-critical-normal-content)",
+                      backgroundColor: "var(--color-critical-normal-fill)",
+                    }}
+                  >
+                    {getReduction(p.Reduction, p.ReductionType)}
+                  </h4>
                 </div>
               )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <span className="font-bold mb-2 ml-1">Cijena za plaćanje na rate:</span>
+              <div className="flex-grow">
+                <div className="flex items-center">
+                  <div className="select !normal flex-grow">
+                    <select value={installments} onChange={(e) => setInstallments(e.target.value)}>
+                      <option value="2">2 rate</option>
+                      <option value="3">3 rate</option>
+                      <option value="4">4 rate</option>
+                      <option value="5">5 rata</option>
+                      <option value="6">6 rata</option>
+                      <option value="7">7 rata</option>
+                      <option value="8">8 rata</option>
+                      <option value="9">9 rata</option>
+                      <option value="10">10 rata</option>
+                      <option value="11">11 rata</option>
+                      <option value="12">12 rata</option>
+                      <option value="13">13 rata</option>
+                      <option value="14">14 rata</option>
+                      <option value="15">15 rata</option>
+                      <option value="16">16 rata</option>
+                      <option value="17">17 rata</option>
+                      <option value="18">18 rata</option>
+                      <option value="19">19 rata</option>
+                      <option value="20">20 rata</option>
+                      <option value="21">21 rata</option>
+                      <option value="22">22 rate</option>
+                      <option value="23">23 rate</option>
+                      <option value="24">24 rate</option>
+                    </select>
+                  </div>
+                  <span className="mr-1 ml-3">
+                    {getPrice(
+                      ((p.HasReduction
+                        ? getReductedPrice(p.Price, p.Reduction, p.ReductionType, true)
+                        : p.Price) *
+                        (parseInt(installments) > 0
+                          ? parseInt(installments) < 13
+                            ? 1.08
+                            : 1.1
+                          : 1)) /
+                        parseInt(installments)
+                    )}
+                    /mj.
+                  </span>
+                </div>
+              </div>
             </div>
             {!p.OutOfStock ? (
               <div className="flex items-end">
@@ -173,7 +236,7 @@ function Product({
                   <span className="text-lg ml-2">Dodaj u košaricu</span>
                 </button>
                 <div className="flex flex-col ml-4">
-                  <span>Količina</span>
+                  <span className="support ml-1">Količina</span>
                   <input
                     type="number"
                     value={quantity}
