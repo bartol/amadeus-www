@@ -1188,7 +1188,7 @@ func totalPrice(products []productLite, installments int, calcInstallments bool,
 
 func checkCoupon(coupon string) bool {
 	_, ok := coupons[coupon]
-	return ok
+	return len(coupon) > 0 && ok
 }
 
 func getCoupon(total int, coupon string) string {
