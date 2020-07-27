@@ -199,12 +199,20 @@ type response struct {
 	Status string `json:"status"`
 }
 
+type coupon struct {
+	Code          string
+	Reduction     int
+	ReductionType string
+	MinAmount     int
+}
+
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
 var categoriesMap = make(map[string]categoryWithProducts)
 var categoriesSlice []categoryWithProducts
 var categoriesTree []categoryTree
 var cachedImages = make(map[string]cachedImage)
+var coupons = make(map[string]coupon)
 
 var blacklistedCategories = []string{
 	"1",  // Root
@@ -279,11 +287,17 @@ func reindex() error {
 		return err
 	}
 
+	cartRulesData, err := getCartRules()
+	if err != nil {
+		return err
+	}
+
 	productsMap = make(map[string]product)
 	productsLiteSlice = []productLite{}
 	categoriesMap = make(map[string]categoryWithProducts)
 	categoriesSlice = []categoryWithProducts{}
 	categoriesTree = []categoryTree{}
+	coupons = make(map[string]coupon)
 
 	for _, p := range productsData.Products {
 		isAmadeus := true
@@ -558,6 +572,52 @@ func reindex() error {
 	categoryTree := getCategoryTree(categoriesData, 25)
 	categoriesTree = categoryTree.Children
 
+	for _, c := range cartRulesData.CartRules {
+		t, err := time.Parse("2006-01-02 15:04:05", c.DateTo)
+		if err != nil {
+			return err
+		}
+		if c.Active != "1" || time.Now().After(t) {
+			continue
+		}
+
+		reductionType := "amount"
+		reductionStr := c.ReductionAmount
+		if c.ReductionAmount == "0.00" {
+			reductionType = "percent"
+			reductionStr = c.ReductionPercent
+		}
+
+		reductionFloat, err := strconv.ParseFloat(reductionStr, 10)
+		if err != nil {
+			return err
+		}
+		reduction := int(reductionFloat)
+		if reductionType == "amount" {
+			reduction = int(reductionFloat * 100)
+			if c.ReductionTax == "0" {
+				reduction = int((reductionFloat + (reductionFloat * (pdv / 100))) * 100)
+			}
+		}
+
+		minAmountFloat, err := strconv.ParseFloat(c.MinimumAmount, 10)
+		if err != nil {
+			return err
+		}
+		minAmount := int(minAmountFloat * 100)
+		if c.MinimumAmountTax == "0" {
+			minAmount = int((minAmountFloat + (minAmountFloat * (pdv / 100))) * 100)
+		}
+
+		coupon := coupon{
+			Code:          c.Code,
+			Reduction:     reduction,
+			ReductionType: reductionType,
+			MinAmount:     minAmount,
+		}
+		coupons[c.Code] = coupon
+	}
+
 	return nil
 }
 
@@ -792,6 +852,36 @@ func getCombinations() (getCombinationsResp, error) {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		return getCombinationsResp{}, err
+	}
+
+	return data, nil
+}
+
+type getCartRulesResp struct {
+	CartRules []struct {
+		ID               int
+		Name             string
+		DateTo           string `json:"date_to"`
+		Code             string
+		MinimumAmount    string `json:"minimum_amount"`
+		MinimumAmountTax string `json:"minimum_amount_tax"`
+		ReductionPercent string `json:"reduction_percent"`
+		ReductionAmount  string `json:"reduction_amount"`
+		ReductionTax     string `json:"reduction_tax"`
+		Active           string
+	} `json:"cart_rules"`
+}
+
+func getCartRules() (getCartRulesResp, error) {
+	body, err := getBody(getPioneerURL("cart_rules"))
+	if err != nil {
+		return getCartRulesResp{}, err
+	}
+
+	data := getCartRulesResp{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return getCartRulesResp{}, err
 	}
 
 	return data, nil
