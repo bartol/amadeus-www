@@ -51,7 +51,7 @@
             </tr>
             {{end}}
         {{end}}
-        {{if $.CheckCoupon}}
+        {{if (call $.CheckCoupon .Data.Coupon) }}
             <tr>
                 <td>Kupon:</td>
                 <td>-{{call $.GetCoupon (call $.TotalPrice .Cart .Installments true .Data.Coupon false) .Data.Coupon}}</td>
