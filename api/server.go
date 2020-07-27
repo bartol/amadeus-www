@@ -1813,18 +1813,28 @@ func couponHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	timeout := time.Now().Add(time.Duration(-10) * time.Minute)
 	if ok && data.LastReq.After(timeout) && data.ReqCount > 100 {
-		data := checkoutResp{}
+		data := couponResp{}
 		data.Error = "too much requests"
 		json.NewEncoder(w).Encode(data)
 		return
 	}
 
-	// handle
+	coupon := r.URL.Path[len("/coupon/"):]
+	c, ok := coupons[coupon]
+	if !ok {
+		data := couponResp{}
+		data.Error = "coupon does not exist"
+		json.NewEncoder(w).Encode(data)
+		return
+	}
 
-	d := checkoutResp{}
-	d.Status = true
-	d.Error = ipAddr
-	json.NewEncoder(w).Encode(d)
+	resp := couponResp{
+		true,
+		"",
+		c.Reduction,
+		c.ReductionType,
+	}
+	json.NewEncoder(w).Encode(resp)
 }
 
 func getIP(r *http.Request) string {
