@@ -44,7 +44,7 @@ const orderInit = {
   installments: "0",
   coupon: "",
   save: false,
-  saveName: new Date().toDateString(),
+  saveName: new Date().toISOString().substring(0, 10),
   terms: false,
 };
 
