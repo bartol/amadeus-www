@@ -5,7 +5,7 @@
 <strong>Narudžba će biti isporučena nakon što primimo Vašu uplatu.</strong><br>
 <br>
 Podaci o banci za prijenos sredstava:<br>
-<strong>Iznos:</strong> {{call $.FormatPrice (call $.TotalPrice .Cart .Installments true) 1.0}}<br>
+<strong>Iznos:</strong> {{call $.FormatPrice (call $.TotalPrice .Cart .Installments true .Data.Coupon true) 1.0}}<br>
 <strong>Vlasnik računa:</strong> Amadeus II d.o.o.<br>
 <strong>Adresa banke:</strong> HR0823400091100187471 kod Privredna banka d.d., Zagreb<br>
 <br>

@@ -1,6 +1,6 @@
 function orderSave(order) {
   const orders = JSON.parse(localStorage.getItem("order_data")) || {};
-  orders[order.saveName] = order;
+  orders[order.saveName] = { ...order, coupon: "" };
   localStorage.setItem("order_data", JSON.stringify(orders));
 }
 

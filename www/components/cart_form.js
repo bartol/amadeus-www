@@ -287,7 +287,7 @@ function CartForm({
 
           setCartOpened(false);
           setOrder(orderInit);
-          serCoupon(couponInit);
+          setCoupon(couponInit);
         }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
