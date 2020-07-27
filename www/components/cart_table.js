@@ -99,10 +99,6 @@ const TotalTable = ({ cart, order, coupon }) => {
             )}
           </tr>
         )}
-        <tr>
-          <td className="px-0 py-px">Dostava:</td>
-          <td className="px-0 py-px">{getPrice(0)}</td>
-        </tr>
         {coupon.reduction > 0 && (
           <tr>
             <td className="px-0 py-px">Kupon:</td>
@@ -114,6 +110,10 @@ const TotalTable = ({ cart, order, coupon }) => {
             </td>
           </tr>
         )}
+        <tr>
+          <td className="px-0 py-px">Dostava:</td>
+          <td className="px-0 py-px">{getPrice(0)}</td>
+        </tr>
         <tr className="font-bold">
           <td className="px-0 py-px">Ukupno:</td>
           <td className="px-0 py-px">{getPrice(total())}</td>
