@@ -1,12 +1,28 @@
 import Link from "next/link";
 import { CreditCard, ShoppingBag, AlertCircle } from "react-feather";
 import { cartSave } from "../helpers/cart";
-import { Fragment, useState } from "react";
-import { orderSave, ordersGet, orderGet, ordersClear, orderInit } from "../helpers/order";
+import { Fragment, useState, useEffect } from "react";
+import {
+  orderSave,
+  ordersGet,
+  orderGet,
+  ordersClear,
+  orderInit,
+  couponInit,
+} from "../helpers/order";
 import { getTotal, getPrice } from "../helpers/price";
 import Router from "next/router";
 
-function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert }) {
+function CartForm({
+  cart,
+  setCart,
+  setCartOpened,
+  order,
+  setOrder,
+  coupon,
+  setCoupon,
+  dispatchAlert,
+}) {
   const setOrderProperty = (property) => (data) => {
     setOrder({
       ...order,
@@ -113,13 +129,31 @@ function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert
 
       <label>
         <span className="support ml-1">Kupon</span>
-        <input
-          type="text"
-          value={order.coupon}
-          onChange={(e) => setOrderProperty("coupon")(e.target.value)}
-          placeholder="Kupon"
-          className="input ~neutral !normal mb-3"
-        />
+        <div className="flex items-center mb-3">
+          <input
+            type="text"
+            value={order.coupon}
+            onChange={async (e) => {
+              setOrderProperty("coupon")(e.target.value);
+              const data = await fetch("https://api.amadeus2.hr/coupon/" + e.target.value);
+              const json = await data.json();
+              setCoupon({
+                reduction: json.Reduction,
+                reductionType: json.ReductionType,
+              });
+            }}
+            placeholder="Kupon"
+            className="input ~neutral !normal"
+          />
+          {coupon.reduction > 0 && (
+            <span className="mr-1 ml-3 whitespace-no-wrap">
+              -
+              {coupon.reductionType === "percent"
+                ? coupon.reduction + "%"
+                : getPrice(coupon.reduction)}
+            </span>
+          )}
+        </div>
       </label>
 
       <label className="flex mt-3 mb-1">
@@ -236,19 +270,24 @@ function CartForm({ cart, setCart, setCartOpened, order, setOrder, dispatchAlert
             return;
           }
 
-          const total =
+          let total =
             getTotal(cart) *
             (order.paymentMethod === "kartica" && parseInt(order.installments) > 0
               ? parseInt(order.installments) < 13
                 ? 1.08
                 : 1.1
               : 1);
+          if (coupon.reductionType === "percent") total = total * ((100 - coupon.reduction) / 100);
+          if (coupon.reductionType === "amount") total = total - coupon.reduction;
+          if (total < 0) total = 0;
+
           Router.push(
             `/checkout/success?orderID=${json.OrderID}&paymentMethod=${order.paymentMethod}&totalAmount=${total}`
           );
 
           setCartOpened(false);
           setOrder(orderInit);
+          serCoupon(couponInit);
         }}
       >
         {order.paymentMethod === "kartica" ? <CreditCard /> : <ShoppingBag />}
