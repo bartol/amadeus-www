@@ -1138,7 +1138,9 @@ type checkoutEmailTemplateData struct {
 	Data         checkoutReq
 	Cart         []productLite
 	ProductPrice func(productLite) int
-	TotalPrice   func([]productLite, int, bool) int
+	TotalPrice   func([]productLite, int, bool, string, bool) int
+	CheckCoupon  func(string) bool
+	GetCoupon    func(int, string) string
 	FormatPrice  func(int, float64) string
 }
 
@@ -1155,7 +1157,7 @@ func productPrice(p productLite) int {
 	return price
 }
 
-func totalPrice(products []productLite, installments int, calcInstallments bool) int {
+func totalPrice(products []productLite, installments int, calcInstallments bool, coupon string, calcCoupon bool) int {
 	total := 0
 	for _, p := range products {
 		total += productPrice(p) * p.Quantity
@@ -1167,7 +1169,39 @@ func totalPrice(products []productLite, installments int, calcInstallments bool)
 			total = int(float64(total) * 1.1)
 		}
 	}
+	if calcCoupon && coupon != "" {
+		c, ok := coupons[coupon]
+		if ok {
+			if c.ReductionType == "percent" {
+				total = (total * (100 - c.Reduction)) / 100
+			}
+			if c.ReductionType == "amount" {
+				total = total - c.Reduction
+				if total < 0 {
+					total = 0
+				}
+			}
+		}
+	}
 	return total
+}
+
+func checkCoupon(coupon string) bool {
+	_, ok := coupons[coupon]
+	return ok
+}
+
+func getCoupon(total int, coupon string) string {
+	c, ok := coupons[coupon]
+	if ok {
+		if c.ReductionType == "percent" {
+			return "-" + strconv.Itoa(c.Reduction) + "%"
+		}
+		if c.ReductionType == "amount" {
+			return formatPrice(c.Reduction, 1.0)
+		}
+	}
+	return ""
 }
 
 func formatPrice(price int, p float64) string {
@@ -1281,6 +1315,19 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	coupon, ok := coupons[data.Coupon]
+	if ok {
+		if coupon.ReductionType == "percent" {
+			totalAmount = (totalAmount * (100 - coupon.Reduction)) / 100
+		}
+		if coupon.ReductionType == "amount" {
+			totalAmount = totalAmount - coupon.Reduction
+			if totalAmount < 0 {
+				totalAmount = 0
+			}
+		}
+	}
+
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		data := checkoutResp{}
@@ -1356,6 +1403,8 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request) {
 		products,
 		productPrice,
 		totalPrice,
+		checkCoupon,
+		getCoupon,
 		formatPrice,
 	}
 	err = checkoutEmailTemplates.Execute(buf, emailData)
@@ -1499,6 +1548,8 @@ func checkoutSuccessHandler(w http.ResponseWriter, r *http.Request) {
 		products,
 		productPrice,
 		totalPrice,
+		checkCoupon,
+		getCoupon,
 		formatPrice,
 	}
 	err = checkoutEmailTemplates.Execute(buf, emailData)
