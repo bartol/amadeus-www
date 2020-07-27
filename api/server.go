@@ -1195,7 +1195,7 @@ func getCoupon(total int, coupon string) string {
 	c, ok := coupons[coupon]
 	if ok {
 		if c.ReductionType == "percent" {
-			return "-" + strconv.Itoa(c.Reduction) + "%"
+			return strconv.Itoa(c.Reduction) + "%"
 		}
 		if c.ReductionType == "amount" {
 			return formatPrice(c.Reduction, 1.0)
