@@ -206,6 +206,11 @@ type coupon struct {
 	MinAmount     int
 }
 
+type ip struct {
+	LastReq  time.Time
+	ReqCount int
+}
+
 var productsMap = make(map[string]product)
 var productsLiteSlice []productLite
 var categoriesMap = make(map[string]categoryWithProducts)
@@ -213,6 +218,7 @@ var categoriesSlice []categoryWithProducts
 var categoriesTree []categoryTree
 var cachedImages = make(map[string]cachedImage)
 var coupons = make(map[string]coupon)
+var ipBlacklist = make(map[string]ip)
 
 var blacklistedCategories = []string{
 	"1",  // Root
@@ -938,6 +944,7 @@ func main() {
 	http.HandleFunc("/checkout/success", checkoutSuccessHandler)
 	http.HandleFunc("/checkout/failure", checkoutFailureHandler)
 	http.HandleFunc("/checkout/cancel", checkoutCancelHandler)
+	http.HandleFunc("/coupon/", couponHandler)
 	http.HandleFunc("/search/", searchHandler)
 	http.HandleFunc("/contact/", contactHandler)
 	http.HandleFunc("/newsletter/", newsletterHandler)
@@ -1781,6 +1788,51 @@ func newsletterHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
+}
+
+type couponResp struct {
+	Status        bool   `json:"status"`
+	Error         string `json:"error"`
+	Reduction     int
+	ReductionType string
+}
+
+func couponHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+
+	ipAddr := getIP(r)
+	data, ok := ipBlacklist[ipAddr]
+	count := 0
+	if ok {
+		count = data.ReqCount + 1
+	}
+	ipBlacklist[ipAddr] = ip{
+		time.Now(),
+		count,
+	}
+	timeout := time.Now().Add(time.Duration(-10) * time.Minute)
+	if ok && data.LastReq.After(timeout) && data.ReqCount > 100 {
+		data := checkoutResp{}
+		data.Error = "too much requests"
+		json.NewEncoder(w).Encode(data)
+		return
+	}
+
+	// handle
+
+	d := checkoutResp{}
+	d.Status = true
+	d.Error = ipAddr
+	json.NewEncoder(w).Encode(d)
+}
+
+func getIP(r *http.Request) string {
+	forwarded := r.Header.Get("X-Real-IP")
+	if forwarded != "" {
+		return forwarded
+	}
+	return r.RemoteAddr
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
