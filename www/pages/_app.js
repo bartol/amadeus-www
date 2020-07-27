@@ -13,11 +13,12 @@ import "glider-js/glider.min.css";
 import "nprogress/nprogress.css";
 import "a17t";
 import "../public/css/styles.css";
-import { orderInit } from "../helpers/order";
+import { orderInit, couponInit } from "../helpers/order";
 
 function App({ Component, pageProps }) {
   const [cart, setCart] = useState(cartGet());
   const [order, setOrder] = useState(orderInit);
+  const [coupon, setCoupon] = useState(couponInit);
   const [query, setQuery] = useState("");
   const [alerts, setAlerts] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
@@ -106,6 +107,8 @@ function App({ Component, pageProps }) {
         setOrder={setOrder}
         cartOpened={cartOpened}
         setCartOpened={setCartOpened}
+        coupon={coupon}
+        setCoupon={setCoupon}
         dispatchAlert={dispatchAlert}
       />
     </div>

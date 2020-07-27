@@ -4,7 +4,17 @@ import { X, ArrowRight, ArrowLeft } from "react-feather";
 import { useState, useRef } from "react";
 import CartForm from "./cart_form";
 
-function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispatchAlert }) {
+function Cart({
+  cart,
+  setCart,
+  order,
+  setOrder,
+  cartOpened,
+  setCartOpened,
+  coupon,
+  setCoupon,
+  dispatchAlert,
+}) {
   const [scroll, setScroll] = useState(0);
   const tableRef = useRef(null);
 
@@ -50,6 +60,7 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispa
           cart={cart}
           setCart={setCart}
           order={order}
+          coupon={coupon}
           setScroll={setScroll}
           tableRef={tableRef}
         />
@@ -60,6 +71,8 @@ function Cart({ cart, setCart, order, setOrder, cartOpened, setCartOpened, dispa
             setCartOpened={setCartOpened}
             order={order}
             setOrder={setOrder}
+            coupon={coupon}
+            setCoupon={setCoupon}
             dispatchAlert={dispatchAlert}
           />
         )}

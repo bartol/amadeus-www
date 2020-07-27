@@ -44,8 +44,13 @@ const orderInit = {
   installments: "0",
   coupon: "",
   save: false,
-  saveName: new Date().toISOString().substring(0, 10),
+  saveName: new Date().toDateString(),
   terms: false,
 };
 
-export { orderInit, orderSave, ordersGet, orderGet, ordersClear };
+const couponInit = {
+  reduction: 0,
+  reductionType: "",
+};
+
+export { orderInit, orderSave, ordersGet, orderGet, ordersClear, couponInit };
