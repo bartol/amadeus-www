@@ -1,9 +1,8 @@
 function orderSave(order) {
   const orders = JSON.parse(localStorage.getItem("order_data")) || {};
-  orders[order.saveName] = {
+  orders[new Date().toISOString().substring(0, 10)] = {
     ...order,
     coupon: "",
-    saveName: new Date().toISOString().substring(0, 10),
   };
   localStorage.setItem("order_data", JSON.stringify(orders));
 }
