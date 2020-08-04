@@ -1032,6 +1032,7 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 	img, ok := cachedImages[imgPath+"-"+options]
 	if ok {
 		w.Header().Set("Content-Type", img.ContentType)
+		w.Header().Set("Cache-Control", "max-age=31536000")
 		w.Write(img.Body)
 		return
 	}
@@ -1053,6 +1054,7 @@ func imagesHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			w.Header().Set("Content-Type", contentType)
+			w.Header().Set("Cache-Control", "max-age=31536000")
 			w.Write(body)
 
 			cachedImages[imgPath+"-"+options] = cachedImage{
