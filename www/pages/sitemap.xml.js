@@ -3,12 +3,7 @@ function getSitemap(pages) {
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       ${pages
         .map((p) => {
-          return `
-			<url>
-			  <loc>https://amadeus2.hr/${p.path}</loc>
-			  <lastmod>${p.date}</lastmod>
-			  <priority>${p.priority}</priority>
-			</url>`;
+          return `<url><loc>https://amadeus2.hr/${p.path}</loc></url>`;
         })
         .join("")}
     </urlset>`;
