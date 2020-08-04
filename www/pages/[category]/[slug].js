@@ -53,7 +53,11 @@ function Product({
   return (
     <div className="container mx-auto px-4">
       <SEO
-        title={`${p.Name} | ${p.Categories[p.Categories.length - 1].Name} | Amadeus II d.o.o. shop`}
+        title={`${p.Name}, samo ${
+          p.HasReduction
+            ? getReductedPrice(p.Price, p.Reduction, p.ReductionType)
+            : getPrice(p.Price)
+        } | Amadeus II d.o.o. shop`}
         description={
           p.Name +
           " | " +
