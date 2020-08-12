@@ -297,7 +297,7 @@ function CartForm({
       </button>
 
       {order.paymentMethod === "kartica" && (
-        <form name="pay" action="https://formtest.wspay.biz/Authorization.aspx" method="POST">
+        <form name="pay" action="https://form.wspay.biz/Authorization.aspx" method="POST">
           <input type="hidden" name="ShopID" value="" />
           <input type="hidden" name="ShoppingCartID" value="" />
           <input type="hidden" name="Version" value="2.0" />
