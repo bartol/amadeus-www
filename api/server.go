@@ -25,7 +25,7 @@ import (
 )
 
 var pdv float64 = 25
-var orderIDPrefix = "testweb-"
+var orderIDPrefix = "web-"
 var pioneerKey = os.Getenv("PIONEER_API_KEY")
 var wsPayKey = os.Getenv("WSPAY_KEY")
 var wsPayShopID = "PIONEERHR"
