@@ -22,6 +22,13 @@ function Index({
         description="Amadeus II d.o.o. je trgovina specijalizirana za prodaju putem interneta i nudi više od 10000 raspoloživih artikala iz različitih područja informatike, potrošačke elektronike..."
       />
       <Info h1Heading dispatchAlert={dispatchAlert} />
+      <div className="mt-16">
+        <Link href="/info/darovi-jeseni">
+          <a>
+            <img src="/img/darovi-jeseni.jpg" />
+          </a>
+        </Link>
+      </div>
       <h2 className="heading text-4xl mt-12 mb-5">Popularne kategorije</h2>
       <ul className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
         {categories.map((c) => {
