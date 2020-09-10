@@ -53,6 +53,7 @@ to change width of column drag boundary
 
 
 def sortby(tree, col, descending):
+    mc_listbox.tree.selection_remove(mc_listbox.tree.selection())
     """sort tree contents when a column header is clicked on"""
     # grab values to sort
     data = [(tree.set(child, col), child) \
@@ -117,10 +118,6 @@ def selectItem(a):
     print(mc_listbox.tree.selection())
 
 
-# curItem = mc_listbox.tree.focus()
-# print(curItem)
-# print(mc_listbox.tree.item(curItem))
-
 mc_listbox.tree.bind('<Delete>', selectItem)
 
 m = tk.Menu(root, tearoff=0)
@@ -139,6 +136,20 @@ def do_popup(event):
 
 
 mc_listbox.tree.bind("<Button-3>", do_popup)
+
+
+def open_product(event):
+    items = mc_listbox.tree.selection()
+    for item in items:
+        info = mc_listbox.tree.item(item)
+        top = tk.Toplevel()
+        top.title('Product view')
+        ttk.Label(top, text=info['values'][0]).pack()
+        tk.Button(top, text="close window", command=top.destroy).pack()
+
+mc_listbox.tree.bind('<Return>', open_product)
+mc_listbox.tree.bind('<Double-Button-1>', open_product)
+
 
 # <<<
 
