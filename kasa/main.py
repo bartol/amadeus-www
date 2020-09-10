@@ -1,17 +1,3 @@
-'''
-ttk_multicolumn_listbox2.py
-Python31 includes the Tkinter Tile extension ttk.
-Ttk comes with 17 widgets, 11 of which already exist in Tkinter:
-Button, Checkbutton, Entry, Frame, Label, LabelFrame, Menubutton,
-PanedWindow, Radiobutton, Scale and Scrollbar
-The 6 new widget classes are:
-Combobox, Notebook, Progressbar, Separator, Sizegrip and Treeview
-For additional info see the Python31 manual:
-http://gpolo.ath.cx:81/pydoc/library/ttk.html
-Here the TreeView widget is configured as a multi-column listbox
-with adjustable column width and column-header-click sorting.
-Tested with Python 3.1.1 and Tkinter 8.5
-'''
 import tkinter as tk
 import tkinter.font as tkFont
 import tkinter.ttk as ttk
@@ -34,7 +20,8 @@ to change width of column drag boundary
                         justify="left",
                         anchor="n",
                         padding=(10, 2, 10, 6),
-                        text=s, master=self.master)
+                        text=s,
+                        master=self.master)
         msg.pack(fill='x')
         container = ttk.Frame(self.master)
         container.pack(fill='both', expand=True)
@@ -90,9 +77,19 @@ car_list = [('Hyundai', 'brakes'), ('Honda', 'light'), ('Lexus', 'battery'),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
             ('Chrysler', 'piston'), ('Toyota', 'brake pedal'), ('BMW', 'seat')]
-root = tk.Tk()
-root.wm_title("multicolumn ListBox")
 
+root = tk.Tk()
+
+# start in full screen
+
+root.geometry('800x600')
+root.attributes('-zoomed', True)
+
+# if it doesn't work on windows try:
+# w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+# root.geometry("%dx%d+0+0" % (w, h))
+
+root.wm_title("amadeus kasa")
 
 # >>>
 
@@ -107,11 +104,14 @@ mc_listbox = McListBox(tab2)
 
 # >>>
 
-tk.Button(tab1, text='Exit', command=root.destroy).pack(padx=200, pady=100)
+tk.Button(tab1, text='Exit', command=root.destroy).pack(padx=200,
+                                                        pady=100,
+                                                        expand=True)
 
-note.add(tab1, text = "Proizvodi")
-note.add(tab2, text = "Računi")
-note.pack()
+note.add(tab1, text="Proizvodi")
+note.add(tab2, text="Računi")
+note.pack(fill="both", expand=True)
+
 
 def selectItem(a):
     print(mc_listbox.tree.selection())
