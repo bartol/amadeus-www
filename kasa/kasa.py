@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import tkinter as tk
 import tkinter.font as tkFont
 import tkinter.ttk as ttk
@@ -12,27 +14,14 @@ class McListBox(object):
         self._build_tree()
 
     def _setup_widgets(self):
-        s = """\
-click on header to sort by that column
-to change width of column drag boundary
-        """
-        msg = ttk.Label(wraplength="4i",
-                        justify="left",
-                        anchor="n",
-                        padding=(10, 2, 10, 6),
-                        text=s,
-                        master=self.master)
-        msg.pack(fill='x')
         container = ttk.Frame(self.master)
         container.pack(fill='both', expand=True)
         # create a treeview with dual scrollbars
         self.tree = ttk.Treeview(columns=car_header, show="headings")
         vsb = ttk.Scrollbar(orient="vertical", command=self.tree.yview)
-        hsb = ttk.Scrollbar(orient="horizontal", command=self.tree.xview)
-        self.tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        self.tree.configure(yscrollcommand=vsb.set)
         self.tree.grid(column=0, row=0, sticky='nsew', in_=container)
         vsb.grid(column=1, row=0, sticky='ns', in_=container)
-        hsb.grid(column=0, row=1, sticky='ew', in_=container)
         container.grid_columnconfigure(0, weight=1)
         container.grid_rowconfigure(0, weight=1)
 
@@ -70,9 +59,9 @@ def sortby(tree, col, descending):
 
 
 # the test data ...
-car_header = ['car', 'repair']
-car_list = [('Hyundai', 'brakes'), ('Honda', 'light'), ('Lexus', 'battery'),
-            ('Benz', 'wiper'), ('Ford', 'tire'), ('Chevy', 'air'),
+car_header = ['naziv', 'cijena']
+car_list = [['Hyundai', 'brakes'], ('Honda', 'light'), ('Lexus', 399),
+            ('Benz', 'wiper'), ('Ford', 'tire'), ('Chevy', 400),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
@@ -84,7 +73,7 @@ root = tk.Tk()
 # start in full screen
 
 root.geometry('800x600')
-root.attributes('-zoomed', True)
+# root.attributes('-zoomed', True)
 
 # if it doesn't work on windows try:
 # w, h = root.winfo_screenwidth(), root.winfo_screenheight()
@@ -99,13 +88,9 @@ note = ttk.Notebook(root)
 tab1 = ttk.Frame(note)
 tab2 = ttk.Frame(note)
 
-# <<<
+mc_listbox = McListBox(tab1)
 
-mc_listbox = McListBox(tab2)
-
-# >>>
-
-tk.Button(tab1, text='Exit', command=root.destroy).pack(padx=200,
+tk.Button(tab2, text='Exit', command=root.destroy).pack(padx=200,
                                                         pady=100,
                                                         expand=True)
 
