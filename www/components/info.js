@@ -47,7 +47,7 @@ function Info({ h1Heading, dispatchAlert }) {
               onClick={async () => {
                 const formData = new URLSearchParams();
                 formData.append("email", email);
-                formData.append("message", message);
+                formData.append("message", window.location.href + "\n\n" + message);
 
                 const data = await fetch("https://api.amadeus2.hr/contact/", {
                   method: "POST",
