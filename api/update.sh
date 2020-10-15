@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+git push
 go build
 scp api srv1:/home/ubuntu/amadeus-www/api
 
