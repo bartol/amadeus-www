@@ -6,14 +6,9 @@ import tkinter.ttk as ttk
 
 
 class McListBox(object):
-    """use a ttk.TreeView as a multicolumn ListBox"""
     def __init__(self, master=None):
         self.tree = None
         self.master = master
-        self._setup_widgets()
-        self._build_tree()
-
-    def _setup_widgets(self):
         container = ttk.Frame(self.master)
         container.pack(fill='both', expand=True)
         # create a treeview with dual scrollbars
@@ -24,8 +19,6 @@ class McListBox(object):
         vsb.grid(column=1, row=0, sticky='ns', in_=container)
         container.grid_columnconfigure(0, weight=1)
         container.grid_rowconfigure(0, weight=1)
-
-    def _build_tree(self):
         for col in car_header:
             self.tree.heading(col,
                               text=col.title(),
@@ -35,10 +28,10 @@ class McListBox(object):
         for item in car_list:
             self.tree.insert('', 'end', values=item)
             # adjust column's width if necessary to fit each value
-            for ix, val in enumerate(item):
-                col_w = tkFont.Font().measure(val)
-                if self.tree.column(car_header[ix], width=None) < col_w:
-                    self.tree.column(car_header[ix], width=col_w)
+            # for ix, val in enumerate(item):
+            #     col_w = tkFont.Font().measure(val)
+            #     if self.tree.column(car_header[ix], width=None) < col_w:
+            #         self.tree.column(car_header[ix], width=col_w)        
 
 
 def sortby(tree, col, descending):
@@ -59,8 +52,8 @@ def sortby(tree, col, descending):
 
 
 # the test data ...
-car_header = ['naziv', 'cijena']
-car_list = [['Hyundai', 'brakes'], ('Honda', 'light'), ('Lexus', 399),
+car_header = ['naziv', 'cijena', 'kol.']
+car_list = [['Hyundai with really really really long name like really long its like long that it wont fit in this box', 'brakes', 34], ('Honda', 'light'), ('Lexus', 399),
             ('Benz', 'wiper'), ('Ford', 'tire'), ('Chevy', 400),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
             ('Chevy', 'air'), ('Chevy', 'air'), ('Chevy', 'air'),
