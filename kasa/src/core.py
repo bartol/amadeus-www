@@ -1,0 +1,2 @@
+def getmessage():
+  return 'message'
