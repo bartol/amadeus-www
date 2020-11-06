@@ -1,6 +1,4 @@
-import webview
-
-from core import getmessage
+from core.message import *
 from flask import Flask
 
 server = Flask(__name__)
