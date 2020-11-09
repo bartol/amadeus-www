@@ -15,12 +15,13 @@ func main() {
   css := mewn.String("./frontend/dist/app.css")
 
   app := wails.CreateApp(&wails.AppConfig{
-    Width:  1024,
-    Height: 768,
+    Width:  1400,
+    Height: 900,
     Title:  "amadeus-kasa",
     JS:     js,
     CSS:    css,
     Colour: "#131313",
+    Resizable: true,
   })
   app.Bind(basic)
   app.Run()
