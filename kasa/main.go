@@ -3,6 +3,7 @@ package main
 import (
   "github.com/leaanthony/mewn"
   "github.com/wailsapp/wails"
+  "amadeus-kasa/core"
 )
 
 func basic() string {
@@ -24,5 +25,6 @@ func main() {
     Resizable: true,
   })
   app.Bind(basic)
+  app.Bind(core.ProductFunc)
   app.Run()
 }
