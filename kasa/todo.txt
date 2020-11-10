@@ -1,0 +1,22 @@
+----- FEATURES
+
+obavijesi me o promjeni cijene
+
+
+----- INSP
+
+https://www.musicstore.com/en_HR/HRK
+https://aukro.cz/
+https://github.com/chekromul/uikit-ecommerce-template
+
+
+----- DB
+
+receipts
+offers
+products
+brands
+categories
+features
+feature_values
+events
