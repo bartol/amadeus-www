@@ -1,3 +1,13 @@
+CREATE TABLE brands (
+  brand_id INTEGER PRIMARY KEY,
+  name TEXT
+);
+
+CREATE TABLE categories (
+  category_id INTEGER PRIMARY KEY,
+  name TEXT
+);
+
 CREATE TABLE products (
   product_id INTEGER PRIMARY KEY,
   name TEXT,
@@ -7,7 +17,11 @@ CREATE TABLE products (
   description TEXT,
   url TEXT,
   created_at TIMESTAMP,
-  updated_at TIMESTAMP
+  updated_at TIMESTAMP,
+  brand_id INTEGER,
+  FOREIGN KEY (brand_id) REFERENCES brands(brand_id),
+  category_id INTEGER,
+  FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
 CREATE TABLE product_images (
