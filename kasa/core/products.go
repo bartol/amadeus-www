@@ -75,11 +75,7 @@ func ProductGet(product_id int) string {
 	if err != nil {
 		log.Println(err)
 		resp := Response{false, "ProductGet: product not found", nil}
-		data, err := json.Marshal(resp)
-		if err != nil {
-			log.Println(err)
-			return `{"status":false,"message":"ProductGet: json serialization error"}`
-		}
+		data, _ := json.Marshal(resp)
 		return string(data)
 	}
 
@@ -113,7 +109,9 @@ func ProductGet(product_id int) string {
 	data, err := json.Marshal(resp)
 	if err != nil {
 		log.Println(err)
-		return `{"status":false,"message":"ProductGet: json serialization error"}`
+		resp := Response{false, "ProductGet: json serialization error", nil}
+		data, _ := json.Marshal(resp)
+		return string(data)
 	}
 	return string(data)
 }
