@@ -1,7 +1,7 @@
 package core
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"time"
 )
@@ -21,10 +21,10 @@ type Product struct {
 	BrandID                int                  `db:"brand_id" json:"brand_id"`
 	Category               string               `db:"category" json:"category"`
 	CategoryID             int                  `db:"category_id" json:"category_id"`
-	ProductImages          []ProductImage       `json:"product_images"`
-	ProductFeatures        []ProductFeature     `json:"product_features"`
-	ProductPublications    []ProductPublication `json:"product_publications"`
-	ProductRecommendations []ProductSlim        `json:"product_recommendations"`
+	ProductImages          []ProductImage       `json:"product_images,omitempty"`
+	ProductFeatures        []ProductFeature     `json:"product_features,omitempty"`
+	ProductPublications    []ProductPublication `json:"product_publications,omitempty"`
+	ProductRecommendations []ProductSlim        `json:"product_recommendations,omitempty"`
 }
 
 type ProductSlim struct {
@@ -73,8 +73,14 @@ func ProductGet(product_id int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE p.product_id = $1`, product_id)
 	if err != nil {
-		// not found
 		log.Println(err)
+		resp := Response{false, "ProductGet: product not found", nil}
+		data, err := json.Marshal(resp)
+		if err != nil {
+			log.Println(err)
+			return `{"status":false,"message":"ProductGet: json serialization error"}`
+		}
+		return string(data)
 	}
 
 	global.DB.Select(&product.ProductImages,
@@ -103,8 +109,13 @@ func ProductGet(product_id int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE r.product_id = $1`, product_id)
 
-	fmt.Println(product)
-	return "stub"
+	resp := Response{true, "", product}
+	data, err := json.Marshal(resp)
+	if err != nil {
+		log.Println(err)
+		return `{"status":false,"message":"ProductGet: json serialization error"}`
+	}
+	return string(data)
 }
 
 func ProductGetList() string {

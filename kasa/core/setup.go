@@ -9,6 +9,12 @@ var global = struct {
   DB *sqlx.DB
 }{}
 
+type Response struct {
+  Status  bool        `json:"status"`
+  Message string      `json:"message"`
+  Data    interface{} `json:"data,omitempty"`
+}
+
 func SetupEnv() error {
   if global.DB == nil {
     err := SetupDB()

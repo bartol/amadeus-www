@@ -30,7 +30,6 @@ func main() {
     Colour:    "#131313",
     Resizable: true,
   })
-  core.ProductGet(4)
   app.Bind(basic)
   app.Bind(core.ProductGet)
   app.Run()
