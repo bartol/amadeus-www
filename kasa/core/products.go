@@ -1,8 +1,6 @@
 package core
 
 import (
-	"encoding/json"
-	"log"
 	"time"
 )
 
@@ -73,10 +71,7 @@ func ProductGet(product_id int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE p.product_id = $1`, product_id)
 	if err != nil {
-		log.Println(err) // event
-		resp := Response{404, "Proizvod nije pronađen", nil}
-		data, _ := json.Marshal(resp)
-		return string(data)
+		return ResponseFailure(404, "Proizvod nije pronađen", err)
 	}
 
 	global.DB.Select(&product.ProductImages,
@@ -105,19 +100,10 @@ func ProductGet(product_id int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE r.product_id = $1`, product_id)
 
-	resp := Response{200, "", product}
-	data, err := json.Marshal(resp)
-	if err != nil {
-		log.Println(err) // event
-		resp := Response{500, "Pogreška pri serializaciji odgovora", nil}
-		data, _ := json.Marshal(resp)
-		return string(data)
-	}
-	// event
-	return string(data)
+	return ResponseSuccess(product)
 }
 
-func ProductGetList(limit, offset int) string {
+func ProductGetListSlim(limit, offset int) string {
 	products := []ProductSlim{}
 	err := global.DB.Select(&products,
 		`SELECT p.product_id,p.name,p.price,p.discount,p.quantity,p.url,p.recommended,
@@ -128,22 +114,10 @@ func ProductGetList(limit, offset int) string {
 		ORDER BY updated_at DESC
 		LIMIT $1 OFFSET $2;`, limit, offset)
 	if err != nil {
-		log.Println(err) // event
-		resp := Response{404, "Proizvod nije pronađen", nil}
-		data, _ := json.Marshal(resp)
-		return string(data)
+		return ResponseFailure(500, err.Error(), err)
 	}
 
-	resp := Response{200, "", products}
-	data, err := json.MarshalIndent(resp, "", "  ")
-	if err != nil {
-		log.Println(err) // event
-		resp := Response{500, "Pogreška pri serializaciji odgovora", nil}
-		data, _ := json.Marshal(resp)
-		return string(data)
-	}
-	// event
-	return string(data)
+	return ResponseSuccess(products)
 }
 
 func ProductGetListModified(products string) string {

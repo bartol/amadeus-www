@@ -9,12 +9,6 @@ var global = struct {
   DB *sqlx.DB
 }{}
 
-type Response struct {
-  Status  int         `json:"status"`
-  Message string      `json:"message"`
-  Data    interface{} `json:"data,omitempty"`
-}
-
 func SetupEnv() error {
   if global.DB == nil {
     err := SetupDB()
@@ -26,7 +20,7 @@ func SetupEnv() error {
 }
 
 func SetupDB() error {
-  conn, err := sqlx.Connect("postgres", "user=amadeus password=pw dbname=kasa13 sslmode=disable")
+  conn, err := sqlx.Connect("postgres", "user=amadeus password=pw dbname=kasa14 sslmode=disable")
   if err != nil {
     return err
   }
