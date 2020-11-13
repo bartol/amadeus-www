@@ -5,12 +5,12 @@ import (
   _ "github.com/lib/pq"
 )
 
-var global = struct {
+var Global = struct {
   DB *sqlx.DB
 }{}
 
 func SetupEnv() error {
-  if global.DB == nil {
+  if Global.DB == nil {
     err := SetupDB()
     if err != nil {
       return err
@@ -24,6 +24,6 @@ func SetupDB() error {
   if err != nil {
     return err
   }
-  global.DB = conn
+  Global.DB = conn
   return nil
 }

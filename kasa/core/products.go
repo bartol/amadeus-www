@@ -64,7 +64,7 @@ type ProductPublication struct {
 
 func ProductGet(product_id int) string {
 	product := Product{}
-	err := global.DB.Get(&product,
+	err := Global.DB.Get(&product,
 		`SELECT p.*,b.name AS brand,c.name AS category
 		FROM products p
 		INNER JOIN brands b ON p.brand_id = b.brand_id
@@ -74,24 +74,24 @@ func ProductGet(product_id int) string {
 		return ResponseFailure(404, "Proizvod nije pronađen", err)
 	}
 
-	global.DB.Select(&product.ProductImages,
+	Global.DB.Select(&product.ProductImages,
 		`SELECT *
 		FROM product_images
 		WHERE product_id = $1`, product_id)
 
-	global.DB.Select(&product.ProductFeatures,
+	Global.DB.Select(&product.ProductFeatures,
 		`SELECT *
 		FROM product_feature_values v
 		INNER JOIN product_features f ON v.product_feature_id = f.product_feature_id
 		WHERE v.product_id = $1`, product_id)
 
-	global.DB.Select(&product.ProductPublications,
+	Global.DB.Select(&product.ProductPublications,
 		`SELECT *
 		FROM product_publications pp
 		INNER JOIN publications p ON pp.publication_id = p.publication_id
 		WHERE product_id = $1`, product_id)
 
-	global.DB.Select(&product.ProductRecommendations,
+	Global.DB.Select(&product.ProductRecommendations,
 		`SELECT p.product_id,p.name,p.price,p.discount,p.quantity,p.url,p.recommended,
 			p.created_at,p.updated_at,b.name AS brand,c.name AS category
 		FROM product_recommendations r
@@ -105,7 +105,7 @@ func ProductGet(product_id int) string {
 
 func ProductGetListSlim(offset, limit int) string {
 	products := []ProductSlim{}
-	err := global.DB.Select(&products,
+	err := Global.DB.Select(&products,
 		`SELECT p.product_id,p.name,p.price,p.discount,p.quantity,p.url,p.recommended,
 			p.created_at,p.updated_at,b.name AS brand,c.name AS category
 		FROM products p
@@ -120,7 +120,7 @@ func ProductGetListSlim(offset, limit int) string {
 	return ResponseSuccess(products)
 }
 
-func ProductGetListModified(products string) string {
+func ProductGetListSlimModified(products string) string {
 	return "stub"
 }
 
