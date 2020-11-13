@@ -73,8 +73,8 @@ func ProductGet(product_id int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE p.product_id = $1`, product_id)
 	if err != nil {
-		log.Println(err)
-		resp := Response{false, "ProductGet: product not found", nil}
+		log.Println(err) // event
+		resp := Response{404, "Proizvod nije pronađen", nil}
 		data, _ := json.Marshal(resp)
 		return string(data)
 	}
@@ -105,14 +105,15 @@ func ProductGet(product_id int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE r.product_id = $1`, product_id)
 
-	resp := Response{true, "", product}
+	resp := Response{200, "", product}
 	data, err := json.Marshal(resp)
 	if err != nil {
-		log.Println(err)
-		resp := Response{false, "ProductGet: json serialization error", nil}
+		log.Println(err) // event
+		resp := Response{500, "Pogreška pri serializaciji odgovora", nil}
 		data, _ := json.Marshal(resp)
 		return string(data)
 	}
+	// event
 	return string(data)
 }
 

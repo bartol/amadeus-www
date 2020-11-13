@@ -10,7 +10,7 @@ var global = struct {
 }{}
 
 type Response struct {
-  Status  bool        `json:"status"`
+  Status  int         `json:"status"`
   Message string      `json:"message"`
   Data    interface{} `json:"data,omitempty"`
 }
