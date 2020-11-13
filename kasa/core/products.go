@@ -103,7 +103,7 @@ func ProductGet(product_id int) string {
 	return ResponseSuccess(product)
 }
 
-func ProductGetListSlim(limit, offset int) string {
+func ProductGetListSlim(offset, limit int) string {
 	products := []ProductSlim{}
 	err := global.DB.Select(&products,
 		`SELECT p.product_id,p.name,p.price,p.discount,p.quantity,p.url,p.recommended,
@@ -112,7 +112,7 @@ func ProductGetListSlim(limit, offset int) string {
 		INNER JOIN brands b ON p.brand_id = b.brand_id
 		INNER JOIN categories c ON p.category_id = c.category_id
 		ORDER BY updated_at DESC
-		LIMIT $1 OFFSET $2;`, limit, offset)
+		OFFSET $1 LIMIT $2;`, offset, limit)
 	if err != nil {
 		return ResponseFailure(500, err.Error(), err)
 	}
