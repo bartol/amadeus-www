@@ -216,5 +216,42 @@ func ProductCreate(data string) string {
 }
 
 func ProductUpdate(data string) string {
-	return "stub"
+	product := Product{}
+	err := json.Unmarshal([]byte(data), &product)
+	if err != nil {
+		return ResponseFailure(500, "Pogreška pri deserializaciji zahtjeva", err)
+	}
+
+	if product.Name == "" {
+		return ResponseFailure(400, "Proizvod mora imati ime", nil)
+	}
+	if product.Price == 0 {
+		return ResponseFailure(400, "Proizvod mora imati cijenu", nil)
+	}
+	if product.Brand == "" {
+		return ResponseFailure(400, "Proizvod mora imati brend", nil)
+	}
+	if product.Category == "" {
+		return ResponseFailure(400, "Proizvod mora imati kategoriju", nil)
+	}
+
+	product.URL = slugify.Marshal(product.Name)
+
+	tx := Global.DB.MustBegin()
+
+	var exists bool
+	err = tx.QueryRow("SELECT EXISTS(SELECT 1 FROM products WHERE product_id = $1)",
+		product.ProductID).Scan(&exists)
+	if err != nil {
+		return ResponseFailure(500, "Pogreška pri provjeri postojanja proizvoda", nil)
+	}
+	if !exists {
+		return ResponseFailure(400, "Proizvod ne postoji", nil)
+	}
+
+	// ...
+
+	tx.Commit()
+
+	return ProductGet(product.ProductID)
 }
