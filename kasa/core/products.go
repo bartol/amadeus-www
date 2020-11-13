@@ -117,8 +117,33 @@ func ProductGet(product_id int) string {
 	return string(data)
 }
 
-func ProductGetList() string {
-	return "stub"
+func ProductGetList(limit, offset int) string {
+	products := []ProductSlim{}
+	err := global.DB.Select(&products,
+		`SELECT p.product_id,p.name,p.price,p.discount,p.quantity,p.url,p.recommended,
+			p.created_at,p.updated_at,b.name AS brand,c.name AS category
+		FROM products p
+		INNER JOIN brands b ON p.brand_id = b.brand_id
+		INNER JOIN categories c ON p.category_id = c.category_id
+		ORDER BY updated_at DESC
+		LIMIT $1 OFFSET $2;`, limit, offset)
+	if err != nil {
+		log.Println(err) // event
+		resp := Response{404, "Proizvod nije pronađen", nil}
+		data, _ := json.Marshal(resp)
+		return string(data)
+	}
+
+	resp := Response{200, "", products}
+	data, err := json.MarshalIndent(resp, "", "  ")
+	if err != nil {
+		log.Println(err) // event
+		resp := Response{500, "Pogreška pri serializaciji odgovora", nil}
+		data, _ := json.Marshal(resp)
+		return string(data)
+	}
+	// event
+	return string(data)
 }
 
 func ProductGetListModified(products string) string {

@@ -2,6 +2,7 @@ package main
 
 import (
   "amadeus-kasa/core"
+  "fmt"
   "log"
 
   "github.com/leaanthony/mewn"
@@ -30,6 +31,15 @@ func main() {
     Colour:    "#131313",
     Resizable: true,
   })
+  fmt.Println(core.ProductGet(1))
+  fmt.Println(core.ProductGet(2))
+  fmt.Println(core.ProductGet(4))
+  fmt.Println(core.ProductGet(6))
+  fmt.Println("--------")
+  fmt.Println(core.ProductGetList(6, 0))
+  fmt.Println(core.ProductGetList(2, 0))
+  fmt.Println(core.ProductGetList(2, 2))
+  fmt.Println(core.ProductGetList(2, 8))
   app.Bind(basic)
   app.Bind(core.ProductGet)
   app.Run()
