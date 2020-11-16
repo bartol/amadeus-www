@@ -8,6 +8,7 @@ import (
 )
 
 var dbconn = flag.String("dbconn", "", "database connection")
+var Update = flag.Bool("update", false, "update golden files")
 
 func TestMain(m *testing.M) {
 	flag.Parse()
