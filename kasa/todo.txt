@@ -1,6 +1,7 @@
 ----- FEATURES
 
 obavijesi me o promjeni cijene
+video - namjestanje kanala itd.
 
 
 ----- INSP
