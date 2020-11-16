@@ -22,8 +22,8 @@ func TestProductGet(t *testing.T) {
 
 	for _, tc := range cases {
 		actual := ProductGet(tc.productID)
-		goldenout := "./testdata/products/product_" + strconv.Itoa(tc.productID) + ".out.golden"
-		goldenoutfail := "./testdata/products/product_" + strconv.Itoa(tc.productID) + ".outfail.golden"
+		goldenout := "./testdata/products/ProductGet/product_" + strconv.Itoa(tc.productID) + ".out.golden"
+		goldenoutfail := "./testdata/products/ProductGet/product_" + strconv.Itoa(tc.productID) + ".outfail.golden"
 		os.Remove(goldenoutfail)
 		if *Update {
 			ioutil.WriteFile(goldenout, []byte(actual), 0644)
