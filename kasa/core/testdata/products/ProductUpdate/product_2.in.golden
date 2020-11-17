@@ -1,0 +1,42 @@
+{
+    "product_id": 2,
+    "name": "Dell Inspiron 5482 2in1, I5I507-273182898",
+    "price": 649900,
+    "discount": 60000,
+    "quantity": 1,
+    "description": "",
+    "recommended": false,
+    "brand": "Dell",
+    "brand_id": 3,
+    "category": "Laptopi",
+    "category_id": 1,
+    "product_images": [
+      {
+        "url": "https://api.amadeus2.hr/images/255/1139?options=600"
+      },
+      {
+        "url": "https://api.amadeus2.hr/images/255/1140?options=600"
+      },
+      {
+        "url": "https://api.amadeus2.hr/images/255/1141?options=600"
+      }
+    ],
+    "product_features": [
+      {
+        "product_feature_id": 1,
+        "product_feature_value_id": 1,
+        "category_id": 1,
+        "name": "Procesor",
+        "value": "Intel Core i5 8265U 1,60 GHz Core 4",
+        "recommended": true
+      },
+      {
+        "product_feature_id": 2,
+        "product_feature_value_id": 2,
+        "category_id": 1,
+        "name": "Veličina zaslona",
+        "value": "14\" inch",
+        "recommended": true
+      }
+    ]
+}

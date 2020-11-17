@@ -1,0 +1,13 @@
+{
+    "product_id": 3,
+    "name": "HP 250 G7 6BP58EA (15.6, i3, 8GB RAM, 256GB SSD, Intel HD, Win10p)",
+    "price": 529900,
+    "discount": 80000,
+    "quantity": 0,
+    "description": "",
+    "recommended": false,
+    "brand": "HP",
+    "brand_id": 4,
+    "category": "Laptopi",
+    "category_id": 1
+}
