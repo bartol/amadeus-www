@@ -3,8 +3,6 @@ package core
 import (
 	"encoding/json"
 	"time"
-
-	"github.com/metal3d/go-slugify"
 )
 
 type Product struct {
@@ -147,7 +145,7 @@ func ProductCreate(data string) string {
 		return ResponseFailure(400, "Proizvod mora imati kategoriju", nil)
 	}
 
-	product.URL = slugify.Marshal(product.Name)
+	product.URL = URLify(product.Name)
 
 	tx := Global.DB.MustBegin()
 
@@ -235,7 +233,7 @@ func ProductUpdate(data string) string {
 		return ResponseFailure(400, "Proizvod mora imati kategoriju", nil)
 	}
 
-	product.URL = slugify.Marshal(product.Name)
+	product.URL = URLify(product.Name)
 
 	tx := Global.DB.MustBegin()
 
