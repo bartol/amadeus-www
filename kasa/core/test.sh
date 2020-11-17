@@ -20,4 +20,4 @@ psql_run() {
 psql_run "\i ./db/schema.sql"
 psql_run "\i ./db/seed.sql"
 
-go test -v -dbconn "postgres://postgres@localhost:5432/$DB_NAME" $1
+go test -v -dbconn "postgres://postgres@localhost:5432/$DB_NAME" $@
