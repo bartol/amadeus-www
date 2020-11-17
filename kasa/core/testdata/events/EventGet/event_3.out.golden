@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "message": "",
+  "data": {
+    "event_id": 3,
+    "type": "INFO",
+    "name": "printed offer id = 1 on device 2",
+    "description": "",
+  }
+}
