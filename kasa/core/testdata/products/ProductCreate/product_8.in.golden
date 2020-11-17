@@ -1,0 +1,12 @@
+{
+    "name": "",
+    "price": 299900,
+    "discount": 100000,
+    "quantity": 3,
+    "description": "Sony Playstation 4 je napravio veliki hardverski odmak...",
+    "recommended": true,
+    "brand": "Sony",
+    "brand_id": 2,
+    "category": "Igraće konzole",
+    "category_id": 4
+}
