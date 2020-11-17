@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Product is struct that contains product info
 type Product struct {
 	ProductID              int                  `db:"product_id" json:"product_id"`
 	Name                   string               `db:"name" json:"name"`
@@ -26,6 +27,7 @@ type Product struct {
 	ProductRecommendations []ProductSlim        `json:"product_recommendations"`
 }
 
+// ProductSlim is struct that contains product info without heavy fields like description...
 type ProductSlim struct {
 	ProductID   int       `db:"product_id" json:"product_id"`
 	Name        string    `db:"name" json:"name"`
@@ -40,12 +42,14 @@ type ProductSlim struct {
 	Category    string    `db:"category" json:"category"`
 }
 
+// ProductImage is struct that contains product image info
 type ProductImage struct {
 	ProductID      int    `db:"product_id" json:"product_id"`
 	ProductImageID int    `db:"product_image_id" json:"product_image_id"`
 	URL            string `db:"url" json:"url"`
 }
 
+// ProductFeature is struct that contains product feature info
 type ProductFeature struct {
 	ProductID             int    `db:"product_id" json:"product_id"`
 	ProductFeatureID      int    `db:"product_feature_id" json:"product_feature_id"`
@@ -56,6 +60,7 @@ type ProductFeature struct {
 	Recommended           bool   `db:"recommended" json:"recommended"`
 }
 
+// ProductPublication is struct that contains product publication info
 type ProductPublication struct {
 	ProductID            int    `db:"product_id" json:"product_id"`
 	PublicationID        int    `db:"publication_id" json:"publication_id"`
@@ -63,14 +68,15 @@ type ProductPublication struct {
 	Name                 string `db:"name" json:"name"`
 }
 
-func ProductGet(product_id int) string {
+// ProductGet returns json encoded Product
+func ProductGet(productID int) string {
 	product := Product{}
 	err := Global.DB.Get(&product,
 		`SELECT p.*,b.name AS brand,c.name AS category
 		FROM products p
 		INNER JOIN brands b ON p.brand_id = b.brand_id
 		INNER JOIN categories c ON p.category_id = c.category_id
-		WHERE p.product_id = $1`, product_id)
+		WHERE p.product_id = $1`, productID)
 	if err != nil {
 		return ResponseFailure(404, "Proizvod nije pronađen", err)
 	}
@@ -78,19 +84,19 @@ func ProductGet(product_id int) string {
 	Global.DB.Select(&product.ProductImages,
 		`SELECT *
 		FROM product_images
-		WHERE product_id = $1`, product_id)
+		WHERE product_id = $1`, productID)
 
 	Global.DB.Select(&product.ProductFeatures,
 		`SELECT *
 		FROM product_feature_values v
 		INNER JOIN product_features f ON v.product_feature_id = f.product_feature_id
-		WHERE v.product_id = $1`, product_id)
+		WHERE v.product_id = $1`, productID)
 
 	Global.DB.Select(&product.ProductPublications,
 		`SELECT *
 		FROM product_publications pp
 		INNER JOIN publications p ON pp.publication_id = p.publication_id
-		WHERE product_id = $1`, product_id)
+		WHERE product_id = $1`, productID)
 
 	Global.DB.Select(&product.ProductRecommendations,
 		`SELECT p.product_id,p.name,p.price,p.discount,p.quantity,p.url,p.recommended,
@@ -99,11 +105,12 @@ func ProductGet(product_id int) string {
 		INNER JOIN products p ON r.recommended_product_id = p.product_id
 		INNER JOIN brands b ON p.brand_id = b.brand_id
 		INNER JOIN categories c ON p.category_id = c.category_id
-		WHERE r.product_id = $1`, product_id)
+		WHERE r.product_id = $1`, productID)
 
 	return ResponseSuccess(product)
 }
 
+// ProductGetListSlim returns json encoded list of ProductSlim based on offset and limit
 func ProductGetListSlim(offset, limit int) string {
 	products := []ProductSlim{}
 	err := Global.DB.Select(&products,
@@ -121,10 +128,12 @@ func ProductGetListSlim(offset, limit int) string {
 	return ResponseSuccess(products)
 }
 
+// ProductGetListSlimModified is stub TODO
 func ProductGetListSlimModified(products string) string {
 	return "stub"
 }
 
+// ProductCreate accepts json encoded Product, creates product in db and returns json encoded created Product
 func ProductCreate(data string) string {
 	product := Product{}
 	err := json.Unmarshal([]byte(data), &product)
@@ -174,38 +183,38 @@ func ProductCreate(data string) string {
 		return ResponseFailure(500, "Pogreška pri dodavanju proizvoda u bazu podataka", err)
 	}
 
-	for _, product_image := range product.ProductImages {
+	for _, productImage := range product.ProductImages {
 		tx.MustExec("INSERT INTO product_images (url,product_id) VALUES ($1,$2)",
-			product_image.URL, product.ProductID)
+			productImage.URL, product.ProductID)
 	}
 
-	for _, product_feature := range product.ProductFeatures {
-		if product_feature.ProductFeatureID == 0 {
+	for _, productFeature := range product.ProductFeatures {
+		if productFeature.ProductFeatureID == 0 {
 			recommended := "n"
-			if product_feature.Recommended {
+			if productFeature.Recommended {
 				recommended = "t"
 			}
 
 			err := tx.QueryRow(`INSERT INTO product_features (name,recommended,category_id) VALUES ($1,$2,$3)
-			RETURNING product_feature_id`, product_feature.Name, recommended,
-				product.CategoryID).Scan(&product_feature.ProductFeatureID)
+			RETURNING product_feature_id`, productFeature.Name, recommended,
+				product.CategoryID).Scan(&productFeature.ProductFeatureID)
 			if err != nil {
 				return ResponseFailure(500, "Pogreška pri dodavanju značaljke proizvoda u bazu podataka", err)
 			}
 		}
 
 		tx.MustExec("INSERT INTO product_feature_values (value,product_feature_id,product_id) VALUES ($1,$2,$3)",
-			product_feature.Value, product_feature.ProductFeatureID, product.ProductID)
+			productFeature.Value, productFeature.ProductFeatureID, product.ProductID)
 	}
 
-	for _, product_publication := range product.ProductPublications {
+	for _, productPublication := range product.ProductPublications {
 		tx.MustExec("INSERT INTO product_publications (publication_id,product_id) VALUES ($1,$2)",
-			product_publication.PublicationID, product.ProductID)
+			productPublication.PublicationID, product.ProductID)
 	}
 
-	for _, product_recommendation := range product.ProductRecommendations {
+	for _, productRecommendation := range product.ProductRecommendations {
 		tx.MustExec("INSERT INTO product_recommendations (recommended_product_id,product_id) VALUES ($1,$2)",
-			product_recommendation.ProductID, product.ProductID)
+			productRecommendation.ProductID, product.ProductID)
 	}
 
 	tx.Commit()
@@ -213,6 +222,7 @@ func ProductCreate(data string) string {
 	return ProductGet(product.ProductID)
 }
 
+// ProductUpdate accepts json encoded Product, updates product in db and returns json encoded updated Product
 func ProductUpdate(data string) string {
 	product := Product{}
 	err := json.Unmarshal([]byte(data), &product)
@@ -280,41 +290,41 @@ func ProductUpdate(data string) string {
 		product.Description, product.URL, product.Recommended, product.BrandID, product.CategoryID)
 
 	tx.MustExec("DELETE FROM product_images WHERE product_id = $1", product.ProductID)
-	for _, product_image := range product.ProductImages {
+	for _, productImage := range product.ProductImages {
 		tx.MustExec("INSERT INTO product_images (url,product_id) VALUES ($1,$2)",
-			product_image.URL, product.ProductID)
+			productImage.URL, product.ProductID)
 	}
 
 	tx.MustExec("DELETE FROM product_feature_values WHERE product_id = $1", product.ProductID)
-	for _, product_feature := range product.ProductFeatures {
-		if product_feature.ProductFeatureID == 0 {
+	for _, productFeature := range product.ProductFeatures {
+		if productFeature.ProductFeatureID == 0 {
 			recommended := "n"
-			if product_feature.Recommended {
+			if productFeature.Recommended {
 				recommended = "t"
 			}
 
 			err := tx.QueryRow(`INSERT INTO product_features (name,recommended,category_id) VALUES ($1,$2,$3)
-			RETURNING product_feature_id`, product_feature.Name, recommended,
-				product.CategoryID).Scan(&product_feature.ProductFeatureID)
+			RETURNING product_feature_id`, productFeature.Name, recommended,
+				product.CategoryID).Scan(&productFeature.ProductFeatureID)
 			if err != nil {
 				return ResponseFailure(500, "Pogreška pri dodavanju značaljke proizvoda u bazu podataka", err)
 			}
 		}
 
 		tx.MustExec("INSERT INTO product_feature_values (value,product_feature_id,product_id) VALUES ($1,$2,$3)",
-			product_feature.Value, product_feature.ProductFeatureID, product.ProductID)
+			productFeature.Value, productFeature.ProductFeatureID, product.ProductID)
 	}
 
 	tx.MustExec("DELETE FROM product_publications WHERE product_id = $1", product.ProductID)
-	for _, product_publication := range product.ProductPublications {
+	for _, productPublication := range product.ProductPublications {
 		tx.MustExec("INSERT INTO product_publications (publication_id,product_id) VALUES ($1,$2)",
-			product_publication.PublicationID, product.ProductID)
+			productPublication.PublicationID, product.ProductID)
 	}
 
 	tx.MustExec("DELETE FROM product_recommendations WHERE product_id = $1", product.ProductID)
-	for _, product_recommendation := range product.ProductRecommendations {
+	for _, productRecommendation := range product.ProductRecommendations {
 		tx.MustExec("INSERT INTO product_recommendations (recommended_product_id,product_id) VALUES ($1,$2)",
-			product_recommendation.ProductID, product.ProductID)
+			productRecommendation.ProductID, product.ProductID)
 	}
 
 	tx.Commit()
