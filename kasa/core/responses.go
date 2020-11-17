@@ -2,7 +2,6 @@ package core
 
 import (
 	"encoding/json"
-	"log"
 )
 
 // Response is struct returned from every exported function
@@ -25,7 +24,7 @@ func ResponseSuccess(data interface{}) string {
 
 // ResponseFailure returns json encoded Response with failure status code and logs an event
 func ResponseFailure(status int, message string, err error) string {
-	log.Println(err) // event
+	// event
 	resp := Response{status, message, nil}
 	json, _ := json.MarshalIndent(resp, "", "  ")
 	return string(json)
