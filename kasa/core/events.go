@@ -61,7 +61,9 @@ func EventCreate(data string) string {
 	tx := Global.DB.MustBegin()
 
 	err = tx.QueryRow(
-		"INSERT INTO events (type,name,description,created_at) VALUES ($1,$2,$3,now()::TIMESTAMP)",
+		`INSERT INTO events (type,name,description,created_at) 
+		VALUES ($1,$2,$3,now()::TIMESTAMP)
+		RETURNING event_id`,
 		event.Type, event.Name, event.Description).Scan(&event.EventID)
 	if err != nil {
 		return ResponseFailure(500, "Pogreška pri dodavanju eventa u bazu podataka", err)

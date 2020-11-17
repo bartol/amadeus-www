@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "message": "",
+  "data": {
+    "event_id": 5,
+    "type": "INFO",
+    "name": "viewed product with id = 2 on device 2",
+    "description": "",
+  }
+}

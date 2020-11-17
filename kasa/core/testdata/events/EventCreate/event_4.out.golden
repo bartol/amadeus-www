@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "message": "",
+  "data": {
+    "event_id": 4,
+    "type": "DATA",
+    "name": "updated product with id = 2 on device 1",
+    "description": "updated properties name, price and discount",
+  }
+}
