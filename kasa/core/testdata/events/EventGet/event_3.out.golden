@@ -1,6 +1,6 @@
 {
   "status": 200,
-  "message": "",
+  "message": "EventGet",
   "data": {
     "event_id": 3,
     "type": "INFO",

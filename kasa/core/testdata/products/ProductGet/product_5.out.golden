@@ -1,6 +1,6 @@
 {
   "status": 200,
-  "message": "",
+  "message": "ProductGet",
   "data": {
     "product_id": 5,
     "name": "Sony KDL-32WE615 televizor, 32\" (82 cm), LED, HD ready, HDR, HEVC (H.265)",

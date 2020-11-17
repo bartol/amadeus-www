@@ -1,6 +1,6 @@
 {
   "status": 200,
-  "message": "",
+  "message": "ProductGet",
   "data": {
     "product_id": 3,
     "name": "HP 250 G7 6BP58EA (15.6, i3, 8GB RAM, 256GB SSD, Intel HD, Win10p)",

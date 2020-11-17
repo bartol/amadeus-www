@@ -1,4 +1,4 @@
 {
   "status": 400,
-  "message": "Proizvod mora imati kategoriju"
+  "message": "ProductCreate: Proizvod mora imati kategoriju"
 }

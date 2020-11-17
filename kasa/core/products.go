@@ -78,7 +78,7 @@ func ProductGet(productID int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE p.product_id = $1`, productID)
 	if err != nil {
-		return ResponseFailure(404, "Proizvod nije pronađen", err)
+		return ResponseFailure(404, "ProductGet: Proizvod nije pronađen", err)
 	}
 
 	Global.DB.Select(&product.ProductImages,
@@ -107,7 +107,7 @@ func ProductGet(productID int) string {
 		INNER JOIN categories c ON p.category_id = c.category_id
 		WHERE r.product_id = $1`, productID)
 
-	return ResponseSuccess(product)
+	return ResponseSuccess(product, "ProductGet")
 }
 
 // ProductGetListSlim returns json encoded list of ProductSlim based on offset and limit
@@ -122,10 +122,10 @@ func ProductGetListSlim(offset, limit int) string {
 		ORDER BY updated_at DESC
 		OFFSET $1 LIMIT $2;`, offset, limit)
 	if err != nil {
-		return ResponseFailure(500, err.Error(), err)
+		return ResponseFailure(500, "ProductGetListSlim: internal server error", err)
 	}
 
-	return ResponseSuccess(products)
+	return ResponseSuccess(products, "ProductGetListSlim")
 }
 
 // ProductGetListSlimModified is stub TODO
@@ -138,20 +138,20 @@ func ProductCreate(data string) string {
 	product := Product{}
 	err := json.Unmarshal([]byte(data), &product)
 	if err != nil {
-		return ResponseFailure(500, "Pogreška pri deserializaciji zahtjeva", err)
+		return ResponseFailure(500, "ProductCreate: Pogreška pri deserializaciji zahtjeva", err)
 	}
 
 	if product.Name == "" {
-		return ResponseFailure(400, "Proizvod mora imati ime", nil)
+		return ResponseFailure(400, "ProductCreate: Proizvod mora imati ime", nil)
 	}
 	if product.Price == 0 {
-		return ResponseFailure(400, "Proizvod mora imati cijenu", nil)
+		return ResponseFailure(400, "ProductCreate: Proizvod mora imati cijenu", nil)
 	}
 	if product.Brand == "" {
-		return ResponseFailure(400, "Proizvod mora imati brend", nil)
+		return ResponseFailure(400, "ProductCreate: Proizvod mora imati brend", nil)
 	}
 	if product.Category == "" {
-		return ResponseFailure(400, "Proizvod mora imati kategoriju", nil)
+		return ResponseFailure(400, "ProductCreate: Proizvod mora imati kategoriju", nil)
 	}
 
 	product.URL = URLify(product.Name)
@@ -162,7 +162,7 @@ func ProductCreate(data string) string {
 		err := tx.QueryRow("INSERT INTO brands (name) VALUES ($1) RETURNING brand_id",
 			product.Brand).Scan(&product.BrandID)
 		if err != nil {
-			return ResponseFailure(500, "Pogreška pri dodavanju novog brenda u bazu podataka", err)
+			return ResponseFailure(500, "ProductCreate: Pogreška pri dodavanju novog brenda u bazu podataka", err)
 		}
 	}
 
@@ -170,7 +170,7 @@ func ProductCreate(data string) string {
 		err := tx.QueryRow("INSERT INTO categories (name) VALUES ($1) RETURNING category_id",
 			product.Category).Scan(&product.CategoryID)
 		if err != nil {
-			return ResponseFailure(500, "Pogreška pri dodavanju nove kategorije u bazu podataka", err)
+			return ResponseFailure(500, "ProductCreate: Pogreška pri dodavanju nove kategorije u bazu podataka", err)
 		}
 	}
 
@@ -180,7 +180,7 @@ func ProductCreate(data string) string {
 			RETURNING product_id`, product.Name, product.Price, product.Discount, product.Quantity, product.Description,
 		product.URL, product.Recommended, product.BrandID, product.CategoryID).Scan(&product.ProductID)
 	if err != nil {
-		return ResponseFailure(500, "Pogreška pri dodavanju proizvoda u bazu podataka", err)
+		return ResponseFailure(500, "ProductCreate: Pogreška pri dodavanju proizvoda u bazu podataka", err)
 	}
 
 	for _, productImage := range product.ProductImages {
@@ -199,7 +199,7 @@ func ProductCreate(data string) string {
 			RETURNING product_feature_id`, productFeature.Name, recommended,
 				product.CategoryID).Scan(&productFeature.ProductFeatureID)
 			if err != nil {
-				return ResponseFailure(500, "Pogreška pri dodavanju značaljke proizvoda u bazu podataka", err)
+				return ResponseFailure(500, "ProductCreate: Pogreška pri dodavanju značajke proizvoda u bazu podataka", err)
 			}
 		}
 
@@ -227,20 +227,20 @@ func ProductUpdate(data string) string {
 	product := Product{}
 	err := json.Unmarshal([]byte(data), &product)
 	if err != nil {
-		return ResponseFailure(500, "Pogreška pri deserializaciji zahtjeva", err)
+		return ResponseFailure(500, "ProductUpdate: Pogreška pri deserializaciji zahtjeva", err)
 	}
 
 	if product.Name == "" {
-		return ResponseFailure(400, "Proizvod mora imati ime", nil)
+		return ResponseFailure(400, "ProductUpdate: Proizvod mora imati ime", nil)
 	}
 	if product.Price == 0 {
-		return ResponseFailure(400, "Proizvod mora imati cijenu", nil)
+		return ResponseFailure(400, "ProductUpdate: Proizvod mora imati cijenu", nil)
 	}
 	if product.Brand == "" {
-		return ResponseFailure(400, "Proizvod mora imati brend", nil)
+		return ResponseFailure(400, "ProductUpdate: Proizvod mora imati brend", nil)
 	}
 	if product.Category == "" {
-		return ResponseFailure(400, "Proizvod mora imati kategoriju", nil)
+		return ResponseFailure(400, "ProductUpdate: Proizvod mora imati kategoriju", nil)
 	}
 
 	product.URL = URLify(product.Name)
@@ -251,17 +251,17 @@ func ProductUpdate(data string) string {
 	err = tx.QueryRow("SELECT EXISTS(SELECT 1 FROM products WHERE product_id = $1)",
 		product.ProductID).Scan(&exists)
 	if err != nil {
-		return ResponseFailure(500, "Pogreška pri provjeri postojanja proizvoda", nil)
+		return ResponseFailure(500, "ProductUpdate: Pogreška pri provjeri postojanja proizvoda", nil)
 	}
 	if !exists {
-		return ResponseFailure(404, "Proizvod ne postoji", nil)
+		return ResponseFailure(404, "ProductUpdate: Proizvod ne postoji", nil)
 	}
 
 	if product.BrandID == 0 {
 		err := tx.QueryRow("INSERT INTO brands (name) VALUES ($1) RETURNING brand_id",
 			product.Brand).Scan(&product.BrandID)
 		if err != nil {
-			return ResponseFailure(500, "Pogreška pri dodavanju novog brenda u bazu podataka", err)
+			return ResponseFailure(500, "ProductUpdate: Pogreška pri dodavanju novog brenda u bazu podataka", err)
 		}
 	}
 
@@ -269,7 +269,7 @@ func ProductUpdate(data string) string {
 		err := tx.QueryRow("INSERT INTO categories (name) VALUES ($1) RETURNING category_id",
 			product.Category).Scan(&product.CategoryID)
 		if err != nil {
-			return ResponseFailure(500, "Pogreška pri dodavanju nove kategorije u bazu podataka", err)
+			return ResponseFailure(500, "ProductUpdate: Pogreška pri dodavanju nove kategorije u bazu podataka", err)
 		}
 	}
 
@@ -307,7 +307,7 @@ func ProductUpdate(data string) string {
 			RETURNING product_feature_id`, productFeature.Name, recommended,
 				product.CategoryID).Scan(&productFeature.ProductFeatureID)
 			if err != nil {
-				return ResponseFailure(500, "Pogreška pri dodavanju značaljke proizvoda u bazu podataka", err)
+				return ResponseFailure(500, "ProductUpdate: Pogreška pri dodavanju značaljke proizvoda u bazu podataka", err)
 			}
 		}
 

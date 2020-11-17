@@ -1,6 +1,6 @@
 {
   "status": 200,
-  "message": "",
+  "message": "ProductGetListSlim",
   "data": {
     "product_id": 0,
     "name": "",

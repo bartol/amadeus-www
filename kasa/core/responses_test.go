@@ -11,18 +11,19 @@ import (
 
 func TestResponseSuccess(t *testing.T) {
 	var cases = []struct {
-		name string
-		data interface{}
+		name    string
+		data    interface{}
+		message string
 	}{
-		{"product", Product{}},
-		{"product_slim", ProductSlim{}},
-		{"text", "str"},
-		{"number", 2},
+		{"product", Product{}, "ProductGet"},
+		{"product_slim", ProductSlim{}, "ProductGetListSlim"},
+		{"text", "str", ""},
+		{"number", 2, "num"},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			actual := ResponseSuccess(tc.data)
+			actual := ResponseSuccess(tc.data, tc.message)
 			goldenout := "./testdata/responses/ResponseSuccess/" + tc.name + ".out.golden"
 			goldenoutfail := "./testdata/responses/ResponseSuccess/" + tc.name + ".outfail.golden"
 			os.Remove(goldenoutfail)

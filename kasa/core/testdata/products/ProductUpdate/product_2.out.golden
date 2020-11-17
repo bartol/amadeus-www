@@ -1,6 +1,6 @@
 {
   "status": 200,
-  "message": "",
+  "message": "ProductGet",
   "data": {
     "product_id": 2,
     "name": "Dell Inspiron 5482 2in1, I5I507-273182898",

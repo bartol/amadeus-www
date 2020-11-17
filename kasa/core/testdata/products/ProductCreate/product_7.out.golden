@@ -1,6 +1,6 @@
 {
   "status": 200,
-  "message": "",
+  "message": "ProductGet",
   "data": {
     "product_id": 7,
     "name": "Lenovo ideapad L340-15API, 81LW0047SC",

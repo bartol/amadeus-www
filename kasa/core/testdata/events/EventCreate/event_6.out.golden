@@ -1,4 +1,4 @@
 {
   "status": 400,
-  "message": "Event mora imati ime"
+  "message": "EventCreate: Event mora imati ime"
 }

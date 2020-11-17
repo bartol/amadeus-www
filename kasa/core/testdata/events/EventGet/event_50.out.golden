@@ -1,4 +1,4 @@
 {
   "status": 404,
-  "message": "Event nije pronađen"
+  "message": "EventGet: Event nije pronađen"
 }

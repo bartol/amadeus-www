@@ -1,4 +1,4 @@
 {
   "status": 400,
-  "message": "Proizvod mora imati ime"
+  "message": "ProductUpdate: Proizvod mora imati ime"
 }

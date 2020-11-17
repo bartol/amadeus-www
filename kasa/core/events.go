@@ -22,10 +22,10 @@ func EventGet(eventID int) string {
 		FROM events
 		WHERE event_id = $1`, eventID)
 	if err != nil {
-		return ResponseFailure(404, "Event nije pronađen", err)
+		return ResponseFailurer(404, "EventGet: Event nije pronađen", err)
 	}
 
-	return ResponseSuccess(event)
+	return ResponseSuccessr(event, "EventGet")
 }
 
 // EventGetList returns json encoded list of Event based on offset and limit
@@ -37,10 +37,10 @@ func EventGetList(offset, limit int) string {
 		ORDER BY created_at DESC
 		OFFSET $1 LIMIT $2;`, offset, limit)
 	if err != nil {
-		return ResponseFailure(500, err.Error(), err)
+		return ResponseFailurer(500, "EventGetList: internal server error", err)
 	}
 
-	return ResponseSuccess(events)
+	return ResponseSuccessr(events, "EventGetList")
 }
 
 // EventCreate accepts json encoded Event, creates event in db and returns json encoded created Event
@@ -48,14 +48,14 @@ func EventCreate(data string) string {
 	event := Event{}
 	err := json.Unmarshal([]byte(data), &event)
 	if err != nil {
-		return ResponseFailure(500, "Pogreška pri deserializaciji zahtjeva", err)
+		return ResponseFailurer(500, "EventCreate: Pogreška pri deserializaciji zahtjeva", err)
 	}
 
 	if event.Type == "" {
-		return ResponseFailure(400, "Event mora imati tip", nil)
+		return ResponseFailurer(400, "EventCreate: Event mora imati tip", nil)
 	}
 	if event.Name == "" {
-		return ResponseFailure(400, "Event mora imati ime", nil)
+		return ResponseFailurer(400, "EventCreate: Event mora imati ime", nil)
 	}
 
 	tx := Global.DB.MustBegin()
@@ -66,10 +66,21 @@ func EventCreate(data string) string {
 		RETURNING event_id`,
 		event.Type, event.Name, event.Description).Scan(&event.EventID)
 	if err != nil {
-		return ResponseFailure(500, "Pogreška pri dodavanju eventa u bazu podataka", err)
+		return ResponseFailurer(500, "EventCreate: Pogreška pri dodavanju eventa u bazu podataka", err)
 	}
 
 	tx.Commit()
 
 	return EventGet(event.EventID)
+}
+
+// EventCreatep accepts Event fields as arguments, creates event in db and returns json encoded created Event
+func EventCreatep(_type, name, description string) string {
+	event := Event{0, _type, name, description, time.Now()}
+	data, err := json.Marshal(event)
+	if err != nil {
+		return ResponseFailurer(500, "EventCreatep: Pogreška pri serializaciji podataka", err)
+	}
+
+	return EventCreate(string(data))
 }
