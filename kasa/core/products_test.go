@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -94,6 +96,17 @@ func TestProductCreate(t *testing.T) {
 				t.Fatal(err)
 			}
 			actual := ProductCreate(string(productin))
+
+			// remove dynamic fields
+			cmd := "sed /created_at/d | sed /updated_at/d"
+			cmdexec := exec.Command("bash", "-c", cmd)
+			cmdexec.Stdin = strings.NewReader(actual)
+			out, err := cmdexec.Output()
+			if err != nil {
+				t.Fatal(err)
+			}
+			actual = string(out)
+
 			goldenout := "./testdata/products/ProductCreate/product_" + strconv.Itoa(tc.productID) + ".out.golden"
 			goldenoutfail := "./testdata/products/ProductCreate/product_" + strconv.Itoa(tc.productID) + ".outfail.golden"
 			os.Remove(goldenoutfail)
@@ -136,6 +149,17 @@ func TestProductUpdate(t *testing.T) {
 				t.Fatal(err)
 			}
 			actual := ProductUpdate(string(productin))
+
+			// remove dynamic fields
+			cmd := "sed /updated_at/d"
+			cmdexec := exec.Command("bash", "-c", cmd)
+			cmdexec.Stdin = strings.NewReader(actual)
+			out, err := cmdexec.Output()
+			if err != nil {
+				t.Fatal(err)
+			}
+			actual = string(out)
+
 			goldenout := "./testdata/products/ProductUpdate/product_" + strconv.Itoa(tc.productID) + ".out.golden"
 			goldenoutfail := "./testdata/products/ProductUpdate/product_" + strconv.Itoa(tc.productID) + ".outfail.golden"
 			os.Remove(goldenoutfail)
