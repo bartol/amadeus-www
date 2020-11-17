@@ -1,11 +1,17 @@
 {
+  "status": 200,
+  "message": "",
+  "data": {
     "product_id": 1,
     "name": "PlayStation 4 500GB F Chassis Black EDIT",
     "price": 299900,
     "discount": 100000,
     "quantity": 3,
     "description": "Sony Playstation 4 je napravio veliki hardverski odmak...",
+    "url": "PlayStation-4-500GB-F-Chassis-Black-EDIT",
     "recommended": true,
+    "created_at": "2020-10-12T17:13:54.287936Z",
+    "updated_at": "2020-11-17T16:12:16.689361Z",
     "brand": "Sony",
     "brand_id": 2,
     "category": "Igraće konzole",
@@ -13,8 +19,12 @@
     "product_images": [
       {
         "product_id": 1,
-        "product_image_id": 1,
+        "product_image_id": 5,
         "url": "https://api.amadeus2.hr/images/253/1137?options=600 EDIT"
       }
-    ]
+    ],
+    "product_features": null,
+    "product_publications": null,
+    "product_recommendations": null
+  }
 }

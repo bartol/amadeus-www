@@ -246,10 +246,78 @@ func ProductUpdate(data string) string {
 		return ResponseFailure(500, "Pogreška pri provjeri postojanja proizvoda", nil)
 	}
 	if !exists {
-		return ResponseFailure(400, "Proizvod ne postoji", nil)
+		return ResponseFailure(404, "Proizvod ne postoji", nil)
 	}
 
-	// ...
+	if product.BrandID == 0 {
+		err := tx.QueryRow("INSERT INTO brands (name) VALUES ($1) RETURNING brand_id",
+			product.Brand).Scan(&product.BrandID)
+		if err != nil {
+			return ResponseFailure(500, "Pogreška pri dodavanju novog brenda u bazu podataka", err)
+		}
+	}
+
+	if product.CategoryID == 0 {
+		err := tx.QueryRow("INSERT INTO categories (name) VALUES ($1) RETURNING category_id",
+			product.Category).Scan(&product.CategoryID)
+		if err != nil {
+			return ResponseFailure(500, "Pogreška pri dodavanju nove kategorije u bazu podataka", err)
+		}
+	}
+
+	tx.MustExec(
+		`UPDATE products 
+		SET name = $2,
+			price = $3,
+			discount = $4,
+			quantity = $5,
+			description = $6,
+			url = $7,
+			recommended = $8,
+			updated_at = now()::TIMESTAMP,
+			brand_id = $9,
+			category_id = $10
+		WHERE product_id = $1`,
+		product.ProductID, product.Name, product.Price, product.Discount, product.Quantity,
+		product.Description, product.URL, product.Recommended, product.BrandID, product.CategoryID)
+
+	tx.MustExec("DELETE FROM product_images WHERE product_id = $1", product.ProductID)
+	for _, product_image := range product.ProductImages {
+		tx.MustExec("INSERT INTO product_images (url,product_id) VALUES ($1,$2)",
+			product_image.URL, product.ProductID)
+	}
+
+	tx.MustExec("DELETE FROM product_feature_values WHERE product_id = $1", product.ProductID)
+	for _, product_feature := range product.ProductFeatures {
+		if product_feature.ProductFeatureID == 0 {
+			recommended := "n"
+			if product_feature.Recommended {
+				recommended = "t"
+			}
+
+			err := tx.QueryRow(`INSERT INTO product_features (name,recommended,category_id) VALUES ($1,$2,$3)
+			RETURNING product_feature_id`, product_feature.Name, recommended,
+				product.CategoryID).Scan(&product_feature.ProductFeatureID)
+			if err != nil {
+				return ResponseFailure(500, "Pogreška pri dodavanju značaljke proizvoda u bazu podataka", err)
+			}
+		}
+
+		tx.MustExec("INSERT INTO product_feature_values (value,product_feature_id,product_id) VALUES ($1,$2,$3)",
+			product_feature.Value, product_feature.ProductFeatureID, product.ProductID)
+	}
+
+	tx.MustExec("DELETE FROM product_publications WHERE product_id = $1", product.ProductID)
+	for _, product_publication := range product.ProductPublications {
+		tx.MustExec("INSERT INTO product_publications (publication_id,product_id) VALUES ($1,$2)",
+			product_publication.PublicationID, product.ProductID)
+	}
+
+	tx.MustExec("DELETE FROM product_recommendations WHERE product_id = $1", product.ProductID)
+	for _, product_recommendation := range product.ProductRecommendations {
+		tx.MustExec("INSERT INTO product_recommendations (recommended_product_id,product_id) VALUES ($1,$2)",
+			product_recommendation.ProductID, product.ProductID)
+	}
 
 	tx.Commit()
 
