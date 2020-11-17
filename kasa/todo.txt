@@ -3,8 +3,6 @@
 obavijesi me o promjeni cijene
 video - namjestanje kanala itd.
 
-extract slugify in function and lowercase all letters
-
 ----- INSP
 
 https://www.musicstore.com/en_HR/HRK
