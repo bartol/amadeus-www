@@ -6,5 +6,6 @@
     "type": "DATA",
     "name": "updated product with id = 2 on device 1",
     "description": "updated properties name, price and discount",
+    "created_at": "2020-10-10T17:13:54.287936Z"
   }
 }
