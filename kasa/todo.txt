@@ -3,6 +3,8 @@
 obavijesi me o promjeni cijene
 video - namjestanje kanala itd.
 
+extract slugify in function and lowercase all letters
+sed delete lines like updated_at so golden files don't get modified
 
 ----- INSP
 
