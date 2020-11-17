@@ -11,6 +11,7 @@ type Event struct {
 	Type        string    `db:"type" json:"type"`
 	Name        string    `db:"name" json:"name"`
 	Description string    `db:"description" json:"description"`
+	Device      string    `db:"device" json:"device"`
 	CreatedAt   time.Time `db:"created_at" json:"created_at"`
 }
 
@@ -61,10 +62,10 @@ func EventCreate(data string) string {
 	tx := Global.DB.MustBegin()
 
 	err = tx.QueryRow(
-		`INSERT INTO events (type,name,description,created_at) 
-		VALUES ($1,$2,$3,now()::TIMESTAMP)
+		`INSERT INTO events (type,name,description,device,created_at) 
+		VALUES ($1,$2,$3,$4,now()::TIMESTAMP)
 		RETURNING event_id`,
-		event.Type, event.Name, event.Description).Scan(&event.EventID)
+		event.Type, event.Name, event.Description, Global.Device).Scan(&event.EventID)
 	if err != nil {
 		return ResponseFailurer(500, "EventCreate: Pogreška pri dodavanju eventa u bazu podataka", err)
 	}
@@ -76,7 +77,7 @@ func EventCreate(data string) string {
 
 // EventCreatep accepts Event fields as arguments, creates event in db and returns json encoded created Event
 func EventCreatep(_type, name, description string) string {
-	event := Event{0, _type, name, description, time.Now()}
+	event := Event{0, _type, name, description, "", time.Now()}
 	data, err := json.Marshal(event)
 	if err != nil {
 		return ResponseFailurer(500, "EventCreatep: Pogreška pri serializaciji podataka", err)

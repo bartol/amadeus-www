@@ -13,7 +13,7 @@ func basic() string {
 }
 
 func main() {
-	err := core.Setup("postgres://postgres@localhost:5432/kasa14")
+	err := core.Setup("postgres://postgres@localhost:5432/kasa14", "kasa 1")
 	if err != nil {
 		log.Fatalln(err)
 	}

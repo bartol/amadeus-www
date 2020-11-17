@@ -9,11 +9,12 @@ import (
 
 // Global contains global variables like database connection etc
 var Global = struct {
-	DB *sqlx.DB
+	DB     *sqlx.DB
+	Device string
 }{}
 
 // Setup is function that configures Global var
-func Setup(dbconn string) error {
+func Setup(dbconn string, device string) error {
 	// connect to db
 	if Global.DB == nil {
 		conn, err := sqlx.Connect("postgres", dbconn)
@@ -22,6 +23,7 @@ func Setup(dbconn string) error {
 		}
 		Global.DB = conn
 	}
+	Global.Device = device
 
 	return nil
 }

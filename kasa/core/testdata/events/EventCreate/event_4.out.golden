@@ -6,5 +6,6 @@
     "type": "DATA",
     "name": "updated product with id = 2 on device 1",
     "description": "updated properties name, price and discount",
+    "device": "ak_testing",
   }
 }

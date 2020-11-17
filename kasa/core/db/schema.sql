@@ -122,5 +122,6 @@ CREATE TABLE events (
   type TEXT,
   name TEXT,
   description TEXT,
+  device TEXT,
   created_at TIMESTAMP
 );

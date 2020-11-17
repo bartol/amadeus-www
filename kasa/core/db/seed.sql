@@ -74,6 +74,6 @@ INSERT INTO offer_products (offer_id,product_id) VALUES (1,5);
 INSERT INTO offer_products (offer_id,product_id) VALUES (2,2);
 
 -- events
-INSERT INTO events (type,name,description,created_at) VALUES ('DATA','updated product with id = 2 on device 1','updated properties name, price and discount','2020-10-10 17:13:54.287936');
-INSERT INTO events (type,name,description,created_at) VALUES ('INFO','viewed product with id = 2 on device 2','','2020-10-12 17:13:52.287936');
-INSERT INTO events (type,name,description,created_at) VALUES ('INFO','printed offer id = 1 on device 2','','2020-10-12 17:13:54.287936');
+INSERT INTO events (type,name,description,device,created_at) VALUES ('DATA','updated product with id = 2 on device 1','updated properties name, price and discount','kasa 1','2020-10-10 17:13:54.287936');
+INSERT INTO events (type,name,description,device,created_at) VALUES ('INFO','viewed product with id = 2 on device 2','','kasa 2','2020-10-12 17:13:52.287936');
+INSERT INTO events (type,name,description,device,created_at) VALUES ('INFO','printed offer id = 1 on device 2','','kasa 2','2020-10-12 17:13:54.287936');
