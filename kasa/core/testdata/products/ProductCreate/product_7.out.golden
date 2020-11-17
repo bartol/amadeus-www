@@ -10,8 +10,6 @@
     "description": "Lenovo ideapad L340-15API, 81LW0047SC, 15.6\" FHD (1920x1080) TN 220nits Anti-glare, AMD...",
     "url": "Lenovo-ideapad-L340-15API-81LW0047SC",
     "recommended": false,
-    "created_at": "2020-11-17T15:21:53.830741Z",
-    "updated_at": "2020-11-17T15:21:53.830741Z",
     "brand": "Lenovo",
     "brand_id": 5,
     "category": "Laptopi",
@@ -60,8 +58,6 @@
         "quantity": 1,
         "url": "dell-inspiron-5482-2in1-i5i507-273182898",
         "recommended": false,
-        "created_at": "2020-10-12T17:13:54.287936Z",
-        "updated_at": "2020-10-13T17:13:54.287936Z",
         "brand": "Dell",
         "category": "Laptopi"
       },
@@ -73,8 +69,6 @@
         "quantity": 0,
         "url": "hp-250-g7-6bp58ea-156-i3-8gb-ram-256gb-ssd-intel-hd-win10p",
         "recommended": false,
-        "created_at": "2020-10-12T17:13:54.287936Z",
-        "updated_at": "2020-10-14T17:13:54.287936Z",
         "brand": "HP",
         "category": "Laptopi"
       }
