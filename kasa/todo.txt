@@ -10,5 +10,3 @@ https://aukro.cz/
 https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
-
-add device column to events
