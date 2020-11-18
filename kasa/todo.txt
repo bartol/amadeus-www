@@ -10,3 +10,11 @@ https://aukro.cz/
 https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
+
+products.go // get modified, print
+brands.go // l, upd, create
+categories.go // l, upd, create
+product_features.go // l, upd, create
+customers.go // get, l, upd, create, print
+receipts.go // get, l, upd, create, print
+offers.go // get, l, upd, create, print

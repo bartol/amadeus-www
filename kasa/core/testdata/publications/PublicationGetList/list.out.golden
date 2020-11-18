@@ -1,0 +1,14 @@
+{
+  "status": 200,
+  "message": "PublicationGetList",
+  "data": [
+    {
+      "publication_id": 1,
+      "name": "amadeus2.hr"
+    },
+    {
+      "publication_id": 2,
+      "name": "pioneer.hr"
+    }
+  ]
+}
