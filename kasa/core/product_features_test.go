@@ -4,8 +4,42 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"testing"
 )
+
+func TestProductFeatureGet(t *testing.T) {
+	var cases = []struct {
+		featureID int
+	}{
+		{1},
+		{2},
+		{3},
+		{4},
+		{50},
+	}
+
+	for _, tc := range cases {
+		t.Run("feature_"+strconv.Itoa(tc.featureID), func(t *testing.T) {
+			actual := ProductFeatureGet(tc.featureID)
+			goldenout := "./testdata/product_features/ProductFeatureGet/feature_" + strconv.Itoa(tc.featureID) + ".out.golden"
+			goldenoutfail := "./testdata/product_features/ProductFeatureGet/feature_" + strconv.Itoa(tc.featureID) + ".outfail.golden"
+			os.Remove(goldenoutfail)
+			if *Update {
+				ioutil.WriteFile(goldenout, []byte(actual), 0644)
+			}
+
+			expected, err := ioutil.ReadFile(goldenout)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !bytes.Equal([]byte(actual), expected) {
+				ioutil.WriteFile(goldenoutfail, []byte(actual), 0644)
+				t.Errorf("actual (%s) didn't match golden (%s) ", goldenoutfail, goldenout)
+			}
+		})
+	}
+}
 
 func TestProductFeatureGetList(t *testing.T) {
 	actual := ProductFeatureGetList()
