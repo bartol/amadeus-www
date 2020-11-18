@@ -29,6 +29,7 @@ INSERT INTO product_images (url,product_id) VALUES ('https://api.amadeus2.hr/ima
 INSERT INTO product_features (name,recommended,category_id) VALUES ('Procesor','t',1);
 INSERT INTO product_features (name,recommended,category_id) VALUES ('Veličina zaslona','t',1);
 INSERT INTO product_features (name,recommended,category_id) VALUES ('OS','n',1);
+INSERT INTO product_features (name,recommended,category_id) VALUES ('OS','n',2);
 
 -- product_feature_values
 INSERT INTO product_feature_values (value,product_feature_id,product_id) VALUES ('Intel Core i5 8265U 1,60 GHz Core 4',1,2);
