@@ -11,10 +11,10 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
-products.go             | get modified, print
-brands.go               | list, update, create
-categories.go           | list, update, create
+products.go             | get list modified, print
+brands.go               | get, list, update, create
+categories.go           | get, list, update, create
 product_features.go     | update, create
-customers.go            | get, list, update, create, print
-receipts.go             | get, list, update, create, print
-offers.go               | get, list, update, create, print
+customers.go            | get, list, get list modified, update, create, print
+receipts.go             | get, list, get list modified, update, create, print
+offers.go               | get, list, get list modified, update, create, print
