@@ -96,3 +96,41 @@ func TestProductFeatureCreate(t *testing.T) {
 		})
 	}
 }
+
+func TestProductFeatureUpdate(t *testing.T) {
+	var cases = []struct {
+		productFeatureID int
+	}{
+		{2},
+		{3},
+		{4},
+		{50},
+	}
+
+	for _, tc := range cases {
+		t.Run("feature_"+strconv.Itoa(tc.productFeatureID), func(t *testing.T) {
+			goldenin := "./testdata/product_features/ProductFeatureUpdate/feature_" + strconv.Itoa(tc.productFeatureID) + ".in.golden"
+			productin, err := ioutil.ReadFile(goldenin)
+			if err != nil {
+				t.Fatal(err)
+			}
+			actual := ProductFeatureUpdate(string(productin))
+
+			goldenout := "./testdata/product_features/ProductFeatureUpdate/feature_" + strconv.Itoa(tc.productFeatureID) + ".out.golden"
+			goldenoutfail := "./testdata/product_features/ProductFeatureUpdate/feature_" + strconv.Itoa(tc.productFeatureID) + ".outfail.golden"
+			os.Remove(goldenoutfail)
+			if *Update {
+				ioutil.WriteFile(goldenout, []byte(actual), 0644)
+			}
+
+			expected, err := ioutil.ReadFile(goldenout)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !bytes.Equal([]byte(actual), expected) {
+				ioutil.WriteFile(goldenoutfail, []byte(actual), 0644)
+				t.Errorf("actual (%s) didn't match golden (%s) ", goldenoutfail, goldenout)
+			}
+		})
+	}
+}

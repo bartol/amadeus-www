@@ -76,3 +76,45 @@ func ProductFeatureCreate(data string) string {
 
 	return ProductFeatureGet(productFeature.ProductFeatureID)
 }
+
+// ProductFeatureUpdate accepts json encoded Feature, updates product feature in db and returns json encoded updated Feature
+func ProductFeatureUpdate(data string) string {
+	productFeature := Feature{}
+	err := json.Unmarshal([]byte(data), &productFeature)
+	if err != nil {
+		return ResponseFailure(500, "ProductFeatureUpdate: Pogreška pri deserializaciji zahtjeva", err)
+	}
+
+	if productFeature.Name == "" {
+		return ResponseFailure(400, "ProductFeatureUpdate: Značajka proizvoda mora imati ime", nil)
+	}
+	if productFeature.Category == "" {
+		return ResponseFailure(400, "ProductFeatureUpdate: Značajka proizvoda mora imati kategoriju", nil)
+	}
+
+	tx := Global.DB.MustBegin()
+
+	var exists bool
+	err = tx.QueryRow(
+		"SELECT EXISTS(SELECT 1 FROM product_features WHERE product_feature_id = $1)",
+		productFeature.ProductFeatureID).Scan(&exists)
+	if err != nil {
+		return ResponseFailure(500, "ProductFeatureUpdate: Pogreška pri provjeri postojanja značajke proizvoda", nil)
+	}
+	if !exists {
+		return ResponseFailure(404, "ProductFeatureUpdate: Značajka proizvoda ne postoji", nil)
+	}
+
+	tx.MustExec(
+		`UPDATE product_features 
+		SET name = $2,
+			recommended = $3,
+			category_id = $4
+		WHERE product_feature_id = $1`,
+		productFeature.ProductFeatureID, productFeature.Name,
+		productFeature.Recommended, productFeature.CategoryID)
+
+	tx.Commit()
+
+	return ProductFeatureGet(productFeature.ProductFeatureID)
+}
