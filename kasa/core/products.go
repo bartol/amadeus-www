@@ -128,11 +128,6 @@ func ProductGetListSlim(offset, limit int) string {
 	return ResponseSuccess(products, "ProductGetListSlim")
 }
 
-// ProductGetListSlimModified is stub TODO
-func ProductGetListSlimModified(products string) string {
-	return "stub"
-}
-
 // ProductCreate accepts json encoded Product, creates product in db and returns json encoded created Product
 func ProductCreate(data string) string {
 	product := Product{}
