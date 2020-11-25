@@ -11,10 +11,12 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
+add url column to categories and brands
+
 products.go             | has updated, print
 brands.go               | get, list, create, update 
 categories.go           | get, list, create, update 
-product_features.go     | create, update
+product_features.go     | update
 customers.go            | get, list, has updated, create, update, print
 receipts.go             | get, list, has updated, create, update, print
 offers.go               | get, list, has updated, create, update, print

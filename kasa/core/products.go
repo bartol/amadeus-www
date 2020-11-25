@@ -185,6 +185,7 @@ func ProductCreate(data string) string {
 
 	for _, productFeature := range product.ProductFeatures {
 		if productFeature.ProductFeatureID == 0 {
+			// replace with ProductFeatureCreate
 			recommended := "n"
 			if productFeature.Recommended {
 				recommended = "t"

@@ -1,5 +1,7 @@
 package core
 
+import "encoding/json"
+
 // Feature is struct that contains product feature info
 type Feature struct {
 	ProductFeatureID int    `db:"product_feature_id" json:"product_feature_id"`
@@ -18,7 +20,7 @@ func ProductFeatureGet(productFeatureID int) string {
 		INNER JOIN categories c ON  f.category_id = c.category_id 
 		WHERE f.product_feature_id = $1;`, productFeatureID)
 	if err != nil {
-		return ResponseFailure(404, "ProductFeatureGet: Značajka nije pronađena", err)
+		return ResponseFailure(404, "ProductFeatureGet: Značajka proizvoda nije pronađena", err)
 	}
 
 	return ResponseSuccess(productFeature, "ProductFeatureGet")
@@ -39,7 +41,38 @@ func ProductFeatureGetList() string {
 	return ResponseSuccess(productFeatures, "ProductFeatureGetList")
 }
 
-// ProductFeatureCreate is stub TODO
+// ProductFeatureCreate accepts json encoded Feature, creates product feature in db and returns json encoded created Feature
 func ProductFeatureCreate(data string) string {
-	return "stub"
+	productFeature := Feature{}
+	err := json.Unmarshal([]byte(data), &productFeature)
+	if err != nil {
+		return ResponseFailure(500, "ProductFeatureCreate: Pogreška pri deserializaciji zahtjeva", err)
+	}
+
+	if productFeature.Name == "" {
+		return ResponseFailure(400, "ProductFeatureCreate: Značajka proizvoda mora imati ime", nil)
+	}
+	if productFeature.Category == "" {
+		return ResponseFailure(400, "ProductFeatureCreate: Značajka proizvoda mora imati kategoriju", nil)
+	}
+
+	tx := Global.DB.MustBegin()
+
+	recommended := "n"
+	if productFeature.Recommended {
+		recommended = "t"
+	}
+
+	err = tx.QueryRow(
+		`INSERT INTO product_features (name,recommended,category_id) 
+		VALUES ($1,$2,$3)
+		RETURNING product_feature_id`, productFeature.Name, recommended,
+		productFeature.CategoryID).Scan(&productFeature.ProductFeatureID)
+	if err != nil {
+		return ResponseFailure(500, "ProductFeatureCreate: Pogreška pri dodavanju značajke proizvoda u bazu podataka", err)
+	}
+
+	tx.Commit()
+
+	return ProductFeatureGet(productFeature.ProductFeatureID)
 }
