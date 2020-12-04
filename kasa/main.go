@@ -2,25 +2,27 @@ package main
 
 import (
 	"amadeus-kasa/core"
-	"log"
+	"flag"
 
 	"github.com/leaanthony/mewn"
 	"github.com/wailsapp/wails"
 )
 
-func basic() string {
-	return "Hello World!"
-}
-
 func main() {
-	err := core.Setup("postgres://postgres@localhost:5432/kasa14", "kasa 1")
+	// get config file path argument
+	configPath := flag.String("config", "core.toml", "configuration file path")
+	flag.Parse()
+
+	// run core setup function that configures database, logger, ...
+	err := core.Setup(*configPath)
 	if err != nil {
-		log.Fatalln(err)
+		panic(err)
 	}
 
 	js := mewn.String("./frontend/dist/app.js")
 	css := mewn.String("./frontend/dist/app.css")
 
+	// app metadata
 	app := wails.CreateApp(&wails.AppConfig{
 		Width:     1400,
 		Height:    900,
@@ -30,7 +32,9 @@ func main() {
 		Colour:    "#131313",
 		Resizable: true,
 	})
-	app.Bind(basic)
-	app.Bind(core.ProductGet)
+
+	// bind go functions
+	// app.Bind(core.ProductGet)
+
 	app.Run()
 }
