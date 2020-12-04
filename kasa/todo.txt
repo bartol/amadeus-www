@@ -19,3 +19,5 @@ categories.go           | get, list, create, update
 customers.go            | get, list, has updated, create, update, print
 receipts.go             | get, list, has updated, create, update, print
 offers.go               | get, list, has updated, create, update, print
+
+remove events
