@@ -34,7 +34,7 @@ func main() {
 	})
 
 	// bind go functions
-	// app.Bind(core.ProductGet)
+	app.Bind(core.ProductGet)
 
 	app.Run()
 }
