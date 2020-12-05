@@ -60,8 +60,7 @@ func TestProductCreate(t *testing.T) {
 	for _, tc := range cases {
 		data := GoldenGet(t, "products/ProductCreate", tc)
 		product, err := ProductCreate(data)
-		product.CreatedAt = ""
-		product.UpdatedAt = ""
+		RemoveDateFields(&product)
 		GoldenCheck(t, "products/ProductCreate", tc, product, err)
 	}
 }
@@ -84,7 +83,7 @@ func TestProductUpdate(t *testing.T) {
 	for _, tc := range cases {
 		data := GoldenGet(t, "products/ProductUpdate", tc)
 		product, err := ProductUpdate(data)
-		product.UpdatedAt = ""
+		RemoveDateFields(&product)
 		GoldenCheck(t, "products/ProductUpdate", tc, product, err)
 	}
 }
