@@ -1,0 +1,51 @@
+core.Product{
+    ProductID:   2,
+    Name:        "Dell Inspiron 5482 2in1, I5I507-273182898",
+    Price:       649900,
+    Discount:    60000,
+    Quantity:    0,
+    Description: "",
+    URL:         "dell-inspiron-5482-2in1-i5i507-273182898",
+    Recommended: false,
+    CreatedAt:   time.Time{
+        wall: 0x11298e00,
+        ext:  63738119634,
+        loc:  &time.Location{
+            name: "",
+            zone: {
+                {},
+            },
+            tx: {
+                {when:-9223372036854775808, index:0x0, isstd:false, isutc:false},
+            },
+            cacheStart: -9223372036854775808,
+            cacheEnd:   9223372036854775807,
+            cacheZone:  &time.zone{(CYCLIC REFERENCE)},
+        },
+    },
+    UpdatedAt: time.Time{
+        wall: 0x11298e00,
+        ext:  63738206034,
+        loc:  &time.Location{
+            name: "",
+            zone: {
+                {},
+            },
+            tx: {
+                {when:-9223372036854775808, index:0x0, isstd:false, isutc:false},
+            },
+            cacheStart: -9223372036854775808,
+            cacheEnd:   9223372036854775807,
+            cacheZone:  &time.zone{(CYCLIC REFERENCE)},
+        },
+    },
+    Brand:           "Dell",
+    BrandID:         3,
+    Category:        "Laptopi",
+    CategoryID:      1,
+    Images:          nil,
+    Features:        nil,
+    Publications:    nil,
+    Recommendations: nil,
+}
+nil

@@ -1,0 +1,51 @@
+core.Product{
+    ProductID:   1,
+    Name:        "PlayStation 4 500GB F Chassis Black",
+    Price:       299900,
+    Discount:    100000,
+    Quantity:    0,
+    Description: "",
+    URL:         "playstation-4-500gb-f-chassis-black",
+    Recommended: true,
+    CreatedAt:   time.Time{
+        wall: 0x11298e00,
+        ext:  63738119634,
+        loc:  &time.Location{
+            name: "",
+            zone: {
+                {},
+            },
+            tx: {
+                {when:-9223372036854775808, index:0x0, isstd:false, isutc:false},
+            },
+            cacheStart: -9223372036854775808,
+            cacheEnd:   9223372036854775807,
+            cacheZone:  &time.zone{(CYCLIC REFERENCE)},
+        },
+    },
+    UpdatedAt: time.Time{
+        wall: 0x11298e00,
+        ext:  63738206034,
+        loc:  &time.Location{
+            name: "",
+            zone: {
+                {},
+            },
+            tx: {
+                {when:-9223372036854775808, index:0x0, isstd:false, isutc:false},
+            },
+            cacheStart: -9223372036854775808,
+            cacheEnd:   9223372036854775807,
+            cacheZone:  &time.zone{(CYCLIC REFERENCE)},
+        },
+    },
+    Brand:           "Sony",
+    BrandID:         2,
+    Category:        "Igraće konzole",
+    CategoryID:      4,
+    Images:          nil,
+    Features:        nil,
+    Publications:    nil,
+    Recommendations: nil,
+}
+nil
