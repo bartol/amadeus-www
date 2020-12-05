@@ -28,3 +28,19 @@ func TestProductGet(t *testing.T) {
 		GoldenCheck(t, "products/ProductGet", tc, product, err)
 	}
 }
+
+func TestProductList(t *testing.T) {
+	var cases = []struct {
+		offset int
+		limit  int
+	}{
+		{0, 2},
+		{2, 6},
+		{50, 2},
+	}
+
+	for _, tc := range cases {
+		products, err := ProductList(tc.offset, tc.limit)
+		GoldenCheck(t, "products/ProductList", tc, products, err)
+	}
+}

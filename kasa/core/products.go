@@ -45,18 +45,18 @@ func ProductGet(productID int, light bool) (Product, error) {
 		FROM products p
 		INNER JOIN brands b USING (brand_id)
 		INNER JOIN categories c USING (category_id)
-		WHERE product_id = $1`, productID)
+		WHERE product_id = $1;`, productID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
 	}
 
 	// get heavy columns
-	if light == false {
+	if !light {
 		err := Global.DB.Get(&product,
 			`SELECT description
 			FROM products
-			WHERE product_id = $1`, productID)
+			WHERE product_id = $1;`, productID)
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
@@ -65,7 +65,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 		err = Global.DB.Select(&product.Images,
 			`SELECT product_image_id, url
 			FROM product_images
-			WHERE product_id = $1`, productID)
+			WHERE product_id = $1;`, productID)
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
@@ -75,7 +75,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 			`SELECT product_feature_id, product_feature_value_id, name, value, recommended
 			FROM product_feature_values
 			INNER JOIN product_features USING (product_feature_id)
-			WHERE product_id = $1`, productID)
+			WHERE product_id = $1;`, productID)
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
@@ -85,7 +85,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 			`SELECT publication_id, name
 			FROM product_publications
 			INNER JOIN publications USING (publication_id)
-			WHERE product_id = $1`, productID)
+			WHERE product_id = $1;`, productID)
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
@@ -98,7 +98,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 			INNER JOIN products p ON recommended_product_id = p.product_id
 			INNER JOIN brands b USING (brand_id)
 			INNER JOIN categories c USING (category_id)
-			WHERE r.product_id = $1`, productID)
+			WHERE r.product_id = $1;`, productID)
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
@@ -106,4 +106,24 @@ func ProductGet(productID int, light bool) (Product, error) {
 	}
 
 	return product, nil
+}
+
+// ProductList returns list of Product
+func ProductList(offset int, limit int) ([]Product, error) {
+	products := []Product{}
+
+	err := Global.DB.Select(&products,
+		`SELECT product_id, p.name, price, discount, url, recommended, updated_at,
+			created_at, brand_id, b.name AS brand, category_id, c.name AS category
+		FROM products p
+		INNER JOIN brands b USING (brand_id)
+		INNER JOIN categories c USING (category_id)
+		ORDER BY updated_at DESC
+		OFFSET $1 LIMIT $2;`, offset, limit)
+	if err != nil {
+		Global.Log.Error(err)
+		return []Product{}, err
+	}
+
+	return products, nil
 }
