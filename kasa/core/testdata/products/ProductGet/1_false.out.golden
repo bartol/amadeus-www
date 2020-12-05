@@ -3,7 +3,7 @@ core.Product{
     Name:        "PlayStation 4 500GB F Chassis Black",
     Price:       299900,
     Discount:    100000,
-    Quantity:    0,
+    Quantity:    3,
     Description: "Sony Playstation 4 je napravio veliki hardverski odmak...",
     URL:         "playstation-4-500gb-f-chassis-black",
     Recommended: true,

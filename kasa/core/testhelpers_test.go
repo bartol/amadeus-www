@@ -2,6 +2,7 @@ package core
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -47,6 +48,12 @@ func GoldenCheck(t *testing.T, dir string, tc interface{}, returned ...interface
 			}
 		}
 
+		// create empty golden file if it doesn't exist
+		_, err := os.Stat(goldenPath)
+		if os.IsNotExist(err) {
+			ioutil.WriteFile(goldenPath, []byte{}, 0644)
+		}
+
 		// read golden file
 		golden, err := ioutil.ReadFile(goldenPath)
 		if err != nil {
@@ -70,4 +77,24 @@ func GoldenCheck(t *testing.T, dir string, tc interface{}, returned ...interface
 			t.Errorf("actual didn't match golden (%s)\n%s", goldenPath, cmd)
 		}
 	})
+}
+
+func GoldenGet(t *testing.T, dir string, tc interface{}) map[string]interface{} {
+	subtestName := SubtestName(tc)
+	goldenPath := fmt.Sprintf("./testdata/%s/in/%s.in.golden", dir, subtestName)
+
+	// read golden file
+	golden, err := ioutil.ReadFile(goldenPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// decode golden file
+	var data map[string]interface{}
+	err = json.Unmarshal(golden, &data)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return data
 }

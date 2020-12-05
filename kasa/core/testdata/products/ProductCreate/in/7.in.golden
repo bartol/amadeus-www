@@ -1,0 +1,45 @@
+{
+    "Name": "Lenovo ideapad L340-15API, 81LW0047SC",
+    "Price": 389900,
+    "Discount": 135000,
+    "Quantity": 1,
+    "Description": "Lenovo ideapad L340-15API, 81LW0047SC, 15.6\" FHD (1920x1080) TN 220nits Anti-glare, AMD...",
+    "Recommended": false,
+    "Brand": "Lenovo",
+    "BrandID": 5,
+    "Category": "Laptopi",
+    "CategoryID": 1,
+    "Images": [
+      {
+        "URL": "https://api.amadeus2.hr/images/253/1137?options=600"
+      }
+    ],
+    "Features": [
+      {
+        "FeatureID": 1,
+        "Name": "Procesor",
+        "Value": "AMD Ryzen 3 3200U (2C / 4T, 2.6 / 3.5GHz, 1MB L2 / 4MB L3)",
+        "Recommended": true
+      },
+      {
+        "FeatureID": 3,
+        "Name": "OS",
+        "Value": "Free DOS",
+        "Recommended": false
+      }
+    ],
+    "Publications": [
+      {
+        "PublicationID": 1,
+        "Name": "amadeus2.hr"
+      }
+    ],
+    "Recommendations": [
+      {
+        "ProductID": 2
+      },
+      {
+        "ProductID": 3
+      }
+    ]
+}

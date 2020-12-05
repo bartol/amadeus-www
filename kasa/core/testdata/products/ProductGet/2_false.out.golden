@@ -3,7 +3,7 @@ core.Product{
     Name:        "Dell Inspiron 5482 2in1, I5I507-273182898",
     Price:       649900,
     Discount:    60000,
-    Quantity:    0,
+    Quantity:    1,
     Description: "",
     URL:         "dell-inspiron-5482-2in1-i5i507-273182898",
     Recommended: false,

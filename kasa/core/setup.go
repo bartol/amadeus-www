@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"io"
 	"io/ioutil"
 	"os"
 
@@ -76,7 +77,7 @@ func Setup(configPath string) error {
 		}
 
 		Global.Log = logrus.New()
-		Global.Log.SetOutput(logfile)
+		Global.Log.SetOutput(io.MultiWriter(os.Stdout, logfile))
 		// show file, line and function name in logs
 		Global.Log.SetReportCaller(true)
 	}

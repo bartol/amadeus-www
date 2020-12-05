@@ -13,9 +13,9 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 add url column to categories and brands
 
-products.go             | has updated, print
-brands.go               | get, list, create, update 
-categories.go           | get, list, create, update 
+products.go             | check, print
+brands.go               | get, list, create, update
+categories.go           | get, list, create, update
 customers.go            | get, list, has updated, create, update, print
 receipts.go             | get, list, has updated, create, update, print
 offers.go               | get, list, has updated, create, update, print
