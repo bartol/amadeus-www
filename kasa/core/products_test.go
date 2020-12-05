@@ -65,3 +65,26 @@ func TestProductCreate(t *testing.T) {
 		GoldenCheck(t, "products/ProductCreate", tc, product, err)
 	}
 }
+
+func TestProductUpdate(t *testing.T) {
+	var cases = []struct {
+		productID int
+	}{
+		{1},
+		{2},
+		{3},
+		{4},
+		{5},
+		{6},
+		{7},
+		{8},
+		{50},
+	}
+
+	for _, tc := range cases {
+		data := GoldenGet(t, "products/ProductUpdate", tc)
+		product, err := ProductUpdate(data)
+		product.UpdatedAt = ""
+		GoldenCheck(t, "products/ProductUpdate", tc, product, err)
+	}
+}
