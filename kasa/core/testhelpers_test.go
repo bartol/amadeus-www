@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/kr/pretty"
-	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 func SubtestName(tc interface{}) string {
@@ -55,10 +55,19 @@ func GoldenCheck(t *testing.T, dir string, tc interface{}, returned ...interface
 
 		// compare
 		if !bytes.Equal(actual, golden) {
-			// display diff
-			dmp := diffmatchpatch.New()
-			diff := dmp.DiffMain(string(actual), string(golden), false)
-			t.Errorf("actual didn't match golden (%s)\n%s", goldenPath, dmp.DiffPrettyText(diff))
+			// write actual to file and run diff on it
+			file, err := ioutil.TempFile("/tmp/amadeus-kasa", "testfile")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer os.Remove(file.Name())
+			err = ioutil.WriteFile(file.Name(), actual, 0644)
+			if err != nil {
+				t.Fatal(err)
+			}
+			cmd, _ := exec.Command("diff", "-u", "--color=always", goldenPath, file.Name()).Output()
+
+			t.Errorf("actual didn't match golden (%s)\n%s", goldenPath, cmd)
 		}
 	})
 }
