@@ -7,43 +7,13 @@ core.Product{
     Description: "Sony Playstation 4 je napravio veliki hardverski odmak...",
     URL:         "playstation-4-500gb-f-chassis-black",
     Recommended: true,
-    CreatedAt:   time.Time{
-        wall: 0x11298e00,
-        ext:  63738119634,
-        loc:  &time.Location{
-            name: "",
-            zone: {
-                {},
-            },
-            tx: {
-                {when:-9223372036854775808, index:0x0, isstd:false, isutc:false},
-            },
-            cacheStart: -9223372036854775808,
-            cacheEnd:   9223372036854775807,
-            cacheZone:  &time.zone{(CYCLIC REFERENCE)},
-        },
-    },
-    UpdatedAt: time.Time{
-        wall: 0x11298e00,
-        ext:  63738206034,
-        loc:  &time.Location{
-            name: "",
-            zone: {
-                {},
-            },
-            tx: {
-                {when:-9223372036854775808, index:0x0, isstd:false, isutc:false},
-            },
-            cacheStart: -9223372036854775808,
-            cacheEnd:   9223372036854775807,
-            cacheZone:  &time.zone{(CYCLIC REFERENCE)},
-        },
-    },
-    Brand:      "Sony",
-    BrandID:    2,
-    Category:   "Igraće konzole",
-    CategoryID: 4,
-    Images:     {
+    CreatedAt:   "2020-10-12T17:13:54.287936Z",
+    UpdatedAt:   "2020-10-13T17:13:54.287936Z",
+    Brand:       "Sony",
+    BrandID:     2,
+    Category:    "Igraće konzole",
+    CategoryID:  4,
+    Images:      {
         {ImageID:1, URL:"https://api.amadeus2.hr/images/253/1137?options=600"},
     },
     Features:     nil,

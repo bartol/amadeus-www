@@ -1,25 +1,21 @@
 package core
 
-import (
-	"time"
-)
-
 // Product is struct that contains product info
 type Product struct {
-	ProductID   int       `db:"product_id"`
-	Name        string    `db:"name"`
-	Price       int       `db:"price"`
-	Discount    int       `db:"discount"`
-	Quantity    int       `db:"quantity"`
-	Description string    `db:"description"`
-	URL         string    `db:"url"`
-	Recommended bool      `db:"recommended"`
-	CreatedAt   time.Time `db:"created_at"`
-	UpdatedAt   time.Time `db:"updated_at"`
-	Brand       string    `db:"brand"`
-	BrandID     int       `db:"brand_id"`
-	Category    string    `db:"category"`
-	CategoryID  int       `db:"category_id"`
+	ProductID   int    `db:"product_id"`
+	Name        string `db:"name"`
+	Price       int    `db:"price"`
+	Discount    int    `db:"discount"`
+	Quantity    int    `db:"quantity"`
+	Description string `db:"description"`
+	URL         string `db:"url"`
+	Recommended bool   `db:"recommended"`
+	CreatedAt   string `db:"created_at"`
+	UpdatedAt   string `db:"updated_at"`
+	Brand       string `db:"brand"`
+	BrandID     int    `db:"brand_id"`
+	Category    string `db:"category"`
+	CategoryID  int    `db:"category_id"`
 	Images      []struct {
 		ImageID int    `db:"product_image_id"`
 		URL     string `db:"url"`
