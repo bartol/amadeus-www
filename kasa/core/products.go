@@ -41,7 +41,7 @@ type Product struct {
 	Recommendations []Product
 }
 
-// ProductGet returns single Product
+// ProductGet returns single product
 func ProductGet(productID int, light bool) (Product, error) {
 	product := Product{}
 
@@ -115,7 +115,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 	return product, nil
 }
 
-// ProductList returns list of Product
+// ProductList returns list of product
 func ProductList(offset int, limit int) ([]Product, error) {
 	products := []Product{}
 
@@ -135,7 +135,7 @@ func ProductList(offset int, limit int) ([]Product, error) {
 	return products, nil
 }
 
-// ProductCreate creates product in db and returns created Product
+// ProductCreate creates product in db and returns created product
 func ProductCreate(data map[string]interface{}) (Product, error) {
 	product := Product{}
 
@@ -289,7 +289,7 @@ func ProductCreate(data map[string]interface{}) (Product, error) {
 	return newproduct, nil
 }
 
-// ProductUpdate updates product in db and returns updated Product
+// ProductUpdate updates product in db and returns updated product
 func ProductUpdate(data map[string]interface{}) (Product, error) {
 	product := Product{}
 

@@ -7,7 +7,7 @@ type Brand struct {
 	URL     string `db:"url"`
 }
 
-// BrandGet returns single Brand
+// BrandGet returns single brand
 func BrandGet(brandID int) (Brand, error) {
 	brand := Brand{}
 
@@ -23,7 +23,7 @@ func BrandGet(brandID int) (Brand, error) {
 	return brand, nil
 }
 
-// BrandList returns list of Brand
+// BrandList returns list of brand
 func BrandList() ([]Brand, error) {
 	brands := []Brand{}
 
