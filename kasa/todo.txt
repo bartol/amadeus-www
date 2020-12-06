@@ -13,10 +13,10 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 add url to categories seed
 replace functions in ProductCreate/Update with Brand*, Category*...
+transaction rollback on error??
 
 ProductPrint
 
-BrandCreate
 BrandUpdate
 
 CategoryGet

@@ -19,7 +19,7 @@ func TestBrandGet(t *testing.T) {
 
 func TestBrandList(t *testing.T) {
 	var cases = []struct {
-		goldenFileName string
+		list string
 	}{
 		{"list"},
 	}
@@ -27,5 +27,21 @@ func TestBrandList(t *testing.T) {
 	for _, tc := range cases {
 		brands, err := BrandList()
 		GoldenCheck(t, "brands/BrandList", tc, brands, err)
+	}
+}
+
+func TestBrandCreate(t *testing.T) {
+	var cases = []struct {
+		brandID int
+	}{
+		{6},
+		{7},
+		{8},
+	}
+
+	for _, tc := range cases {
+		data := GoldenGet(t, "brands/BrandCreate", tc)
+		brand, err := BrandCreate(data)
+		GoldenCheck(t, "brands/BrandCreate", tc, brand, err)
 	}
 }

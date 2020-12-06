@@ -1,5 +1,12 @@
 package core
 
+import (
+	"errors"
+
+	"github.com/metal3d/go-slugify"
+	"github.com/mitchellh/mapstructure"
+)
+
 // Brand is struct that contains brand info
 type Brand struct {
 	BrandID int    `db:"brand_id"`
@@ -37,4 +44,59 @@ func BrandList() ([]Brand, error) {
 	}
 
 	return brands, nil
+}
+
+// BrandCreate creates brand in db and returns created brand
+func BrandCreate(data map[string]interface{}) (Brand, error) {
+	brand := Brand{}
+
+	// decode request parameters
+	err := mapstructure.Decode(data, &brand)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// check if brand is valid
+	if brand.Name == "" {
+		err := errors.New("Brend mora imati ime")
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// create brand url from its name
+	brand.URL = slugify.Marshal(brand.Name, true)
+
+	// start db transaction
+	tx, err := Global.DB.Begin()
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// insert brand
+	err = tx.QueryRow(
+		`INSERT INTO brands (name, url)
+			VALUES ($1, $2)
+			RETURNING brand_id;`, brand.Name, brand.URL).Scan(&brand.BrandID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// commit transaction
+	err = tx.Commit()
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// get inserted brand
+	newbrand, err := BrandGet(brand.BrandID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	return newbrand, nil
 }
