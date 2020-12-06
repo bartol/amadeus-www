@@ -1,0 +1,8 @@
+[]core.Brand{
+    {BrandID:3, Name:"Dell", URL:"dell"},
+    {BrandID:4, Name:"HP", URL:"hp"},
+    {BrandID:5, Name:"Lenovo", URL:"lenovo"},
+    {BrandID:1, Name:"Samsung", URL:"samsung"},
+    {BrandID:2, Name:"Sony", URL:"sony"},
+}
+nil

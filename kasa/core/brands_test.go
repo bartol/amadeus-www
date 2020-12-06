@@ -16,3 +16,16 @@ func TestBrandGet(t *testing.T) {
 		GoldenCheck(t, "brands/BrandGet", tc, brand, err)
 	}
 }
+
+func TestBrandList(t *testing.T) {
+	var cases = []struct {
+		goldenFileName string
+	}{
+		{"list"},
+	}
+
+	for _, tc := range cases {
+		brands, err := BrandList()
+		GoldenCheck(t, "brands/BrandList", tc, brands, err)
+	}
+}

@@ -22,3 +22,19 @@ func BrandGet(brandID int) (Brand, error) {
 
 	return brand, nil
 }
+
+// BrandList returns list of Brand
+func BrandList() ([]Brand, error) {
+	brands := []Brand{}
+
+	err := Global.DB.Select(&brands,
+		`SELECT brand_id, name, url
+		FROM brands
+		ORDER BY name ASC`)
+	if err != nil {
+		Global.Log.Error(err)
+		return []Brand{}, err
+	}
+
+	return brands, nil
+}

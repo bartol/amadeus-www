@@ -16,7 +16,6 @@ replace functions in ProductCreate/Update with Brand*, Category*...
 
 ProductPrint
 
-BrandList
 BrandCreate
 BrandUpdate
 
