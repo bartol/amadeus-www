@@ -1,11 +1,13 @@
 CREATE TABLE brands (
   brand_id SERIAL PRIMARY KEY,
-  name TEXT
+  name TEXT,
+  url TEXT
 );
 
 CREATE TABLE categories (
   category_id SERIAL PRIMARY KEY,
-  name TEXT
+  name TEXT,
+  url TEXT
 );
 
 CREATE TABLE products (

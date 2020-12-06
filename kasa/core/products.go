@@ -47,7 +47,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 
 	// get light columns
 	err := Global.DB.Get(&product,
-		`SELECT product_id, p.name, price, discount, quantity, url, recommended, updated_at,
+		`SELECT product_id, p.name, price, discount, quantity, p.url, recommended, updated_at,
 			created_at, brand_id, b.name AS brand, category_id, c.name AS category
 		FROM products p
 		INNER JOIN brands b USING (brand_id)
@@ -99,7 +99,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 		}
 
 		err = Global.DB.Select(&product.Recommendations,
-			`SELECT p.product_id, p.name, price, discount, quantity, url, recommended, updated_at,
+			`SELECT p.product_id, p.name, price, discount, quantity, p.url, recommended, updated_at,
 				created_at, brand_id, b.name AS brand, category_id, c.name AS category
 			FROM product_recommendations r
 			INNER JOIN products p ON recommended_product_id = p.product_id
@@ -120,7 +120,7 @@ func ProductList(offset int, limit int) ([]Product, error) {
 	products := []Product{}
 
 	err := Global.DB.Select(&products,
-		`SELECT product_id, p.name, price, discount, quantity, url, recommended, updated_at,
+		`SELECT product_id, p.name, price, discount, quantity, p.url, recommended, updated_at,
 			created_at, brand_id, b.name AS brand, category_id, c.name AS category
 		FROM products p
 		INNER JOIN brands b USING (brand_id)

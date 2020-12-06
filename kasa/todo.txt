@@ -11,7 +11,7 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
-add url column to categories and brands
+replace functions in ProductCreate/Update with Brand*, Category*...
 
 ProductPrint
 
