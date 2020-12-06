@@ -11,11 +11,11 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
+add url to categories seed
 replace functions in ProductCreate/Update with Brand*, Category*...
 
 ProductPrint
 
-BrandGet
 BrandList
 BrandCreate
 BrandUpdate
