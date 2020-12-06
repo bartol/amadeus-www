@@ -87,3 +87,18 @@ func TestProductUpdate(t *testing.T) {
 		GoldenCheck(t, "products/ProductUpdate", tc, product, err)
 	}
 }
+
+func TestProductCheck(t *testing.T) {
+	var cases = []struct {
+		since string
+	}{
+		{"2020-10-12 17:14:00"},
+		{"2020-10-14 17:14:00"},
+		{"2050-10-14 17:14:00"},
+	}
+
+	for _, tc := range cases {
+		modified, err := ProductCheck(tc.since)
+		GoldenCheck(t, "products/ProductCheck", tc, modified, err)
+	}
+}

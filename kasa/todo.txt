@@ -13,7 +13,6 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 add url column to categories and brands
 
-ProductCheck
 ProductPrint
 
 BrandGet

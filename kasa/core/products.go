@@ -335,7 +335,7 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	// check if product exists
 	var exists bool
 	err = tx.QueryRow(
-		"SELECT EXISTS(SELECT 1 FROM products WHERE product_id = $1)",
+		"SELECT EXISTS(SELECT 1 FROM products WHERE product_id = $1);",
 		product.ProductID).Scan(&exists)
 	if err != nil {
 		Global.Log.Error(err)
@@ -384,7 +384,7 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 			updated_at = NOW()::TIMESTAMP,
 			brand_id = $9,
 			category_id = $10
-		WHERE product_id = $1`, product.ProductID, product.Name, product.Price,
+		WHERE product_id = $1;`, product.ProductID, product.Name, product.Price,
 		product.Discount, product.Quantity, product.Description, product.URL,
 		product.Recommended, product.BrandID, product.CategoryID)
 	if err != nil {
@@ -395,7 +395,7 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	// delete old images
 	_, err = tx.Exec(
 		`DELETE FROM product_images
-		WHERE product_id = $1`, product.ProductID)
+		WHERE product_id = $1;`, product.ProductID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
@@ -415,7 +415,7 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	// delete old feature values
 	_, err = tx.Exec(
 		`DELETE FROM product_feature_values
-		WHERE product_id = $1`, product.ProductID)
+		WHERE product_id = $1;`, product.ProductID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
@@ -448,7 +448,7 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	// delete old publications
 	_, err = tx.Exec(
 		`DELETE FROM product_publications
-		WHERE product_id = $1`, product.ProductID)
+		WHERE product_id = $1;`, product.ProductID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
@@ -468,7 +468,7 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	// delete old recommendations
 	_, err = tx.Exec(
 		`DELETE FROM product_recommendations
-		WHERE product_id = $1`, product.ProductID)
+		WHERE product_id = $1;`, product.ProductID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
@@ -500,4 +500,17 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	}
 
 	return newproduct, nil
+}
+
+// ProductCheck returns true if there are created/updated products
+func ProductCheck(since string) (bool, error) {
+	var modified bool
+	err := Global.DB.QueryRow(
+		"SELECT EXISTS(SELECT 1 FROM products WHERE updated_at > $1 LIMIT 1);",
+		since).Scan(&modified)
+	if err != nil {
+		Global.Log.Error(err)
+		return false, err
+	}
+	return modified, nil
 }
