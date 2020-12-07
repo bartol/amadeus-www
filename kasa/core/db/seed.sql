@@ -7,12 +7,12 @@ INSERT INTO brands (name, url) VALUES
     ('Lenovo', 'lenovo');
 
 -- categories
-INSERT INTO categories (name) VALUES
-    ('Laptopi'),
-    ('Računala'),
-    ('Televizije'),
-    ('Igraće konzole'),
-    ('Klima uređaji');
+INSERT INTO categories (name, url) VALUES
+    ('Laptopi', 'laptopi'),
+    ('Računala', 'racunala'),
+    ('Televizije', 'televizije'),
+    ('Igraće konzole', 'igrace-konzole'),
+    ('Klima uređaji', 'klima-uredaji');
 
 -- products
 INSERT INTO products (name,price,discount,quantity,description,url,recommended,created_at,updated_at,brand_id,category_id) VALUES
