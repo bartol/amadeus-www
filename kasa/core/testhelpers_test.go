@@ -51,7 +51,12 @@ func GoldenCheck(t *testing.T, dir string, tc interface{}, returned ...interface
 		// create empty golden file if it doesn't exist
 		_, err := os.Stat(goldenPath)
 		if os.IsNotExist(err) {
-			ioutil.WriteFile(goldenPath, []byte{}, 0644)
+			file, err := ioutil.TempFile("/tmp/amadeus-kasa", "golden.out.")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer os.Remove(file.Name())
+			goldenPath = file.Name()
 		}
 
 		// read golden file
@@ -63,7 +68,7 @@ func GoldenCheck(t *testing.T, dir string, tc interface{}, returned ...interface
 		// compare
 		if !bytes.Equal(actual, golden) {
 			// write actual to file and run diff on it
-			file, err := ioutil.TempFile("/tmp/amadeus-kasa", "testfile")
+			file, err := ioutil.TempFile("/tmp/amadeus-kasa", "golden.in.")
 			if err != nil {
 				t.Fatal(err)
 			}
