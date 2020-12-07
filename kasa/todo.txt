@@ -17,8 +17,6 @@ transaction rollback on error??
 
 ProductPrint
 
-newbrand -> createdbrand
-
 CategoryGet
 CategoryList
 CategoryCreate

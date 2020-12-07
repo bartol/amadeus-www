@@ -92,13 +92,13 @@ func BrandCreate(data map[string]interface{}) (Brand, error) {
 	}
 
 	// get inserted brand
-	newbrand, err := BrandGet(brand.BrandID)
+	createdbrand, err := BrandGet(brand.BrandID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Brand{}, err
 	}
 
-	return newbrand, nil
+	return createdbrand, nil
 }
 
 // BrandUpdate creates brand in db and returns created brand
