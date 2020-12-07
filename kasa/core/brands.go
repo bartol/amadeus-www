@@ -100,3 +100,77 @@ func BrandCreate(data map[string]interface{}) (Brand, error) {
 
 	return newbrand, nil
 }
+
+// BrandUpdate creates brand in db and returns created brand
+func BrandUpdate(data map[string]interface{}) (Brand, error) {
+	brand := Brand{}
+
+	// decode request parameters
+	err := mapstructure.Decode(data, &brand)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// check if brand is valid
+	if brand.Name == "" {
+		err := errors.New("Brend mora imati ime")
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// create brand url from its name
+	brand.URL = slugify.Marshal(brand.Name, true)
+
+	// start db transaction
+	tx, err := Global.DB.Begin()
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// check if brand exists
+	var exists bool
+	err = tx.QueryRow(
+		`SELECT EXISTS(
+			SELECT 1
+			FROM brands
+			WHERE brand_id = $1
+		);`, brand.BrandID).Scan(&exists)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+	if !exists {
+		err := errors.New("Brend ne postoji")
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// update brand
+	_, err = tx.Exec(
+		`UPDATE brands
+			SET name = $2,
+				url = $3
+			WHERE brand_id = $1;`, brand.BrandID, brand.Name, brand.URL)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// commit transaction
+	err = tx.Commit()
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	// get updated brand
+	updatedbrand, err := BrandGet(brand.BrandID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Brand{}, err
+	}
+
+	return updatedbrand, nil
+}

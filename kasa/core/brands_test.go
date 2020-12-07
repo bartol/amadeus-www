@@ -45,3 +45,19 @@ func TestBrandCreate(t *testing.T) {
 		GoldenCheck(t, "brands/BrandCreate", tc, brand, err)
 	}
 }
+
+func TestBrandUpdate(t *testing.T) {
+	var cases = []struct {
+		brandID int
+	}{
+		{1},
+		{2},
+		{50},
+	}
+
+	for _, tc := range cases {
+		data := GoldenGet(t, "brands/BrandUpdate", tc)
+		brand, err := BrandUpdate(data)
+		GoldenCheck(t, "brands/BrandUpdate", tc, brand, err)
+	}
+}
