@@ -23,15 +23,15 @@ CREATE TABLE products (
   updated_at TIMESTAMP,
   brand_id INTEGER,
   category_id INTEGER,
-  FOREIGN KEY (brand_id) REFERENCES brands(brand_id),
-  FOREIGN KEY (category_id) REFERENCES categories(category_id)
+  FOREIGN KEY (brand_id) REFERENCES brands,
+  FOREIGN KEY (category_id) REFERENCES categories
 );
 
 CREATE TABLE product_images (
   product_image_id SERIAL PRIMARY KEY,
   url TEXT,
   product_id INTEGER,
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  FOREIGN KEY (product_id) REFERENCES products
 );
 
 CREATE TABLE product_features (
@@ -39,7 +39,7 @@ CREATE TABLE product_features (
   name TEXT,
   recommended BOOLEAN,
   category_id INTEGER,
-  FOREIGN KEY (category_id) REFERENCES categories(category_id)
+  FOREIGN KEY (category_id) REFERENCES categories
 );
 
 CREATE TABLE product_feature_values (
@@ -47,8 +47,8 @@ CREATE TABLE product_feature_values (
   value TEXT,
   product_feature_id INTEGER,
   product_id INTEGER,
-  FOREIGN KEY (product_feature_id) REFERENCES product_features(product_feature_id),
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  FOREIGN KEY (product_feature_id) REFERENCES product_features,
+  FOREIGN KEY (product_id) REFERENCES products
 );
 
 CREATE TABLE publications (
@@ -60,8 +60,8 @@ CREATE TABLE product_publications (
   product_publication_id SERIAL PRIMARY KEY,
   publication_id INTEGER,
   product_id INTEGER,
-  FOREIGN KEY (publication_id) REFERENCES publications(publication_id),
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  FOREIGN KEY (publication_id) REFERENCES publications,
+  FOREIGN KEY (product_id) REFERENCES products
 );
 
 CREATE TABLE product_recommendations (
@@ -69,7 +69,7 @@ CREATE TABLE product_recommendations (
   recommended_product_id INTEGER,
   product_id INTEGER,
   FOREIGN KEY (recommended_product_id) REFERENCES products(product_id),
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  FOREIGN KEY (product_id) REFERENCES products
 );
 
 CREATE TABLE customers (
@@ -91,15 +91,15 @@ CREATE TABLE receipts (
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
   customer_id INTEGER,
-  FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+  FOREIGN KEY (customer_id) REFERENCES customers
 );
 
 CREATE TABLE receipt_products (
   receipt_product_id SERIAL PRIMARY KEY,
   receipt_id INTEGER,
   product_id INTEGER,
-  FOREIGN KEY (receipt_id) REFERENCES receipts(receipt_id),
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  FOREIGN KEY (receipt_id) REFERENCES receipts,
+  FOREIGN KEY (product_id) REFERENCES products
 );
 
 CREATE TABLE offers (
@@ -108,13 +108,13 @@ CREATE TABLE offers (
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
   customer_id INTEGER,
-  FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+  FOREIGN KEY (customer_id) REFERENCES customers
 );
 
 CREATE TABLE offer_products (
   offer_product_id SERIAL PRIMARY KEY,
   offer_id INTEGER,
   product_id INTEGER,
-  FOREIGN KEY (offer_id) REFERENCES offers(offer_id),
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  FOREIGN KEY (offer_id) REFERENCES offers,
+  FOREIGN KEY (product_id) REFERENCES products
 );
