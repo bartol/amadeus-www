@@ -3,7 +3,7 @@ package core
 import (
 	"errors"
 
-	"github.com/metal3d/go-slugify"
+	"github.com/gosimple/slug"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -65,7 +65,7 @@ func BrandCreate(data map[string]interface{}) (Brand, error) {
 	}
 
 	// create brand url from its name
-	brand.URL = slugify.Marshal(brand.Name, true)
+	brand.URL = slug.Make(brand.Name)
 
 	// start db transaction
 	tx, err := Global.DB.Begin()
@@ -120,7 +120,7 @@ func BrandUpdate(data map[string]interface{}) (Brand, error) {
 	}
 
 	// create brand url from its name
-	brand.URL = slugify.Marshal(brand.Name, true)
+	brand.URL = slug.Make(brand.Name)
 
 	// start db transaction
 	tx, err := Global.DB.Begin()
