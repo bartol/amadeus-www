@@ -180,26 +180,26 @@ func ProductCreate(data map[string]interface{}) (Product, error) {
 
 	// if brand has a name but invalid id, it should be created
 	if product.BrandID == 0 {
-		err := tx.QueryRow(
-			`INSERT INTO brands (name)
-			VALUES ($1)
-			RETURNING brand_id;`, product.Brand).Scan(&product.BrandID)
+		brand, err := BrandCreate(map[string]interface{}{
+			"Name": product.Brand,
+		})
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
 		}
+		product.BrandID = brand.BrandID
 	}
 
 	// if category has a name but invalid id, it should be created
 	if product.CategoryID == 0 {
-		err := tx.QueryRow(
-			`INSERT INTO categories (name)
-			VALUES ($1)
-			RETURNING category_id;`, product.Category).Scan(&product.CategoryID)
+		category, err := CategoryCreate(map[string]interface{}{
+			"Name": product.Category,
+		})
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
 		}
+		product.CategoryID = category.CategoryID
 	}
 
 	// insert product
@@ -352,26 +352,26 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 
 	// if brand has a name but invalid id, it should be created
 	if product.BrandID == 0 {
-		err := tx.QueryRow(
-			`INSERT INTO brands (name)
-			VALUES ($1)
-			RETURNING brand_id;`, product.Brand).Scan(&product.BrandID)
+		brand, err := BrandCreate(map[string]interface{}{
+			"Name": product.Brand,
+		})
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
 		}
+		product.BrandID = brand.BrandID
 	}
 
 	// if category has a name but invalid id, it should be created
 	if product.CategoryID == 0 {
-		err := tx.QueryRow(
-			`INSERT INTO categories (name)
-			VALUES ($1)
-			RETURNING category_id;`, product.Category).Scan(&product.CategoryID)
+		category, err := CategoryCreate(map[string]interface{}{
+			"Name": product.Category,
+		})
 		if err != nil {
 			Global.Log.Error(err)
 			return Product{}, err
 		}
+		product.CategoryID = category.CategoryID
 	}
 
 	// update product
