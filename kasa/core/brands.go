@@ -46,7 +46,7 @@ func BrandList() ([]Brand, error) {
 	return brands, nil
 }
 
-// BrandCreate creates brand in db and returns created brand
+// BrandCreate creates brand in db and returns it
 func BrandCreate(data map[string]interface{}) (Brand, error) {
 	brand := Brand{}
 
@@ -77,8 +77,8 @@ func BrandCreate(data map[string]interface{}) (Brand, error) {
 	// insert brand
 	err = tx.QueryRow(
 		`INSERT INTO brands (name, url)
-			VALUES ($1, $2)
-			RETURNING brand_id;`, brand.Name, brand.URL).Scan(&brand.BrandID)
+		VALUES ($1, $2)
+		RETURNING brand_id;`, brand.Name, brand.URL).Scan(&brand.BrandID)
 	if err != nil {
 		Global.Log.Error(err)
 		return Brand{}, err
@@ -91,7 +91,7 @@ func BrandCreate(data map[string]interface{}) (Brand, error) {
 		return Brand{}, err
 	}
 
-	// get inserted brand
+	// get created brand
 	createdbrand, err := BrandGet(brand.BrandID)
 	if err != nil {
 		Global.Log.Error(err)
@@ -101,7 +101,7 @@ func BrandCreate(data map[string]interface{}) (Brand, error) {
 	return createdbrand, nil
 }
 
-// BrandUpdate creates brand in db and returns created brand
+// BrandUpdate updates brand in db and returns it
 func BrandUpdate(data map[string]interface{}) (Brand, error) {
 	brand := Brand{}
 
@@ -150,9 +150,9 @@ func BrandUpdate(data map[string]interface{}) (Brand, error) {
 	// update brand
 	_, err = tx.Exec(
 		`UPDATE brands
-			SET name = $2,
-				url = $3
-			WHERE brand_id = $1;`, brand.BrandID, brand.Name, brand.URL)
+		SET name = $2,
+			url = $3
+		WHERE brand_id = $1;`, brand.BrandID, brand.Name, brand.URL)
 	if err != nil {
 		Global.Log.Error(err)
 		return Brand{}, err

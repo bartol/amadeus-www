@@ -29,3 +29,19 @@ func TestCategoryList(t *testing.T) {
 		GoldenCheck(t, "categories/CategoryList", tc, categories, err)
 	}
 }
+
+func TestCategoryCreate(t *testing.T) {
+	var cases = []struct {
+		categoryID int
+	}{
+		{6},
+		{7},
+		{8},
+	}
+
+	for _, tc := range cases {
+		data := GoldenGet(t, "categories/CategoryCreate", tc)
+		category, err := CategoryCreate(data)
+		GoldenCheck(t, "categories/CategoryCreate", tc, category, err)
+	}
+}

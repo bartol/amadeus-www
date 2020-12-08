@@ -1,5 +1,12 @@
 package core
 
+import (
+	"errors"
+
+	"github.com/gosimple/slug"
+	"github.com/mitchellh/mapstructure"
+)
+
 // Category is struct that contains category info
 type Category struct {
 	CategoryID int    `db:"category_id"`
@@ -37,4 +44,59 @@ func CategoryList() ([]Category, error) {
 	}
 
 	return categories, nil
+}
+
+// CategoryCreate creates category in db and returns it
+func CategoryCreate(data map[string]interface{}) (Category, error) {
+	category := Category{}
+
+	// decode request parameters
+	err := mapstructure.Decode(data, &category)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// check if category is valid
+	if category.Name == "" {
+		err := errors.New("Kategorija mora imati ime")
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// create category url from its name
+	category.URL = slug.Make(category.Name)
+
+	// start db transaction
+	tx, err := Global.DB.Begin()
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// insert category
+	err = tx.QueryRow(
+		`INSERT INTO categories (name, url)
+		VALUES ($1, $2)
+		RETURNING category_id;`, category.Name, category.URL).Scan(&category.CategoryID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// commit transaction
+	err = tx.Commit()
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// get created category
+	createdcategory, err := CategoryGet(category.CategoryID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	return createdcategory, nil
 }

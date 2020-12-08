@@ -135,7 +135,7 @@ func ProductList(offset int, limit int) ([]Product, error) {
 	return products, nil
 }
 
-// ProductCreate creates product in db and returns created product
+// ProductCreate creates product in db and returns it
 func ProductCreate(data map[string]interface{}) (Product, error) {
 	product := Product{}
 
@@ -279,17 +279,17 @@ func ProductCreate(data map[string]interface{}) (Product, error) {
 		return Product{}, err
 	}
 
-	// get inserted product
-	newproduct, err := ProductGet(product.ProductID, false)
+	// get created product
+	createdproduct, err := ProductGet(product.ProductID, false)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
 	}
 
-	return newproduct, nil
+	return createdproduct, nil
 }
 
-// ProductUpdate updates product in db and returns updated product
+// ProductUpdate updates product in db and returns it
 func ProductUpdate(data map[string]interface{}) (Product, error) {
 	product := Product{}
 
@@ -495,14 +495,14 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 		return Product{}, err
 	}
 
-	// get inserted product
-	newproduct, err := ProductGet(product.ProductID, false)
+	// get updated product
+	updatedproduct, err := ProductGet(product.ProductID, false)
 	if err != nil {
 		Global.Log.Error(err)
 		return Product{}, err
 	}
 
-	return newproduct, nil
+	return updatedproduct, nil
 }
 
 // ProductCheck returns true if there are created/updated products
