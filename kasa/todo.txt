@@ -11,8 +11,5 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
-transaction rollback on error??
-
 ProductPrint
 
-PublicationList
