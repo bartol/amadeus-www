@@ -11,16 +11,9 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
-add url to categories seed
 replace functions in ProductCreate/Update with Brand*, Category*...
 transaction rollback on error??
 
 ProductPrint
 
-CategoryCreate
-CategoryUpdate
-
 PublicationList
-
----
-if not exist bounce to create

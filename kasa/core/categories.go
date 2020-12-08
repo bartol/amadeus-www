@@ -100,3 +100,77 @@ func CategoryCreate(data map[string]interface{}) (Category, error) {
 
 	return createdcategory, nil
 }
+
+// CategoryUpdate updates category in db and returns it
+func CategoryUpdate(data map[string]interface{}) (Category, error) {
+	category := Category{}
+
+	// decode request parameters
+	err := mapstructure.Decode(data, &category)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// check if category is valid
+	if category.Name == "" {
+		err := errors.New("Kategorija mora imati ime")
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// create category url from its name
+	category.URL = slug.Make(category.Name)
+
+	// start db transaction
+	tx, err := Global.DB.Begin()
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// check if category exists
+	var exists bool
+	err = tx.QueryRow(
+		`SELECT EXISTS(
+			SELECT 1
+			FROM categories
+			WHERE category_id = $1
+		);`, category.CategoryID).Scan(&exists)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+	if !exists {
+		err := errors.New("Kategorija ne postoji")
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// update category
+	_, err = tx.Exec(
+		`UPDATE categories
+		SET name = $2,
+			url = $3
+		WHERE category_id = $1;`, category.CategoryID, category.Name, category.URL)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// commit transaction
+	err = tx.Commit()
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	// get updated category
+	updatedcategory, err := CategoryGet(category.CategoryID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Category{}, err
+	}
+
+	return updatedcategory, nil
+}

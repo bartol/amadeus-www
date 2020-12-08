@@ -1,0 +1,2 @@
+core.Category{}
+&errors.errorString{s:"Kategorija mora imati ime"}
