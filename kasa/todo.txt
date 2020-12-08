@@ -13,3 +13,25 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 ProductPrint
 
+CustomerGet
+CustomerList
+CustomerCreate
+CustomerUpdate
+CustomerCheck
+CustomerPrint
+
+ReceiptGet
+ReceiptList
+ReceiptCreate
+ReceiptUpdate
+ReceiptCheck
+ReceiptPrint
+
+OfferGet
+OfferList
+OfferCreate
+OfferUpdate
+OfferCheck
+OfferPrint
+
+features?
