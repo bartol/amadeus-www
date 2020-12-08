@@ -17,8 +17,6 @@ transaction rollback on error??
 
 ProductPrint
 
-CategoryGet
-CategoryList
 CategoryCreate
 CategoryUpdate
 

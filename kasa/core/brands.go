@@ -30,7 +30,7 @@ func BrandGet(brandID int) (Brand, error) {
 	return brand, nil
 }
 
-// BrandList returns list of brand
+// BrandList returns list of brands
 func BrandList() ([]Brand, error) {
 	brands := []Brand{}
 

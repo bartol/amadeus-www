@@ -115,7 +115,7 @@ func ProductGet(productID int, light bool) (Product, error) {
 	return product, nil
 }
 
-// ProductList returns list of product
+// ProductList returns list of products
 func ProductList(offset int, limit int) ([]Product, error) {
 	products := []Product{}
 

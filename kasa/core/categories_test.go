@@ -16,3 +16,16 @@ func TestCategoryGet(t *testing.T) {
 		GoldenCheck(t, "categories/CategoryGet", tc, category, err)
 	}
 }
+
+func TestCategoryList(t *testing.T) {
+	var cases = []struct {
+		list string
+	}{
+		{"list"},
+	}
+
+	for _, tc := range cases {
+		categories, err := CategoryList()
+		GoldenCheck(t, "categories/CategoryList", tc, categories, err)
+	}
+}

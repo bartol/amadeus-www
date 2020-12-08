@@ -22,3 +22,19 @@ func CategoryGet(categoryID int) (Category, error) {
 
 	return category, nil
 }
+
+// CategoryList returns list of categories
+func CategoryList() ([]Category, error) {
+	categories := []Category{}
+
+	err := Global.DB.Select(&categories,
+		`SELECT category_id, name, url
+		FROM categories
+		ORDER BY name ASC`)
+	if err != nil {
+		Global.Log.Error(err)
+		return []Category{}, err
+	}
+
+	return categories, nil
+}
