@@ -135,6 +135,28 @@ func ProductList(offset int, limit int) ([]Product, error) {
 	return products, nil
 }
 
+// ProductSearch returns list of products filtered by query
+func ProductSearch(query string, offset int, limit int) ([]Product, error) {
+	products := []Product{}
+
+	err := Global.DB.Select(&products,
+		`SELECT product_id, ts_headline(p.name, to_tsquery($1)) AS name, price,
+			discount, quantity, p.url, recommended, updated_at, created_at,
+			brand_id, b.name AS brand, category_id, c.name AS category
+		FROM products p
+		INNER JOIN brands b USING (brand_id)
+		INNER JOIN categories c USING (category_id)
+		WHERE tsv @@ to_tsquery($1)
+		ORDER BY ts_rank(tsv, to_tsquery($1)) DESC
+		OFFSET $2 LIMIT $3;`, query, offset, limit)
+	if err != nil {
+		Global.Log.Error(err)
+		return []Product{}, err
+	}
+
+	return products, nil
+}
+
 // ProductCreate creates product in db and returns it
 func ProductCreate(data map[string]interface{}) (Product, error) {
 	product := Product{}

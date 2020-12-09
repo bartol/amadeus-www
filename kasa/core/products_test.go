@@ -45,6 +45,24 @@ func TestProductList(t *testing.T) {
 	}
 }
 
+func TestProductSearch(t *testing.T) {
+	var cases = []struct {
+		query  string
+		offset int
+		limit  int
+	}{
+		{"sony", 0, 50},
+		{"sony", 1, 50},
+		{"sony", 0, 1},
+		{"sony", 50, 50},
+	}
+
+	for _, tc := range cases {
+		products, err := ProductSearch(tc.query, tc.offset, tc.limit)
+		GoldenCheck(t, "products/ProductSearch", tc, products, err)
+	}
+}
+
 func TestProductCreate(t *testing.T) {
 	var cases = []struct {
 		productID int

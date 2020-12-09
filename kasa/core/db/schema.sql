@@ -21,11 +21,26 @@ CREATE TABLE products (
   recommended BOOLEAN,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
+  tsv TSVECTOR,
   brand_id INTEGER,
   category_id INTEGER,
   FOREIGN KEY (brand_id) REFERENCES brands,
   FOREIGN KEY (category_id) REFERENCES categories
 );
+
+CREATE FUNCTION products_trigger() RETURNS trigger AS $$
+begin
+new.tsv :=
+  setweight(to_tsvector(new.name), 'A') ||
+  setweight(to_tsvector(new.description), 'B');
+return new;
+end
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
+ON products FOR EACH ROW EXECUTE PROCEDURE products_trigger();
+
+CREATE INDEX tsvector_idx ON products USING GIN (tsv);
 
 CREATE TABLE product_images (
   product_image_id SERIAL PRIMARY KEY,

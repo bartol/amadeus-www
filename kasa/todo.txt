@@ -11,7 +11,6 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 -- TODO
 
-ProductSearch
 ProductPrint
 
 CustomerGet
@@ -24,18 +23,18 @@ CustomerPrint
 
 ReceiptGet
 ReceiptList
+ReceiptSearch
+ReceiptCheck
 ReceiptCreate
 ReceiptUpdate
-ReceiptCheck
-ReceiptSearch
 ReceiptPrint
 
 OfferGet
 OfferList
+OfferSearch
+OfferCheck
 OfferCreate
 OfferUpdate
-OfferCheck
-OfferSearch
 OfferPrint
 
 features?
