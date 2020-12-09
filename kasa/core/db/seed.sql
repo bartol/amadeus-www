@@ -43,11 +43,6 @@ INSERT INTO product_feature_values (value,product_feature_id,product_id) VALUES
     ('AMD Ryzen 3 3200U (2C / 4T, 2.6 / 3.5GHz, 1MB L2 / 4MB L3)',1,4),
     ('Free DOS',3,4);
 
--- publications
-INSERT INTO publications (name) VALUES
-    ('amadeus2.hr'),
-    ('pioneer.hr');
-
 -- product_publications
 INSERT INTO product_publications (publication_id,product_id) VALUES
     (1,1),

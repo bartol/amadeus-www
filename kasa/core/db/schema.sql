@@ -79,6 +79,10 @@ CREATE TABLE product_publications (
   FOREIGN KEY (product_id) REFERENCES products
 );
 
+INSERT INTO publications (name) VALUES
+  ('amadeus2.hr'),
+  ('pioneer.hr');
+
 CREATE TABLE product_recommendations (
   product_recommendation_id SERIAL PRIMARY KEY,
   recommended_product_id INTEGER,
