@@ -63,6 +63,21 @@ func TestProductSearch(t *testing.T) {
 	}
 }
 
+func TestProductCheck(t *testing.T) {
+	var cases = []struct {
+		since string
+	}{
+		{"2020-10-12 17:14:00"},
+		{"2020-10-14 17:14:00"},
+		{"2050-10-14 17:14:00"},
+	}
+
+	for _, tc := range cases {
+		modified, err := ProductCheck(tc.since)
+		GoldenCheck(t, "products/ProductCheck", tc, modified, err)
+	}
+}
+
 func TestProductCreate(t *testing.T) {
 	var cases = []struct {
 		productID int
@@ -103,20 +118,5 @@ func TestProductUpdate(t *testing.T) {
 		product, err := ProductUpdate(data)
 		RemoveDateFields(&product)
 		GoldenCheck(t, "products/ProductUpdate", tc, product, err)
-	}
-}
-
-func TestProductCheck(t *testing.T) {
-	var cases = []struct {
-		since string
-	}{
-		{"2020-10-12 17:14:00"},
-		{"2020-10-14 17:14:00"},
-		{"2050-10-14 17:14:00"},
-	}
-
-	for _, tc := range cases {
-		modified, err := ProductCheck(tc.since)
-		GoldenCheck(t, "products/ProductCheck", tc, modified, err)
 	}
 }

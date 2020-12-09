@@ -157,6 +157,23 @@ func ProductSearch(query string, offset int, limit int) ([]Product, error) {
 	return products, nil
 }
 
+// ProductCheck returns true if there are created/updated products
+func ProductCheck(since string) (bool, error) {
+	var modified bool
+	err := Global.DB.QueryRow(
+		`SELECT EXISTS(
+			SELECT 1
+			FROM products
+			WHERE updated_at > $1
+			LIMIT 1
+		);`, since).Scan(&modified)
+	if err != nil {
+		Global.Log.Error(err)
+		return false, err
+	}
+	return modified, nil
+}
+
 // ProductCreate creates product in db and returns it
 func ProductCreate(data map[string]interface{}) (Product, error) {
 	product := Product{}
@@ -525,21 +542,4 @@ func ProductUpdate(data map[string]interface{}) (Product, error) {
 	}
 
 	return updatedproduct, nil
-}
-
-// ProductCheck returns true if there are created/updated products
-func ProductCheck(since string) (bool, error) {
-	var modified bool
-	err := Global.DB.QueryRow(
-		`SELECT EXISTS(
-			SELECT 1
-			FROM products
-			WHERE updated_at > $1
-			LIMIT 1
-		);`, since).Scan(&modified)
-	if err != nil {
-		Global.Log.Error(err)
-		return false, err
-	}
-	return modified, nil
 }
