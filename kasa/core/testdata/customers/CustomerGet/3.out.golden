@@ -1,0 +1,2 @@
+core.Customer{CustomerID:3, Name:"Stjepan Radić", Address:"Vladimira Nazora 45", PostalCode:"Ploče", City:"20340", Country:"Hrvatska", Phone:"0987654321", OIB:"", CreatedAt:"2020-10-12T17:13:54.287936Z", UpdatedAt:"2020-10-12T17:13:54.287936Z", Type:"Fizička osoba", TypeID:"1"}
+nil

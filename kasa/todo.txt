@@ -9,6 +9,8 @@ https://www.musicstore.com/en_HR/HRK
 https://aukro.cz/
 https://github.com/chekromul/uikit-ecommerce-template
 
+add publ. insert to schema.sql
+
 -- TODO
 
 ProductPrint

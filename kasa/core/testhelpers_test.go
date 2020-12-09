@@ -104,11 +104,16 @@ func GoldenGet(t *testing.T, dir string, tc interface{}) map[string]interface{} 
 	return data
 }
 
-func RemoveDateFields(product *Product) {
+func ProductRemoveDateFields(product *Product) {
 	product.CreatedAt = ""
 	product.UpdatedAt = ""
 	for i := range product.Recommendations {
 		product.Recommendations[i].CreatedAt = ""
 		product.Recommendations[i].UpdatedAt = ""
 	}
+}
+
+func CustomerRemoveDateFields(customer *Customer) {
+	customer.CreatedAt = ""
+	customer.UpdatedAt = ""
 }

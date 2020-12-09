@@ -87,6 +87,15 @@ CREATE TABLE product_recommendations (
   FOREIGN KEY (product_id) REFERENCES products
 );
 
+CREATE TABLE customer_types (
+  customer_type_id SERIAL PRIMARY KEY,
+  name TEXT
+);
+
+INSERT INTO customer_types (name) VALUES
+  ('Fizička osoba'),
+  ('Pravna osoba');
+
 CREATE TABLE customers (
   customer_id SERIAL PRIMARY KEY,
   name TEXT,
@@ -97,7 +106,9 @@ CREATE TABLE customers (
   phone TEXT,
   oib TEXT,
   created_at TIMESTAMP,
-  updated_at TIMESTAMP
+  updated_at TIMESTAMP,
+  customer_type_id INTEGER,
+  FOREIGN KEY (customer_type_id) REFERENCES customer_types
 );
 
 CREATE TABLE receipts (
