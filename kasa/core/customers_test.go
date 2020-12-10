@@ -35,3 +35,26 @@ func TestCustomerList(t *testing.T) {
 		GoldenCheck(t, "customers/CustomerList", tc, customers, err)
 	}
 }
+
+func TestCustomerSearch(t *testing.T) {
+	var cases = []struct {
+		query  string
+		offset int
+		limit  int
+	}{
+		{"vladimira nazora", 0, 50},
+		{"vladimira nazora", 1, 1},
+		{"vladimira nazora", 50, 50},
+		{"ploce", 0, 50},
+		{"ploče", 0, 50},
+		{"hrvatska", 0, 50},
+		{"starcevic", 0, 50},
+		{"1234567891", 0, 50}, // oib
+		{"0987654321", 0, 50}, // broj
+	}
+
+	for _, tc := range cases {
+		customers, err := CustomerSearch(tc.query, tc.offset, tc.limit)
+		GoldenCheck(t, "customers/CustomerSearch", tc, customers, err)
+	}
+}

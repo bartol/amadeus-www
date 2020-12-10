@@ -52,3 +52,24 @@ func CustomerList(offset int, limit int) ([]Customer, error) {
 
 	return customers, nil
 }
+
+// CustomerSearch returns list of customers filtered by query
+func CustomerSearch(query string, offset int, limit int) ([]Customer, error) {
+	customers := []Customer{}
+
+	err := Global.DB.Select(&customers,
+		`SELECT customer_id, ts_headline(c.name, plainto_tsquery(unaccent($1))) AS name,
+			address, postal_code, city, country, phone, oib, created_at, updated_at,
+			customer_type_id, t.name AS type
+		FROM customers c
+		INNER JOIN customer_types t USING (customer_type_id)
+		WHERE tsv @@ plainto_tsquery(unaccent($1))
+		ORDER BY ts_rank(tsv, plainto_tsquery(unaccent($1))) DESC
+		OFFSET $2 LIMIT $3;`, query, offset, limit)
+	if err != nil {
+		Global.Log.Error(err)
+		return []Customer{}, err
+	}
+
+	return customers, nil
+}

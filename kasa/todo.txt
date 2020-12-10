@@ -13,7 +13,6 @@ https://github.com/chekromul/uikit-ecommerce-template
 
 ProductPrint
 
-
 CustomerCreate
 CustomerUpdate
 CustomerCheck

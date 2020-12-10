@@ -56,10 +56,10 @@ INSERT INTO product_recommendations (recommended_product_id,product_id) VALUES
 -- customers
 INSERT INTO customers (name,address,postal_code,city,country,phone,oib,created_at,updated_at,customer_type_id) VALUES
     ('Ante Starčević','Vladimira Nazora 45','Ploče','20340','Hrvatska','','','2020-10-12 17:13:54.287936','2020-10-12 17:13:54.287936',1),
-    ('Marko Marulić','Vladimira Nazora 45','Ploče','20340','Hrvatska','','','2020-10-12 17:13:54.287936','2020-10-12 17:13:54.287936',1),
+    ('Marko Marulić','Vladimira Nazora 45','Split','20340','Hrvatska','','','2020-10-12 17:13:54.287936','2020-10-12 17:13:54.287936',1),
     ('Stjepan Radić','Vladimira Nazora 45','Ploče','20340','Hrvatska','0987654321','','2020-10-12 17:13:54.287936','2020-10-12 17:13:54.287936',1),
     ('Amadeus III d.o.o.','Vladimira Nazora 45','Ploče','20340','Hrvatska','','1234567890','2020-10-12 17:13:54.287936','2020-10-13 17:13:54.287936',2),
-    ('Produžni kablovi d.d.','Vladimira Nazora 45','Ploče','20340','Hrvatska','','1234567891','2020-10-12 17:13:54.287936','2020-10-12 17:13:54.287936',2);
+    ('Produžni kablovi d.d.','ulica broj','grad','20340','zemlja','','1234567891','2020-10-12 17:13:54.287936','2020-10-12 17:13:54.287936',2);
 
 -- receipts
 INSERT INTO receipts (message,created_at,updated_at,customer_id) VALUES

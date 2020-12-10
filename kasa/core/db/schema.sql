@@ -1,3 +1,5 @@
+CREATE EXTENSION unaccent;
+
 CREATE TABLE brands (
   brand_id SERIAL PRIMARY KEY,
   name TEXT,
@@ -31,8 +33,8 @@ CREATE TABLE products (
 CREATE FUNCTION products_trigger() RETURNS trigger AS $$
 begin
 new.tsv :=
-  setweight(to_tsvector(new.name), 'A') ||
-  setweight(to_tsvector(new.description), 'B');
+  setweight(to_tsvector(unaccent(new.name)), 'A') ||
+  setweight(to_tsvector(unaccent(new.description)), 'B');
 return new;
 end
 $$ LANGUAGE plpgsql;
@@ -111,9 +113,29 @@ CREATE TABLE customers (
   oib TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
+  tsv TSVECTOR,
   customer_type_id INTEGER,
   FOREIGN KEY (customer_type_id) REFERENCES customer_types
 );
+
+CREATE FUNCTION customers_trigger() RETURNS trigger AS $$
+begin
+new.tsv :=
+  setweight(to_tsvector(unaccent(new.name)), 'A') ||
+  setweight(to_tsvector(unaccent(new.address)), 'B') ||
+  setweight(to_tsvector(unaccent(new.postal_code)), 'B') ||
+  setweight(to_tsvector(unaccent(new.city)), 'B') ||
+  setweight(to_tsvector(unaccent(new.country)), 'B') ||
+  setweight(to_tsvector(unaccent(new.phone)), 'B') ||
+  setweight(to_tsvector(unaccent(new.oib)), 'B');
+return new;
+end
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
+ON customers FOR EACH ROW EXECUTE PROCEDURE customers_trigger();
+
+CREATE INDEX tsvector_idx ON customers USING GIN (tsv);
 
 CREATE TABLE receipts (
   receipt_id SERIAL PRIMARY KEY,
