@@ -22,7 +22,7 @@ func CustomerGet(customerID int) (Customer, error) {
 
 	err := Global.DB.Get(&customer,
 		`SELECT customer_id, c.name, address, postal_code, city, country,
-		phone, oib, created_at, updated_at, customer_type_id, t.name AS type
+			phone, oib, created_at, updated_at, customer_type_id, t.name AS type
 		FROM customers c
 		INNER JOIN customer_types t USING (customer_type_id)
 		WHERE customer_id = $1;`, customerID)
@@ -32,4 +32,23 @@ func CustomerGet(customerID int) (Customer, error) {
 	}
 
 	return customer, nil
+}
+
+// CustomerList returns list of customers
+func CustomerList(offset int, limit int) ([]Customer, error) {
+	customers := []Customer{}
+
+	err := Global.DB.Select(&customers,
+		`SELECT customer_id, c.name, address, postal_code, city, country,
+			phone, oib, created_at, updated_at, customer_type_id, t.name AS type
+		FROM customers c
+		INNER JOIN customer_types t USING (customer_type_id)
+		ORDER BY updated_at DESC
+		OFFSET $1 LIMIT $2;`, offset, limit)
+	if err != nil {
+		Global.Log.Error(err)
+		return []Customer{}, err
+	}
+
+	return customers, nil
 }

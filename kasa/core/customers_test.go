@@ -19,3 +19,19 @@ func TestCustomerGet(t *testing.T) {
 		GoldenCheck(t, "customers/CustomerGet", tc, customer, err)
 	}
 }
+
+func TestCustomerList(t *testing.T) {
+	var cases = []struct {
+		offset int
+		limit  int
+	}{
+		{0, 2},
+		{2, 6},
+		{50, 2},
+	}
+
+	for _, tc := range cases {
+		customers, err := CustomerList(tc.offset, tc.limit)
+		GoldenCheck(t, "customers/CustomerList", tc, customers, err)
+	}
+}
