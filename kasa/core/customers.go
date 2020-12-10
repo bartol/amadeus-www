@@ -1,5 +1,11 @@
 package core
 
+import (
+	"errors"
+
+	"github.com/mitchellh/mapstructure"
+)
+
 // Customer is struct that contains customer info
 type Customer struct {
 	CustomerID int    `db:"customer_id"`
@@ -13,7 +19,7 @@ type Customer struct {
 	CreatedAt  string `db:"created_at"`
 	UpdatedAt  string `db:"updated_at"`
 	Type       string `db:"type"`
-	TypeID     string `db:"customer_type_id"`
+	TypeID     int    `db:"customer_type_id"`
 }
 
 // CustomerGet returns single customer
@@ -72,4 +78,65 @@ func CustomerSearch(query string, offset int, limit int) ([]Customer, error) {
 	}
 
 	return customers, nil
+}
+
+// CustomerCreate creates customer in db and returns it
+func CustomerCreate(data map[string]interface{}) (Customer, error) {
+	customer := Customer{}
+
+	// decode request parameters
+	err := mapstructure.Decode(data, &customer)
+	if err != nil {
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+
+	// check if customer is valid
+	if customer.Name == "" {
+		err := errors.New("Kupac mora imati ime")
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+	if customer.TypeID == 0 {
+		err := errors.New("Kupac mora imati tip")
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+
+	// start db transaction
+	tx, err := Global.DB.Begin()
+	if err != nil {
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+
+	// insert customer
+	err = tx.QueryRow(
+		`INSERT INTO customers (name, address, postal_code, city, country, phone,
+			oib, created_at, updated_at, customer_type_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()::TIMESTAMP, NOW()::TIMESTAMP, $8)
+		RETURNING customer_id;`, customer.Name, customer.Address, customer.PostalCode,
+		customer.City, customer.Country, customer.Phone, customer.OIB,
+		customer.TypeID).Scan(&customer.CustomerID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+
+	// commit transaction
+	err = tx.Commit()
+	if err != nil {
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+
+	// get created customer
+	createdcustomer, err := CustomerGet(customer.CustomerID)
+	if err != nil {
+		Global.Log.Error(err)
+		return Customer{}, err
+	}
+
+	return createdcustomer, nil
+
 }

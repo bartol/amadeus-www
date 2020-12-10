@@ -1,4 +1,4 @@
 []core.Customer{
-    {CustomerID:2, Name:"Marko Marulić", Address:"Vladimira Nazora 45", PostalCode:"Split", City:"20340", Country:"Hrvatska", Phone:"", OIB:"", CreatedAt:"2020-10-12T17:13:54.287936Z", UpdatedAt:"2020-10-12T17:13:54.287936Z", Type:"Fizička osoba", TypeID:"1"},
+    {CustomerID:2, Name:"Marko Marulić", Address:"Vladimira Nazora 45", PostalCode:"Split", City:"20340", Country:"Hrvatska", Phone:"", OIB:"", CreatedAt:"2020-10-12T17:13:54.287936Z", UpdatedAt:"2020-10-12T17:13:54.287936Z", Type:"Fizička osoba", TypeID:1},
 }
 nil

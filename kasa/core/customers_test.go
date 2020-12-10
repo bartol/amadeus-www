@@ -58,3 +58,21 @@ func TestCustomerSearch(t *testing.T) {
 		GoldenCheck(t, "customers/CustomerSearch", tc, customers, err)
 	}
 }
+
+func TestCustomerCreate(t *testing.T) {
+	var cases = []struct {
+		customerID int
+	}{
+		{6},
+		{7},
+		{8},
+		{9},
+	}
+
+	for _, tc := range cases {
+		data := GoldenGet(t, "customers/CustomerCreate", tc)
+		customer, err := CustomerCreate(data)
+		CustomerRemoveDateFields(&customer)
+		GoldenCheck(t, "customers/CustomerCreate", tc, customer, err)
+	}
+}
