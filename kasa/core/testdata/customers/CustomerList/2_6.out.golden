@@ -1,0 +1,6 @@
+[]core.Customer{
+    {CustomerID:2, Name:"Marko Marulić", Address:"Vladimira Nazora 45", PostalCode:"Split", City:"20340", Country:"Hrvatska", Phone:"", OIB:"", CreatedAt:"2020-10-12T17:13:54.287936Z", UpdatedAt:"2020-10-12T17:13:54.287936Z", Type:"Fizička osoba", TypeID:"1"},
+    {CustomerID:3, Name:"Stjepan Radić", Address:"Vladimira Nazora 45", PostalCode:"Ploče", City:"20340", Country:"Hrvatska", Phone:"0987654321", OIB:"", CreatedAt:"2020-10-12T17:13:54.287936Z", UpdatedAt:"2020-10-12T17:13:54.287936Z", Type:"Fizička osoba", TypeID:"1"},
+    {CustomerID:5, Name:"Produžni kablovi d.d.", Address:"ulica broj", PostalCode:"grad", City:"20340", Country:"zemlja", Phone:"", OIB:"1234567891", CreatedAt:"2020-10-12T17:13:54.287936Z", UpdatedAt:"2020-10-12T17:13:54.287936Z", Type:"Pravna osoba", TypeID:"2"},
+}
+nil
