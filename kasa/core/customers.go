@@ -80,6 +80,23 @@ func CustomerSearch(query string, offset int, limit int) ([]Customer, error) {
 	return customers, nil
 }
 
+// CustomerCheck returns true if there are created/updated customers
+func CustomerCheck(since string) (bool, error) {
+	var modified bool
+	err := Global.DB.QueryRow(
+		`SELECT EXISTS(
+			SELECT 1
+			FROM customers
+			WHERE updated_at > $1
+			LIMIT 1
+		);`, since).Scan(&modified)
+	if err != nil {
+		Global.Log.Error(err)
+		return false, err
+	}
+	return modified, nil
+}
+
 // CustomerCreate creates customer in db and returns it
 func CustomerCreate(data map[string]interface{}) (Customer, error) {
 	customer := Customer{}
@@ -138,5 +155,4 @@ func CustomerCreate(data map[string]interface{}) (Customer, error) {
 	}
 
 	return createdcustomer, nil
-
 }

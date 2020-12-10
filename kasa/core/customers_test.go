@@ -59,6 +59,21 @@ func TestCustomerSearch(t *testing.T) {
 	}
 }
 
+func TestCustomerCheck(t *testing.T) {
+	var cases = []struct {
+		since string
+	}{
+		{"2020-10-12 17:13:00"},
+		{"2020-10-13 17:13:00"},
+		{"2040-10-14 17:14:00"},
+	}
+
+	for _, tc := range cases {
+		modified, err := CustomerCheck(tc.since)
+		GoldenCheck(t, "customers/CustomerCheck", tc, modified, err)
+	}
+}
+
 func TestCustomerCreate(t *testing.T) {
 	var cases = []struct {
 		customerID int
