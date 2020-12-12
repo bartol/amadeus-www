@@ -1,0 +1,21 @@
+core.Product{
+    ProductID:       6,
+    Name:            "PlayStation 4 500GB F Chassis Black",
+    Price:           299900,
+    Discount:        100000,
+    Quantity:        15,
+    Description:     "Sony Playstation 4 je napravio veliki hardverski odmak...",
+    URL:             "playstation-4-500gb-f-chassis-black",
+    Recommended:     true,
+    CreatedAt:       "",
+    UpdatedAt:       "",
+    Brand:           "Sony",
+    BrandID:         2,
+    Category:        "Igraće konzole",
+    CategoryID:      4,
+    Images:          nil,
+    Features:        nil,
+    Publications:    nil,
+    Recommendations: nil,
+}
+nil

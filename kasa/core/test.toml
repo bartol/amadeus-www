@@ -1,0 +1,4 @@
+DatabaseURL = "postgres://postgres@localhost:5432/DB_NAME"
+LogPath = "LOG_FILE"
+Device = "kasa 1"
+PDV = 25

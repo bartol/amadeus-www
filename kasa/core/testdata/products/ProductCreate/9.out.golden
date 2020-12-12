@@ -1,0 +1,2 @@
+core.Product{}
+&errors.errorString{s:"Proizvod mora imati cijenu"}

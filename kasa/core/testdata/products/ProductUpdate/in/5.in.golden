@@ -1,0 +1,13 @@
+{
+    "ProductID": 5,
+    "name": "",
+    "price": 289900,
+    "discount": 0,
+    "quantity": 1,
+    "description": "",
+    "recommended": false,
+    "brand": "Sony",
+    "BrandID": 2,
+    "category": "Televizije",
+    "CategoryID": 3
+}

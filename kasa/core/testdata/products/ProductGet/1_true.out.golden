@@ -1,0 +1,21 @@
+core.Product{
+    ProductID:       1,
+    Name:            "PlayStation 4 500GB F Chassis Black",
+    Price:           299900,
+    Discount:        100000,
+    Quantity:        3,
+    Description:     "",
+    URL:             "playstation-4-500gb-f-chassis-black",
+    Recommended:     true,
+    CreatedAt:       "2020-10-12T17:13:54.287936Z",
+    UpdatedAt:       "2020-10-13T17:13:54.287936Z",
+    Brand:           "Sony",
+    BrandID:         2,
+    Category:        "Igraće konzole",
+    CategoryID:      4,
+    Images:          nil,
+    Features:        nil,
+    Publications:    nil,
+    Recommendations: nil,
+}
+nil

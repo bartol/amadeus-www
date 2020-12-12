@@ -1,0 +1,21 @@
+core.Product{
+    ProductID:       5,
+    Name:            "Sony KDL-32WE615 televizor, 32\" (82 cm), LED, HD ready, HDR, HEVC (H.265)",
+    Price:           289900,
+    Discount:        0,
+    Quantity:        1,
+    Description:     "",
+    URL:             "sony-kdl-32we615-televizor-32-82-cm-led-hd-ready-hdr-hevc-h265",
+    Recommended:     false,
+    CreatedAt:       "2020-10-12T17:13:54.287936Z",
+    UpdatedAt:       "2020-10-16T17:13:54.287936Z",
+    Brand:           "Sony",
+    BrandID:         2,
+    Category:        "Televizije",
+    CategoryID:      3,
+    Images:          nil,
+    Features:        nil,
+    Publications:    nil,
+    Recommendations: nil,
+}
+nil
