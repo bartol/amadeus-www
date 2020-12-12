@@ -13,6 +13,7 @@ import "glider-js/glider.min.css";
 import "nprogress/nprogress.css";
 import "a17t";
 import "../public/css/styles.css";
+//import "../public/css/black-friday.css";
 import { orderInit, couponInit } from "../helpers/order";
 
 function App({ Component, pageProps }) {
@@ -57,13 +58,21 @@ function App({ Component, pageProps }) {
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
               })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              
+
               ga('create', 'UA-173407510-1', 'auto');
               ga('send', 'pageview');
         `,
           }}
         />
       </Head>
+	  {/*<div className="banner">
+        <div className="container mx-auto p-4">
+          <h2 className="heading text-white banner-title">
+            Black friday popusti u amadeus web trgovini
+            traju od petka 27.11. do petka 4.12.2020.
+          </h2>
+        </div>
+      </div>*/}
       <Header
         query={query}
         setQuery={setQuery}
