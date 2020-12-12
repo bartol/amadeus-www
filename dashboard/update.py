@@ -3,11 +3,13 @@
 import csv
 import json
 import os, shutil
+import psycopg2
 
 bazadir = 'baza'
 bazatmpdir = 'baza-tmp'
 bazacachedir = 'baza-cache'
 year = 2017
+dbconn = 'dbname=kasa-testiranje user=postgres'
 
 if not os.path.exists(bazatmpdir):
     os.mkdir(bazatmpdir)
@@ -19,6 +21,9 @@ shutil.copyfile(f"{bazadir}/POD1/{year}/malst.tps", f"{bazatmpdir}/malst.tps")
 
 os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/malmat.tps -t {bazatmpdir}/malmat.csv")
 os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/malst.tps -t {bazatmpdir}/malst.csv")
+
+conn = psycopg2.connect(dbconn)
+cur = conn.cursor()
 
 with open(f'{bazatmpdir}/malst.csv', encoding='cp852') as f:
     reader = csv.reader(f)
@@ -62,9 +67,35 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
         if new:
             # insert product
             print('NOVI PROIZVOD', product['sifra'], product['naziv'])
+            cur.execute("""
+                INSERT INTO proizvodi (sifra,grupa,naziv,kolicina,nabavna_cijena,marza,cijena,rabat)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s);
+                """,
+                (product['sifra'], product['grupa'], product['naziv'], product['kolicina'],
+                product['nabavna_cijena'], product['marza'], product['cijena'], product['rabat']))
         else:
             # update product
-            pass
+            cur.execute("""
+                UPDATE proizvodi
+                SET grupa = %s,
+                    naziv = %s,
+                    kolicina = %s,
+                    nabavna_cijena = %s,
+                    marza = %s,
+                    cijena = %s,
+                    rabat = %s
+                WHERE sifra = %s;
+                """,
+                (product['grupa'], product['naziv'], product['kolicina'], product['nabavna_cijena'],
+                product['marza'], product['cijena'], product['rabat'], product['sifra']))
+
+        conn.commit()
 
         with open(cachepath, 'w') as cf:
             json.dump(product, cf)
+
+
+cur.close()
+conn.close()
+
+shutil.rmtree(bazatmpdir)

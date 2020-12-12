@@ -1,6 +1,5 @@
 CREATE TABLE proizvodi (
-    id SERIAL PRIMARY KEY,
-    sifra INT,
+    sifra INT PRIMARY KEY,
     grupa INT,
     naziv TEXT,
     kolicina INT,
