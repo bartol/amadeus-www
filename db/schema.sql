@@ -1,4 +1,4 @@
-CREATE TABLE proizvodi (
+CREATE TABLE IF NOT EXISTS proizvodi (
     sifra INT PRIMARY KEY,
     grupa INT,
     naziv TEXT,
