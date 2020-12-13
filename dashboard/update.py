@@ -18,9 +18,11 @@ if not os.path.exists(bazacachedir):
 
 shutil.copyfile(f"{bazadir}/POD1/MALMAT.TPS", f"{bazatmpdir}/malmat.tps")
 shutil.copyfile(f"{bazadir}/POD1/{year}/malst.tps", f"{bazatmpdir}/malst.tps")
+shutil.copyfile(f"{bazadir}/POD1/GRUPE.TPS", f"{bazatmpdir}/grupe.tps")
 
 os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/malmat.tps -t {bazatmpdir}/malmat.csv")
 os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/malst.tps -t {bazatmpdir}/malst.csv")
+os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/grupe.tps -t {bazatmpdir}/grupe.csv")
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
