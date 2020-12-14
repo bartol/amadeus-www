@@ -76,15 +76,15 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
 
         if cur.fetchone() == None:
             # insert product
-            print('NOVI PROIZVOD', product['sifra'], product['naziv'])
             cur.execute("""
                 INSERT INTO proizvodi (sifra,grupa,naziv,kolicina,nabavna_cijena,marza,cijena,rabat)
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s);
                 """, (product['sifra'], product['grupa'], product['naziv'], product['kolicina'],
                 product['nabavna_cijena'], product['marza'], product['cijena'], product['rabat']))
+            if cur.rowcount == 1:
+                print('NOVI PROIZVOD', product['sifra'], product['naziv'])
         else:
             # update product
-            print('IZMJENJEN PROIZVOD', product['sifra'], product['naziv'])
             cur.execute("""
                 UPDATE proizvodi
                 SET grupa = %s,
@@ -98,6 +98,8 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
                 """, (product['grupa'], product['naziv'], product['kolicina'],
                 product['nabavna_cijena'], product['marza'], product['cijena'],
                 product['rabat'], product['sifra']))
+            if cur.rowcount == 1:
+                print('IZMJENJEN PROIZVOD', product['sifra'], product['naziv'])
 
         conn.commit()
 
