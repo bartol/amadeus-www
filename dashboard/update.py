@@ -19,6 +19,8 @@ if not os.path.exists(bazatmpdir):
     os.mkdir(bazatmpdir)
 if not os.path.exists(bazacachedir):
     os.mkdir(bazacachedir)
+    os.mkdir(f'{bazacachedir}/p')
+    os.mkdir(f'{bazacachedir}/g')
 
 shutil.copyfile(f"{bazadir}/POD1/MALMAT.TPS", f"{bazatmpdir}/malmat.tps")
 shutil.copyfile(f"{bazadir}/POD1/{year}/malst.tps", f"{bazatmpdir}/malst.tps")
@@ -30,6 +32,55 @@ os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/grupe.tps -t {bazatmpdir}/g
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
+
+with open(f'{bazatmpdir}/grupe.csv', encoding='cp852') as f:
+    reader = csv.reader(f)
+    next(reader)
+    for g in reader:
+        group = {
+            'sifra': int(g[1]),
+            'naziv': g[2].rstrip()
+        }
+
+        cachepath = f"{bazacachedir}/g/{group['sifra']}"
+        if os.path.exists(cachepath):
+            with open(cachepath) as cf:
+                cachedgroup = json.load(cf)
+                if cachedgroup == group:
+                    continue
+                else:
+                    diff = set(cachedgroup.items()) ^ set(group.items())
+                    print('IZMJENE U GRUPI', group['sifra'], diff)
+
+        cur.execute("""
+            SELECT 1
+            FROM grupe
+            WHERE sifra = %s;
+            """, (group['sifra'],))
+
+        if cur.fetchone() == None:
+            # insert group
+            cur.execute("""
+                INSERT INTO grupe (sifra,naziv)
+                VALUES (%s,%s);
+                """, (group['sifra'], group['naziv']))
+            if cur.rowcount == 1:
+                print('NOVA GRUPA', group['sifra'], group['naziv'])
+        else:
+            # update group
+            cur.execute("""
+                UPDATE grupe
+                SET naziv = %s
+                WHERE sifra = %s;
+                """, (group['naziv'], group['sifra']))
+            if cur.rowcount == 1:
+                print('IZMJENJENA GRUPA', group['sifra'], group['naziv'])
+
+        conn.commit()
+
+        with open(cachepath, 'w') as cf:
+            json.dump(group, cf)
+
 
 with open(f'{bazatmpdir}/malst.csv', encoding='cp852') as f:
     reader = csv.reader(f)
@@ -58,7 +109,10 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
             'rabat': float(c[15])
         }
 
-        cachepath = f"{bazacachedir}/{product['sifra']}"
+        if product['grupa'] == 0:
+            product['grupa'] = None
+
+        cachepath = f"{bazacachedir}/p/{product['sifra']}"
         if os.path.exists(cachepath):
             with open(cachepath) as cf:
                 cachedproduct = json.load(cf)
