@@ -58,7 +58,6 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
             'rabat': float(c[15])
         }
 
-        new = True
         cachepath = f"{bazacachedir}/{product['sifra']}"
         if os.path.exists(cachepath):
             with open(cachepath) as cf:
@@ -67,20 +66,25 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
                     continue
                 else:
                     diff = set(cachedproduct.items()) ^ set(product.items())
-                    print('IZMJENJEN PROIZVOD', product['sifra'], diff)
-                    new = False
+                    print('IZMJENE U PROIZVODU', product['sifra'], diff)
 
-        if new:
+        cur.execute("""
+            SELECT 1
+            FROM proizvodi
+            WHERE sifra = %s;
+            """, (product['sifra'],))
+
+        if cur.fetchone() == None:
             # insert product
             print('NOVI PROIZVOD', product['sifra'], product['naziv'])
             cur.execute("""
                 INSERT INTO proizvodi (sifra,grupa,naziv,kolicina,nabavna_cijena,marza,cijena,rabat)
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s);
-                """,
-                (product['sifra'], product['grupa'], product['naziv'], product['kolicina'],
+                """, (product['sifra'], product['grupa'], product['naziv'], product['kolicina'],
                 product['nabavna_cijena'], product['marza'], product['cijena'], product['rabat']))
         else:
             # update product
+            print('IZMJENJEN PROIZVOD', product['sifra'], product['naziv'])
             cur.execute("""
                 UPDATE proizvodi
                 SET grupa = %s,
@@ -91,9 +95,9 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
                     cijena = %s,
                     rabat = %s
                 WHERE sifra = %s;
-                """,
-                (product['grupa'], product['naziv'], product['kolicina'], product['nabavna_cijena'],
-                product['marza'], product['cijena'], product['rabat'], product['sifra']))
+                """, (product['grupa'], product['naziv'], product['kolicina'],
+                product['nabavna_cijena'], product['marza'], product['cijena'],
+                product['rabat'], product['sifra']))
 
         conn.commit()
 
