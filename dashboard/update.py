@@ -4,12 +4,16 @@ import csv
 import json
 import os, shutil
 import psycopg2
+import configparser
 
-bazadir = 'baza'
-bazatmpdir = 'baza-tmp'
-bazacachedir = 'baza-cache'
-year = 2017
-dbconn = 'dbname=kasa-testiranje user=postgres'
+config = configparser.ConfigParser()
+config.read('update.ini')
+
+bazadir = config['settings']['bazadir'].strip('"')
+bazatmpdir = config['settings']['bazatmpdir'].strip('"')
+bazacachedir = config['settings']['bazacachedir'].strip('"')
+year = config['settings']['year']
+dbconn = config['settings']['dbconn'].strip('"')
 
 if not os.path.exists(bazatmpdir):
     os.mkdir(bazatmpdir)
