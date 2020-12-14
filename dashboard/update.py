@@ -7,13 +7,13 @@ import psycopg2
 import configparser
 
 config = configparser.ConfigParser()
-config.read('update.ini')
+config.read('config.ini')
 
-bazadir = config['settings']['bazadir'].strip('"')
-bazatmpdir = config['settings']['bazatmpdir'].strip('"')
-bazacachedir = config['settings']['bazacachedir'].strip('"')
-year = config['settings']['year']
-dbconn = config['settings']['dbconn'].strip('"')
+bazadir = config['update']['bazadir'].strip('"')
+bazatmpdir = config['update']['bazatmpdir'].strip('"')
+bazacachedir = config['update']['bazacachedir'].strip('"')
+year = config['update']['year']
+dbconn = config['global']['dbconn'].strip('"')
 
 if not os.path.exists(bazatmpdir):
     os.mkdir(bazatmpdir)
