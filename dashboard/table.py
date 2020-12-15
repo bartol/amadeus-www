@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import csv
+import os
 import psycopg2
 import configparser
 
@@ -8,6 +9,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 dbconn = config['global']['dbconn'].strip('"')
+opencmd = config['table']['opencmd'].strip('"')
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
@@ -39,3 +41,7 @@ def get(csvpath, columns, condition = ''):
         w.writerow(columns)
         for p in products:
             w.writerow(p)
+
+    # open file
+    cmd = opencmd.format(os.path.abspath(csvpath))
+    os.system(cmd)
