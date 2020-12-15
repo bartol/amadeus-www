@@ -58,7 +58,7 @@ def tableget():
 
     table.get(columns=columns, condition=conditionstr)
 
-    return 'success'
+    return render_template('gui.html', page='success')
 
 
 ui.run()
