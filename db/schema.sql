@@ -17,3 +17,7 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     pioneerhr CHAR(1),
     njuskalohr CHAR(1)
 );
+
+-- CREATE INDEX amadeus2hr_idx ON proizvodi(amadeus2hr) WHERE amadeus2hr IS NOT NULL;
+-- CREATE INDEX pioneerhr_idx ON proizvodi(pioneerhr) WHERE pioneerhr IS NOT NULL;
+-- CREATE INDEX njuskalohr_idx ON proizvodi(njuskalohr) WHERE njuskalohr IS NOT NULL;
