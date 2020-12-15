@@ -15,9 +15,46 @@
 </head>
 <body>
     <h1>amadeus-dashboard</h1>
-    filter by shown/hidden on amadeus2.hr/pioneer.hr
-    filter by group
-    filter by text
-    ...
+    <hr>
+
+    {% if page == 'index' %}
+        <h2>Preuzmi tablicu</h2>
+
+        <form method="POST" action="/table/get">
+            <h3>Prikaži ove stupce</h3>
+            <ul>
+                <li><label><input type="checkbox" name="columns[]" value="p.naziv" checked>Naziv</label></li>
+                <li><label><input type="checkbox" name="columns[]" value="g.naziv" checked>Grupa</label></li>
+                <li><label><input type="checkbox" name="columns[]" value="kolicina" checked>Količina</label></li>
+                <li><label><input type="checkbox" name="columns[]" value="nabavna_cijena" checked>Nabavna cijena</label></li>
+                <li><label><input type="checkbox" name="columns[]" value="marza" checked>Marza</label></li>
+                <li><label><input type="checkbox" name="columns[]" value="cijena" checked>Cijena</label></li>
+                <li><label><input type="checkbox" name="columns[]" value="rabat" checked>Rabat</label></li>
+            </ul>
+
+            <h3>Prikaži samo ove grupe</h3>
+            <ul>
+            {% for grupa in grupe %}
+                <li><label><input type="checkbox" name="grupe[]" value="{{ grupa[0] }}">{{ grupa[1] }}</label></li>
+            {% endfor %}
+            </ul>
+
+            <h3>Prikaži samo ako sadržava</h3>
+            <input type="text" name="pretraga" placeholder="pretraži rezultate">
+
+            <h3>Ostali filteri</h3>
+            <ul>
+                <li><label><input type="checkbox" name="only_amadeus2hr">Prikaži samo prikazane na amadeus2.hr</label></li>
+                <li><label><input type="checkbox" name="only_pioneerhr">Prikaži samo prikazane na pioneer.hr</label></li>
+                <li><label><input type="checkbox" name="only_njuskalohr">Prikaži samo prikazane na njuskalo.hr</label></li>
+                <li>limit: <input type="text" name="limit" placeholder="LIMIT"></li>
+                <li>offset: <input type="text" name="offset" placeholder="OFFSET"></li>
+            </ul>
+
+            <button type="submit">Preuzmi i otvori tablicu</button>
+        </form>
+    {% endif %}
+
+
 </body>
 </html>

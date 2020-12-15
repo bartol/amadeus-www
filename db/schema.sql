@@ -12,5 +12,8 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     nabavna_cijena DECIMAL(9, 2),
     marza DECIMAL(9, 2),
     cijena DECIMAL(9, 2),
-    rabat DECIMAL(9, 2)
+    rabat DECIMAL(9, 2),
+    amadeus2hr CHAR(1),
+    pioneerhr CHAR(1),
+    njuskalohr CHAR(1)
 );
