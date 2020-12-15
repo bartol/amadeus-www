@@ -60,6 +60,9 @@ def tableget():
 
     return render_template('gui.html', page='success')
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('gui.html', page='404'), 404
 
 ui.run()
 
