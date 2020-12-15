@@ -32,7 +32,6 @@ def get(columns, condition = ''):
     # replace some group names
     for idx, val in enumerate(columns):
         replacements = {
-            'p.sifra': 'Šifra (read-only)',
             'p.naziv': 'Naziv (read-only)',
             'g.sifra': 'Šifra grupe (read-only)',
             'g.naziv': 'Grupa (read-only)',
@@ -43,7 +42,7 @@ def get(columns, condition = ''):
             'rabat': 'Rabat (read-only)'
         }
         columns[idx] = replacements.get(val, val)
-    columns.insert(0, 'šifra')
+    columns.insert(0, 'Šifra (read-only)')
 
     # write to file
     time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
