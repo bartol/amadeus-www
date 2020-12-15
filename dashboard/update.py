@@ -9,18 +9,15 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-bazadir = config['update']['bazadir'].strip('"')
-bazatmpdir = config['update']['bazatmpdir'].strip('"')
-bazacachedir = config['update']['bazacachedir'].strip('"')
-year = config['update']['year']
+bazadir = config['baza']['bazadir'].strip('"')
+bazatmpdir = config['baza']['bazatmpdir'].strip('"') + '/update'
+bazacachedir = config['baza']['bazacachedir'].strip('"')
+year = config['baza']['year']
 dbconn = config['global']['dbconn'].strip('"')
 
-if not os.path.exists(bazatmpdir):
-    os.mkdir(bazatmpdir)
-if not os.path.exists(bazacachedir):
-    os.mkdir(bazacachedir)
-    os.mkdir(f'{bazacachedir}/p')
-    os.mkdir(f'{bazacachedir}/g')
+os.makedirs(bazatmpdir, exist_ok=True)
+os.makedirs(f'{bazacachedir}/p', exist_ok=True)
+os.makedirs(f'{bazacachedir}/g', exist_ok=True)
 
 shutil.copyfile(f"{bazadir}/POD1/MALMAT.TPS", f"{bazatmpdir}/malmat.tps")
 shutil.copyfile(f"{bazadir}/POD1/{year}/malst.tps", f"{bazatmpdir}/malst.tps")
@@ -159,9 +156,5 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
 
         with open(cachepath, 'w') as cf:
             json.dump(product, cf)
-
-
-cur.close()
-conn.close()
 
 shutil.rmtree(bazatmpdir)

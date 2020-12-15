@@ -56,7 +56,7 @@ def tableget():
     if offset:
         conditionstr += f' OFFSET {offset}'
 
-    table.get('tmp.csv', columns=columns, condition=conditionstr)
+    table.get(columns=columns, condition=conditionstr)
 
     return 'success'
 
