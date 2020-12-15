@@ -41,7 +41,7 @@ def tableget():
     if len(grupe) > 0:
         condition.append(f"g.sifra IN ({','.join(grupe)})")
     if query:
-        condition.append(f"LOWER(p.naziv) LIKE LOWER('%{query}%')")
+        condition.append(f"p.naziv ILIKE '%{query}%'")
     if only_amadeus2hr:
         condition.append("amadeus2hr = 'x'")
     if only_pioneerhr:
