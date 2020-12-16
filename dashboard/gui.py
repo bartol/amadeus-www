@@ -2,7 +2,7 @@
 
 import table
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flaskwebgui import FlaskUI
 import psycopg2
 import configparser
@@ -70,9 +70,15 @@ def tableupdate():
         table.update(tablepath)
         return render_template('gui.html', page='success')
 
-    files = glob.glob(f"{bazatmpdir}/*")
-    files_list = sorted(files, key=lambda x: os.stat(x).st_mtime)[-3:][::-1]
+    files = glob.glob(f"{bazatmpdir}/*.csv")
+    files_list = sorted(files, key=lambda x: os.stat(x).st_mtime)[-5:][::-1]
     return render_template('gui.html', page='tableupdate', files=files_list)
+
+@app.route('/table/uploadfile', methods=['POST'])
+def tablefileupload():
+    uploaded_file = request.files['tablefile']
+    uploaded_file.save(f"{bazatmpdir}/{uploaded_file.filename}")
+    return redirect('/table/update')
 
 @app.errorhandler(404)
 def page_not_found(e):

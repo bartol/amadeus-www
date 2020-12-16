@@ -71,6 +71,12 @@
             </li>
         {% endfor %}
         </ul>
+
+        <h3>Učitaj tablicu</h3>
+        <form method="POST" action="/table/uploadfile" enctype="multipart/form-data">
+            <p><input type="file" name="tablefile"></p>
+            <p><button type="submit">Učitaj tablicu</button></p>
+        </form>
     {% endif %}
 
     {% if page == 'success' %}
