@@ -13,7 +13,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 dbconn = config['global']['dbconn'].strip('"')
-bazatmpdir = config['baza']['bazatmpdir'].strip('"') + '/table'
+bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'table')
 
 app = Flask(__name__, template_folder='.')
 ui = FlaskUI(app)
@@ -76,14 +76,14 @@ def tableupdate():
             return render_template('gui.html', page='err', msg=str(e))
         return render_template('gui.html', page='success')
 
-    files = glob.glob(f"{bazatmpdir}/*.csv")
+    files = glob.glob(os.path.join(bazatmpdir, "*.csv"))
     files_list = sorted(files, key=lambda x: os.stat(x).st_mtime)[-5:][::-1]
     return render_template('gui.html', page='tableupdate', files=files_list)
 
 @app.route('/table/uploadfile', methods=['POST'])
 def tablefileupload():
     uploaded_file = request.files['tablefile']
-    uploaded_file.save(f"{bazatmpdir}/{uploaded_file.filename}")
+    uploaded_file.save(os.path.join(bazatmpdir, uploaded_file.filename))
     return redirect('/table/update')
 
 @app.errorhandler(404)

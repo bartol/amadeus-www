@@ -10,27 +10,31 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 bazadir = config['baza']['bazadir'].strip('"')
-bazatmpdir = config['baza']['bazatmpdir'].strip('"') + '/update'
+bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'update')
 bazacachedir = config['baza']['bazacachedir'].strip('"')
 year = config['baza']['year']
 dbconn = config['global']['dbconn'].strip('"')
 
 os.makedirs(bazatmpdir, exist_ok=True)
-os.makedirs(f'{bazacachedir}/p', exist_ok=True)
-os.makedirs(f'{bazacachedir}/g', exist_ok=True)
+os.makedirs(os.path.join(bazacachedir, 'p'), exist_ok=True)
+os.makedirs(os.path.join(bazacachedir, 'g'), exist_ok=True)
 
-shutil.copyfile(f"{bazadir}/POD1/MALMAT.TPS", f"{bazatmpdir}/malmat.tps")
-shutil.copyfile(f"{bazadir}/POD1/{year}/malst.tps", f"{bazatmpdir}/malst.tps")
-shutil.copyfile(f"{bazadir}/POD1/GRUPE.TPS", f"{bazatmpdir}/grupe.tps")
+tmp_malmat = os.path.join(bazatmpdir, 'malmat')
+tmp_malst = os.path.join(bazatmpdir, 'malst')
+tmp_grupe = os.path.join(bazatmpdir, 'grupe')
 
-os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/malmat.tps -t {bazatmpdir}/malmat.csv")
-os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/malst.tps -t {bazatmpdir}/malst.csv")
-os.system(f"java -jar tps-to-csv.jar -s {bazatmpdir}/grupe.tps -t {bazatmpdir}/grupe.csv")
+shutil.copyfile(os.path.join(bazadir, 'POD1', 'MALMAT.TPS'), f"{tmp_malmat}.tps")
+shutil.copyfile(os.path.join(bazadir, 'POD1', year, 'malst.tps'), f"{tmp_malst}.tps")
+shutil.copyfile(os.path.join(bazadir, 'POD1', 'GRUPE.TPS'), f"{tmp_grupe}.tps")
+
+os.system(f"java -jar tps-to-csv.jar -s {tmp_malmat}.tps -t {tmp_malmat}.csv")
+os.system(f"java -jar tps-to-csv.jar -s {tmp_malst}.tps -t {tmp_malst}.csv")
+os.system(f"java -jar tps-to-csv.jar -s {tmp_grupe}.tps -t {tmp_grupe}.csv")
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
 
-with open(f'{bazatmpdir}/grupe.csv', encoding='cp852') as f:
+with open(f"{tmp_grupe}.csv", encoding='cp852') as f:
     reader = csv.reader(f)
     next(reader)
     for g in reader:
@@ -39,7 +43,7 @@ with open(f'{bazatmpdir}/grupe.csv', encoding='cp852') as f:
             'naziv': g[2].rstrip()
         }
 
-        cachepath = f"{bazacachedir}/g/{group['sifra']}"
+        cachepath = os.path.join(bazacachedir, 'g', str(group['sifra']))
         if os.path.exists(cachepath):
             with open(cachepath) as cf:
                 cachedgroup = json.load(cf)
@@ -79,12 +83,12 @@ with open(f'{bazatmpdir}/grupe.csv', encoding='cp852') as f:
             json.dump(group, cf)
 
 
-with open(f'{bazatmpdir}/malst.csv', encoding='cp852') as f:
+with open(f"{tmp_malst}.csv", encoding='cp852') as f:
     reader = csv.reader(f)
     next(reader)
     cijene = list(reader)
 
-with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
+with open(f"{tmp_malmat}.csv", encoding='cp852') as f:
     reader = csv.reader(f)
     next(reader)
     for p in reader:
@@ -115,7 +119,7 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
         if cur.fetchone() == None:
             product['grupa'] = None
 
-        cachepath = f"{bazacachedir}/p/{product['sifra']}"
+        cachepath = os.path.join(bazacachedir, 'p', str(product['sifra']))
         if os.path.exists(cachepath):
             with open(cachepath) as cf:
                 cachedproduct = json.load(cf)

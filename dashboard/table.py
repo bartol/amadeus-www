@@ -12,7 +12,7 @@ config.read('config.ini')
 
 dbconn = config['global']['dbconn'].strip('"')
 opencmd = config['table']['opencmd'].strip('"')
-bazatmpdir = config['baza']['bazatmpdir'].strip('"') + '/table'
+bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'table')
 
 os.makedirs(bazatmpdir, exist_ok=True)
 
@@ -52,7 +52,8 @@ def get(columns, condition = ''):
 
     # write to file
     time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    csvpath = f'{bazatmpdir}/{time}.csv'
+    csvpath = os.path.join(bazatmpdir, f'{time}.csv')
+
     with open(csvpath, 'w') as f:
         w = csv.writer(f)
         w.writerow(columns)
