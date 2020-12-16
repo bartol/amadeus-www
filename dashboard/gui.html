@@ -82,6 +82,9 @@
     {% if page == 'success' %}
     success
     {% endif %}
+    {% if page == 'err' %}
+    error: {{ msg }}
+    {% endif %}
     {% if page == '404' %}
     404
     {% endif %}
