@@ -32,11 +32,11 @@
     <tbody>
         <tr>
             <td>Proizvodi:</td>
-            <td>{{call $.FormatPrice (call $.TotalPrice .Cart .Installments false .Data.Coupon false) 0.75}}</td>
+            <td>{{call $.FormatPrice (call $.TotalPrice .Cart .Installments false .Data.Coupon false) 0.8}}</td>
         </tr>
         <tr>
             <td>PDV:</td>
-            <td>{{call $.FormatPrice (call $.TotalPrice .Cart .Installments false .Data.Coupon false) 0.25}}</td>
+            <td>{{call $.FormatPrice (call $.TotalPrice .Cart .Installments false .Data.Coupon false) 0.2}}</td>
         </tr>
         {{if gt .Installments 0}}
             {{if lt .Installments 13}}
