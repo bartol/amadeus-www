@@ -106,7 +106,13 @@ with open(f'{bazatmpdir}/malmat.csv', encoding='cp852') as f:
             'rabat': float(c[15])
         }
 
-        if product['grupa'] == 0:
+        cur.execute("""
+            SELECT 1
+            FROM grupe
+            WHERE sifra = %s;
+            """, (product['grupa'],))
+
+        if cur.fetchone() == None:
             product['grupa'] = None
 
         cachepath = f"{bazacachedir}/p/{product['sifra']}"

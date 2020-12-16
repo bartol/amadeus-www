@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     njuskalohr CHAR(1),
 
     web_cijena DECIMAL(9, 2),
-    web_cijena_s_popustom DECIMAL(9, 2),
+    web_cijena_s_popustom DECIMAL(9, 2)
 );
 
 -- CREATE INDEX amadeus2hr_idx ON proizvodi(amadeus2hr) WHERE amadeus2hr IS NOT NULL;
