@@ -39,6 +39,7 @@ def tableget():
     only_njuskalohr = True if request.form.get('only_njuskalohr') else False
     limit = request.form.get('limit')
     offset = request.form.get('offset')
+    sort = request.form.get('sort')
 
     condition = []
     if len(grupe) > 0:
@@ -54,6 +55,8 @@ def tableget():
     conditionstr = ' AND '.join(condition)
     if len(condition) > 0:
         conditionstr = 'WHERE ' + conditionstr
+    if sort:
+        conditionstr += f' ORDER BY {sort}'
     if limit:
         conditionstr += f' LIMIT {limit}'
     if offset:

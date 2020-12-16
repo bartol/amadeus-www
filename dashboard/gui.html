@@ -58,6 +58,14 @@
                 <li>offset: <input type="text" name="offset" placeholder="OFFSET"></li>
             </ul>
 
+            <h3>Sortiranje</h3>
+            <ul>
+                <li><label><input type="radio" name="sort" value="p.sifra ASC">Sortiraj po šifri A prema Z</label></li>
+                <li><label><input type="radio" name="sort" value="p.sifra DESC">Sortiraj po šifri Z prema A</label></li>
+                <li><label><input type="radio" name="sort" value="p.naziv ASC">Sortiraj po nazivu A prema Z</label></li>
+                <li><label><input type="radio" name="sort" value="p.naziv DESC">Sortiraj po nazivu Z prema A</label></li>
+            </ul>
+
             <button type="submit">Preuzmi i otvori tablicu</button>
         </form>
     {% endif %}
