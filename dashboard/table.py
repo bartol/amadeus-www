@@ -39,7 +39,12 @@ def get(columns, condition = ''):
             'nabavna_cijena': 'Nabavna cijena (read-only)',
             'marza': 'Marža (read-only)',
             'cijena': 'Cijena (read-only)',
-            'rabat': 'Rabat (read-only)'
+            'rabat': 'Rabat (read-only)',
+            'web_cijena': 'Web cijena',
+            'web_cijena_s_popustom': 'Web cijena s popustom',
+            'amadeus2hr': 'Prikaži na amadeus2.hr',
+            'pioneerhr': 'Prikaži na pioneer.hr',
+            'njuskalohr': 'Prikaži na njuskalo.hr'
         }
         columns[idx] = replacements.get(val, val)
     columns.insert(0, 'Šifra (read-only)')
