@@ -6,11 +6,14 @@ from flask import Flask, render_template, request
 from flaskwebgui import FlaskUI
 import psycopg2
 import configparser
+import os
+import glob
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 dbconn = config['global']['dbconn'].strip('"')
+bazatmpdir = config['baza']['bazatmpdir'].strip('"') + '/table'
 
 app = Flask(__name__, template_folder='.')
 ui = FlaskUI(app)
@@ -59,6 +62,17 @@ def tableget():
     table.get(columns=columns, condition=conditionstr)
 
     return render_template('gui.html', page='success')
+
+@app.route('/table/update', methods=['GET', 'POST'])
+def tableupdate():
+    if request.method == 'POST':
+        tablepath = request.form.get('tablepath')
+        table.update(tablepath)
+        return render_template('gui.html', page='success')
+
+    files = glob.glob(f"{bazatmpdir}/*")
+    files_list = sorted(files, key=lambda x: os.stat(x).st_mtime)[-3:][::-1]
+    return render_template('gui.html', page='tableupdate', files=files_list)
 
 @app.errorhandler(404)
 def page_not_found(e):

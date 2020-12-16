@@ -56,3 +56,6 @@ def get(columns, condition = ''):
     # open file
     cmd = opencmd.format(os.path.abspath(csvpath))
     os.system(cmd)
+
+def update(tablepath):
+    print(tablepath)

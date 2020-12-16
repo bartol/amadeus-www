@@ -57,6 +57,22 @@
         </form>
     {% endif %}
 
+    {% if page == 'tableupdate' %}
+        <h2>Preuzmi promjene iz tablice</h2>
+
+        <h3>Zadnje izmjenjene tablice</h3>
+        <ul>
+        {% for file in files %}
+            <li>
+                <form method="POST" action="/table/update">
+                    <input type="hidden" name="tablepath" value="{{ file }}">
+                    <a href="#" onclick="this.parentElement.submit()">{{ file }}</a>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
     {% if page == 'success' %}
     success
     {% endif %}
