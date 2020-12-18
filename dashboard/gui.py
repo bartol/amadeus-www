@@ -153,14 +153,14 @@ def productdetail():
 
     cur.execute("""
         SELECT naziv, vrijednost
-        FROM znacaljke_vrijednosti v
-        INNER JOIN znacaljke z ON z.sifra = v.sifra_znacaljke
+        FROM znacajke_vrijednosti v
+        INNER JOIN znacajke z ON z.sifra = v.sifra_znacajke
         WHERE sifra_proizvoda = %s;
     """, (sifra,))
-    znacaljke = cur.fetchall()
+    znacajke = cur.fetchall()
 
     return render_template('gui.html', page='productdetail',
-        product=product, slike=slike, znacaljke=znacaljke)
+        product=product, slike=slike, znacajke=znacajke)
 
 @app.route('/product/uploadimg', methods=['POST'])
 def uploadimg():
@@ -178,7 +178,7 @@ def uploadimg():
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
-# app.run(  debug=True)
+app.run(debug=True)
 ui.run()
 
 # todo:

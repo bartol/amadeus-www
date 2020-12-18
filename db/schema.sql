@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     web_cijena DECIMAL(9, 2),
     web_cijena_s_popustom DECIMAL(9, 2),
 
-    -- mjenjaju se pojedinactno  +znacaljke +slike
+    -- mjenjaju se pojedinactno  +znacajke +slike
     web_opis TEXT,
     web_istaknut BOOLEAN
 );
@@ -39,18 +39,18 @@ CREATE TABLE IF NOT EXISTS slike (
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
 );
 
-CREATE TABLE IF NOT EXISTS znacaljke (
+CREATE TABLE IF NOT EXISTS znacajke (
     sifra SERIAL PRIMARY KEY,
     naziv TEXT,
     sifra_grupe INT,
     FOREIGN KEY (sifra_grupe) REFERENCES grupe(sifra)
 );
 
-CREATE TABLE IF NOT EXISTS znacaljke_vrijednosti (
+CREATE TABLE IF NOT EXISTS znacajke_vrijednosti (
     sifra SERIAL PRIMARY KEY,
     vrijednost TEXT,
-    sifra_znacaljke INT,
-    FOREIGN KEY (sifra_znacaljke) REFERENCES znacaljke(sifra),
+    sifra_znacajke INT,
+    FOREIGN KEY (sifra_znacajke) REFERENCES znacajke(sifra),
     sifra_proizvoda INT,
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
 );
