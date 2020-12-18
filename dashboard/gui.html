@@ -6,73 +6,80 @@
     <title>amadeus-dashboard</title>
     <link rel="icon" type="image/png" href="https://amadeus2.hr/img/icon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Noto Sans', sans-serif;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>h1,h3 { margin-top: 0.75rem }</style>
 </head>
 <body>
-    <h1>amadeus-dashboard</h1>
-    <a href="/">Preuzmi tablicu</a>
-    <a href="/table/update">Preuzmi promjene iz tablice</a>
-    <a href="/product/list">Izmjena proizvoda</a>
-    <hr>
+    <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">amadeus-dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link {% if page == 'index' %}active{% endif %}" href="/">Preuzmi tablicu</a>
+                    <a class="nav-link {% if page == 'tableupdate' %}active{% endif %}" href="/table/update">Preuzmi promjene iz tablice</a>
+                    <a class="nav-link {% if page == 'productlist' %}active{% endif %}" href="/product/list">Izmjena proizvoda</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
+    <div class="container-fluid mb-2">
     {% if page == 'index' %}
-        <h2>Preuzmi tablicu</h2>
+        <h1>Preuzmi tablicu</h1>
 
         <form method="POST" action="/table/get">
             <h3>Prikaži ove stupce</h3>
             <ul>
-                <li><label><input type="checkbox" name="columns[]" value="p.naziv" checked>Naziv (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="g.naziv" checked>Grupa (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="kolicina" checked>Količina (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="nabavna_cijena" checked>Nabavna cijena (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="marza" checked>Marža (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="cijena" checked>Cijena (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="rabat" checked>Rabat (read-only)</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="web_cijena" checked>Web cijena</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="web_cijena_s_popustom" checked>Web cijena s popustom</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="amadeus2hr" checked>Prikaži na amadeus2.hr</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="pioneerhr" checked>Prikaži na pioneer.hr</label></li>
-                <li><label><input type="checkbox" name="columns[]" value="njuskalohr" checked>Prikaži na njuskalo.hr</label></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="p.naziv" checked class="form-check-input">Naziv (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="g.naziv" checked class="form-check-input">Grupa (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="kolicina" checked class="form-check-input">Količina (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="nabavna_cijena" checked class="form-check-input">Nabavna cijena (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="marza" checked class="form-check-input">Marža (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="cijena" checked class="form-check-input">Cijena (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="rabat" checked class="form-check-input">Rabat (read-only)</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="web_cijena" checked class="form-check-input">Web cijena</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="web_cijena_s_popustom" checked class="form-check-input">Web cijena s popustom</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="amadeus2hr" checked class="form-check-input">Prikaži na amadeus2.hr</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="pioneerhr" checked class="form-check-input">Prikaži na pioneer.hr</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="columns[]" value="njuskalohr" checked class="form-check-input">Prikaži na njuskalo.hr</label></div></li>
             </ul>
 
             <h3>Prikaži samo ove grupe</h3>
             <ul>
             {% for grupa in grupe %}
-                <li><label><input type="checkbox" name="grupe[]" value="{{ grupa[0] }}">{{ grupa[1] }}</label></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="grupe[]" value="{{ grupa[0] }}" class="form-check-input">{{ grupa[1] }}</label></div></li>
             {% endfor %}
             </ul>
 
             <h3>Prikaži samo ako sadržava</h3>
-            <input type="text" name="pretraga" placeholder="pretraži rezultate">
+            <label class="form-label"><input type="text" name="pretraga" placeholder="pretraži rezultate" class="form-control"></label>
 
             <h3>Ostali filteri</h3>
             <ul>
-                <li><label><input type="checkbox" name="only_amadeus2hr">Prikaži samo prikazane na amadeus2.hr</label></li>
-                <li><label><input type="checkbox" name="only_pioneerhr">Prikaži samo prikazane na pioneer.hr</label></li>
-                <li><label><input type="checkbox" name="only_njuskalohr">Prikaži samo prikazane na njuskalo.hr</label></li>
-                <li>limit: <input type="text" name="limit" placeholder="LIMIT"></li>
-                <li>offset: <input type="text" name="offset" placeholder="OFFSET"></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="only_amadeus2hr" class="form-check-input">Prikaži samo prikazane na amadeus2.hr</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="only_pioneerhr" class="form-check-input">Prikaži samo prikazane na pioneer.hr</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="only_njuskalohr" class="form-check-input">Prikaži samo prikazane na njuskalo.hr</label></div></li>
+                <li><label class="form-label"><input type="text" name="limit" placeholder="LIMIT" class="form-control"></label></li>
+                <li><label class="form-label"><input type="text" name="offset" placeholder="OFFSET" class="form-control"></label></li>
             </ul>
 
             <h3>Sortiranje</h3>
             <ul>
-                <li><label><input type="radio" name="sort" value="p.sifra ASC">Sortiraj po šifri 0 prema 10</label></li>
-                <li><label><input type="radio" name="sort" value="p.sifra DESC">Sortiraj po šifri 10 prema 0</label></li>
-                <li><label><input type="radio" name="sort" value="p.naziv ASC">Sortiraj po nazivu A prema Z</label></li>
-                <li><label><input type="radio" name="sort" value="p.naziv DESC">Sortiraj po nazivu Z prema A</label></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="sort" value="p.sifra ASC" class="form-check-input">Sortiraj po šifri 0 prema 10</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="sort" value="p.sifra DESC" class="form-check-input">Sortiraj po šifri 10 prema 0</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="sort" value="p.naziv ASC" checked class="form-check-input">Sortiraj po nazivu A prema Z</label></div></li>
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="sort" value="p.naziv DESC" class="form-check-input">Sortiraj po nazivu Z prema A</label></div></li>
             </ul>
 
-            <button type="submit">Preuzmi i otvori tablicu</button>
+            <button type="submit" class="btn btn-primary">Preuzmi i otvori tablicu</button>
         </form>
     {% endif %}
 
     {% if page == 'tableupdate' %}
-        <h2>Preuzmi promjene iz tablice</h2>
+        <h1>Preuzmi promjene iz tablice</h1>
 
         <h3>Zadnje izmjenjene tablice</h3>
         <ul>
@@ -88,20 +95,21 @@
 
         <h3>Učitaj tablicu</h3>
         <form method="POST" action="/table/uploadfile" enctype="multipart/form-data">
-            <p><input type="file" name="tablefile"></p>
-            <p><button type="submit">Učitaj tablicu</button></p>
+            <div><label class="form-label"><input type="file" name="tablefile" class="form-control"></label></div>
+            <button type="submit" class="btn btn-primary">Učitaj tablicu</button>
         </form>
     {% endif %}
 
     {% if page == 'productlist' %}
         <h3>Otvori proizvod sa šifrom</h3>
         <form method="GET" action="/product/detail">
-            <p><input type="text" name="product"></p>
-            <p><button type="submit">Otvori proizvod</button></p>
+            <div><label class="form-label"><input type="text" name="product" placeholder="šifra" class="form-control"></label></div>
+            <button type=" submit" class="btn btn-primary">Otvori proizvod</button>
         </form>
 
         <h3>Lista proizvoda</h3>
-        <table>
+        {% if proizvodi|length %}
+        <table class="table">
             <tr>
                 <th>Šifra</th>
                 <th>Naziv</th>
@@ -113,9 +121,14 @@
             </tr>
         {% endfor %}
         </table>
+        {% else %}
+        <a href="/product/list?showlist=true" class="btn btn-primary">Učitaj listu</a>
+        {% endif %}
     {% endif %}
 
     {% if page == 'productdetail' %}
+        <h1>{{ product[1] }}</h1>
+        <p>šifra: {{ product[0] }}</p>
     {% endif %}
 
     {% if page == 'success' %}
@@ -127,5 +140,8 @@
     {% if page == '404' %}
     404
     {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
 </html>

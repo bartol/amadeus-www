@@ -88,14 +88,42 @@ def tablefileupload():
 
 @app.route('/product/list')
 def productlist():
-    cur.execute("SELECT sifra, naziv FROM proizvodi ORDER BY naziv ASC;")
-    proizvodi = cur.fetchall()
-    return render_template('gui.html', page='productlist', proizvodi=proizvodi)
+    if request.args.get('showlist') == "true":
+        cur.execute("SELECT sifra, naziv FROM proizvodi ORDER BY naziv ASC;")
+        proizvodi = cur.fetchall()
+        return render_template('gui.html', page='productlist', proizvodi=proizvodi)
+    return render_template('gui.html', page='productlist')
 
-@app.route('/product/detail')
+@app.route('/product/detail', methods=['GET', 'POST'])
 def productdetail():
     sifra = request.args.get('product')
-    return render_template('gui.html', page='err', msg=sifra)
+
+    cur.execute("""
+        SELECT sifra, naziv, web_opis, web_istaknut
+        FROM proizvodi
+        WHERE sifra = %s;
+    """, (sifra,))
+    product = cur.fetchone()
+    if product is None:
+        return render_template('gui.html', page='err', msg='proizvod ne postoji')
+
+    cur.execute("""
+        SELECT link
+        FROM slike
+        WHERE sifra_proizvoda = %s;
+    """, (sifra,))
+    slike = cur.fetchall()
+
+    cur.execute("""
+        SELECT naziv, vrijednost
+        FROM znacaljke_vrijednosti v
+        INNER JOIN znacaljke z ON z.sifra = v.sifra_znacaljke
+        WHERE sifra_proizvoda = %s;
+    """, (sifra,))
+    znacaljke = cur.fetchall()
+
+    return render_template('gui.html', page='productdetail',
+        product=product, slike=slike, znacaljke=znacaljke)
 
 @app.errorhandler(404)
 def page_not_found(e):
