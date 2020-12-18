@@ -8,6 +8,9 @@ import psycopg2
 import configparser
 import os
 import glob
+import boto3, botocore
+import random
+from werkzeug.utils import secure_filename
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -21,13 +24,21 @@ ui = FlaskUI(app)
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
 
+cur.execute("SELECT value FROM cred WHERE key = 'aws_access_key_id';")
+aws_access_key_id = cur.fetchone()[0]
+cur.execute("SELECT value FROM cred WHERE key = 'aws_secret_access_key';")
+aws_secret_access_key = cur.fetchone()[0]
+s3 = boto3.client(
+   "s3",
+   aws_access_key_id=aws_access_key_id,
+   aws_secret_access_key=aws_secret_access_key
+)
 
 @app.route('/')
 def index():
     cur.execute("SELECT sifra, naziv FROM grupe ORDER BY naziv ASC;")
     grupe = cur.fetchall()
     return render_template('gui.html', page='index', grupe=grupe)
-
 
 @app.route('/table/get', methods=['POST'])
 def tableget():
@@ -96,7 +107,32 @@ def productlist():
 
 @app.route('/product/detail', methods=['GET', 'POST'])
 def productdetail():
+    if not request.args.get('product'):
+        return redirect(f'/product/list')
     sifra = request.args.get('product')
+    if request.method == 'POST':
+        opis = request.form.get('opis')
+        istaknut = request.form.get('istaknut')
+        slike = request.form.getlist('images[]')
+
+        cur.execute("""
+            UPDATE proizvodi
+            SET web_opis = %s,
+                web_istaknut = %s
+            WHERE sifra = %s;
+        """, (opis, istaknut, sifra))
+
+        cur.execute("DELETE FROM slike WHERE sifra_proizvoda = %s;", (sifra,))
+
+        for idx, link in enumerate(slike):
+            cur.execute("""
+                INSERT INTO slike (link, pozicija, sifra_proizvoda)
+                VALUES (%s, %s, %s);
+            """, (link, idx, sifra))
+
+        conn.commit()
+
+        return redirect(f'/product/detail?product={sifra}')
 
     cur.execute("""
         SELECT sifra, naziv, web_opis, web_istaknut
@@ -110,7 +146,8 @@ def productdetail():
     cur.execute("""
         SELECT link
         FROM slike
-        WHERE sifra_proizvoda = %s;
+        WHERE sifra_proizvoda = %s
+        ORDER BY pozicija ASC;
     """, (sifra,))
     slike = cur.fetchall()
 
@@ -125,10 +162,23 @@ def productdetail():
     return render_template('gui.html', page='productdetail',
         product=product, slike=slike, znacaljke=znacaljke)
 
+@app.route('/product/uploadimg', methods=['POST'])
+def uploadimg():
+    img = request.files['file']
+    imgname = f'{random.randint(1000,9999)}-{secure_filename(img.filename)}'
+    try:
+        s3.upload_fileobj(img, 'amadeus2.hr', imgname,
+            ExtraArgs={"ACL": "public-read", "ContentType": img.content_type})
+    except:
+        return ""
+    return f'https://s3.eu-central-1.amazonaws.com/amadeus2.hr/{imgname}'
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
+# app.run(  debug=True)
 ui.run()
 
 # todo:

@@ -32,24 +32,30 @@ CREATE TABLE IF NOT EXISTS proizvodi (
 -- CREATE INDEX njuskalohr_idx ON proizvodi(njuskalohr) WHERE njuskalohr IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS slike (
-    sifra INT PRIMARY KEY,
+    sifra SERIAL PRIMARY KEY,
     link TEXT,
+    pozicija INT,
     sifra_proizvoda INT,
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
 );
 
 CREATE TABLE IF NOT EXISTS znacaljke (
-    sifra INT PRIMARY KEY,
+    sifra SERIAL PRIMARY KEY,
     naziv TEXT,
     sifra_grupe INT,
     FOREIGN KEY (sifra_grupe) REFERENCES grupe(sifra)
 );
 
 CREATE TABLE IF NOT EXISTS znacaljke_vrijednosti (
-    sifra INT PRIMARY KEY,
+    sifra SERIAL PRIMARY KEY,
     vrijednost TEXT,
     sifra_znacaljke INT,
     FOREIGN KEY (sifra_znacaljke) REFERENCES znacaljke(sifra),
     sifra_proizvoda INT,
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
+);
+
+CREATE TABLE IF NOT EXISTS cred (
+    key TEXT PRIMARY KEY,
+    value TEXT
 );
