@@ -17,6 +17,7 @@
     <h1>amadeus-dashboard</h1>
     <a href="/">Preuzmi tablicu</a>
     <a href="/table/update">Preuzmi promjene iz tablice</a>
+    <a href="/product/list">Izmjena proizvoda</a>
     <hr>
 
     {% if page == 'index' %}
@@ -60,8 +61,8 @@
 
             <h3>Sortiranje</h3>
             <ul>
-                <li><label><input type="radio" name="sort" value="p.sifra ASC">Sortiraj po šifri A prema Z</label></li>
-                <li><label><input type="radio" name="sort" value="p.sifra DESC">Sortiraj po šifri Z prema A</label></li>
+                <li><label><input type="radio" name="sort" value="p.sifra ASC">Sortiraj po šifri 0 prema 10</label></li>
+                <li><label><input type="radio" name="sort" value="p.sifra DESC">Sortiraj po šifri 10 prema 0</label></li>
                 <li><label><input type="radio" name="sort" value="p.naziv ASC">Sortiraj po nazivu A prema Z</label></li>
                 <li><label><input type="radio" name="sort" value="p.naziv DESC">Sortiraj po nazivu Z prema A</label></li>
             </ul>
@@ -90,6 +91,31 @@
             <p><input type="file" name="tablefile"></p>
             <p><button type="submit">Učitaj tablicu</button></p>
         </form>
+    {% endif %}
+
+    {% if page == 'productlist' %}
+        <h3>Otvori proizvod sa šifrom</h3>
+        <form method="GET" action="/product/detail">
+            <p><input type="text" name="product"></p>
+            <p><button type="submit">Otvori proizvod</button></p>
+        </form>
+
+        <h3>Lista proizvoda</h3>
+        <table>
+            <tr>
+                <th>Šifra</th>
+                <th>Naziv</th>
+            </tr>
+        {% for proizvod in proizvodi %}
+            <tr>
+                <td><a href="/product/detail?product={{ proizvod[0] }}">{{ proizvod[0] }}</a></td>
+                <td><a href="/product/detail?product={{ proizvod[0] }}">{{ proizvod[1] }}</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if page == 'productdetail' %}
     {% endif %}
 
     {% if page == 'success' %}

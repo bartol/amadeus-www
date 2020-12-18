@@ -24,7 +24,7 @@ cur = conn.cursor()
 
 @app.route('/')
 def index():
-    cur.execute("SELECT sifra, naziv FROM grupe;")
+    cur.execute("SELECT sifra, naziv FROM grupe ORDER BY naziv ASC;")
     grupe = cur.fetchall()
     return render_template('gui.html', page='index', grupe=grupe)
 
@@ -85,6 +85,17 @@ def tablefileupload():
     uploaded_file = request.files['tablefile']
     uploaded_file.save(os.path.join(bazatmpdir, uploaded_file.filename))
     return redirect('/table/update')
+
+@app.route('/product/list')
+def productlist():
+    cur.execute("SELECT sifra, naziv FROM proizvodi ORDER BY naziv ASC;")
+    proizvodi = cur.fetchall()
+    return render_template('gui.html', page='productlist', proizvodi=proizvodi)
+
+@app.route('/product/detail')
+def productdetail():
+    sifra = request.args.get('product')
+    return render_template('gui.html', page='err', msg=sifra)
 
 @app.errorhandler(404)
 def page_not_found(e):
