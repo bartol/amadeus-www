@@ -19,7 +19,7 @@ dbconn = config['global']['dbconn'].strip('"')
 bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'table')
 
 app = Flask(__name__, template_folder='.')
-ui = FlaskUI(app)
+ui = FlaskUI(app, width=1000, height=750)
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
@@ -221,8 +221,8 @@ def uploadimg():
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
-app.run(debug=True)
-# ui.run()
+# app.run(debug=True)
+ui.run()
 
 # todo:
 # https://github.com/ClimenteA/pyvan
