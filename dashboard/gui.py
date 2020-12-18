@@ -111,9 +111,12 @@ def productdetail():
         return redirect(f'/product/list')
     sifra = request.args.get('product')
     if request.method == 'POST':
+        grupa = request.form.get('grupa')
         opis = request.form.get('opis')
         istaknut = request.form.get('istaknut')
         slike = request.form.getlist('images[]')
+        feature = request.form.getlist('feature[]')
+        feature_value = request.form.getlist('feature_value[]')
 
         cur.execute("""
             UPDATE proizvodi
@@ -130,12 +133,36 @@ def productdetail():
                 VALUES (%s, %s, %s);
             """, (link, idx, sifra))
 
+        cur.execute("DELETE FROM znacajke_vrijednosti WHERE sifra_proizvoda = %s;", (sifra,))
+
+        for idx, naziv in enumerate(feature):
+            if naziv == '': continue
+            cur.execute("""
+                SELECT sifra
+                FROM znacajke
+                WHERE naziv = %s AND sifra_grupe = %s;
+            """, (naziv, grupa))
+            feature = cur.fetchone()
+            if feature == None:
+                cur.execute("""
+                    INSERT INTO znacajke (naziv, sifra_grupe)
+                    VALUES (%s, %s) RETURNING sifra;
+                """, (naziv, grupa))
+                feature = cur.fetchone()
+
+            vrijednost = feature_value[idx]
+            if vrijednost == '': continue
+            cur.execute("""
+                INSERT INTO znacajke_vrijednosti (vrijednost, sifra_znacajke, sifra_proizvoda)
+                VALUES (%s,%s,%s);
+            """, (vrijednost, feature[0], sifra))
+
         conn.commit()
 
         return redirect(f'/product/detail?product={sifra}')
 
     cur.execute("""
-        SELECT sifra, naziv, web_opis, web_istaknut
+        SELECT sifra, naziv, web_opis, web_istaknut, grupa
         FROM proizvodi
         WHERE sifra = %s;
     """, (sifra,))
@@ -159,8 +186,24 @@ def productdetail():
     """, (sifra,))
     znacajke = cur.fetchall()
 
+    cur.execute("""
+        SELECT naziv
+        FROM znacajke
+        WHERE sifra_grupe = %s;
+    """, (product[4],))
+    znacajke_grupe = cur.fetchall()
+
+    ostale_znacajke = []
+    for zg in znacajke_grupe:
+        a = True
+        for z in znacajke:
+            if zg[0] == z[0]:
+                a = False
+        if a:
+            ostale_znacajke.append(zg[0])
+
     return render_template('gui.html', page='productdetail',
-        product=product, slike=slike, znacajke=znacajke)
+        product=product, slike=slike, znacajke=znacajke, ostale_znacajke=ostale_znacajke)
 
 @app.route('/product/uploadimg', methods=['POST'])
 def uploadimg():
@@ -179,7 +222,7 @@ def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
 app.run(debug=True)
-ui.run()
+# ui.run()
 
 # todo:
 # https://github.com/ClimenteA/pyvan

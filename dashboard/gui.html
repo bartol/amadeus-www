@@ -136,6 +136,7 @@
         <p>šifra: {{ product[0] }}</p>
         <form method="POST" action="/product/detail?product={{ product[0] }}" enctype="multipart/form-data">
             <div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="istaknut" class="form-check-input" {% if product[3] %}checked{% endif %}>Istaknut na početnoj stranici</label></div>
+            <input type="hidden" name="grupa" value="{{ product[4] }}">
 
             <h3>Opis</h3>
             <textarea name="opis" id="editor">{% if product[2] %}{{ product[2] }}{% endif %}</textarea>
@@ -164,7 +165,40 @@
             </div>
 
             <h3>Značajke</h3>
-
+            <script>
+                function addFeature(key, value) {
+                    $("#ftable").append(`<tr>
+                        <td><label class="form-label mb-0"><input type="text" name="feature[]" value="${key}" placeholder="Naziv" class="form-control"></label></td>
+                        <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="${value}" placeholder="Vrijednost" class="form-control"></label></td>
+                        <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
+                    </tr>`)
+                }
+            </script>
+            <p>
+                {% if ostale_znacajke|length %}
+                Ostali proizvodi u grupi imaju još:
+                {% for znacajka in ostale_znacajke %}
+                    <span><a href="#" onclick='event.preventDefault()
+                    addFeature("{{ znacajka }}", "")
+                    this.parentElement.remove()'>{{ znacajka }}</a>{{ ", " if not loop.last }}</span>
+                {% endfor %}
+                {% endif %}
+            </p>
+            <button type="button" onclick="addFeature('', '')" class="btn btn-primary">&plus; Nova značajka</button>
+            <table class="table" id="ftable">
+                <tr>
+                    <th>Naziv</th>
+                    <th>Vrijednost</th>
+                    <th>Obriši</th>
+                </tr>
+                {% for znacajka in znacajke %}
+                <tr>
+                    <td><label class="form-label mb-0"><input type="text" name="feature[]" value="{{ znacajka[0] }}" placeholder="Naziv" class="form-control"></label></td>
+                    <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="{{ znacajka[1] }}" placeholder="Vrijednost" class="form-control"></label></td>
+                    <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
+                </tr>
+                {% endfor %}
+            </table>
 
             <button type="submit" class="btn btn-primary">Spremi promjene</button>
         </form>
@@ -191,18 +225,15 @@
                 const url = file.xhr.response
                 if (url) {
                 $(".images").append(`
-                    <div class="d-flex mt-2">
-                        <img src="${url}" width="200">
-                        <input type="hidden" name="images[]" value="${url}">
-                        <div class="d-flex flex-column justify-content-center ml-2">
-                            <button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">
-                                &times;
-                            </button>
-                            <div class="btn btn-secondary mt-2 handle">
-                                &varr;
-                            </div>
-                        </div>
-                    </div>`)
+                <div class="d-flex mt-2">
+                    <img src="${url}" width="200">
+                    <input type="hidden" name="images[]" value="${url}">
+                    <div class="d-flex align-items-center ml-5 mr-2">
+                        <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
+                        <button type="button" onclick="this.parentElement.parentElement.remove()"
+                            class="btn btn-danger">&times; Obriši</button>
+                    </div>
+                </div>`)
                 } else {
                     $('.image-upload-error').append(`
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
