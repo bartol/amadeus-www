@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS grupe (
 );
 
 CREATE TABLE IF NOT EXISTS proizvodi (
+    -- iz kase
     sifra INT PRIMARY KEY,
     grupa INT,
     FOREIGN KEY (grupa) REFERENCES grupe(sifra),
@@ -14,14 +15,41 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     cijena DECIMAL(9, 2),
     rabat DECIMAL(9, 2),
 
+    -- mjenjaju se u tablici
     amadeus2hr CHAR(1),
     pioneerhr CHAR(1),
     njuskalohr CHAR(1),
-
     web_cijena DECIMAL(9, 2),
-    web_cijena_s_popustom DECIMAL(9, 2)
+    web_cijena_s_popustom DECIMAL(9, 2),
+
+    -- mjenjaju se pojedinactno  +znacaljke +slike
+    web_opis TEXT,
+    web_istaknut BOOLEAN
 );
 
 -- CREATE INDEX amadeus2hr_idx ON proizvodi(amadeus2hr) WHERE amadeus2hr IS NOT NULL;
 -- CREATE INDEX pioneerhr_idx ON proizvodi(pioneerhr) WHERE pioneerhr IS NOT NULL;
 -- CREATE INDEX njuskalohr_idx ON proizvodi(njuskalohr) WHERE njuskalohr IS NOT NULL;
+
+CREATE TABLE IF NOT EXISTS slike (
+    sifra INT PRIMARY KEY,
+    link TEXT,
+    sifra_proizvoda INT,
+    FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
+);
+
+CREATE TABLE IF NOT EXISTS znacaljke (
+    sifra INT PRIMARY KEY,
+    naziv TEXT,
+    sifra_grupe INT,
+    FOREIGN KEY (sifra_grupe) REFERENCES grupe(sifra)
+);
+
+CREATE TABLE IF NOT EXISTS znacaljke_vrijednosti (
+    sifra INT PRIMARY KEY,
+    vrijednost TEXT,
+    sifra_znacaljke INT,
+    FOREIGN KEY (sifra_znacaljke) REFERENCES znacaljke(sifra),
+    sifra_proizvoda INT,
+    FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
+);
