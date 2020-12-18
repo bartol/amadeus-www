@@ -59,3 +59,12 @@ CREATE TABLE IF NOT EXISTS cred (
     key TEXT PRIMARY KEY,
     value TEXT
 );
+
+CREATE TABLE IF NOT EXISTS covers (
+    sifra SERIAL PRIMARY KEY,
+    link TEXT,
+    promourl TEXT,
+    pozicija INT,
+    amadeus2hr BOOLEAN,
+    pioneerhr BOOLEAN
+);

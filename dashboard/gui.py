@@ -208,7 +208,7 @@ def productdetail():
 @app.route('/product/uploadimg', methods=['POST'])
 def uploadimg():
     img = request.files['file']
-    imgname = f'{random.randint(1000,9999)}-{secure_filename(img.filename)}'
+    imgname = f'img/{random.randint(1000,9999)}-{secure_filename(img.filename)}'
     try:
         s3.upload_fileobj(img, 'amadeus2.hr', imgname,
             ExtraArgs={"ACL": "public-read", "ContentType": img.content_type})
@@ -216,6 +216,28 @@ def uploadimg():
         return ""
     return f'https://s3.eu-central-1.amazonaws.com/amadeus2.hr/{imgname}'
 
+@app.route('/amadeus2hr', methods=['GET', 'POST'])
+def amadeus2hr():
+    if request.method == 'POST':
+        slike = request.form.getlist('images[]')
+        promourls = request.form.getlist('promourl[]')
+
+        cur.execute("DELETE FROM covers WHERE amadeus2hr = 't';")
+
+        for idx, link in enumerate(slike):
+            promourl = promourls[idx]
+            cur.execute("""
+                INSERT INTO covers (link, pozicija, promourl, amadeus2hr)
+                VALUES (%s, %s, %s, 't');
+            """, (link, idx, promourl))
+
+        conn.commit()
+        return redirect('/amadeus2hr')
+
+    cur.execute("SELECT link,promourl FROM covers WHERE amadeus2hr = 't' ORDER BY pozicija ASC;")
+    covers = cur.fetchall()
+
+    return render_template('gui.html', page='amadeus2hr', covers=covers)
 
 @app.errorhandler(404)
 def page_not_found(e):
