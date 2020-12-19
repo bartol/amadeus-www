@@ -68,3 +68,10 @@ CREATE TABLE IF NOT EXISTS covers (
     amadeus2hr BOOLEAN,
     pioneerhr BOOLEAN
 );
+
+CREATE TABLE IF NOT EXISTS slicni_proizvodi (
+    sifra INT,
+    FOREIGN KEY (sifra) REFERENCES proizvodi(sifra),
+    sifra_slicnog INT,
+    FOREIGN KEY (sifra_slicnog) REFERENCES proizvodi(sifra)
+);

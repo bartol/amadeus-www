@@ -202,8 +202,16 @@ def productdetail():
         if a:
             ostale_znacajke.append(zg[0])
 
-    return render_template('gui.html', page='productdetail',
-        product=product, slike=slike, znacajke=znacajke, ostale_znacajke=ostale_znacajke)
+    cur.execute("""
+        SELECT sifra_slicnog, naziv
+        FROM slicni_proizvodi s
+        INNER JOIN proizvodi p ON p.sifra = s.sifra_slicnog
+        WHERE s.sifra = %s;
+    """, (sifra,))
+    slicni = cur.fetchall()
+
+    return render_template('gui.html', page='productdetail', product=product,  slike=slike,
+        znacajke=znacajke, ostale_znacajke=ostale_znacajke, slicni=slicni)
 
 @app.route('/product/uploadimg', methods=['POST'])
 def uploadimg():

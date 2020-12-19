@@ -201,6 +201,27 @@
                 {% endfor %}
             </table>
 
+            <h3>Slični proizvodi</h3>
+            <div class="d-flex">
+                <label class="form-label mb-0"><input type="text" name="sifra_slicnog" placeholder="šifra" class="form-control"></label>
+                <button type="button" onclick="addFeature('', '')" class="btn btn-primary mx-2">&plus; Novi sličan proizvod</button>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>Šifra</th>
+                    <th>Naziv</th>
+                    <th>Obriši</th>
+                </tr>
+            {% for proizvod in slicni %}
+                <tr>
+                    <td style="vertical-align: middle;"><a href="/product/detail?product={{ proizvod[0] }}">{{ proizvod[0] }}</a></td>
+                    <td style="vertical-align: middle;"><a href="/product/detail?product={{ proizvod[0] }}">{{ proizvod[1] }}</a></td>
+                    <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
+                    <input type="hidden" name="slicni[]" value="{{ proizvod[0] }}">
+                </tr>
+            {% endfor %}
+            </table>
+
             <button type="submit" class="btn btn-primary">Spremi promjene</button>
         </form>
 
