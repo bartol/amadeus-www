@@ -25,7 +25,7 @@
                     <a class="nav-link {% if page == 'index' %}active{% endif %}" href="/">Preuzmi tablicu</a>
                     <a class="nav-link {% if page == 'tableupdate' %}active{% endif %}" href="/table/update">Preuzmi promjene iz tablice</a>
                     <a class="nav-link {% if page == 'productlist' %}active{% endif %}" href="/product/list">Izmjena proizvoda</a>
-                    <a class="nav-link {% if page == 'amadeus2hr' %}active{% endif %}" href="/amadeus2hr">Postavke stranice</a>
+                    <a class="nav-link {% if page == 'postavke' %}active{% endif %}" href="/postavke">Postavke</a>
                 </div>
             </div>
         </div>
@@ -243,9 +243,9 @@
         </script>
     {% endif %}
 
-    {% if page == 'amadeus2hr' %}
+    {% if page == 'postavke' %}
     <h1>amadeus2.hr postavke</h1>
-    <form method="POST" action="/amadeus2hr" enctype="multipart/form-data">
+    <form method="POST" action="/postavke" enctype="multipart/form-data">
         <h3>Slike</h3>
         <div class="image-upload-error"></div>
         <div class="dropzone" id="image-upload"></div>

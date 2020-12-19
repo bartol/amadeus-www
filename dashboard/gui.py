@@ -216,8 +216,8 @@ def uploadimg():
         return ""
     return f'https://s3.eu-central-1.amazonaws.com/amadeus2.hr/{imgname}'
 
-@app.route('/amadeus2hr', methods=['GET', 'POST'])
-def amadeus2hr():
+@app.route('/postavke', methods=['GET', 'POST'])
+def postavke():
     if request.method == 'POST':
         slike = request.form.getlist('images[]')
         promourls = request.form.getlist('promourl[]')
@@ -232,19 +232,19 @@ def amadeus2hr():
             """, (link, idx, promourl))
 
         conn.commit()
-        return redirect('/amadeus2hr')
+        return redirect('/postavke')
 
     cur.execute("SELECT link,promourl FROM covers WHERE amadeus2hr = 't' ORDER BY pozicija ASC;")
     covers = cur.fetchall()
 
-    return render_template('gui.html', page='amadeus2hr', covers=covers)
+    return render_template('gui.html', page='postavke', covers=covers)
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
-# app.run(debug=True)
-ui.run()
+app.run(debug=True)
+# ui.run()
 
 # todo:
 # https://github.com/ClimenteA/pyvan
