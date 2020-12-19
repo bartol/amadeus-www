@@ -202,11 +202,35 @@
             </table>
 
             <h3>Slični proizvodi</h3>
+            <script>
+                function addRelated(sifra) {
+                    $.get(`/product/getname?productid=${sifra}`, function(naziv) {
+                        if (naziv) {
+                            $("#related_table").append(`<tr>
+                                <td style="vertical-align: middle;"><a href="/product/detail?product=${sifra}">${sifra}</a></td>
+                                <td style="vertical-align: middle;"><a href="/product/detail?product=${sifra}">${naziv}</a></td>
+                                <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
+                                <input type="hidden" name="slicni[]" value="${sifra}">
+                            </tr>`)
+                        } else {
+                            $('.add-related-product-error').append(`
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Proizvod ne postoji.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`)
+                        }
+                    })
+                }
+            </script>
             <div class="d-flex">
                 <label class="form-label mb-0"><input type="text" name="sifra_slicnog" placeholder="šifra" class="form-control"></label>
-                <button type="button" onclick="addFeature('', '')" class="btn btn-primary mx-2">&plus; Novi sličan proizvod</button>
+                <button type="button" onclick='
+                addRelated(document.querySelector("[name=sifra_slicnog]").value)
+                document.querySelector("[name=sifra_slicnog]").value = ""
+                ' class="btn btn-primary mx-2">&plus; Dodaj sličan proizvod</button>
             </div>
-            <table class="table">
+            <div class="add-related-product-error mt-2"></div>
+            <table class="table" id="related_table">
                 <tr>
                     <th>Šifra</th>
                     <th>Naziv</th>

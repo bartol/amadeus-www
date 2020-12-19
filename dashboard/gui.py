@@ -117,6 +117,7 @@ def productdetail():
         slike = request.form.getlist('images[]')
         feature = request.form.getlist('feature[]')
         feature_value = request.form.getlist('feature_value[]')
+        related = request.form.getlist('slicni[]')
 
         cur.execute("""
             UPDATE proizvodi
@@ -156,6 +157,14 @@ def productdetail():
                 INSERT INTO znacajke_vrijednosti (vrijednost, sifra_znacajke, sifra_proizvoda)
                 VALUES (%s,%s,%s);
             """, (vrijednost, feature[0], sifra))
+
+        cur.execute("DELETE FROM slicni_proizvodi WHERE sifra = %s", (sifra,))
+
+        for r in related:
+            cur.execute("""
+                INSERT INTO slicni_proizvodi (sifra, sifra_slicnog)
+                VALUES (%s,%s);
+            """, (sifra, r))
 
         conn.commit()
 
@@ -263,6 +272,15 @@ def postavke():
 def rmfeature():
     featureid = request.args.get('featureid')
     cur.execute("DELETE FROM znacajke WHERE sifra = %s", (featureid,))
+    return ''
+
+@app.route('/product/getname')
+def getname():
+    productid = request.args.get('productid')
+    cur.execute("SELECT naziv FROM proizvodi WHERE sifra = %s", (productid,))
+    product = cur.fetchone()
+    if product:
+        return product[0]
     return ''
 
 @app.errorhandler(404)
