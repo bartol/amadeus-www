@@ -237,7 +237,25 @@ def postavke():
     cur.execute("SELECT link,promourl FROM covers WHERE amadeus2hr = 't' ORDER BY pozicija ASC;")
     covers = cur.fetchall()
 
-    return render_template('gui.html', page='postavke', covers=covers)
+    cur.execute("""
+        SELECT z.sifra, z.naziv, g.naziv FROM znacajke z
+        LEFT JOIN grupe g ON g.sifra = z.sifra_grupe
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM znacajke_vrijednosti
+            WHERE sifra_znacajke = z.sifra
+        );
+    """)
+    unused_features = cur.fetchall()
+
+    return render_template('gui.html', page='postavke', covers=covers,
+        unused_features=unused_features)
+
+@app.route('/postavke/rmfeature', methods=['POST'])
+def rmfeature():
+    featureid = request.args.get('featureid')
+    cur.execute("DELETE FROM znacajke WHERE sifra = %s", (featureid,))
+    return ''
 
 @app.errorhandler(404)
 def page_not_found(e):

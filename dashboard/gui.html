@@ -154,7 +154,7 @@
             <div class="form-group mt-3 images">
             {% for slika in slike %}
                 <div class="d-flex mt-2">
-                    <img src="{{ slika[0] }}" width="200">
+                    <img src="{{ slika[0] }}" width="250">
                     <input type="hidden" name="images[]" value="{{ slika[0] }}">
                     <div class="d-flex align-items-center ml-5 mr-2">
                         <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
@@ -224,7 +224,7 @@
                 if (url) {
                 $(".images").append(`
                 <div class="d-flex mt-2">
-                    <img src="${url}" width="200">
+                    <img src="${url}" width="250">
                     <input type="hidden" name="images[]" value="${url}">
                     <div class="d-flex align-items-center ml-5 mr-2">
                         <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
@@ -244,6 +244,26 @@
     {% endif %}
 
     {% if page == 'postavke' %}
+    <h1>amadeus-dashboard postavke</h1>
+    <h3>Značajke koje se više ne koriste</h3>
+    <table class="table">
+        <tr>
+            <th>Značajka</th>
+            <th>Grupa</th>
+            <th>Obriši</th>
+        </tr>
+        {% for f in unused_features %}
+        <tr>
+            <td style="vertical-align: middle;">{{ f[1] }}</td>
+            <td style="vertical-align: middle;">{{ f[2] }}</td>
+            <td><button type="button" onclick='
+                $.post(`/postavke/rmfeature?featureid={{ f[0] }}`)
+                this.parentElement.parentElement.remove()
+                ' class="btn btn-danger">&times; Obriši</button></td>
+        </tr>
+        {% endfor %}
+    </table>
+
     <h1>amadeus2.hr postavke</h1>
     <form method="POST" action="/postavke" enctype="multipart/form-data">
         <h3>Slike</h3>
@@ -252,7 +272,7 @@
         <div class="form-group my-3 images">
         {% for slika in covers %}
             <div class="d-flex mt-2">
-                <img src="{{ slika[0] }}" width="200">
+                <img src="{{ slika[0] }}" width="250">
                 <input type="hidden" name="images[]" value="{{ slika[0] }}">
                 <div class="d-flex align-items-center ml-5 mr-2">
                     <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
@@ -286,7 +306,7 @@
             if (url) {
             $(".images").append(`
             <div class="d-flex mt-2">
-                <img src="${url}" width="200">
+                <img src="${url}" width="250">
                 <input type="hidden" name="images[]" value="${url}">
                 <div class="d-flex align-items-center ml-5 mr-2">
                     <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
