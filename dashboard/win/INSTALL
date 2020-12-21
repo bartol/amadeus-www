@@ -1,0 +1,13 @@
+///// windows ///////////////////////////////////////////////
+
+1. install python (https://www.python.org/ftp/python/3.9.1/python-3.9.1-amd64.exe)
+2. install java (https://javadl.oracle.com/webapps/download/AutoDL?BundleId=243737_61ae65e088624f5aaa0b1d2d801acb16)
+3. download portable chrome (https://chromium.woolyss.com/) and extract to Desktop/amadeus-dashboard/chrome
+3. download repository (https://github.com/bartol/amadeus2.hr/archive/master.zip)
+4. extract repository/dashboard to Desktop/amadeus-dashboard/code
+5. cd in code dir and run C:\> python -m venv venv
+6. C:\> pip install -r requirements.txt
+7. edit config.ini file, edit win/gui.bat
+8. create Desktop/amadeus-dashboard/data/{table,update}, Desktop/amadeus-dashboard/cache, Desktop/amadeus-dashboard/logs
+9. create shortcut to gui.bat, update.bat on Desktop
+10. add update.bat to task scheduler (every 30 mins)

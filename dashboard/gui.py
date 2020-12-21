@@ -287,8 +287,8 @@ def getname():
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
-app.run(debug=True)
-# ui.run()
+# app.run(debug=True)
+ui.run()
 
 # todo:
 # https://github.com/ClimenteA/pyvan
