@@ -5,6 +5,7 @@
 - download portable chrome (https://chromium.woolyss.com/f/chrlauncher-win64-stable-ungoogled.zip), extract to Desktop/amadeus-dashboard/chrome and run setup
 - download repository (https://github.com/bartol/amadeus2.hr/archive/master.zip)
 - download notepad++ (https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9.1/npp.7.9.1.Installer.exe)
+- download libreoffice (https://www.libreoffice.org/donate/dl/win-x86_64/7.0.4/en-US/LibreOffice_7.0.4_Win_x64.msi)
 - extract repository/dashboard to Desktop/amadeus-dashboard/code
 - cd in code dir and run C:\> python -m venv venv and C:\> venv\Scripts\activate.bat
 - download and install wheel for psutil (https://files.pythonhosted.org/packages/21/71/33cb528381c443df1ee25cbb451da975421bddb5099b11e7f2eb3fc90d6d/psutil-5.8.0-cp39-cp39-win_amd64.whl)
