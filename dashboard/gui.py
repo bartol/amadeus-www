@@ -17,9 +17,10 @@ config.read('config.ini')
 
 dbconn = config['global']['dbconn'].strip('"')
 bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'table')
+browser_path= os.path.join(config['gui']['browser_path'].strip('"'))
 
 app = Flask(__name__, template_folder='.')
-ui = FlaskUI(app, width=1000, height=750)
+ui = FlaskUI(app, width=1000, height=750, browser_path=browser_path)
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
