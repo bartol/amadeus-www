@@ -13,6 +13,12 @@ config.read('config.ini')
 dbconn = config['global']['dbconn'].strip('"')
 opencmd = config['table']['opencmd'].strip('"')
 bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'table')
+windows = config['global']['windows'].strip('"')
+
+if windows == "yes":
+    import sys, io
+    sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 os.makedirs(bazatmpdir, exist_ok=True)
 
@@ -54,7 +60,7 @@ def get(columns, condition = ''):
     time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     csvpath = os.path.join(bazatmpdir, f'{time}.csv')
 
-    with open(csvpath, 'w') as f:
+    with open(csvpath, 'w', encoding="utf-8-sig", newline='') as f:
         w = csv.writer(f)
         w.writerow(columns)
         for p in products:
@@ -65,7 +71,7 @@ def get(columns, condition = ''):
     os.system(cmd)
 
 def update(tablepath):
-    with open(tablepath) as f:
+    with open(tablepath, encoding="utf-8-sig", newline='') as f:
         r = csv.reader(f)
         header = next(r)
         allowed = [

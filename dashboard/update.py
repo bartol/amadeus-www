@@ -14,6 +14,12 @@ bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'update')
 bazacachedir = config['baza']['bazacachedir'].strip('"')
 year = config['baza']['year']
 dbconn = config['global']['dbconn'].strip('"')
+windows = config['global']['windows'].strip('"')
+
+if windows == "yes":
+    import sys, io
+    sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 os.makedirs(bazatmpdir, exist_ok=True)
 os.makedirs(os.path.join(bazacachedir, 'p'), exist_ok=True)
