@@ -91,10 +91,7 @@ export async function getStaticProps() {
 
   const whitelistedCategories = [
     "klima-uredaji",
-    "televizori",
-    "ps4-gaming",
-    "racunala",
-    "pametni-mobiteli-smartphone",
+    "televizori"
   ];
   categories = categories
     .filter((c) => whitelistedCategories.includes(c.Slug))
