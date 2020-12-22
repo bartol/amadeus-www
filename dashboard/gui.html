@@ -158,7 +158,9 @@
                     <input type="hidden" name="images[]" value="{{ slika[0] }}">
                     <div class="d-flex align-items-center ml-5 mr-2">
                         <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
-                        <button type="button" onclick="this.parentElement.parentElement.remove()"
+                        <button type="button" onclick="
+                        $.post(`/product/rmimg?imgurl={{ slika[0] }}`)
+                        this.parentElement.parentElement.remove()"
                             class="btn btn-danger">&times; Obriši</button>
                     </div>
                 </div>
@@ -273,7 +275,9 @@
                     <input type="hidden" name="images[]" value="${url}">
                     <div class="d-flex align-items-center ml-5 mr-2">
                         <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
-                        <button type="button" onclick="this.parentElement.parentElement.remove()"
+                        <button type="button" onclick="
+                        $.post('/product/rmimg?imgurl=${url}')
+                        this.parentElement.parentElement.remove()"
                             class="btn btn-danger">&times; Obriši</button>
                     </div>
                 </div>`)
@@ -321,7 +325,9 @@
                 <input type="hidden" name="images[]" value="{{ slika[0] }}">
                 <div class="d-flex align-items-center ml-5 mr-2">
                     <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()"
+                    <button type="button" onclick="
+                        $.post(`/product/rmimg?imgurl={{ slika[0] }}`)
+                        this.parentElement.parentElement.remove()"
                         class="btn btn-danger">&times; Obriši</button>
                     <label class="form-label mb-0 mx-2"><input type="text" name="promourl[]" value="{{ slika[1] }}" placeholder="promo link" class="form-control"></label>
                 </div>
@@ -355,7 +361,9 @@
                 <input type="hidden" name="images[]" value="${url}">
                 <div class="d-flex align-items-center ml-5 mr-2">
                     <div class="btn btn-secondary mx-2 handle">&varr; Pomakni</div>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()"
+                    <button type="button" onclick="
+                        $.post('/product/rmimg?imgurl=${url}')
+                        this.parentElement.parentElement.remove()"
                         class="btn btn-danger">&times; Obriši</button>
                     <label class="form-label mb-0 mx-2"><input type="text" name="promourl[]" placeholder="promo url" class="form-control"></label>
                 </div>

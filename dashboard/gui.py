@@ -234,6 +234,14 @@ def uploadimg():
         return ""
     return f'https://s3.eu-central-1.amazonaws.com/amadeus2.hr/{imgname}'
 
+@app.route('/product/rmimg', methods=['POST'])
+def rmimg():
+    imgurl = request.args.get('imgurl')
+    imgkey = imgurl[len('https://s3.eu-central-1.amazonaws.com/amadeus2.hr/'):]
+    s3.delete_object(Bucket='amadeus2.hr', Key=imgkey)
+    return ''
+
+
 @app.route('/postavke', methods=['GET', 'POST'])
 def postavke():
     if request.method == 'POST':
