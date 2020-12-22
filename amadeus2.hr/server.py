@@ -16,6 +16,10 @@ def category(category):
 def product(product):
 	return f'proizvod: {product}'
 
+@app.route('/search')
+def search():
+	return 'search'
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
 	return 'checkout'
