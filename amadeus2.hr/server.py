@@ -8,28 +8,28 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
-@app.route('/kategorija/<category>')
-def category(category):
-	return f'kategorija: {category}'
+@app.route('/kategorija/<int:id>-<string:slug>')
+def category(id, slug):
+	return f'kategorija: {id}'
 
-@app.route('/proizvod/<product>')
-def product(product):
-	return f'proizvod: {product}'
+@app.route('/proizvod/<int:id>-<string:slug>')
+def product(id, slug):
+	return f'proizvod: {id}'
 
 @app.route('/search')
 def search():
 	return 'search'
 
+@app.route('/contact', methods=['POST'])
+def contact():
+	return 'contact'
+
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+	return 'cart'
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
 	return 'checkout'
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	return 'login'
-
-@app.route('/orders', methods=['GET', 'POST', 'DELETE'])
-def orders():
-	return 'orders'
 
 app.run(debug=True, host='0.0.0.0')
