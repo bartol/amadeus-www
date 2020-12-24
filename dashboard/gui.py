@@ -257,6 +257,17 @@ def postavke():
                 VALUES (%s, %s, %s, 't');
             """, (link, idx, promourl))
 
+        sifre_grupe = request.form.getlist('sifre_grupe[]')
+        slike_grupe = request.form.getlist('slike_grupe[]')
+
+        for idx, sifra in enumerate(sifre_grupe):
+            html = slike_grupe[idx]
+            cur.execute("""
+                UPDATE grupe
+                SET img_html = %s
+                WHERE sifra = %s;
+            """, (html,sifra))
+
         conn.commit()
         return redirect('/postavke')
 
@@ -274,8 +285,14 @@ def postavke():
     """)
     unused_features = cur.fetchall()
 
+    cur.execute("""
+        SELECT sifra, naziv, img_html
+        FROM grupe;
+    """)
+    grupe = cur.fetchall()
+
     return render_template('gui.html', page='postavke', covers=covers,
-        unused_features=unused_features)
+        unused_features=unused_features, grupe=grupe)
 
 @app.route('/postavke/rmfeature', methods=['POST'])
 def rmfeature():

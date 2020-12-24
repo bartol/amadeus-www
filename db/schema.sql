@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS grupe (
     sifra INT PRIMARY KEY,
-    naziv TEXT
+    naziv TEXT,
+    img_html TEXT
 );
 
 CREATE TABLE IF NOT EXISTS proizvodi (
