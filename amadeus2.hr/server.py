@@ -4,6 +4,8 @@ from flask import Flask, render_template
 import psycopg2
 import configparser
 from slugify import slugify
+import datetime
+from dateutil.relativedelta import relativedelta
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -70,5 +72,12 @@ def checkout():
 @app.template_filter('slugify')
 def _slugify(string):
 	return slugify(string)
+
+@app.context_processor
+def date_stuff():
+    return {'today': datetime.date.today(),
+			'tomorrow': (datetime.date.today() + datetime.timedelta(days=1)),
+			'diffdate': relativedelta,
+			'parsedate': datetime.datetime.strptime}
 
 app.run(debug=True, host='0.0.0.0')

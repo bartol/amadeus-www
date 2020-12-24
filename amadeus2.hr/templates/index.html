@@ -129,7 +129,7 @@
                         <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z" />
                     </svg>
                 </div>
-                <span>26 godina uspješnog poslovanja</span>
+                <span>{{ diffdate(today, parsedate("1995-04-01", "%Y-%m-%d")).years }} godina uspješnog poslovanja</span>
             </div>
         </div>
         <div class="col-sm p-2">
@@ -193,13 +193,16 @@
     </div>
 </div>
 <script>
-    var countDownDate = new Date("2020-12-25").getTime();
+    var countDownDate = new Date("{{ tomorrow }} 00:00").getTime();
+    console.log(countDownDate)
     setInterval(function() {
       var distance = countDownDate - new Date().getTime();
+      console.log(distance)
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      document.getElementById("countdown").innerHTML = `${hours}:${minutes}:${seconds}`;
+      document.getElementById("countdown").innerHTML =
+        `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     }, 1000);
 </script>
 
