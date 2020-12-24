@@ -51,8 +51,19 @@ def index():
 	""")
 	istaknuti_proizvodi = cur.fetchall()
 
+	cur.execute("""
+		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, kolicina, (
+			SELECT link
+			FROM slike
+			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+		) FROM akcija_dana a
+        INNER JOIN proizvodi p ON p.sifra = a.sifra_proizvoda
+        WHERE day = %s;
+	""", (str(datetime.date.today()),))
+	akcija_dana = cur.fetchone()
+
 	return render_template('index.html', grupe=grupe, covers=covers,
-		istaknuti_proizvodi=istaknuti_proizvodi)
+		istaknuti_proizvodi=istaknuti_proizvodi, akcija_dana=akcija_dana)
 
 @app.route('/kategorija/<int:id>-<string:slug>')
 def category(id, slug):

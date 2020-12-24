@@ -146,12 +146,13 @@
     </div>
 </div>
 
+{% if akcija_dana %}
 <h2>Akcija dana</h2>
 <div class="card mb-3">
     <div class="row g-0 m-2">
         <div class="col-5">
             <div class="d-flex align-items-center h-100">
-                <img src=" https://api.amadeus2.hr/images/279/1190?options=600" alt="..." width="100%">
+                <img src="{{ akcija_dana[5] }}" alt="..." width="100%">
             </div>
         </div>
         <div class="col-7">
@@ -163,19 +164,19 @@
                             00:00:00
                             <span class="visually-hidden">time left</span>
                         </span>
-                        Call of Duty: WWII Standard Edition PS4
+                        {{ akcija_dana[1] }}
                     </a>
                 </h3>
                 <div>
                     <h4 class="h6 overflow-hidden">
-                        <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">499,00 kn</span>
+                        <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">{{ formatmoney(akcija_dana[2]) }}</span>
                         <span class="text-nowrap">
-                            199,00 kn
-                            <span class="badge rounded-pill bg-danger">-300,00 kn</span>
+                            {{ formatmoney(akcija_dana[3]) }}
+                            <span class="badge rounded-pill bg-danger">-{{ formatmoney(akcija_dana[2]-akcija_dana[3]) }}</span>
                         </span>
                     </h4>
-                    <h5 class="h6">
-                        Dostupno još samo <b>6 kom.</b>
+                    <h5 style="font-size: 0.9rem;">
+                        Dostupno još samo <b>{{ akcija_dana[4] }} kom.</b>
                     </h5>
                     <div class="d-grid">
                         <button type="button" class="btn btn-primary text-truncate" style="z-index: 1100;">
@@ -209,6 +210,7 @@
         `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     }, 1000);
 </script>
+{% endif %}
 
 {% include "partials/contact_form.html" %}
 
