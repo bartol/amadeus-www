@@ -167,7 +167,6 @@
     var countDownDate = convertDateForIOS("{{ tomorrow }} 00:00:00").getTime();
     setInterval(function() {
       var distance = countDownDate - new Date().getTime();
-      console.log(distance)
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -180,8 +179,8 @@
 {% include "partials/contact_form.html" %}
 
 <h2>Istaknuti proizvodi</h2>
-<div class="container mb-3" style="margin-left: -0.25rem; margin-right: -0.25rem; margin-top: -0.25rem;">
-    <div class="row">
+<div class="container mb-3 px-0">
+    <div class="row" style="margin: -0.25rem;">
         {% for proizvod in istaknuti_proizvodi %}
         <div class="col-6 p-1">
             <div class="card p-2">
