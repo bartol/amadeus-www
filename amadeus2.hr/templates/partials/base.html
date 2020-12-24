@@ -98,12 +98,11 @@
 			<form class="input-group">
 				<input type="text" class="form-control form-control-lg" placeholder="iphone 12"
 					aria-label="trazilica za proizvode i 2 tipke">
-				<select class="form-select" style="max-width: 125px;">
-					<option selected>Sve kategorije</option>
-					<option value="1">One</option>
-					<option value="2">Two</option>
-					<option value="3">Three</option>
-					<option value="4">one option that is super super long</option>
+				<select class="form-select" style="max-width: 135px;">
+					<option selected>SVE KATEGORIJE</option>
+					{% for grupa in grupe %}
+					<option value="{{ grupa[0] }}">{{ grupa[1] }}</option>
+					{% endfor %}
 				</select>
 				<button class="btn btn-primary btn-lg" type="button">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
