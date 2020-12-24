@@ -167,11 +167,16 @@
     var countDownDate = convertDateForIOS("{{ tomorrow }} 00:00:00").getTime();
     setInterval(function() {
       var distance = countDownDate - new Date().getTime();
+      if (distance < 0) return
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      document.getElementById("countdown").innerHTML =
-        `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      var el = document.getElementById("countdown")
+      el.innerHTML = `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      if (hours < 6) {
+        el.classList.add("bg-danger")
+        el.classList.add("text-white")
+      }
     }, 1000);
 </script>
 {% endif %}
@@ -209,5 +214,4 @@
         {% endfor %}
     </div>
 </div>
-
 {% endblock %}
