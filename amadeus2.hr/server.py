@@ -18,6 +18,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+	# base.html
 	cur.execute("""
 		SELECT * FROM (
 			SELECT sifra, naziv, img_html, (
@@ -30,7 +31,15 @@ def index():
 	""")
 	grupe = cur.fetchall()
 
-	return render_template('index.html', grupe=grupe)
+	cur.execute("""
+		SELECT link, promourl
+		FROM covers
+		WHERE amadeus2hr = 't'
+		ORDER BY pozicija ASC;
+	""")
+	covers = cur.fetchall()
+
+	return render_template('index.html', grupe=grupe, covers=covers)
 
 @app.route('/kategorija/<int:id>-<string:slug>')
 def category(id, slug):
