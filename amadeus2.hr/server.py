@@ -41,7 +41,18 @@ def index():
 	""")
 	covers = cur.fetchall()
 
-	return render_template('index.html', grupe=grupe, covers=covers)
+	cur.execute("""
+		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT link
+			FROM slike
+			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+		) FROM proizvodi p
+		WHERE web_istaknut = 't';
+	""")
+	istaknuti_proizvodi = cur.fetchall()
+
+	return render_template('index.html', grupe=grupe, covers=covers,
+		istaknuti_proizvodi=istaknuti_proizvodi)
 
 @app.route('/kategorija/<int:id>-<string:slug>')
 def category(id, slug):
@@ -79,5 +90,12 @@ def date_stuff():
 			'tomorrow': (datetime.date.today() + datetime.timedelta(days=1)),
 			'diffdate': relativedelta,
 			'parsedate': datetime.datetime.strptime}
+
+@app.context_processor
+def money_stuff():
+	def formatmoney(amount):
+		m = "{:,.2f}".format(float(amount)).replace(',', '.')
+		return f'{m[:-3]},{m[-2:]} kn'
+	return {'formatmoney': formatmoney}
 
 app.run(debug=True, host='0.0.0.0')

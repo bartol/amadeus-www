@@ -211,56 +211,33 @@
 <h2>Istaknuti proizvodi</h2>
 <div class="container mb-3" style="margin-left: -0.25rem; margin-right: -0.25rem; margin-top: -0.25rem;">
     <div class="row">
+        {% for proizvod in istaknuti_proizvodi %}
         <div class="col-6 p-1">
             <div class="card p-2">
                 <div class="position-relative">
                     <div class="ratio ratio-1x1 mb-2">
                         <div>
-                            <img src=" https://api.amadeus2.hr/images/279/1190?options=600" alt="..."
+                            <img src="{{ proizvod[4] }}" alt="..."
                                 style="object-fit: contain;" class="w-100 h-100">
                         </div>
                     </div>
                     <h3 class="h6">
-                        <a href="#" class="stretched-link text-decoration-none text-dark overflow-hidden"
+                        <a href="/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="stretched-link text-decoration-none text-dark overflow-hidden"
                             style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                            Call of Duty: WWII Standard Edition PS4
+                            {{ proizvod[1] }}
                         </a>
                     </h3>
                     <h4 class="h6 overflow-hidden mb-0">
-                        <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">499,00 kn</span>
+                        <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">{{ formatmoney(proizvod[2]) }}</span>
                         <span class="text-nowrap">
-                            199,00 kn
-                            <span class="badge rounded-pill bg-danger">-3,00 kn</span>
+                            {{ formatmoney(proizvod[3]) }}
+                            <span class="badge rounded-pill bg-danger">-{{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
                         </span>
                     </h4>
                 </div>
             </div>
         </div>
-        <div class="col-6 p-1">
-            <div class="card p-2">
-                <div class="position-relative">
-                    <div class="ratio ratio-1x1 mb-2">
-                        <div>
-                            <img src=" https://api.amadeus2.hr/images/1140/3989?options=600" alt="..."
-                                style="object-fit: contain;" class="w-100 h-100">
-                        </div>
-                    </div>
-                    <h3 class="h6">
-                        <a href="#" class="stretched-link text-decoration-none text-dark overflow-hidden"
-                            style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                            Lenovo V15 15,6 FHD, 3020E, 4/256, DOS (82C7008ESC)
-                        </a>
-                    </h3>
-                    <h4 class="h6 overflow-hidden mb-0">
-                        <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">499,00 kn</span>
-                        <span class="text-nowrap">
-                            19999,00 kn
-                            <span class="badge rounded-pill bg-danger">-3000,00 kn</span>
-                        </span>
-                    </h4>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 
