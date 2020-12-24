@@ -135,13 +135,10 @@
         <div class="col-sm p-2">
             <div class="d-flex align-items-center position-relative">
                 <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
-                        class="bi bi-shield-lock me-3" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M5.443 1.991a60.17 60.17 0 0 0-2.725.802.454.454 0 0 0-.315.366C1.87 7.056 3.1 9.9 4.567 11.773c.736.94 1.533 1.636 2.197 2.093.333.228.626.394.857.5.116.053.21.089.282.11A.73.73 0 0 0 8 14.5c.007-.001.038-.005.097-.023.072-.022.166-.058.282-.111.23-.106.525-.272.857-.5a10.197 10.197 0 0 0 2.197-2.093C12.9 9.9 14.13 7.056 13.597 3.159a.454.454 0 0 0-.315-.366c-.626-.2-1.682-.526-2.725-.802C9.491 1.71 8.51 1.5 8 1.5c-.51 0-1.49.21-2.557.491zm-.256-.966C6.23.749 7.337.5 8 .5c.662 0 1.77.249 2.813.525a61.09 61.09 0 0 1 2.772.815c.528.168.926.623 1.003 1.184.573 4.197-.756 7.307-2.367 9.365a11.191 11.191 0 0 1-2.418 2.3 6.942 6.942 0 0 1-1.007.586c-.27.124-.558.225-.796.225s-.526-.101-.796-.225a6.908 6.908 0 0 1-1.007-.586 11.192 11.192 0 0 1-2.417-2.3C2.167 10.331.839 7.221 1.412 3.024A1.454 1.454 0 0 1 2.415 1.84a61.11 61.11 0 0 1 2.772-.815z" />
-                        <path
-                            d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415z" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-file-earmark-lock me-3" viewBox="0 0 16 16">
+                        <path d="M10 7v1.076c.54.166 1 .597 1 1.224v2.4c0 .816-.781 1.3-1.5 1.3h-3c-.719 0-1.5-.484-1.5-1.3V9.3c0-.627.46-1.058 1-1.224V7a2 2 0 1 1 4 0zM7 7v1h2V7a1 1 0 0 0-2 0zM6 9.3v2.4c0 .042.02.107.105.175A.637.637 0 0 0 6.5 12h3a.64.64 0 0 0 .395-.125c.085-.068.105-.133.105-.175V9.3c0-.042-.02-.107-.105-.175A.637.637 0 0 0 9.5 9h-3a.637.637 0 0 0-.395.125C6.02 9.193 6 9.258 6 9.3z"/>
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                      </svg>
                 </div>
                 <span>Sigurna i povoljna kupovina iz udobnosti vašeg doma</span>
             </div>
@@ -162,8 +159,8 @@
                 <h3 class="h6 flex-grow-1">
                     <a href="#" class="stretched-link text-decoration-none text-dark overflow-hidden">
                         <span class="badge rounded-pill bg-warning text-dark mb-2 ms-2 float-end"
-                            style="font-size: 0.95rem;">
-                            7:36:24
+                            style="font-size: 0.95rem;" id="countdown">
+                            00:00:00
                             <span class="visually-hidden">time left</span>
                         </span>
                         Call of Duty: WWII Standard Edition PS4
@@ -195,6 +192,16 @@
         </div>
     </div>
 </div>
+<script>
+    var countDownDate = new Date("2020-12-25").getTime();
+    setInterval(function() {
+      var distance = countDownDate - new Date().getTime();
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById("countdown").innerHTML = `${hours}:${minutes}:${seconds}`;
+    }, 1000);
+</script>
 
 {% include "partials/contact_form.html" %}
 
