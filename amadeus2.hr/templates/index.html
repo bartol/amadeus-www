@@ -193,8 +193,12 @@
     </div>
 </div>
 <script>
-    var countDownDate = new Date("{{ tomorrow }} 00:00").getTime();
-    console.log(countDownDate)
+    function convertDateForIOS(date) {
+        var arr = date.split(/[- :]/);
+        date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+        return date;
+    }
+    var countDownDate = convertDateForIOS("{{ tomorrow }} 00:00:00").getTime();
     setInterval(function() {
       var distance = countDownDate - new Date().getTime();
       console.log(distance)
