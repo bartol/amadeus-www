@@ -11,6 +11,7 @@ import glob
 import boto3, botocore
 import random
 from werkzeug.utils import secure_filename
+import datetime
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -268,6 +269,35 @@ def postavke():
                 WHERE sifra = %s;
             """, (html,sifra))
 
+        datumi = request.form.getlist('datumi[]')
+        sifrezadatume = request.form.getlist('sifrezadatume[]')
+
+        for idx, d in enumerate(datumi):
+            # check if product exists
+            s = sifrezadatume[idx]
+            sp = None
+            if s != '':
+                s = int(s)
+                cur.execute("SELECT 1 FROM proizvodi WHERE sifra = %s", (s,))
+                if cur.fetchone() != None:
+                    sp = s
+
+            # check if date exists
+            cur.execute("SELECT 1 FROM akcija_dana WHERE day = %s", (d,))
+            if cur.fetchone() == None:
+                # insert
+                cur.execute("""
+                    INSERT INTO akcija_dana (day, sifra_proizvoda)
+                    VALUES (%s, %s);
+                """, (d, sp))
+            else:
+                # update
+                cur.execute("""
+                    UPDATE akcija_dana
+                    SET sifra_proizvoda = %s
+                    WHERE day = %s;
+                """, (sp, d))
+
         conn.commit()
         return redirect('/postavke')
 
@@ -291,8 +321,26 @@ def postavke():
     """)
     grupe = cur.fetchall()
 
+    datumi = []
+    for n in range(7):
+        datumi.append(datetime.date.today() + datetime.timedelta(days=n))
+
+    datumisifre = []
+    for d in datumi:
+        cur.execute("""
+            SELECT sifra_proizvoda, naziv
+            FROM akcija_dana a
+            LEFT JOIN proizvodi p ON p.sifra = a.sifra_proizvoda
+            WHERE day = %s;
+        """, (d,))
+        akcd = cur.fetchone()
+        if akcd is None:
+            datumisifre.append((d, '', ''))
+        else:
+            datumisifre.append((d, akcd[0], akcd[1]))
+
     return render_template('gui.html', page='postavke', covers=covers,
-        unused_features=unused_features, grupe=grupe)
+        unused_features=unused_features, grupe=grupe, datumi=datumisifre)
 
 @app.route('/postavke/rmfeature', methods=['POST'])
 def rmfeature():
@@ -313,8 +361,8 @@ def getname():
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
 
-# app.run(debug=True)
-ui.run()
+app.run(debug=True)
+# ui.run()
 
 # todo:
 # https://github.com/ClimenteA/pyvan

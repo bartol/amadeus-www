@@ -76,3 +76,9 @@ CREATE TABLE IF NOT EXISTS slicni_proizvodi (
     sifra_slicnog INT,
     FOREIGN KEY (sifra_slicnog) REFERENCES proizvodi(sifra)
 );
+
+CREATE TABLE IF NOT EXISTS akcija_dana (
+    day DATE PRIMARY KEY,
+    sifra_proizvoda INT,
+    FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
+);

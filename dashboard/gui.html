@@ -368,6 +368,25 @@
               </div>
             </div>
           </div>
+
+          <h3>Akcije dana</h3>
+          <table class="table">
+            <tr>
+                <th>Datum</th>
+                <th>Naziv</th>
+                <th>Šifra</th>
+            </tr>
+            {% for datum in datumi %}
+            <tr>
+                <td style="vertical-align: middle;">{{ datum[0] }}</td>
+                <td style="vertical-align: middle;">{% if datum[2] %}{{ datum[2] }}{% endif %}</td>
+                <td>
+                    <input type="hidden" name="datumi[]" value="{{ datum[0] }}">
+                    <label class="form-label mb-0"><input type="text" name="sifrezadatume[]" value="{% if datum[1] %}{{ datum[1] }}{% endif %}" placeholder="šifra proizvoda" class="form-control"></label>
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
         <button type="submit" class="btn btn-primary">Spremi promjene</button>
     </form>
 
