@@ -2,32 +2,38 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
-<div id="covercarousel" class="carousel carousel-dark slide mb-3" data-bs-ride="carousel">
-    <ol class="carousel-indicators">
-        {% for cover in covers %}
-        <li data-bs-target="#covercarousel" data-bs-slide-to="0" class="{% if loop.index == 1 %}active{% endif %}"></li>
-        {% endfor %}
-    </ol>
-    <div class="carousel-inner">
-        {% for cover in covers %}
-        <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-            <a href="{{ cover[1] }}">
-                <img src="{{ cover[0] }}" class="d-block w-100" alt="...">
-            </a>
-        </div>
-        {% endfor %}
+<div class="row mb-3">
+    <div class="col-md-4 col-lg-3 d-none d-md-block">
+        {% include "partials/category_list.html" %}
     </div>
-    <a class="carousel-control-prev" href="#covercarousel" role="button" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#covercarousel" role="button" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </a>
+
+    <div id="covercarousel" class="col-md-8 col-lg-9 carousel carousel-dark slide" data-bs-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for cover in covers %}
+            <li data-bs-target="#covercarousel" data-bs-slide-to="0" class="{% if loop.index == 1 %}active{% endif %}"></li>
+            {% endfor %}
+        </ol>
+        <div class="carousel-inner">
+            {% for cover in covers %}
+            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                <a href="{{ cover[1] }}">
+                    <img src="{{ cover[0] }}" class="d-block w-100" alt="...">
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#covercarousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#covercarousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </a>
+    </div>
 </div>
 
-<ul class="list-group list-group-horizontal">
+<ul class="list-group list-group-horizontal d-md-none">
     <li class="list-group-item list-group-item-action d-flex flex-column justify-content-center align-items-center text-dark py-2" style="width: 33.333%">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-list mt-1" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
@@ -53,7 +59,7 @@
         <a href="https://pioneer.hr" class="text-nowrap my-1 stretched-link text-dark text-decoration-none" style="font-size: 0.75rem;">Pioneer DJ</a>
     </li>
 </ul>
-<ul class="list-group list-group-horizontal mb-3">
+<ul class="list-group list-group-horizontal mb-3 d-md-none">
     <li class="list-group-item list-group-item-action d-flex flex-column justify-content-center align-items-center text-dark py-2" style="width: 33.333%">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-phone mt-1" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M11 1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
@@ -79,7 +85,7 @@
 
 <div class="container mb-3">
     <div class="row">
-        <div class="col-sm p-2">
+        <div class="col-md p-2">
             <div class="d-flex align-items-center position-relative">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-truck me-3" viewBox="0 0 16 16">
@@ -89,7 +95,7 @@
                 <span>Brza i besplatna dostava za <b>sve</b> narudžbe</span>
             </div>
         </div>
-        <div class="col-sm p-2">
+        <div class="col-md p-2">
             <div class="d-flex align-items-center position-relative">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-award me-3" viewBox="0 0 16 16">
@@ -100,7 +106,7 @@
                 <span>{{ diffdate(today, parsedate("1995-04-01", "%Y-%m-%d")).years }} godina uspješnog poslovanja</span>
             </div>
         </div>
-        <div class="col-sm p-2">
+        <div class="col-md p-2">
             <div class="d-flex align-items-center position-relative">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-file-earmark-lock me-3" viewBox="0 0 16 16">
@@ -114,8 +120,23 @@
     </div>
 </div>
 
-{% include "partials/akcija_dana.html" %}
-{% include "partials/contact_form.html" %}
+<div class="row">
+    <div class="col-12 col-md-6">
+        {% include "partials/akcija_dana.html" %}
+    </div>
+    <div class="col-12 col-md-6">
+        <style>
+            @media(min-width: 1200px) {
+                .contact_form_wrapper {
+                    max-width: 340px;
+                }
+            }
+        </style>
+        <div class="mx-auto contact_form_wrapper">
+            {% include "partials/contact_form.html" %}
+        </div>
+    </div>
+</div>
 
 <h2>Istaknuti proizvodi</h2>
 <div class="container mb-3 px-0">

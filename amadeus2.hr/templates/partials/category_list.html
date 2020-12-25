@@ -1,0 +1,14 @@
+<h2>Kategorije</h2>
+<!-- category list -->
+<div class="list-group mb-3">
+    <!-- set active if on that category -->
+    {% for grupa in grupe %}
+    <a href="/kategorija/{{ grupa[0] }}-{{ grupa[1]|slugify }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <span>
+            {{ grupa[2] }}
+            {{ grupa[1] }}
+        </span>
+        <span class="badge bg-secondary rounded-pill">{{ grupa[3] }}</span>
+    </a>
+    {% endfor %}
+</div>
