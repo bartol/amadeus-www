@@ -60,7 +60,24 @@ def category(id, slug):
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):
-	return f'proizvod: {id}'
+	grupe = getbase()
+
+	cur.execute("""
+		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, web_opis
+		FROM proizvodi
+		WHERE amadeus2hr = 'x' AND sifra = %s;
+	""", (id,))
+	proizvod = cur.fetchone()
+
+	cur.execute("""
+		SELECT link
+		FROM slike
+		WHERE sifra_proizvoda = %s
+		ORDER BY pozicija ASC;
+	""", (id,))
+	slike = cur.fetchall()
+
+	return render_template('product.html', grupe=grupe, proizvod=proizvod, slike=slike)
 
 @app.route('/search')
 def search():

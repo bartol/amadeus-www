@@ -2,7 +2,7 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
-<div id="covercarousel" class="carousel carousel-dark slide my-3" data-bs-ride="carousel">
+<div id="covercarousel" class="carousel carousel-dark slide mb-3" data-bs-ride="carousel">
     <ol class="carousel-indicators">
         {% for cover in covers %}
         <li data-bs-target="#covercarousel" data-bs-slide-to="0" class="{% if loop.index == 1 %}active{% endif %}"></li>
@@ -190,9 +190,12 @@
         <div class="col-6 p-1">
             <div class="card p-2">
                 <div class="position-relative">
-                    <div class="ratio ratio-1x1 mb-2">
+                    <div class="ratio ratio-1x1 position-relative mb-2">
+                        <img src="{{ proizvod[4] }}" alt="..." style="object-fit: contain;" class="w-100 h-100">
                         <div>
-                            <img src="{{ proizvod[4] }}" alt="..." style="object-fit: contain;" class="w-100 h-100">
+                            <div class="position-absolute bottom-0 start-0">
+                                <span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
+                            </div>
                         </div>
                     </div>
                     <h3 class="h6">
@@ -203,10 +206,9 @@
                     </h3>
                     <h4 class="h6 overflow-hidden mb-0">
                         <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">{{ formatmoney(proizvod[2]) }}</span>
-                        <span class="text-nowrap">
+                        <b class="text-nowrap">
                             {{ formatmoney(proizvod[3]) }}
-                            <span class="badge rounded-pill bg-danger">-{{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
-                        </span>
+                        </b>
                     </h4>
                 </div>
             </div>
@@ -214,4 +216,5 @@
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}
