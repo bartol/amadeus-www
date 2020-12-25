@@ -20,18 +20,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	# base.html
-	cur.execute("""
-		SELECT * FROM (
-			SELECT sifra, naziv, img_html, (
-				SELECT COUNT(*)
-				FROM proizvodi
-				WHERE grupa = g.sifra AND amadeus2hr = 'x'
-			) AS broj_proizvoda
-			FROM grupe g
-		) x WHERE broj_proizvoda > 0;
-	""")
-	grupe = cur.fetchall()
+	grupe = getbase()
 
 	cur.execute("""
 		SELECT link, promourl
@@ -90,6 +79,20 @@ def checkout():
 	return 'checkout'
 
 # helpers
+
+def getbase():
+	cur.execute("""
+		SELECT * FROM (
+			SELECT sifra, naziv, img_html, (
+				SELECT COUNT(*)
+				FROM proizvodi
+				WHERE grupa = g.sifra AND amadeus2hr = 'x'
+			) AS broj_proizvoda
+			FROM grupe g
+		) x WHERE broj_proizvoda > 0;
+	""")
+	grupe = cur.fetchall()
+	return grupe
 
 @app.template_filter('slugify')
 def _slugify(string):
