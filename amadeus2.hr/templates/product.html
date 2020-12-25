@@ -37,7 +37,7 @@
     <h1>{{ proizvod[1] }}</h1>
     <h2 class="fs-6 fw-bold mt-2">Cijena za jednokratno plaćanje:</h2>
     <h3 class="mb-2">
-        <div class="fs-6">
+        <div class="fs-6 mb-1">
             MPC:
             <span class="text-decoration-line-through">{{ formatmoney(proizvod[2]) }}</span>
         </div>
@@ -115,9 +115,14 @@
 
 <div>
     <div>
+        {% if znacajke|length > 0 %}
         <h2>Značajke</h2>
         <div class="card p-2 mb-3">
-            <table class="table table-bordered rounded mb-0">
+            <table class="table rounded mb-0">
+                <tr>
+                    <th>Značajka</th>
+                    <th>Vrijednost</th>
+                </tr>
                 {% for znacajka in znacajke %}
                 <tr>
                     <td><b>{{ znacajka[0] }}</b></td>
@@ -126,46 +131,29 @@
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
+        {% if proizvod[4] %}
         <h2>Opis</h2>
         <div class="card p-2 mb-3">
             {{ proizvod[4]|safe }}
         </div>
+        {% endif %}
     </div>
     <div>
+        {% if preporuceni_proizvodi|length > 0 %}
         <h2>Preporučeni proizvodi</h2>
         <div class="container mb-3 px-0">
             <div class="row" style="margin: -0.25rem;">
                 {% for proizvod in preporuceni_proizvodi %}
-                <div class="col-6 p-1">
-                    <div class="card p-2">
-                        <div class="position-relative">
-                            <div class="ratio ratio-1x1 position-relative mb-2">
-                                <img src="{{ proizvod[4] }}" alt="..." style="object-fit: contain;" class="w-100 h-100">
-                                <div>
-                                    <div class="position-absolute bottom-0 start-0">
-                                        <span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 class="h6">
-                                <a href="/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="stretched-link text-decoration-none text-dark overflow-hidden"
-                                    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                                    {{ proizvod[1] }}
-                                </a>
-                            </h3>
-                            <h4 class="h6 overflow-hidden mb-0">
-                                <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">{{ formatmoney(proizvod[2]) }}</span>
-                                <b class="text-nowrap">
-                                    {{ formatmoney(proizvod[3]) }}
-                                </b>
-                            </h4>
-                        </div>
-                    </div>
-                </div>
+                {% include "partials/product_card.html" %}
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
+
+{% include "partials/akcija_dana.html" %}
+{% include "partials/contact_form.html" %}
 
 {% endblock %}

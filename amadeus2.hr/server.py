@@ -20,7 +20,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	grupe = getbase()
+	grupe = getgroup()
+	akcija_dana = getakcijadana()
 
 	cur.execute("""
 		SELECT link, promourl
@@ -40,17 +41,6 @@ def index():
 	""")
 	istaknuti_proizvodi = cur.fetchall()
 
-	cur.execute("""
-		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, kolicina, (
-			SELECT link
-			FROM slike
-			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-		) FROM akcija_dana a
-        INNER JOIN proizvodi p ON p.sifra = a.sifra_proizvoda
-        WHERE day = %s;
-	""", (str(datetime.date.today()),))
-	akcija_dana = cur.fetchone()
-
 	return render_template('index.html', grupe=grupe, covers=covers,
 		istaknuti_proizvodi=istaknuti_proizvodi, akcija_dana=akcija_dana)
 
@@ -60,7 +50,8 @@ def category(id, slug):
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):
-	grupe = getbase()
+	grupe = getgroup()
+	akcija_dana = getakcijadana()
 
 	cur.execute("""
 		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, web_opis
@@ -97,7 +88,7 @@ def product(id, slug):
 	znacajke = cur.fetchall()
 
 	return render_template('product.html', grupe=grupe, proizvod=proizvod, slike=slike,
-		preporuceni_proizvodi=preporuceni_proizvodi, znacajke=znacajke)
+		preporuceni_proizvodi=preporuceni_proizvodi, znacajke=znacajke, akcija_dana=akcija_dana)
 
 @app.route('/search')
 def search():
@@ -117,7 +108,7 @@ def checkout():
 
 # helpers
 
-def getbase():
+def getgroup():
 	cur.execute("""
 		SELECT * FROM (
 			SELECT sifra, naziv, img_html, (
@@ -130,6 +121,19 @@ def getbase():
 	""")
 	grupe = cur.fetchall()
 	return grupe
+
+def getakcijadana():
+	cur.execute("""
+		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, kolicina, (
+			SELECT link
+			FROM slike
+			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+		) FROM akcija_dana a
+        INNER JOIN proizvodi p ON p.sifra = a.sifra_proizvoda
+        WHERE day = %s;
+	""", (str(datetime.date.today()),))
+	akcija_dana = cur.fetchone()
+	return akcija_dana
 
 @app.template_filter('slugify')
 def _slugify(string):

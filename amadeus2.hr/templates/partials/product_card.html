@@ -1,0 +1,24 @@
+<div class="col-6 p-1">
+    <div class="card p-2">
+        <div class="position-relative">
+            <div class="ratio ratio-1x1 position-relative mb-2">
+                <img src="{{ proizvod[4] }}" alt="..." style="object-fit: contain;" class="w-100 h-100">
+                <div>
+                    <div class="position-absolute bottom-0 start-0">
+                        <span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
+                    </div>
+                </div>
+            </div>
+            <h3 class="h6">
+                <a href="/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="stretched-link text-decoration-none text-dark overflow-hidden"
+                    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                    {{ proizvod[1] }}
+                </a>
+            </h3>
+            <h4 class="h6 mb-0">
+                <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">{{ formatmoney(proizvod[2]) }}</span>
+                <b>{{ formatmoney(proizvod[3]) }}</b>
+            </h4>
+        </div>
+    </div>
+</div>
