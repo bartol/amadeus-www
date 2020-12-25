@@ -88,8 +88,16 @@ def product(id, slug):
 	""", (id,))
 	preporuceni_proizvodi = cur.fetchall()
 
+	cur.execute("""
+		SELECT naziv, vrijednost
+		FROM znacajke_vrijednosti v
+		INNER JOIN znacajke z ON z.sifra = v.sifra_znacajke
+		WHERE sifra_proizvoda = %s;
+	""", (id,))
+	znacajke = cur.fetchall()
+
 	return render_template('product.html', grupe=grupe, proizvod=proizvod, slike=slike,
-		preporuceni_proizvodi=preporuceni_proizvodi)
+		preporuceni_proizvodi=preporuceni_proizvodi, znacajke=znacajke)
 
 @app.route('/search')
 def search():

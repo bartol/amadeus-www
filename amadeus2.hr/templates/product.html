@@ -109,11 +109,11 @@
     <div>
         <h2>Značajke</h2>
         <div class="card p-2 mb-3">
-            <table class="table">
+            <table class="table table-bordered rounded mb-0">
                 {% for znacajka in znacajke %}
                 <tr>
-                    <th>{{ znacajka[0] }}</th>
-                    <th>{{ znacajka[1] }}</th>
+                    <td><b>{{ znacajka[0] }}</b></td>
+                    <td>{{ znacajka[1] }}</td>
                 </tr>
                 {% endfor %}
             </table>
