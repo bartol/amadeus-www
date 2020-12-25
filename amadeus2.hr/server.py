@@ -77,7 +77,19 @@ def product(id, slug):
 	""", (id,))
 	slike = cur.fetchall()
 
-	return render_template('product.html', grupe=grupe, proizvod=proizvod, slike=slike)
+	cur.execute("""
+		SELECT p.sifra, naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT link
+			FROM slike
+			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+		) FROM slicni_proizvodi s
+		INNER JOIN proizvodi p ON s.sifra_slicnog = p.sifra
+		WHERE s.sifra = %s;
+	""", (id,))
+	preporuceni_proizvodi = cur.fetchall()
+
+	return render_template('product.html', grupe=grupe, proizvod=proizvod, slike=slike,
+		preporuceni_proizvodi=preporuceni_proizvodi)
 
 @app.route('/search')
 def search():
