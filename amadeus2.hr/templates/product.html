@@ -2,122 +2,127 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
-<div class="card p-2 mb-3">
-    <div id="productcarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for slika in slike %}
-            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-                <div class="ratio ratio-1x1">
-                    <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="...">
+<div class="row">
+    <div class="col-12 col-md-6">
+        <div class="card p-2 mb-3 mb-lg-4">
+            <div id="productcarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for slika in slike %}
+                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                        <div class="ratio ratio-1x1">
+                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="...">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#productcarousel" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#productcarousel" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+                <ol class="carousel-indicators">
+                    {% for slika in slike %}
+                    <li data-bs-target="#productcarousel" data-bs-slide-to="{{ loop.index - 1 }}" class="bg-transparent {% if loop.index == 1 %}active{% endif %}">
+                        <div class="ratio ratio-1x1">
+                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="...">
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class="card p-2 mb-3 mb-lg-4">
+            <h1>{{ proizvod[1] }}</h1>
+            <h2 class="fs-6 fw-bold mt-2 mt-lg-3">Cijena za jednokratno plaćanje:</h2>
+            <h3 class="mb-2">
+                <div class="fs-6 mb-1">
+                    MPC:
+                    <span class="text-decoration-line-through">{{ formatmoney(proizvod[2]) }}</span>
+                </div>
+                <span class="text-nowrap">
+                    <b>{{ formatmoney(proizvod[3]) }}</b>
+                    <span class="badge rounded-pill bg-danger">-{{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
+                </span>
+            </h3>
+            <h2 class="fs-6 fw-bold mt-2 mt-lg-3">Cijena za plaćanje na rate:</h2>
+            <div class="d-flex mb-3 mb-md-4 align-items-center">
+                <select class="form-select" aria-label="Default select example">
+                    <option value="2" selected>2 rate</option>
+                    <option value="3">3 rate</option>
+                    <option value="4">4 rate</option>
+                    <option value="5">5 rata</option>
+                    <option value="6">6 rata</option>
+                    <option value="7">7 rata</option>
+                    <option value="8">8 rata</option>
+                    <option value="9">9 rata</option>
+                    <option value="10">10 rata</option>
+                    <option value="11">11 rata</option>
+                    <option value="12">12 rata</option>
+                    <option value="13">13 rata</option>
+                    <option value="14">14 rata</option>
+                    <option value="15">15 rata</option>
+                    <option value="16">16 rata</option>
+                    <option value="17">17 rata</option>
+                    <option value="18">18 rata</option>
+                    <option value="19">19 rata</option>
+                    <option value="20">20 rata</option>
+                    <option value="21">21 rata</option>
+                    <option value="22">22 rate</option>
+                    <option value="23">23 rate</option>
+                    <option value="24">24 rate</option>
+                </select>
+                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos">146,59</span> kn/mj.</span>
+            </div>
+            <div class="d-flex">
+                <style>
+                    /* Chrome, Safari, Edge, Opera */
+                    input::-webkit-outer-spin-button,
+                    input::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+
+                    /* Firefox */
+                    input[type=number] {
+                        -moz-appearance: textfield;
+                    }
+                </style>
+                <div class="input-group mb-0 me-2" style="max-width: 8rem;">
+                    <button class="btn btn-outline-secondary px-2" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                        </svg>
+                    </button>
+                    <input type="number" class="form-control" aria-label="trazilica za proizvode i 2 tipke" value="1" style="text-align: center;" min="1">
+                    <button class="btn btn-outline-secondary px-2" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="d-grid flex-grow-1">
+                    <button type="button" class="btn btn-primary text-truncate" style="z-index: 1100;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                        </svg>
+                        Dodaj u košaricu
+                    </button>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        <a class="carousel-control-prev" href="#productcarousel" role="button" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#productcarousel" role="button" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </a>
-        <ol class="carousel-indicators">
-            {% for slika in slike %}
-            <li data-bs-target="#productcarousel" data-bs-slide-to="{{ loop.index - 1 }}" class="bg-transparent {% if loop.index == 1 %}active{% endif %}">
-                <div class="ratio ratio-1x1">
-                    <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="...">
-                </div>
-            </li>
-            {% endfor %}
-        </ol>
-    </div>
-</div>
-
-<div class="card p-2 mb-3">
-    <h1>{{ proizvod[1] }}</h1>
-    <h2 class="fs-6 fw-bold mt-2">Cijena za jednokratno plaćanje:</h2>
-    <h3 class="mb-2">
-        <div class="fs-6 mb-1">
-            MPC:
-            <span class="text-decoration-line-through">{{ formatmoney(proizvod[2]) }}</span>
-        </div>
-        <span class="text-nowrap">
-            <b>{{ formatmoney(proizvod[3]) }}</b>
-            <span class="badge rounded-pill bg-danger">-{{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
-        </span>
-    </h3>
-    <h2 class="fs-6 fw-bold mt-2">Cijena za plaćanje na rate:</h2>
-    <div class="d-flex mb-3 align-items-center">
-        <select class="form-select" aria-label="Default select example">
-            <option value="2" selected>2 rate</option>
-            <option value="3">3 rate</option>
-            <option value="4">4 rate</option>
-            <option value="5">5 rata</option>
-            <option value="6">6 rata</option>
-            <option value="7">7 rata</option>
-            <option value="8">8 rata</option>
-            <option value="9">9 rata</option>
-            <option value="10">10 rata</option>
-            <option value="11">11 rata</option>
-            <option value="12">12 rata</option>
-            <option value="13">13 rata</option>
-            <option value="14">14 rata</option>
-            <option value="15">15 rata</option>
-            <option value="16">16 rata</option>
-            <option value="17">17 rata</option>
-            <option value="18">18 rata</option>
-            <option value="19">19 rata</option>
-            <option value="20">20 rata</option>
-            <option value="21">21 rata</option>
-            <option value="22">22 rate</option>
-            <option value="23">23 rate</option>
-            <option value="24">24 rate</option>
-        </select>
-        <span class="text-nowrap ms-2"><span id="placanje_rate_iznos">146,59</span> kn/mj.</span>
-    </div>
-    <div class="d-flex">
-        <style>
-            /* Chrome, Safari, Edge, Opera */
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-
-            /* Firefox */
-            input[type=number] {
-                -moz-appearance: textfield;
-            }
-        </style>
-        <div class="input-group mb-0 me-2" style="max-width: 8rem;">
-            <button class="btn btn-outline-secondary px-2" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
-                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
-                </svg>
-            </button>
-            <input type="number" class="form-control" aria-label="trazilica za proizvode i 2 tipke" value="1" style="text-align: center;" min="1">
-            <button class="btn btn-outline-secondary px-2" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-            </button>
-        </div>
-        <div class="d-grid flex-grow-1">
-            <button type="button" class="btn btn-primary text-truncate" style="z-index: 1100;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                </svg>
-                Dodaj u košaricu
-            </button>
         </div>
     </div>
 </div>
 
-<div>
-    <div>
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-7 col-xl-8">
         {% if znacajke|length > 0 %}
         <h2>Značajke</h2>
-        <div class="card p-2 mb-3">
+        <div class="card p-2 mb-3 mb-lg-4">
             <table class="table rounded mb-0">
                 <tr>
                     <th>Značajka</th>
@@ -134,18 +139,20 @@
         {% endif %}
         {% if proizvod[4] %}
         <h2>Opis</h2>
-        <div class="card p-2 mb-3">
+        <div class="card p-2 mb-3 mb-lg-4">
             {{ proizvod[4]|safe }}
         </div>
         {% endif %}
     </div>
-    <div>
+    <div class="col-12 col-md-6 col-lg-5 col-xl-4">
         {% if preporuceni_proizvodi|length > 0 %}
         <h2>Preporučeni proizvodi</h2>
-        <div class="container mb-3 px-0">
+        <div class="container mb-3 mb-lg-4 px-0">
             <div class="row" style="margin: -0.25rem;">
                 {% for proizvod in preporuceni_proizvodi %}
+                {% with sidebar=true %}
                 {% include "partials/product_card.html" %}
+                {% endwith %}
                 {% endfor %}
             </div>
         </div>
@@ -153,7 +160,13 @@
     </div>
 </div>
 
-{% include "partials/akcija_dana.html" %}
-{% include "partials/contact_form.html" %}
+<div class="row">
+    <div class="col-12 col-md-6">
+        {% include "partials/akcija_dana.html" %}
+    </div>
+    <div class="col-12 col-md-6">
+        {% include "partials/contact_form.html" %}
+    </div>
+</div>
 
 {% endblock %}
