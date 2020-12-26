@@ -122,7 +122,7 @@
     <div class="col-12 col-md-6 col-lg-7 col-xl-8">
         {% if znacajke|length > 0 %}
         <h2>Značajke</h2>
-        <div class="card p-2 mb-3 mb-lg-4">
+        <div class="card p-2 mb-3">
             <table class="table rounded mb-0">
                 <tr>
                     <th>Značajka</th>
@@ -139,7 +139,7 @@
         {% endif %}
         {% if proizvod[4] %}
         <h2>Opis</h2>
-        <div class="card p-2 mb-3 mb-lg-4">
+        <div class="card p-2 mb-3">
             {{ proizvod[4]|safe }}
         </div>
         {% endif %}
@@ -147,7 +147,7 @@
     <div class="col-12 col-md-6 col-lg-5 col-xl-4">
         {% if preporuceni_proizvodi|length > 0 %}
         <h2>Preporučeni proizvodi</h2>
-        <div class="container mb-3 mb-lg-4 px-0">
+        <div class="container mb-3 px-0">
             <div class="row" style="margin: -0.25rem;">
                 {% for proizvod in preporuceni_proizvodi %}
                 {% with sidebar=true %}
@@ -159,6 +159,8 @@
         {% endif %}
     </div>
 </div>
+
+{% include "partials/badges.html" %}
 
 <div class="row">
     <div class="col-12 col-md-6">
