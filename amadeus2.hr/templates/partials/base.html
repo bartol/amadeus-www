@@ -73,42 +73,45 @@
 	<!-- footer -->
 	<footer class="shadow-sm bg-white py-3">
 		<div class="container">
-			<div class="accordion mb-3" id="footeraccordion">
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingTwo">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-							data-bs-target="#about" aria-expanded="false" aria-controls="about">
-							O Amadeusu
-						</button>
-					</h2>
-					<div id="about" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#footeraccordion">
-						<div class="accordion-body">
-							<ul class="list-unstyled mb-0">
-								<li><a href="https://bdeak.net">link</a></li>
-								<li><a href="https://bdeak.net">link2</a></li>
-							</ul>
+			<div class="row">
+				<div class="col-12 accordion mb-3 d-md-none" id="footeraccordion">
+					<div class="accordion-item">
+						<h2 class="accordion-header" id="headingTwo">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#about" aria-expanded="false" aria-controls="about">
+								O Amadeusu
+							</button>
+						</h2>
+						<div id="about" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#footeraccordion">
+							<div class="accordion-body">
+								{% include "partials/about.html" %}
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item">
+						<h2 class="accordion-header" id="headingThree">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+								Informacije
+							</button>
+						</h2>
+						<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#footeraccordion">
+							<div class="accordion-body">
+								{% include "partials/information_list.html" %}
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingThree">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-							data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-							Informacije
-						</button>
-					</h2>
-					<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#footeraccordion">
-						<div class="accordion-body">
-							<ul class="list-unstyled mb-0">
-								<li><a href="https://bdeak.net">link</a></li>
-								<li><a href="https://bdeak.net">link2</a></li>
-							</ul>
-						</div>
-					</div>
+				<div class="col-md-4 d-none d-md-block">
+					{% include "partials/about.html" %}
 				</div>
-			</div>
-			<div class="mb-3">
-				{% include "partials/contact_list.html" %}
+				<div class="col-md-4 d-none d-md-block">
+					<h2>Informacije</h2>
+					{% include "partials/information_list.html" %}
+				</div>
+				<div class="col-12 col-md-4 mb-3">
+					{% include "partials/contact_list.html" %}
+				</div>
 			</div>
 			<p class="text-muted text-center mb-1" style="font-size: 0.75rem;">&copy; 1995-{{ today.year }} Amadeus II d.o.o.</p>
 		</div>
