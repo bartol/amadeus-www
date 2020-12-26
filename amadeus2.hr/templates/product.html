@@ -2,6 +2,15 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Početna</a></li>
+        <li class="breadcrumb-item"><a href="/kategorija/{{ proizvod[5] }}-{{ proizvod[6]|slugify }}">{{ proizvod[6] }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ proizvod[1] }}</li>
+    </ol>
+</nav>
+
 <div class="row">
     <div class="col-12 col-md-6">
         <div class="card p-2 mb-3 mb-lg-4">

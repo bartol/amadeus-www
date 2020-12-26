@@ -54,9 +54,10 @@ def product(id, slug):
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
-		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, web_opis
-		FROM proizvodi
-		WHERE amadeus2hr = 'x' AND sifra = %s;
+		SELECT p.sifra, p.naziv, web_cijena, web_cijena_s_popustom, web_opis, g.sifra, g.naziv
+		FROM proizvodi p
+		INNER JOIN grupe g ON p.grupa = g.sifra
+		WHERE amadeus2hr = 'x' AND p.sifra = %s;
 	""", (id,))
 	proizvod = cur.fetchone()
 	if not proizvod:
