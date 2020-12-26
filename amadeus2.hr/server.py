@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 import psycopg2
 import configparser
 from slugify import slugify
@@ -37,7 +37,7 @@ def index():
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
 		) FROM proizvodi p
-		WHERE web_istaknut = 't';
+		WHERE web_istaknut = 't' AND amadeus2hr = 'x';
 	""")
 	istaknuti_proizvodi = cur.fetchall()
 
@@ -59,6 +59,8 @@ def product(id, slug):
 		WHERE amadeus2hr = 'x' AND sifra = %s;
 	""", (id,))
 	proizvod = cur.fetchone()
+	if not proizvod:
+		abort(404)
 
 	cur.execute("""
 		SELECT link
@@ -118,7 +120,9 @@ def getgroup():
 				WHERE grupa = g.sifra AND amadeus2hr = 'x'
 			) AS broj_proizvoda
 			FROM grupe g
-		) x WHERE broj_proizvoda > 0;
+		) _
+		WHERE broj_proizvoda > 0
+		ORDER BY broj_proizvoda DESC;
 	""")
 	grupe = cur.fetchall()
 	return grupe
@@ -131,7 +135,7 @@ def getakcijadana():
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
 		) FROM akcija_dana a
         INNER JOIN proizvodi p ON p.sifra = a.sifra_proizvoda
-        WHERE day = %s;
+        WHERE day = %s AND amadeus2hr = 'x';
 	""", (str(datetime.date.today()),))
 	akcija_dana = cur.fetchone()
 	return akcija_dana
