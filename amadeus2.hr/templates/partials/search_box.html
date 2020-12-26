@@ -1,5 +1,5 @@
 <form class="input-group mx-auto" style="max-width: 700px;">
-    <input type="text" class="form-control {% if lg %}form-control-lg{% endif %}" placeholder="iphone 12" aria-label="trazilica za proizvode i 2 tipke" id="searchbox{% if lg %}-lg{% endif %}">
+    <input type="text" class="form-control {% if lg %}form-control-lg{% endif %}" aria-label="trazilica za proizvode i 2 tipke" id="searchbox{% if lg %}-lg{% endif %}">
     <select class="form-select" {% if lg %}style="max-width: 8.5rem;"{% else %}style="max-width: 12rem;"{% endif %}>
         <option selected>SVE KATEGORIJE</option>
         {% for grupa in grupe %}
