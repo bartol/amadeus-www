@@ -7,7 +7,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">amadeus2.hr</a></li>
         <li class="breadcrumb-item"><a href="/kategorija/{{ proizvod[5] }}-{{ proizvod[6]|slugify }}">{{ proizvod[6] }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ proizvod[1] }}</li>
+        <li class="breadcrumb-item active" aria-current="page"><span class="d-none d-md-inline">{{ proizvod[1] }}</span></li>
     </ol>
 </nav>
 
@@ -47,6 +47,7 @@
     <div class="col-12 col-md-6">
         <div class="card p-2 mb-3 mb-lg-4">
             <h1>{{ proizvod[1] }}</h1>
+            <h2 style="font-size: 0.9rem;">Šifra: {{ proizvod[0] }}</h2>
             <h2 class="fs-6 fw-bold mt-2 mt-lg-3">Cijena za jednokratno plaćanje:</h2>
             <h3 class="mb-2">
                 <div class="fs-6 mb-1">
@@ -122,6 +123,29 @@
                         Dodaj u košaricu
                     </button>
                 </div>
+            </div>
+        </div>
+        <div class="card p-2 mb-3 mb-lg-4">
+            <div class="d-flex flex-column flex-xl-row">
+            <a class="btn btn-outline-secondary text-nowrap mb-2 mb-xl-0 me-xl-2" href='https://www.facebook.com/sharer.php?u={{ ("https://amadeus2.hr/proizvod/" + (proizvod[0]|string) + "-" + (proizvod[1]|slugify))|urlencode|replace("/", "%2F") }}' target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+                </svg>
+                Podijeli na Facebooku
+            </a>
+            <div class="input-group">
+                <input type="text" class="form-control text-muted" aria-label="trazilica za proizvode i 2 tipke" id="copytoclipboard" value="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" onclick="this.select();">
+                <button class="btn btn-outline-secondary text-nowrap" type="button" onclick='
+                el = document.getElementById("copytoclipboard");
+                el.select();
+                document.execCommand("copy");
+                '>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16">
+                        <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                    </svg>
+                    Kopiraj link
+                </button>
+            </div>
             </div>
         </div>
     </div>
