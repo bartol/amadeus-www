@@ -2,7 +2,7 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
-<div class="row mb-3">
+<div class="row mb-3 mb-lg-5">
     <div class="col-md-4 col-lg-3 d-none d-md-block">
         {% include "partials/category_list.html" %}
     </div>
@@ -83,7 +83,7 @@
     </li>
 </ul>
 
-<div class="container mb-3">
+<div class="container mb-3 mb-lg-5">
     <div class="row">
         <div class="col-md p-2">
             <div class="d-flex align-items-center position-relative">
@@ -125,21 +125,12 @@
         {% include "partials/akcija_dana.html" %}
     </div>
     <div class="col-12 col-md-6">
-        <style>
-            @media(min-width: 1200px) {
-                .contact_form_wrapper {
-                    max-width: 340px;
-                }
-            }
-        </style>
-        <div class="mx-auto contact_form_wrapper">
-            {% include "partials/contact_form.html" %}
-        </div>
+        {% include "partials/contact_form.html" %}
     </div>
 </div>
 
 <h2>Istaknuti proizvodi</h2>
-<div class="container mb-3 px-0">
+<div class="container mb-3 mb-lg-4 px-0">
     <div class="row" style="margin: -0.25rem;">
         {% for proizvod in istaknuti_proizvodi %}
         {% include "partials/product_card.html" %}

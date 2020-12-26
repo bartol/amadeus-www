@@ -94,9 +94,10 @@ def product(id, slug):
 def search():
 	return 'search'
 
-@app.route('/contact', methods=['POST'])
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-	return 'contact'
+	grupe = getgroup()
+	return render_template('contact.html', grupe=grupe)
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
