@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, request, abort
 import psycopg2
 import configparser
 from slugify import slugify
 import datetime
 from dateutil.relativedelta import relativedelta
+import math
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -13,6 +14,8 @@ config.read('config.ini')
 dbconn = config['global']['dbconn'].strip('"')
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
+
+pagesize = 60
 
 app = Flask(__name__)
 
@@ -51,14 +54,18 @@ def category(id, slug):
 	cur.execute("SELECT naziv FROM grupe WHERE sifra = %s", (id,))
 	grupa = cur.fetchone()
 
+	page = request.args.get('p', default=1, type=int)
+	offset = (page - 1) * pagesize
+
 	cur.execute("""
 		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
 		) FROM proizvodi p
-		WHERE grupa = %s AND amadeus2hr = 'x';
-	""", (id,))
+		WHERE grupa = %s AND amadeus2hr = 'x'
+		LIMIT %s OFFSET %s;
+	""", (id, pagesize, offset))
 	proizvodi = cur.fetchall()
 
 	cur.execute("""
@@ -78,14 +85,16 @@ def category(id, slug):
 			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [z[2]] }
 
 	cur.execute("""
-		SELECT MIN(web_cijena_s_popustom)::INT, MAX(web_cijena_s_popustom)::INT
+		SELECT MIN(web_cijena_s_popustom)::INT, MAX(web_cijena_s_popustom)::INT, COUNT(*)
 		FROM proizvodi
 		WHERE grupa = %s AND amadeus2hr = 'x';
 	""", (id,))
-	cijene_ekstremi = cur.fetchone()
+	agg = cur.fetchone()
+
+	numofpages = math.ceil(agg[2] / pagesize)
 
 	return render_template('category.html', grupe=grupe, grupa=grupa, proizvodi=proizvodi,
-		znacajke=znacajke, cijene_ekstremi=cijene_ekstremi)
+		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages)
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):
