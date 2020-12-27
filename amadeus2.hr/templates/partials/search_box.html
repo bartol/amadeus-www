@@ -1,12 +1,12 @@
-<form class="input-group mx-auto" style="max-width: 700px;">
-    <input type="text" class="form-control {% if lg %}form-control-lg{% endif %}" aria-label="trazilica za proizvode i 2 tipke" id="searchbox{% if lg %}-lg{% endif %}">
-    <select class="form-select" {% if lg %}style="max-width: 8.5rem;"{% else %}style="max-width: 12rem;"{% endif %}>
-        <option selected>SVE KATEGORIJE</option>
+<form action="/search" method="GET" class="input-group mx-auto" style="max-width: 700px;">
+    <input type="text" name="q" class="form-control {% if lg %}form-control-lg{% endif %}" aria-label="trazilica za proizvode i 2 tipke" id="searchbox{% if lg %}-lg{% endif %}">
+    <select name="c" class="form-select" {% if lg %}style="max-width: 8.5rem;"{% else %}style="max-width: 12rem;"{% endif %}>
+        <option value="" selected>SVE KATEGORIJE</option>
         {% for grupa in grupe %}
         <option value="{{ grupa[0] }}">{{ grupa[1] }}</option>
         {% endfor %}
     </select>
-    <button class="btn btn-primary {% if lg %}btn-lg{% endif %}" type="button">
+    <button class="btn btn-primary {% if lg %}btn-lg{% endif %}" type="submit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
             <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />

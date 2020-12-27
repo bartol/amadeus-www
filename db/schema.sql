@@ -25,12 +25,34 @@ CREATE TABLE IF NOT EXISTS proizvodi (
 
     -- mjenjaju se pojedinactno  +znacajke +slike
     web_opis TEXT,
-    web_istaknut BOOLEAN
+    web_istaknut BOOLEAN,
+
+    tsv TSVECTOR
 );
 
 -- CREATE INDEX amadeus2hr_idx ON proizvodi(amadeus2hr) WHERE amadeus2hr IS NOT NULL;
 -- CREATE INDEX pioneerhr_idx ON proizvodi(pioneerhr) WHERE pioneerhr IS NOT NULL;
 -- CREATE INDEX njuskalohr_idx ON proizvodi(njuskalohr) WHERE njuskalohr IS NOT NULL;
+
+-- fts -----------------------------------------------------------------------
+
+CREATE EXTENSION unaccent;
+
+CREATE FUNCTION products_trigger() RETURNS trigger AS $$
+begin
+new.tsv :=
+    setweight(to_tsvector(unaccent(coalesce(new.naziv,''))), 'A') ||
+    setweight(to_tsvector(unaccent(coalesce(new.web_opis,''))), 'B');
+return new;
+end
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
+ON proizvodi FOR EACH ROW EXECUTE PROCEDURE products_trigger();
+
+CREATE INDEX tsvector_idx ON proizvodi USING GIN (tsv);
+
+------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS slike (
     sifra SERIAL PRIMARY KEY,

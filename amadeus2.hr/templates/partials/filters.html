@@ -21,6 +21,23 @@
         <option value="min-max" {{"selected" if sort == "min-max"}}>Cijena (niža prema višoj)</option>
         <option value="max-min" {{"selected" if sort == "max-min"}}>Cijena (viša prema nižoj)</option>
     </select>
+    {% if filtergrupe|length %}
+    <h2 class="h4">Kategorije</h2>
+    <ul class="list-unstyled">
+        {% for grupa in filtergrupe %}
+        <li>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" name="g[]" value="{{ grupa[0] }}"
+                    {% if grupa[2] %}checked{% endif %}
+                    class="form-check-input">
+                    {{ grupa[1] }}
+                </label>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% for sifra in znacajke %}
     <h2 class="h4">{{ znacajke[sifra]['naziv'] }}</h2>
     <ul class="list-unstyled">
@@ -50,7 +67,7 @@
         <span class="input-group-text">kn</span>
     </div>
 
-    <input type="hidden" name="q" value="" id="queryinput">
+    <input type="hidden" name="q" value="{% if query %}{{ query }}{% endif %}" id="queryinput">
     <input type="hidden" name="p" value="1" id="pageinput">
 
     <div class="d-grid">

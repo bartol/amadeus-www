@@ -11,7 +11,7 @@
         <h3 class="h6">
             <a href="/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="stretched-link text-decoration-none text-dark overflow-hidden"
                 style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                {{ proizvod[1] }}
+                {{ proizvod[1]|safe }}
             </a>
         </h3>
         <h4 class="h6 mb-0">

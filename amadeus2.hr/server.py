@@ -195,7 +195,150 @@ def product(id, slug):
 
 @app.route('/search')
 def search():
-	return 'search'
+	grupe = getgroup()
+
+	query = request.args.get('q')
+	if not query:
+		return render_template('search.html', grupe=grupe)
+
+	modified = False
+
+	cur.execute("""
+	SELECT grupa, naziv FROM (
+		SELECT DISTINCT grupa
+		FROM proizvodi, plainto_tsquery(unaccent(%s)) query
+		WHERE tsv @@ query AND amadeus2hr = 'x'
+	) _
+	INNER JOIN grupe g ON g.sifra = grupa
+	""", (query,))
+	filtergrupex = cur.fetchall()
+
+	kategorije = request.args.getlist('g[]', type=int)
+	filtergrupe = []
+	for grupa in filtergrupex:
+		filtergrupe.append([grupa[0], grupa[1], (grupa[0] in kategorije)])
+
+	page = request.args.get('p', default=1, type=int)
+	offset = (page - 1) * pagesize
+
+	sort = request.args.get('s')
+	sort_val = {
+		'a-z': 'ORDER BY naziv ASC',
+		'z-a': 'ORDER BY naziv DESC',
+		'min-max': 'ORDER BY web_cijena_s_popustom ASC',
+		'max-min': 'ORDER BY web_cijena_s_popustom DESC'
+	}
+	sort_sql = sort_val.get(sort, '')
+
+	condition_sql = ''
+	cijene = [request.args.get('c-min'), request.args.get('c-max')]
+	if cijene[0]: cijene[0] = int(float(cijene[0]))
+	if cijene[1]: cijene[1] = int(float(cijene[1]))
+	if isinstance(cijene[0], int):
+		condition_sql += f'AND web_cijena_s_popustom > {cijene[0]}'
+	if isinstance(cijene[1], int):
+		condition_sql += f'AND web_cijena_s_popustom < {cijene[1]}'
+
+	if page > 1 or sort or len(kategorije) or isinstance(cijene[0], int) or isinstance(cijene[1], int):
+		modified = True
+
+	# cur.execute("""
+	# 	SELECT DISTINCT z.sifra, naziv, vrijednost
+	# 	FROM znacajke_vrijednosti v
+	# 	INNER JOIN znacajke z ON v.sifra_znacajke = z.sifra
+	# 	WHERE sifra_grupe = %s
+	# 	ORDER BY naziv, vrijednost ASC;
+	# """, (id,))
+	# znacajkelist = cur.fetchall()
+	znacajkelist = []
+
+	znacajke = {}
+	sel = {}
+	for z in znacajkelist:
+		selected = False
+		if z[2] in request.args.getlist(f'z-{z[0]}[]'):
+			selected = True
+			modified = True
+		vrijednost = (z[2], selected)
+		if z[0] in znacajke:
+			znacajke[z[0]]['vrijednosti'].append(vrijednost)
+		else:
+			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [vrijednost] }
+		if selected:
+			if z[0] in sel:
+				sel[z[0]].append(z[2])
+			else:
+				sel[z[0]] = [z[2]]
+
+	znacajke_exists_sql = ''
+	znacajke_where_sql = ''
+	for idx, sifra in enumerate(sel):
+		lst = "'" + "','".join(sel[sifra]) + "'"
+		znacajke_exists_sql += f',EXISTS (SELECT 1 FROM znacajke_vrijednosti WHERE sifra_proizvoda = p.sifra AND sifra_znacajke = {sifra} AND vrijednost IN ({lst})) AS z{sifra}'
+		if znacajke_where_sql == '':
+			znacajke_where_sql = f"WHERE z{sifra} = 't'"
+		else:
+			znacajke_where_sql += f" AND z{sifra} = 't'"
+
+	sql = f"""
+		SELECT * FROM (
+			SELECT sifra, ts_headline(naziv, query) AS naziv, web_cijena, web_cijena_s_popustom, (
+				SELECT link
+				FROM slike
+				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+			)
+			{znacajke_exists_sql}
+			FROM proizvodi p, websearch_to_tsquery(unaccent(%s)) query
+			WHERE tsv @@ query AND amadeus2hr = 'x' {condition_sql}
+			ORDER BY ts_rank(tsv, query) DESC
+		) _
+		{znacajke_where_sql}
+		{sort_sql}
+		LIMIT %s OFFSET %s;
+	"""
+	cur.execute(sql, (query, pagesize, offset))
+	proizvodi = cur.fetchall()
+
+	cur.execute("""
+		SELECT MIN(web_cijena_s_popustom)::INT, MAX(web_cijena_s_popustom)::INT, COUNT(*)
+		FROM proizvodi, websearch_to_tsquery(unaccent(%s)) query
+		WHERE tsv @@ query AND amadeus2hr = 'x'
+	""", (query,))
+	agg = cur.fetchone()
+
+	numofpages = math.ceil(agg[2] / pagesize)
+
+	return render_template('search.html', grupe=grupe, query=query, proizvodi=proizvodi,
+		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
+		sort=sort, modified=modified, filtergrupe=filtergrupe)
+
+
+
+
+
+
+
+
+	sql = f"""
+		SELECT * FROM (
+			SELECT sifra, ts_headline(naziv, query) AS naziv, web_cijena, web_cijena_s_popustom, (
+				SELECT link
+				FROM slike
+				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+			)
+			FROM proizvodi p, websearch_to_tsquery(unaccent(%s)) query
+			WHERE tsv @@ query AND amadeus2hr = 'x'
+			ORDER BY ts_rank(tsv, query) DESC
+		) _
+		LIMIT %s OFFSET %s;
+	"""
+	cur.execute(sql, (query, pagesize, offset))
+	proizvodi = cur.fetchall()
+
+	print(sql)
+	print(proizvodi)
+
+	return render_template('search.html', grupe=grupe, query=query, proizvodi=proizvodi)
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
