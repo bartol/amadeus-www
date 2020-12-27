@@ -46,7 +46,46 @@ def index():
 
 @app.route('/kategorija/<int:id>-<string:slug>')
 def category(id, slug):
-	return f'kategorija: {id}'
+	grupe = getgroup()
+
+	cur.execute("SELECT naziv FROM grupe WHERE sifra = %s", (id,))
+	grupa = cur.fetchone()
+
+	cur.execute("""
+		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT link
+			FROM slike
+			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+		) FROM proizvodi p
+		WHERE grupa = %s AND amadeus2hr = 'x';
+	""", (id,))
+	proizvodi = cur.fetchall()
+
+	cur.execute("""
+		SELECT DISTINCT z.sifra, naziv, vrijednost
+		FROM znacajke_vrijednosti v
+		INNER JOIN znacajke z ON v.sifra_znacajke = z.sifra
+		WHERE sifra_grupe = %s
+		ORDER BY naziv, vrijednost ASC;
+	""", (id,))
+	znacajkelist = cur.fetchall()
+
+	znacajke = {}
+	for z in znacajkelist:
+		if z[0] in znacajke:
+			znacajke[z[0]]['vrijednosti'].append(z[2])
+		else:
+			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [z[2]] }
+
+	cur.execute("""
+		SELECT MIN(web_cijena_s_popustom), MAX(web_cijena_s_popustom)
+		FROM proizvodi
+		WHERE grupa = %s AND amadeus2hr = 'x';
+	""", (id,))
+	cijene_ekstremi = cur.fetchone()
+
+	return render_template('category.html', grupe=grupe, grupa=grupa, proizvodi=proizvodi,
+		znacajke=znacajke, cijene_ekstremi=cijene_ekstremi)
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):

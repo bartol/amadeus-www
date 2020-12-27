@@ -1,0 +1,35 @@
+<form method="GET">
+    {% for sifra in znacajke %}
+    <h2>{{ znacajke[sifra]['naziv'] }}</h2>
+    <ul class="list-unstyled">
+        {% for vrijednost in znacajke[sifra]['vrijednosti'] %}
+        <li>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" name="z-{{ sifra }}[]" value="{{ vrijednost }}" class="form-check-input">
+                    {{ vrijednost }}
+                </label>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+    <h2>Cijena</h2>
+    <div class="d-flex align-items-center mb-3">
+        <span class="me-2">OD</span>
+        <label class="form-label flex-shrink-1 mb-0">
+            <input type="text" name="cijena-min" class="form-control" placeholder="{{ cijene_ekstremi[0] }}">
+        </label>
+        <span class="mx-2">DO</span>
+        <label class="form-label flex-shrink-1 mb-0">
+            <input type="text" name="cijena-max" class="form-control" placeholder="{{ cijene_ekstremi[1] }}">
+        </label>
+        <span class="ms-2">kn</span>
+    </div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary">
+            Primjeni filtere
+        </button>
+    </div>
+</form>

@@ -95,10 +95,12 @@
 </div>
 
 <h2>Istaknuti proizvodi</h2>
-<div class="container mb-3 mb-lg-4 px-0">
+<div class="mb-3 mb-lg-4 px-0">
     <div class="row" style="margin: -0.25rem;">
         {% for proizvod in istaknuti_proizvodi %}
-        {% include "partials/product_card.html" %}
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 p-1">
+            {% include "partials/product_card.html" %}
+        </div>
         {% endfor %}
     </div>
 </div>

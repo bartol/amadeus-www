@@ -2,7 +2,6 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">amadeus2.hr</a></li>
@@ -180,12 +179,12 @@
     <div class="col-12 col-md-6 col-lg-5 col-xl-4">
         {% if preporuceni_proizvodi|length > 0 %}
         <h2>Preporučeni proizvodi</h2>
-        <div class="container mb-3 px-0">
+        <div class="mb-3 px-0">
             <div class="row" style="margin: -0.25rem;">
                 {% for proizvod in preporuceni_proizvodi %}
-                {% with sidebar=true %}
-                {% include "partials/product_card.html" %}
-                {% endwith %}
+                <div class="col-6 col-sm-4 col-md-6 p-1">
+                    {% include "partials/product_card.html" %}
+                </div>
                 {% endfor %}
             </div>
         </div>
