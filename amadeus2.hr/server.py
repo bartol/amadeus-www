@@ -57,16 +57,32 @@ def category(id, slug):
 	page = request.args.get('p', default=1, type=int)
 	offset = (page - 1) * pagesize
 
-	cijene = (request.args.get('c-min'), request.args.get('c-max'))
 	sort = request.args.get('s')
+	sort_val = {
+		'a-z': 'ORDER BY naziv ASC',
+		'z-a': 'ORDER BY naziv DESC',
+		'min-max': 'ORDER BY web_cijena_s_popustom ASC',
+		'max-min': 'ORDER BY web_cijena_s_popustom DESC'
+	}
+	sort_sql = sort_val.get(sort, '')
 
-	cur.execute("""
+	condition_sql = ''
+	cijene = [request.args.get('c-min'), request.args.get('c-max')]
+	if cijene[0]: cijene[0] = int(float(cijene[0]))
+	if cijene[1]: cijene[1] = int(float(cijene[1]))
+	if isinstance(cijene[0], int):
+		condition_sql += f'AND web_cijena_s_popustom > {cijene[0]}'
+	if isinstance(cijene[1], int):
+		condition_sql += f'AND web_cijena_s_popustom < {cijene[1]}'
+
+	cur.execute(f"""
 		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
 		) FROM proizvodi p
-		WHERE grupa = %s AND amadeus2hr = 'x'
+		WHERE grupa = %s AND amadeus2hr = 'x' {condition_sql}
+		{sort_sql}
 		LIMIT %s OFFSET %s;
 	""", (id, pagesize, offset))
 	proizvodi = cur.fetchall()
