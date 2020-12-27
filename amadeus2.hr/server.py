@@ -75,18 +75,6 @@ def category(id, slug):
 	if isinstance(cijene[1], int):
 		condition_sql += f'AND web_cijena_s_popustom < {cijene[1]}'
 
-	cur.execute(f"""
-		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
-			SELECT link
-			FROM slike
-			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-		) FROM proizvodi p
-		WHERE grupa = %s AND amadeus2hr = 'x' {condition_sql}
-		{sort_sql}
-		LIMIT %s OFFSET %s;
-	""", (id, pagesize, offset))
-	proizvodi = cur.fetchall()
-
 	cur.execute("""
 		SELECT DISTINCT z.sifra, naziv, vrijednost
 		FROM znacajke_vrijednosti v
@@ -97,6 +85,7 @@ def category(id, slug):
 	znacajkelist = cur.fetchall()
 
 	znacajke = {}
+	sel = {}
 	for z in znacajkelist:
 		selected = False
 		if z[2] in request.args.getlist(f'z-{z[0]}[]'):
@@ -104,8 +93,40 @@ def category(id, slug):
 		vrijednost = (z[2], selected)
 		if z[0] in znacajke:
 			znacajke[z[0]]['vrijednosti'].append(vrijednost)
+			if selected: sel[z[0]].append(z[2])
 		else:
 			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [vrijednost] }
+			if selected: sel[z[0]] = [z[2]]
+
+	znacajke_exists_sql = ''
+	znacajke_where_sql = ''
+
+	for idx, sifra in enumerate(sel):
+		lst = "'" + "','".join(sel[sifra]) + "'"
+		znacajke_exists_sql += f',EXISTS (SELECT 1 FROM znacajke_vrijednosti WHERE sifra_proizvoda = p.sifra AND sifra_znacajke = {sifra} AND vrijednost IN ({lst})) AS z{sifra}'
+		if znacajke_where_sql == '':
+			znacajke_where_sql = f"WHERE z{sifra} = 't'"
+		else:
+			znacajke_where_sql += f" AND z{sifra} = 't'"
+
+	sql = f"""
+		SELECT * FROM (
+			SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+				SELECT link
+				FROM slike
+				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+			)
+			{znacajke_exists_sql}
+			FROM proizvodi p
+			WHERE grupa = %s AND amadeus2hr = 'x' {condition_sql}
+		) _
+		{znacajke_where_sql}
+		{sort_sql}
+		LIMIT %s OFFSET %s;
+	"""
+	print(sql)
+	cur.execute(sql, (id, pagesize, offset))
+	proizvodi = cur.fetchall()
 
 	cur.execute("""
 		SELECT MIN(web_cijena_s_popustom)::INT, MAX(web_cijena_s_popustom)::INT, COUNT(*)
