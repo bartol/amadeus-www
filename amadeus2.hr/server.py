@@ -322,6 +322,31 @@ def search():
 		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
 		sort=sort, modified=modified, filtergrupe=filtergrupe)
 
+@app.route('/search_autocomplete')
+def search_autocomplete():
+	query = request.args.get('q')
+	if not query:
+		return ""
+
+	query += ':*'
+	cur.execute("""
+		SELECT sifra, ts_headline(naziv, query) AS naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT link
+			FROM slike
+			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+		)
+		FROM proizvodi p, websearch_to_tsquery(unaccent(%s)) query
+		WHERE tsv @@ query AND amadeus2hr = 'x'
+		ORDER BY ts_rank(tsv, query) DESC
+		LIMIT 4;
+	""", (query,))
+	proizvodi = cur.fetchall()
+
+	if not len(proizvodi):
+		return ""
+
+	return render_template('partials/search_autocomplete.html', proizvodi=proizvodi)
+
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
 	grupe = getgroup()

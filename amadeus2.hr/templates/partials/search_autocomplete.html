@@ -1,0 +1,9 @@
+<div class="card p-2 border-top-0 rounded-top-0" style="z-index: 1100;">
+    <div class="row" style="margin: -0.25rem;">
+        {% for proizvod in proizvodi %}
+        <div class="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 p-1 {% if loop.index == 3 %}d-none d-sm-block d-md-none d-lg-block{% endif %} {% if loop.index == 4 %}d-none d-xl-block{% endif %}">
+            {% include "partials/product_card.html" %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
