@@ -57,6 +57,9 @@ def category(id, slug):
 	page = request.args.get('p', default=1, type=int)
 	offset = (page - 1) * pagesize
 
+	cijene = (request.args.get('c-min'), request.args.get('c-max'))
+	sort = request.args.get('s')
+
 	cur.execute("""
 		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
 			SELECT link
@@ -79,10 +82,14 @@ def category(id, slug):
 
 	znacajke = {}
 	for z in znacajkelist:
+		selected = False
+		if z[2] in request.args.getlist(f'z-{z[0]}[]'):
+			selected = True
+		vrijednost = (z[2], selected)
 		if z[0] in znacajke:
-			znacajke[z[0]]['vrijednosti'].append(z[2])
+			znacajke[z[0]]['vrijednosti'].append(vrijednost)
 		else:
-			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [z[2]] }
+			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [vrijednost] }
 
 	cur.execute("""
 		SELECT MIN(web_cijena_s_popustom)::INT, MAX(web_cijena_s_popustom)::INT, COUNT(*)
@@ -94,7 +101,8 @@ def category(id, slug):
 	numofpages = math.ceil(agg[2] / pagesize)
 
 	return render_template('category.html', grupe=grupe, grupa=grupa, proizvodi=proizvodi,
-		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages)
+		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
+		sort=sort)
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):
