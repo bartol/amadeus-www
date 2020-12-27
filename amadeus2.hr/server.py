@@ -54,6 +54,8 @@ def category(id, slug):
 	cur.execute("SELECT naziv FROM grupe WHERE sifra = %s", (id,))
 	grupa = cur.fetchone()
 
+	modified = False
+
 	page = request.args.get('p', default=1, type=int)
 	offset = (page - 1) * pagesize
 
@@ -75,6 +77,9 @@ def category(id, slug):
 	if isinstance(cijene[1], int):
 		condition_sql += f'AND web_cijena_s_popustom < {cijene[1]}'
 
+	if page > 1 or sort != '' or cijene[0] != '' or cijene[1] != '':
+		modified = True
+
 	cur.execute("""
 		SELECT DISTINCT z.sifra, naziv, vrijednost
 		FROM znacajke_vrijednosti v
@@ -90,6 +95,7 @@ def category(id, slug):
 		selected = False
 		if z[2] in request.args.getlist(f'z-{z[0]}[]'):
 			selected = True
+			modified = True
 		vrijednost = (z[2], selected)
 		if z[0] in znacajke:
 			znacajke[z[0]]['vrijednosti'].append(vrijednost)
@@ -103,7 +109,6 @@ def category(id, slug):
 
 	znacajke_exists_sql = ''
 	znacajke_where_sql = ''
-
 	for idx, sifra in enumerate(sel):
 		lst = "'" + "','".join(sel[sifra]) + "'"
 		znacajke_exists_sql += f',EXISTS (SELECT 1 FROM znacajke_vrijednosti WHERE sifra_proizvoda = p.sifra AND sifra_znacajke = {sifra} AND vrijednost IN ({lst})) AS z{sifra}'
@@ -127,7 +132,6 @@ def category(id, slug):
 		{sort_sql}
 		LIMIT %s OFFSET %s;
 	"""
-	print(sql)
 	cur.execute(sql, (id, pagesize, offset))
 	proizvodi = cur.fetchall()
 
@@ -142,7 +146,7 @@ def category(id, slug):
 
 	return render_template('category.html', grupe=grupe, grupa=grupa, proizvodi=proizvodi,
 		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
-		sort=sort)
+		sort=sort, modified=modified)
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):

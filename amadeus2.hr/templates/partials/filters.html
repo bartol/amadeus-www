@@ -1,4 +1,18 @@
 <form method="GET" id="filterform">
+    {% if modified %}
+    <div class="d-grid">
+        <button type="button" class="btn btn-danger mb-3" onclick="
+        const form = document.getElementById('filterform')
+        form.querySelector('select').selectedIndex = 0
+        form.querySelectorAll('[type=checkbox]').forEach(el => { el.checked = false })
+        form.querySelector('[name=c-min]').value = ''
+        form.querySelector('[name=c-max]').value = ''
+        form.submit()
+        ">
+            Poništi filtere
+        </button>
+    </div>
+    {% endif %}
     <h2 class="h4">Sortiranje</h2>
     <select name="s" class="form-select mb-3" aria-label="Default select example">
         <option value="" {{"selected" if sort == ""}}>Zadano</option>
@@ -27,12 +41,12 @@
     <h2 class="h4">Cijena</h2>
     <div class="input-group mb-2">
         <span class="input-group-text">OD</span>
-        <input type="text" class="form-control" name="c-min" value="{{ cijene[0] }}" placeholder="{{ agg[0] }}" aria-label="Amount (to the nearest dollar)">
+        <input type="text" class="form-control" name="c-min" value="{% if cijene[0] %}{{ cijene[0] }}{% endif %}" placeholder="{{ agg[0] }}" aria-label="Amount (to the nearest dollar)">
         <span class="input-group-text">kn</span>
     </div>
     <div class="input-group mb-3">
         <span class="input-group-text">DO</span>
-        <input type="text" class="form-control" name="c-max" value="{{ cijene[1] }}" placeholder="{{ agg[1] }}" aria-label="Amount (to the nearest dollar)">
+        <input type="text" class="form-control" name="c-max" value="{% if cijene[1] %}{{ cijene[1] }}{% endif %}" placeholder="{{ agg[1] }}" aria-label="Amount (to the nearest dollar)">
         <span class="input-group-text">kn</span>
     </div>
 
