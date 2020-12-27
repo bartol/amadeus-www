@@ -78,7 +78,7 @@ def category(id, slug):
 			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [z[2]] }
 
 	cur.execute("""
-		SELECT MIN(web_cijena_s_popustom), MAX(web_cijena_s_popustom)
+		SELECT MIN(web_cijena_s_popustom)::INT, MAX(web_cijena_s_popustom)::INT
 		FROM proizvodi
 		WHERE grupa = %s AND amadeus2hr = 'x';
 	""", (id,))
