@@ -93,10 +93,13 @@ def category(id, slug):
 		vrijednost = (z[2], selected)
 		if z[0] in znacajke:
 			znacajke[z[0]]['vrijednosti'].append(vrijednost)
-			if selected: sel[z[0]].append(z[2])
 		else:
 			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [vrijednost] }
-			if selected: sel[z[0]] = [z[2]]
+		if selected:
+			if z[0] in sel:
+				sel[z[0]].append(z[2])
+			else:
+				sel[z[0]] = [z[2]]
 
 	znacajke_exists_sql = ''
 	znacajke_where_sql = ''

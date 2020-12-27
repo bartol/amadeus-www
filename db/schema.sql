@@ -56,6 +56,8 @@ CREATE TABLE IF NOT EXISTS znacajke_vrijednosti (
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
 );
 
+CREATE INDEX vrijednost_idx ON znacajke_vrijednosti (vrijednost);
+
 CREATE TABLE IF NOT EXISTS cred (
     key TEXT PRIMARY KEY,
     value TEXT
