@@ -250,7 +250,7 @@ def search():
 	if len(grupeselarr) > 0:
 		condition_sql += f'AND grupa IN ({",".join(grupeselarr)})'
 
-	if page > 1 or sort or len(kategorije) or isinstance(cijene[0], int) or isinstance(cijene[1], int):
+	if page > 1 or sort or len(grupeselarr) or isinstance(cijene[0], int) or isinstance(cijene[1], int):
 		modified = True
 
 	cur.execute(f"""
