@@ -322,34 +322,6 @@ def search():
 		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
 		sort=sort, modified=modified, filtergrupe=filtergrupe)
 
-
-
-
-
-
-
-
-	sql = f"""
-		SELECT * FROM (
-			SELECT sifra, ts_headline(naziv, query) AS naziv, web_cijena, web_cijena_s_popustom, (
-				SELECT link
-				FROM slike
-				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-			)
-			FROM proizvodi p, websearch_to_tsquery(unaccent(%s)) query
-			WHERE tsv @@ query AND amadeus2hr = 'x'
-			ORDER BY ts_rank(tsv, query) DESC
-		) _
-		LIMIT %s OFFSET %s;
-	"""
-	cur.execute(sql, (query, pagesize, offset))
-	proizvodi = cur.fetchall()
-
-	print(sql)
-	print(proizvodi)
-
-	return render_template('search.html', grupe=grupe, query=query, proizvodi=proizvodi)
-
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
 	grupe = getgroup()
