@@ -1,6 +1,6 @@
 <form action="/search" method="GET" class="input-group mx-auto" style="max-width: 700px;">
     <input type="text" name="q" class="form-control {% if lg %}form-control-lg{% endif %}" aria-label="trazilica za proizvode i 2 tipke" id="searchbox{% if lg %}-lg{% endif %}">
-    <select name="c" class="form-select" {% if lg %}style="max-width: 8.5rem;"{% else %}style="max-width: 12rem;"{% endif %}>
+    <select name="g[]" class="form-select" {% if lg %}style="max-width: 8.5rem;"{% else %}style="max-width: 12rem;"{% endif %}>
         <option value="" selected>SVE KATEGORIJE</option>
         {% for grupa in grupe %}
         <option value="{{ grupa[0] }}">{{ grupa[1] }}</option>

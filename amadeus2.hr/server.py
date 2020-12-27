@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, redirect
 import psycopg2
 import configparser
 from slugify import slugify
@@ -195,11 +195,11 @@ def product(id, slug):
 
 @app.route('/search')
 def search():
-	grupe = getgroup()
-
 	query = request.args.get('q')
 	if not query:
-		return render_template('search.html', grupe=grupe)
+		return redirect('/')
+
+	grupe = getgroup()
 
 	modified = False
 
@@ -213,10 +213,18 @@ def search():
 	""", (query,))
 	filtergrupex = cur.fetchall()
 
+	if len(filtergrupex) == 0:
+		return render_template('search.html', grupe=grupe, query=query)
+
 	kategorije = request.args.getlist('g[]', type=int)
 	filtergrupe = []
+	grupearr = []
+	grupeselarr = []
 	for grupa in filtergrupex:
+		grupearr.append(str(grupa[0]))
 		filtergrupe.append([grupa[0], grupa[1], (grupa[0] in kategorije)])
+		if grupa[0] in kategorije:
+			grupeselarr.append(str(grupa[0]))
 
 	page = request.args.get('p', default=1, type=int)
 	offset = (page - 1) * pagesize
@@ -239,18 +247,20 @@ def search():
 	if isinstance(cijene[1], int):
 		condition_sql += f'AND web_cijena_s_popustom < {cijene[1]}'
 
+	if len(grupeselarr) > 0:
+		condition_sql += f'AND grupa IN ({",".join(grupeselarr)})'
+
 	if page > 1 or sort or len(kategorije) or isinstance(cijene[0], int) or isinstance(cijene[1], int):
 		modified = True
 
-	# cur.execute("""
-	# 	SELECT DISTINCT z.sifra, naziv, vrijednost
-	# 	FROM znacajke_vrijednosti v
-	# 	INNER JOIN znacajke z ON v.sifra_znacajke = z.sifra
-	# 	WHERE sifra_grupe = %s
-	# 	ORDER BY naziv, vrijednost ASC;
-	# """, (id,))
-	# znacajkelist = cur.fetchall()
-	znacajkelist = []
+	cur.execute(f"""
+		SELECT DISTINCT z.sifra, naziv, vrijednost
+		FROM znacajke_vrijednosti v
+		INNER JOIN znacajke z ON v.sifra_znacajke = z.sifra
+		WHERE sifra_grupe IN ({",".join(grupearr)})
+		ORDER BY naziv, vrijednost ASC;
+	""")
+	znacajkelist = cur.fetchall()
 
 	znacajke = {}
 	sel = {}
