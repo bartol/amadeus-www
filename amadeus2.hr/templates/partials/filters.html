@@ -1,4 +1,12 @@
 <form method="GET" id="filterform">
+    <h2 class="h4">Sortiranje</h2>
+    <select name="s" class="form-select mb-3" aria-label="Default select example">
+        <option value="" selected>Zadano</option>
+        <option value="a-z">Naziv (A do Z)</option>
+        <option value="z-a">Naziv (Z do A)</option>
+        <option value="min-max">Cijena (niža prema višoj)</option>
+        <option value="max-min">Cijena (viša prema nižoj)</option>
+    </select>
     {% for sifra in znacajke %}
     <h2 class="h4">{{ znacajke[sifra]['naziv'] }}</h2>
     <ul class="list-unstyled">
