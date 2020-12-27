@@ -77,7 +77,7 @@ def category(id, slug):
 	if isinstance(cijene[1], int):
 		condition_sql += f'AND web_cijena_s_popustom < {cijene[1]}'
 
-	if page > 1 or sort != '' or cijene[0] != '' or cijene[1] != '':
+	if page > 1 or sort or isinstance(cijene[0], int) or isinstance(cijene[1], int):
 		modified = True
 
 	cur.execute("""
