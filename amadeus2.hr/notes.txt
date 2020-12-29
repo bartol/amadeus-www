@@ -1,9 +1,13 @@
 stranica:
 
 flask
-bootstrap
+flaskwebgui
+jinja
+drymail
 postgresql
-meilisearch
+
+bootstrap
+htmlx
 google analytics
 google tag manager
 

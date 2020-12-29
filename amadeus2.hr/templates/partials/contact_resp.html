@@ -1,0 +1,11 @@
+{% if success %}
+<div class="alert alert-success alert-dismissible fade show mb-2" role="alert">
+    <strong>Vaša poruka je uspješno poslana!</strong> Odgovorit ćemo Vam u najkraćem mogućem roku.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% else %}
+<div class="alert alert-danger alert-dismissible fade show mb-2" role="alert">
+    <strong>Greška prilikom slanja poruke.</strong> Molimo pokušajte kasnije ili nas kontaktirajte direktno na mail <a href="mailto:amadeus@pioneer.hr?subject=Upit&body={{ message|urlencode }}" class="alert-link">amadeus@pioneer.hr</a>.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}

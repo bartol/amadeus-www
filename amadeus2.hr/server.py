@@ -7,6 +7,7 @@ from slugify import slugify
 import datetime
 from dateutil.relativedelta import relativedelta
 import math
+from drymail import SMTPMailer, Message
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -14,6 +15,8 @@ config.read('config.ini')
 dbconn = config['global']['dbconn'].strip('"')
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
+
+mail = SMTPMailer(host='127.0.0.1', port=1025)
 
 pagesize = 60
 
@@ -349,6 +352,18 @@ def search_autocomplete():
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
+	if request.method == 'POST':
+		customer_email = request.form.get('email')
+		customer_message = request.form.get('message')
+		html = render_template('emails/admin/contact.html', email=customer_email, message=customer_message)
+		message = Message(subject='Nova poruka na amadeus2.hr', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+                  receivers=['prodaja@pioneer.hr'], html=html)
+		try:
+			mail.send(message)
+			return render_template('partials/contact_resp.html', message=customer_message, success=True)
+		except:
+			return render_template('partials/contact_resp.html', message=customer_message, success=False)
+
 	grupe = getgroup()
 	return render_template('contact.html', grupe=grupe)
 
