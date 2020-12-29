@@ -16,11 +16,17 @@ dbconn = config['global']['dbconn'].strip('"')
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
 
-mail = SMTPMailer(host='127.0.0.1', port=1025)
+secret_key = config['global']['secret_key'].strip('"')
+
+mailhost = config['global']['mailhost'].strip('"')
+mailport = config['global']['mailport']
+
+mail = SMTPMailer(host=mailhost, port=mailport)
 
 pagesize = 60
 
 app = Flask(__name__)
+app.secret_key = secret_key
 
 # routes
 
