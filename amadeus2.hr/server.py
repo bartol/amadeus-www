@@ -392,27 +392,27 @@ def cart():
 		maxkolicina = cur.fetchone()
 
 		if kolicina < 1:
-			flash('Količina nije valjana', 'danger')
-			return redirect('/cart')
+			flash(f'Količina ({kolicina}) za proizvod (šifra: {sifra}) nije valjana', 'danger')
+			return redirect(request.referrer)
 
 		if maxkolicina == None:
-			flash('Proizvod ne postoji', 'danger')
-			return redirect('/cart')
+			flash(f'Proizvod (šifra: {sifra}) ne postoji', 'danger')
+			return redirect(request.referrer)
 
 		if idx == -1:
 			if kolicina > maxkolicina[0]:
-				flash('Željena količina nije dostupna', 'danger')
-				return redirect('/cart')
+				flash(f'Željena količina ({kolicina}) za proizvod (šifra: {sifra}) nije dostupna', 'danger')
+				return redirect(request.referrer)
 			cart.append({'sifra': sifra, 'kolicina': kolicina})
 		else:
 			nova_kolicina = cart[idx]['kolicina'] + kolicina
 			if nova_kolicina > maxkolicina[0]:
-				flash('Željena količina nije dostupna', 'danger')
-				return redirect('/cart')
+				flash(f'Željena količina ({nova_kolicina}) za proizvod (šifra: {sifra}) nije dostupna', 'danger')
+				return redirect(request.referrer)
 			cart[idx]['kolicina'] = nova_kolicina
 
 		session['cart'] = cart
-		flash('Proizvod dodan u košaricu', 'success')
+		flash(f'Proizvod (šifra: {sifra}) dodan u košaricu', 'success')
 		return redirect('/cart')
 
 	cart = session.get('cart', default=[])
@@ -439,10 +439,10 @@ def cart_delete():
 	if idx > -1:
 		del cart[idx]
 	else:
-		flash('Proizvod ne postoji', 'danger')
+		flash('Proizvod (šifra: {sifra}) ne postoji', 'danger')
 		return redirect('/cart')
 	session['cart'] = cart
-	flash('Proizvod uspješno obrisan', 'success')
+	flash('Proizvod (šifra: {sifra}) uspješno obrisan', 'success')
 	return redirect('/cart')
 
 # @app.route('/cart/kolicina', method=['POST'])
