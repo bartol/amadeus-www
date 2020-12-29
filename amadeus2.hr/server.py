@@ -23,6 +23,8 @@ mailport = config['global']['mailport']
 
 mail = SMTPMailer(host=mailhost, port=mailport)
 
+internal_email = config['global']['internal_email'].strip('"')
+
 pagesize = 60
 
 app = Flask(__name__)
@@ -361,9 +363,12 @@ def contact():
 	if request.method == 'POST':
 		customer_email = request.form.get('email')
 		customer_message = request.form.get('message')
-		html = render_template('emails/admin/contact.html', email=customer_email, message=customer_message)
-		message = Message(subject='Nova poruka na amadeus2.hr', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-                  receivers=['prodaja@pioneer.hr'], html=html)
+		url = request.headers.get("Referer")
+		if not customer_email or not customer_message:
+			return ""
+		html = render_template('emails/admin/contact.html', email=customer_email, message=customer_message, url=url)
+		message = Message(subject='[amadeus2.hr] Nova poruka', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+                  receivers=[internal_email], reply_to=[customer_email], html=html)
 		try:
 			mail.send(message)
 			return render_template('partials/contact_resp.html', message=customer_message, success=True)

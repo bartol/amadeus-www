@@ -1,5 +1,11 @@
-<h1>{{ email }} je poslao</h1>
+{% extends 'emails/base.html' %}
+{% block title %}[amadeus2.hr] Nova poruka{% endblock %}
+{% block content %}
 
-<pre>
-{{ message }}
-</pre>
+<h1>Nova poruka</h1>
+<p>Pošiljatelj: <a href="mailto:{{ email }}">{{ email }}</a></p>
+<p>Poslano sa: <a href="{{ url }}">{{ url }}</a></p>
+<p>Sadržaj poruke:</p>
+<pre>{{ message }}</pre>
+
+{% endblock %}
