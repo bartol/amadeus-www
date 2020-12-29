@@ -1,0 +1,18 @@
+{% extends 'partials/base.html' %}
+{% block title %}amadeus{% endblock %}
+{% block content %}
+
+<h2>Košarica</h2>
+<div class="mb-3 mb-lg-4 px-0">
+    <div class="row" style="margin: -0.25rem;">
+        {% for proizvod in cart_products %}
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 p-1">
+            {% with is_cart = true, idx = loop.index-1 %}
+            {% include "partials/product_card.html" %}
+            {% endwith %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

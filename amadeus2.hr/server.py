@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template, request, abort, redirect
+from flask import Flask, render_template, request, abort, redirect, session, flash
 import psycopg2
 import configparser
 from slugify import slugify
@@ -380,7 +380,72 @@ def contact():
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
-	return 'cart'
+	# add item
+	if request.method == 'POST':
+		sifra = request.form.get('sifra', type=int)
+		kolicina = request.form.get('kolicina', type=int)
+
+		cart = session.get('cart', default=[])
+		idx = find(cart, 'sifra', sifra)
+
+		cur.execute("SELECT kolicina FROM proizvodi WHERE sifra = %s", (sifra,))
+		maxkolicina = cur.fetchone()
+
+		if kolicina < 1:
+			flash('Količina nije valjana', 'danger')
+			return redirect('/cart')
+
+		if maxkolicina == None:
+			flash('Proizvod ne postoji', 'danger')
+			return redirect('/cart')
+
+		if idx == -1:
+			if kolicina > maxkolicina[0]:
+				flash('Željena količina nije dostupna', 'danger')
+				return redirect('/cart')
+			cart.append({'sifra': sifra, 'kolicina': kolicina})
+		else:
+			nova_kolicina = cart[idx]['kolicina'] + kolicina
+			if nova_kolicina > maxkolicina[0]:
+				flash('Željena količina nije dostupna', 'danger')
+				return redirect('/cart')
+			cart[idx]['kolicina'] = nova_kolicina
+
+		session['cart'] = cart
+		flash('Proizvod dodan u košaricu', 'success')
+		return redirect('/cart')
+
+	cart = session.get('cart', default=[])
+	cart_products = []
+	for item in cart:
+		cur.execute("""
+			SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+				SELECT link
+				FROM slike
+				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+			), kolicina FROM proizvodi p
+			WHERE sifra = %s AND amadeus2hr = 'x';
+		""", (item['sifra'],))
+		cart_product = cur.fetchone()
+		cart_products.append(cart_product)
+
+	return render_template('cart.html', cart=cart, cart_products=cart_products, grupe=getgroup())
+
+@app.route('/cart/delete', methods=['POST'])
+def cart_delete():
+	sifra = request.form.get('sifra', type=int)
+	cart = session.get('cart', default=[])
+	idx = find(cart, 'sifra', sifra)
+	if idx > -1:
+		del cart[idx]
+	else:
+		flash('Proizvod ne postoji', 'danger')
+		return redirect('/cart')
+	session['cart'] = cart
+	flash('Proizvod uspješno obrisan', 'success')
+	return redirect('/cart')
+
+# @app.route('/cart/kolicina', method=['POST'])
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
@@ -416,6 +481,13 @@ def getakcijadana():
 	""", (str(datetime.date.today()),))
 	akcija_dana = cur.fetchone()
 	return akcija_dana
+
+# find in list
+def find(lst, key, value):
+    for i, dic in enumerate(lst):
+        if dic[key] == value:
+            return i
+    return -1
 
 @app.template_filter('slugify')
 def _slugify(string):
