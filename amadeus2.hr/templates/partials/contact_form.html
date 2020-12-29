@@ -7,11 +7,21 @@
 {% set msgid = random_int(5) %}
 
 <h2>Kontaktirajte nas</h2>
-<form class="mb-3 mb-lg-4">
-    <input type="text" name="email" class="form-control mb-2" placeholder="Vaš email" aria-label="trazilica za proizvode i 2 tipke">
-    <textarea name="message" class="form-control mb-2" placeholder="Poruka" rows="3"></textarea>
+<form class="mb-3 mb-lg-4 contact-form" novalidate>
+    <label class="form-label w-100 mb-2">
+        <input type="email" name="email" class="form-control" placeholder="Vaš email" aria-label="trazilica za proizvode i 2 tipke" required>
+        <div class="invalid-feedback">
+            Molimo upišite Vašu email adresu
+        </div>
+    </label>
+    <label class="w-100">
+        <textarea name="message" class="form-control" placeholder="Poruka" rows="3" required></textarea>
+        <div class="invalid-feedback mb-2">
+            Molimo upišite poruku
+        </div>
+    </label>
     <div id="msg_{{ msgid }}"></div>
-    <button class="btn btn-primary" type="button" hx-post="/contact" hx-target="#msg_{{ msgid }}">
+    <button class="btn btn-primary" type="submit" hx-post="/contact" hx-target="#msg_{{ msgid }}">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-text icon" viewBox="0 0 16 16">
             <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
             <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>

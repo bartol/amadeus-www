@@ -148,7 +148,7 @@
 		</button>
 	</div>
 
-	<!-- javascript -->
+	<!-- search suggestions -->
 	<script>
 		timeout_var = null;
 		function typeWriter(selector_target, text_list, placeholder = false, i = 0, text_list_i=0, delay_ms=200) {
@@ -201,6 +201,22 @@
 		shuffleArray(text_list)
 		typeWriter("#searchbox", text_list, true);
 		typeWriter("#searchbox-lg", text_list, true);
+	</script>
+	<!-- contact form validation -->
+	<script>
+		(function () {
+			var forms = document.querySelectorAll('.contact-form')
+			forms.forEach(function (form) {
+				var submitbtn = form.querySelector('[type=submit]')
+				submitbtn.addEventListener('click', function (event) {
+					if (!form.checkValidity()) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+					form.classList.add('was-validated')
+				}, false)
+			})
+		})()
 	</script>
 	<script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/htmx.org@1.0.2/dist/htmx.min.js"></script>
