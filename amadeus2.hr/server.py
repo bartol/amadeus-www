@@ -34,7 +34,6 @@ app.secret_key = secret_key
 
 @app.route('/')
 def index():
-	grupe = getgroup()
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
@@ -55,12 +54,11 @@ def index():
 	""")
 	istaknuti_proizvodi = cur.fetchall()
 
-	return render_template('index.html', grupe=grupe, covers=covers,
+	return render_template('index.html', covers=covers,
 		istaknuti_proizvodi=istaknuti_proizvodi, akcija_dana=akcija_dana)
 
 @app.route('/kategorija/<int:id>-<string:slug>')
 def category(id, slug):
-	grupe = getgroup()
 
 	cur.execute("SELECT naziv FROM grupe WHERE sifra = %s", (id,))
 	grupa = cur.fetchone()
@@ -155,13 +153,12 @@ def category(id, slug):
 
 	numofpages = math.ceil(agg[2] / pagesize)
 
-	return render_template('category.html', grupe=grupe, grupa=grupa, proizvodi=proizvodi,
+	return render_template('category.html', grupa=grupa, proizvodi=proizvodi,
 		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
 		sort=sort, modified=modified)
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):
-	grupe = getgroup()
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
@@ -201,7 +198,7 @@ def product(id, slug):
 	""", (id,))
 	znacajke = cur.fetchall()
 
-	return render_template('product.html', grupe=grupe, proizvod=proizvod, slike=slike,
+	return render_template('product.html', proizvod=proizvod, slike=slike,
 		preporuceni_proizvodi=preporuceni_proizvodi, znacajke=znacajke, akcija_dana=akcija_dana)
 
 @app.route('/search')
@@ -210,7 +207,6 @@ def search():
 	if not query:
 		return redirect('/')
 
-	grupe = getgroup()
 
 	modified = False
 
@@ -225,7 +221,7 @@ def search():
 	filtergrupex = cur.fetchall()
 
 	if len(filtergrupex) == 0:
-		return render_template('search.html', grupe=grupe, query=query)
+		return render_template('search.html', query=query)
 
 	kategorije = request.args.getlist('g[]', type=int)
 	filtergrupe = []
@@ -329,7 +325,7 @@ def search():
 
 	numofpages = math.ceil(agg[2] / pagesize)
 
-	return render_template('search.html', grupe=grupe, query=query, proizvodi=proizvodi,
+	return render_template('search.html', query=query, proizvodi=proizvodi,
 		znacajke=znacajke, agg=agg, page=page, numofpages=numofpages, cijene=cijene,
 		sort=sort, modified=modified, filtergrupe=filtergrupe)
 
@@ -375,8 +371,7 @@ def contact():
 		except:
 			return render_template('partials/contact_resp.html', message=customer_message, success=False)
 
-	grupe = getgroup()
-	return render_template('contact.html', grupe=grupe)
+	return render_template('contact.html')
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
@@ -429,7 +424,7 @@ def cart():
 		cart_product = cur.fetchone()
 		cart_products.append(cart_product)
 
-	return render_template('cart.html', cart=cart, cart_products=cart_products, grupe=getgroup())
+	return render_template('cart.html', cart=cart, cart_products=cart_products)
 
 @app.route('/cart/delete', methods=['POST'])
 def cart_delete():
@@ -517,6 +512,10 @@ def find(lst, key, value):
 @app.template_filter('slugify')
 def _slugify(string):
 	return slugify(string)
+
+@app.context_processor
+def global_stuff():
+    return {'grupe': getgroup()}
 
 @app.context_processor
 def date_stuff():
