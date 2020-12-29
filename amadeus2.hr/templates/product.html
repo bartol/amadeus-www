@@ -90,13 +90,13 @@
             <form action="/cart" method="POST" class="d-flex">
                 <input type="hidden" name="sifra" value="{{ proizvod[0] }}">
                 <div class="input-group mb-0 me-2" style="max-width: 8rem;">
-                    <button class="btn btn-outline-secondary px-2" type="button" onclick="document.querySelector('[name=kolicina]').value--">
+                    <button class="btn btn-outline-secondary px-2" type="button" onclick="form.querySelector('[name=kolicina]').value--">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
                             <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
                         </svg>
                     </button>
                     <input type="number" name="kolicina" class="form-control" aria-label="trazilica za proizvode i 2 tipke" value="1" style="text-align: center;">
-                    <button class="btn btn-outline-secondary px-2" type="button" onclick="document.querySelector('[name=kolicina]').value++">
+                    <button class="btn btn-outline-secondary px-2" type="button" onclick="form.querySelector('[name=kolicina]').value++">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                         </svg>

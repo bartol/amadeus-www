@@ -401,13 +401,13 @@ def cart():
 
 		if idx == -1:
 			if kolicina > maxkolicina[0]:
-				flash(f'Željena količina ({kolicina}) za proizvod (šifra: {sifra}) nije dostupna', 'danger')
+				flash(f'Tražena količina ({kolicina}) za proizvod (šifra: {sifra}, dostupno: {maxkolicina[0]} kom.) nije dostupna', 'danger')
 				return redirect(request.referrer)
 			cart.append({'sifra': sifra, 'kolicina': kolicina})
 		else:
 			nova_kolicina = cart[idx]['kolicina'] + kolicina
 			if nova_kolicina > maxkolicina[0]:
-				flash(f'Željena količina ({nova_kolicina}) za proizvod (šifra: {sifra}) nije dostupna', 'danger')
+				flash(f'Tražena količina ({nova_kolicina}) za proizvod (šifra: {sifra}, dostupno: {maxkolicina[0]} kom.) nije dostupna', 'danger')
 				return redirect(request.referrer)
 			cart[idx]['kolicina'] = nova_kolicina
 
@@ -439,13 +439,38 @@ def cart_delete():
 	if idx > -1:
 		del cart[idx]
 	else:
-		flash('Proizvod (šifra: {sifra}) ne postoji', 'danger')
+		flash(f'Proizvod (šifra: {sifra}) ne postoji', 'danger')
 		return redirect('/cart')
 	session['cart'] = cart
-	flash('Proizvod (šifra: {sifra}) uspješno obrisan', 'success')
+	flash(f'Proizvod (šifra: {sifra}) uklonjen iz košarice', 'success')
 	return redirect('/cart')
 
-# @app.route('/cart/kolicina', method=['POST'])
+@app.route('/cart/kolicina', methods=['POST'])
+def cart_kolicina():
+	sifra = request.form.get('sifra', type=int)
+	kolicina = request.form.get('kolicina', type=int)
+
+	cart = session.get('cart', default=[])
+	idx = find(cart, 'sifra', sifra)
+
+	cur.execute("SELECT kolicina FROM proizvodi WHERE sifra = %s", (sifra,))
+	maxkolicina = cur.fetchone()
+
+	if kolicina < 1:
+		flash(f'Količina ({kolicina}) za proizvod (šifra: {sifra}) nije valjana', 'danger')
+		return redirect('/cart')
+
+	if idx > -1:
+		if kolicina > maxkolicina[0]:
+			flash(f'Tražena količina ({kolicina}) za proizvod (šifra: {sifra}, dostupno: {maxkolicina[0]} kom.) nije dostupna', 'danger')
+			return redirect(request.referrer)
+		cart[idx]['kolicina'] = kolicina
+	else:
+		flash(f'Proizvod (šifra: {sifra}) ne postoji', 'danger')
+		return redirect('/cart')
+	session['cart'] = cart
+	flash(f'Količina ({kolicina}) za proizvod (šifra: {sifra}) uspješno promjenjena', 'success')
+	return redirect('/cart')
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():

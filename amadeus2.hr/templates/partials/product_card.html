@@ -21,19 +21,23 @@
     </div>
     {% if is_cart %}
     <div class="d-flex justify-content-between mt-2">
-    <div class="input-group" style="max-width: 6.5rem;">
-        <button class="btn btn-outline-secondary btn-sm px-1" type="button" onclick="document.querySelector('[name=kolicina]').value--">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
-                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
-            </svg>
-        </button>
-        <input type="number" name="kolicina" value="{{ cart[idx]['kolicina'] }}" class="form-control form-control-sm" aria-label="trazilica za proizvode i 2 tipke" style="text-align: center;">
-        <button class="btn btn-outline-secondary btn-sm px-1" type="button" onclick="document.querySelector('[name=kolicina]').value++">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>
-        </button>
-    </div>
+    <form action="/cart/kolicina" method="POST">
+        <input type="hidden" name="sifra" value="{{ proizvod[0] }}">
+        <div class="input-group" style="max-width: 6.5rem;">
+            <button class="btn btn-outline-secondary btn-sm px-1" type="button" onclick="form.querySelector('[name=kolicina]').value--; form.submit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                </svg>
+            </button>
+            <input type="number" name="kolicina" value="{{ cart[idx]['kolicina'] }}" class="form-control form-control-sm"
+                aria-label="trazilica za proizvode i 2 tipke" style="text-align: center;" onfocusout="form.submit()">
+            <button class="btn btn-outline-secondary btn-sm px-1" type="button" onclick="form.querySelector('[name=kolicina]').value++; form.submit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </button>
+        </div>
+    </form>
     <form action="/cart/delete" method="POST">
         <input type="hidden" name="sifra" value="{{ proizvod[0] }}">
         <button type="submit" class="btn btn-outline-danger btn-sm px-1">
