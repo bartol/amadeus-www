@@ -2,13 +2,14 @@
 {% block title %}amadeus{% endblock %}
 {% block content %}
 
-<h2>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+<h1>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
         <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
       </svg>
-    Košarica</h2>
+    Košarica
+</h1>
 {% if cart|length %}
-<div class="mb-3 mb-lg-4 px-0">
+<div class="mb-3 px-0">
     <div class="row" style="margin: -0.25rem;">
         {% for proizvod in cart_products %}
         <div class="col-6 col-sm-4 col-md-3 col-xl-2 p-1">
@@ -19,11 +20,48 @@
         {% endfor %}
     </div>
 </div>
+
+<div class="card p-2 mb-3 mb-lg-4">
+    <h2>Promo kod</h2>
+    <form class="input-group mb-3">
+        <input type="text" class="form-control" name="promo_kod" placeholder="promo kod">
+        <button type="submit" class="btn btn-outline-secondary">
+            Unesi <span class="d-none d-md-inline">promo kod</span>
+        </button>
+    </form>
+    <h2>Cijena</h2>
+    <table class="table mb-3">
+        <tr>
+            <td>Proizvodi:</td>
+            <td>{{ formatmoney(cijene.proizvodi) }}</td>
+        </tr>
+        <tr>
+            <td>PDV:</td>
+            <td>{{ formatmoney(cijene.pdv) }}</td>
+        </tr>
+        <tr>
+            <td>Dostava:</td>
+            <td>{{ formatmoney(0) }}</td>
+        </tr>
+        <tr>
+            <td><b>Ukupno:</b></td>
+            <td><b>{{ formatmoney(cijene.sum) }}</b></td>
+        </tr>
+    </table>
+    <div class="d-grid">
+        <a href="/checkout" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+            </svg>
+            Unos podataka
+        </a>
+    </div>
+</div>
 {% else %}
 <div class="mb-3 mb-lg-4">
     Vaša košarica je prazna
 </div>
 {% endif %}
-
 
 {% endblock %}

@@ -6,7 +6,7 @@ import configparser
 from slugify import slugify
 import datetime
 from dateutil.relativedelta import relativedelta
-import math
+import math, decimal
 from drymail import SMTPMailer, Message
 
 config = configparser.ConfigParser()
@@ -424,7 +424,13 @@ def cart():
 		cart_product = cur.fetchone()
 		cart_products.append(cart_product)
 
-	return render_template('cart.html', cart=cart, cart_products=cart_products)
+	cijene = {'sum': 0}
+	for idx, item in enumerate(cart_products):
+		cijene['sum'] = cijene['sum'] + (item[3] * decimal.Decimal(cart[idx]['kolicina']))
+	cijene['proizvodi'] = cijene['sum'] * decimal.Decimal(0.8)
+	cijene['pdv'] = cijene['sum'] * decimal.Decimal(0.2)
+
+	return render_template('cart.html', cart=cart, cart_products=cart_products, cijene=cijene)
 
 @app.route('/cart/delete', methods=['POST'])
 def cart_delete():
