@@ -17,7 +17,7 @@
             {% for cover in covers %}
             <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
                 <a href="{{ cover[1] }}">
-                    <img src="{{ cover[0] }}" class="d-block w-100" alt="...">
+                    <img src="{{ cover[0] }}" class="d-block w-100" alt="cover slika {{ loop.index }}">
                 </a>
             </div>
             {% endfor %}

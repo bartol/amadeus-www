@@ -18,7 +18,7 @@
                     {% for slika in slike %}
                     <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
                         <div class="ratio ratio-1x1">
-                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="...">
+                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="slika proizvoda {{ loop.index }}">
                         </div>
                     </div>
                     {% endfor %}
@@ -35,7 +35,7 @@
                     {% for slika in slike %}
                     <li data-bs-target="#productcarousel" data-bs-slide-to="{{ loop.index - 1 }}" class="bg-transparent {% if loop.index == 1 %}active{% endif %}">
                         <div class="ratio ratio-1x1">
-                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="...">
+                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="tipka za prebacivanje na sliku proizvoda {{ loop.index }}">
                         </div>
                     </li>
                     {% endfor %}
@@ -91,20 +91,20 @@
             <form action="/cart" method="POST" class="d-flex">
                 <input type="hidden" name="sifra" value="{{ proizvod[0] }}">
                 <div class="input-group mb-0 me-2" style="max-width: 8rem;">
-                    <button class="btn btn-outline-secondary px-2" type="button" onclick="form.querySelector('[name=kolicina]').value--">
+                    <button class="btn btn-outline-secondary px-2" title="-1" type="button" onclick="form.querySelector('[name=kolicina]').value--">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
                             <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
                         </svg>
                     </button>
                     <input type="number" name="kolicina" class="form-control" aria-label="trazilica za proizvode i 2 tipke" value="1" style="text-align: center;">
-                    <button class="btn btn-outline-secondary px-2" type="button" onclick="form.querySelector('[name=kolicina]').value++">
+                    <button class="btn btn-outline-secondary px-2" title="+1" type="button" onclick="form.querySelector('[name=kolicina]').value++">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                         </svg>
                     </button>
                 </div>
                 <div class="d-grid flex-grow-1">
-                    <button type="submit" class="btn btn-primary text-truncate" style="z-index: 1100;">
+                    <button type="submit" class="btn btn-primary text-truncate" title="Dodaj proizvod u košaricu" style="z-index: 1100;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
                         </svg>
@@ -115,7 +115,7 @@
         </form>
         <div class="card p-2 mb-3 mb-lg-4">
             <div class="d-flex flex-column flex-xl-row">
-            <a class="btn btn-outline-secondary text-nowrap mb-2 mb-xl-0 me-xl-2" href='https://www.facebook.com/sharer.php?u={{ ("https://amadeus2.hr/proizvod/" + (proizvod[0]|string) + "-" + (proizvod[1]|slugify))|urlencode|replace("/", "%2F") }}' target="_blank">
+            <a class="btn btn-outline-secondary text-nowrap mb-2 mb-xl-0 me-xl-2" title="Podijeli ovaj proizvod na Facebooku" href='https://www.facebook.com/sharer.php?u={{ ("https://amadeus2.hr/proizvod/" + (proizvod[0]|string) + "-" + (proizvod[1]|slugify))|urlencode|replace("/", "%2F") }}' target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
                     <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
                 </svg>
@@ -127,7 +127,7 @@
                 el = document.getElementById("copytoclipboard");
                 el.select();
                 document.execCommand("copy");
-                '>
+                ' title="Kopiraj link na ovaj proizvod">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16">
                         <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
                     </svg>
