@@ -29,6 +29,7 @@
                     <h5 style="font-size: 0.9rem;">
                         Dostupno još samo <b>{{ akcija_dana[4] }} kom.</b>
                     </h5>
+                    {% if akcija_dana[4] > 0 %}
                     <form action="/cart" method="POST" class="d-grid">
                         <input type="hidden" name="sifra" value="{{ akcija_dana[0] }}">
                         <input type="hidden" name="kolicina" value="1">
@@ -39,6 +40,7 @@
                             Dodaj u košaricu
                         </button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

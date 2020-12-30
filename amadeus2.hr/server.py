@@ -162,7 +162,7 @@ def product(id, slug):
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
-		SELECT p.sifra, p.naziv, web_cijena, web_cijena_s_popustom, web_opis, g.sifra, g.naziv
+		SELECT p.sifra, p.naziv, web_cijena, web_cijena_s_popustom, web_opis, g.sifra, g.naziv, kolicina
 		FROM proizvodi p
 		INNER JOIN grupe g ON p.grupa = g.sifra
 		WHERE amadeus2hr = 'x' AND p.sifra = %s;

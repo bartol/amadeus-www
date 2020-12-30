@@ -88,6 +88,7 @@
                 </select>
                 <span class="text-nowrap ms-2"><span id="placanje_rate_iznos" title="Iznos jedne mjesečne rate">{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}</span>/mj.</span>
             </div>
+            {% if proizvod[7] > 0 %}
             <form action="/cart" method="POST" class="d-flex">
                 <input type="hidden" name="sifra" value="{{ proizvod[0] }}">
                 <div class="input-group mb-0 me-2" style="max-width: 8rem;">
@@ -111,8 +112,15 @@
                         Dodaj u košaricu
                     </button>
                 </div>
+            </form>
+            {% else %}
+            <div class="d-grid">
+                <button class="btn btn-danger">
+                    Proizvod trenutno nije dostupan
+                </button>
             </div>
-        </form>
+            {% endif %}
+        </div>
         <div class="card p-2 mb-3 mb-lg-4">
             <div class="d-flex flex-column flex-xl-row">
             <a class="btn btn-outline-secondary text-nowrap mb-2 mb-xl-0 me-xl-2" title="Podijeli ovaj proizvod na Facebooku" href='https://www.facebook.com/sharer.php?u={{ ("https://amadeus2.hr/proizvod/" + (proizvod[0]|string) + "-" + (proizvod[1]|slugify))|urlencode|replace("/", "%2F") }}' target="_blank">
