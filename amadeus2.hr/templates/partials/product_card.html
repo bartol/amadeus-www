@@ -1,7 +1,8 @@
 <div class="card p-2">
     <div class="position-relative">
         <div class="ratio ratio-1x1 position-relative mb-2">
-            <img src="{{ proizvod[4] }}" alt="slika proizvoda" style="object-fit: contain;" class="w-100 h-100">
+            <img src="https://cdn.statically.io/img/{{ (proizvod[4]|urlparse).hostname }}/f=auto,w=250,q=90/{{ (proizvod[4]|urlparse).path }}"
+                onerror="this.src='{{ proizvod[4] }}'; this.onerror='';" alt="slika proizvoda" style="object-fit: contain;" class="w-100 h-100">
             <div>
                 <div class="position-absolute bottom-0 start-0">
                     <span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>

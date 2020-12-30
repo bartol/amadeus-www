@@ -8,6 +8,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import math, decimal
 from drymail import SMTPMailer, Message
+from urllib.parse import urlparse
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -524,6 +525,10 @@ def find(lst, key, value):
 @app.template_filter('slugify')
 def _slugify(string):
 	return slugify(string)
+
+@app.template_filter('urlparse')
+def _urlparse(string):
+	return urlparse(string)
 
 @app.context_processor
 def global_stuff():

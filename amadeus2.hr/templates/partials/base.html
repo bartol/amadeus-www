@@ -6,6 +6,7 @@
 
 	<!-- meta -->
 	<title>{% block title %}{% endblock %}</title>
+	<link rel="icon" type="image/png" href="/static/img/icon.png" />
 
 	<!-- css -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
@@ -49,7 +50,8 @@
 			<div class="container d-flex flex-nowrap">
 				<!-- logo -->
 				<a class="navbar-brand" href="/">
-					<img src="https://amadeus2.hr/img/logo.png" alt="Amadeus" title="Amadeus web trgovina" width="160" height="32">
+					<img src="https://cdn.statically.io/img/amadeus2.hr/f=auto,w=160,q=90/static/img/logo.png"
+						onerror="this.src='/static/img/logo.png'; this.onerror='';" alt="Amadeus" title="Amadeus web trgovina" width="160" height="32">
 				</a>
 				<div class="flex-grow-1 d-flex justify-content-end">
 					<div class="flex-grow-1 d-none d-md-block me-3 ms-1">

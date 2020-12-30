@@ -17,7 +17,8 @@
             {% for cover in covers %}
             <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
                 <a href="{{ cover[1] }}">
-                    <img src="{{ cover[0] }}" class="d-block w-100" alt="cover slika {{ loop.index }}">
+                    <img src="https://cdn.statically.io/img/{{ (cover[0]|urlparse).hostname }}/f=auto,w=975,q=90/{{ (cover[0]|urlparse).path }}"
+                        onerror="this.src='{{ cover[0] }}'; this.onerror='';" class="d-block w-100" alt="cover slika {{ loop.index }}">
                 </a>
             </div>
             {% endfor %}

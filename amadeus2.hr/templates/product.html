@@ -18,7 +18,8 @@
                     {% for slika in slike %}
                     <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
                         <div class="ratio ratio-1x1">
-                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="slika proizvoda {{ loop.index }}">
+                            <img src="https://cdn.statically.io/img/{{ (slika[0]|urlparse).hostname }}/f=auto,w=620,q=90/{{ (slika[0]|urlparse).path }}"
+                                onerror="this.src='{{ slika[0] }}'; this.onerror='';" style="object-fit: contain;" class="w-100 h-100" alt="slika proizvoda {{ loop.index }}">
                         </div>
                     </div>
                     {% else %}
@@ -39,7 +40,8 @@
                     {% for slika in slike %}
                     <li data-bs-target="#productcarousel" data-bs-slide-to="{{ loop.index - 1 }}" class="bg-transparent {% if loop.index == 1 %}active{% endif %}">
                         <div class="ratio ratio-1x1">
-                            <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="tipka za prebacivanje na sliku proizvoda {{ loop.index }}">
+                            <img src="https://cdn.statically.io/img/{{ (slika[0]|urlparse).hostname }}/f=auto,w=30,q=90/{{ (slika[0]|urlparse).path }}"
+                                onerror="this.src='{{ slika[0] }}'; this.onerror='';" style="object-fit: contain;" class="w-100 h-100" alt="tipka za prebacivanje na sliku proizvoda {{ loop.index }}">
                         </div>
                     </li>
                     {% endfor %}
