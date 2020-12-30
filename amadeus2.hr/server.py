@@ -477,6 +477,12 @@ def cart_kolicina():
 def checkout():
 	return 'checkout'
 
+@app.route('/cookieconsent', methods=['POST'])
+def cookieconsent():
+	session['hidecookieconsent'] = True
+	return ''
+
+
 # helpers
 
 def getgroup():
@@ -521,7 +527,8 @@ def _slugify(string):
 
 @app.context_processor
 def global_stuff():
-    return {'grupe': getgroup()}
+    return {'grupe': getgroup(),
+			'hidecookieconsent': session.get('hidecookieconsent', default=False)}
 
 @app.context_processor
 def date_stuff():

@@ -7,9 +7,8 @@ drymail
 postgresql
 
 bootstrap
-htmlx
-google analytics
-google tag manager
+htmx
+posthog
 
 slicne stranice:
 
