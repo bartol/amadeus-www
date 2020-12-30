@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template, request, abort, redirect, session, flash
+from flask import Flask, render_template, request, abort, redirect, session, flash, send_from_directory
 import psycopg2
 import configparser
 from slugify import slugify
@@ -483,6 +483,9 @@ def cookieconsent():
 	session['hidecookieconsent'] = True
 	return ''
 
+@app.route('/robots.txt')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 # helpers
 
