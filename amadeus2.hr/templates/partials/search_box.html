@@ -3,7 +3,7 @@
 const input = this.querySelector("[name=q]")
 if (!input.value) input.value = input.placeholder'>
     <input type="text" name="q" class="form-control {% if lg %}form-control-lg{% endif %}"
-        aria-label="trazilica za proizvode i 2 tipke" id="searchbox{% if lg %}-lg{% endif %}"
+        aria-label="Pretraži proizvode" id="searchbox{% if lg %}-lg{% endif %}"
         autocomplete="off" hx-get="/search_autocomplete" hx-trigger="keyup delay:500ms changed"
         hx-target="#search-results{% if lg %}-lg{% endif %}">
     <select name="g[]" title="Odaberi kategoriju pretraživanja" autocomplete="off" class="form-select" {% if lg %}style="max-width: 8.5rem;"{% else %}style="max-width: 12rem;"{% endif %}>

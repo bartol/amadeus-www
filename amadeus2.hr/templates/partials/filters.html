@@ -14,7 +14,7 @@
     </div>
     {% endif %}
     <h2 class="h4">Sortiranje</h2>
-    <select name="s" autocomplete="off" class="form-select mb-3" aria-label="Default select example">
+    <select name="s" autocomplete="off" class="form-select mb-3" aria-label="Sortiranje">
         <option value="" {{"selected" if sort == ""}}>Zadano</option>
         <option value="a-z" {{"selected" if sort == "a-z"}}>Naziv (A do Z)</option>
         <option value="z-a" {{"selected" if sort == "z-a"}}>Naziv (Z do A)</option>
@@ -58,12 +58,12 @@
     <h2 class="h4">Cijena</h2>
     <div class="input-group mb-2">
         <span class="input-group-text">OD</span>
-        <input type="text" class="form-control" name="c-min" value="{% if cijene[0] %}{{ cijene[0] }}{% endif %}" placeholder="{{ agg[0] }}" aria-label="Amount (to the nearest dollar)">
+        <input type="text" class="form-control" name="c-min" value="{% if cijene[0] %}{{ cijene[0] }}{% endif %}" placeholder="{{ agg[0] }}" title="Minimalna cijena" aria-label="Minimalna cijena">
         <span class="input-group-text">kn</span>
     </div>
     <div class="input-group mb-3">
         <span class="input-group-text">DO</span>
-        <input type="text" class="form-control" name="c-max" value="{% if cijene[1] %}{{ cijene[1] }}{% endif %}" placeholder="{{ agg[1] }}" aria-label="Amount (to the nearest dollar)">
+        <input type="text" class="form-control" name="c-max" value="{% if cijene[1] %}{{ cijene[1] }}{% endif %}" placeholder="{{ agg[1] }}" title="Maksimalna cijena" aria-label="Maksimalna cijena">
         <span class="input-group-text">kn</span>
     </div>
 

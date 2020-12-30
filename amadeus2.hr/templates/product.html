@@ -60,7 +60,7 @@
             </h3>
             <h2 class="fs-6 fw-bold mt-2 mt-lg-3">Cijena za plaćanje na rate:</h2>
             <div class="d-flex mb-3 mb-md-4 align-items-center">
-                <select class="form-select" aria-label="Default select example" autocomplete="off"
+                <select class="form-select" aria-label="Odaberi broj rata" title="Odaberi broj rata" autocomplete="off"
                     onchange="document.getElementById('placanje_rate_iznos').innerHTML = this.value">
                     <option value="{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}" selected>2 rate</option>
                     <option value="{{ formatmoney((proizvod[3] / 3) * dec(1.08)) }}">3 rate</option>
@@ -86,7 +86,7 @@
                     <option value="{{ formatmoney((proizvod[3] / 23) * dec(1.1)) }}">23 rate</option>
                     <option value="{{ formatmoney((proizvod[3] / 24) * dec(1.1)) }}">24 rate</option>
                 </select>
-                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos">{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}</span>/mj.</span>
+                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos" title="Iznos jedne mjesečne rate">{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}</span>/mj.</span>
             </div>
             <form action="/cart" method="POST" class="d-flex">
                 <input type="hidden" name="sifra" value="{{ proizvod[0] }}">
@@ -96,7 +96,7 @@
                             <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
                         </svg>
                     </button>
-                    <input type="number" name="kolicina" class="form-control" aria-label="trazilica za proizvode i 2 tipke" value="1" style="text-align: center;">
+                    <input type="number" name="kolicina" class="form-control" aria-label="Količina" value="1" style="text-align: center;">
                     <button class="btn btn-outline-secondary px-2" title="+1" type="button" onclick="form.querySelector('[name=kolicina]').value++">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -122,7 +122,7 @@
                 Podijeli na Facebooku
             </a>
             <div class="input-group">
-                <input type="text" class="form-control text-muted" aria-label="trazilica za proizvode i 2 tipke" id="copytoclipboard" value="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" onclick="this.select();">
+                <input type="text" class="form-control text-muted" aria-label="Link na proizvod" id="copytoclipboard" value="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" onclick="this.select();">
                 <button class="btn btn-outline-secondary text-nowrap" type="button" onclick='
                 el = document.getElementById("copytoclipboard");
                 el.select();
