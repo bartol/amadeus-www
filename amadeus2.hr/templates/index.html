@@ -10,7 +10,7 @@
     <div id="covercarousel" class="col-md-8 col-lg-9 carousel carousel-dark slide" data-bs-ride="carousel">
         <ol class="carousel-indicators">
             {% for cover in covers %}
-            <li data-bs-target="#covercarousel" data-bs-slide-to="0" class="{% if loop.index == 1 %}active{% endif %}"></li>
+            <li data-bs-target="#covercarousel" data-bs-slide-to="{{ loop.index - 1 }}" class="{% if loop.index == 1 %}active{% endif %}"></li>
             {% endfor %}
         </ol>
         <div class="carousel-inner">
