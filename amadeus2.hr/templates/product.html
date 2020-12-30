@@ -60,32 +60,33 @@
             </h3>
             <h2 class="fs-6 fw-bold mt-2 mt-lg-3">Cijena za plaćanje na rate:</h2>
             <div class="d-flex mb-3 mb-md-4 align-items-center">
-                <select class="form-select" aria-label="Default select example">
-                    <option value="2" selected>2 rate</option>
-                    <option value="3">3 rate</option>
-                    <option value="4">4 rate</option>
-                    <option value="5">5 rata</option>
-                    <option value="6">6 rata</option>
-                    <option value="7">7 rata</option>
-                    <option value="8">8 rata</option>
-                    <option value="9">9 rata</option>
-                    <option value="10">10 rata</option>
-                    <option value="11">11 rata</option>
-                    <option value="12">12 rata</option>
-                    <option value="13">13 rata</option>
-                    <option value="14">14 rata</option>
-                    <option value="15">15 rata</option>
-                    <option value="16">16 rata</option>
-                    <option value="17">17 rata</option>
-                    <option value="18">18 rata</option>
-                    <option value="19">19 rata</option>
-                    <option value="20">20 rata</option>
-                    <option value="21">21 rata</option>
-                    <option value="22">22 rate</option>
-                    <option value="23">23 rate</option>
-                    <option value="24">24 rate</option>
+                <select class="form-select" aria-label="Default select example" autocomplete="off"
+                    onchange="document.getElementById('placanje_rate_iznos').innerHTML = this.value">
+                    <option value="{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}" selected>2 rate</option>
+                    <option value="{{ formatmoney((proizvod[3] / 3) * dec(1.08)) }}">3 rate</option>
+                    <option value="{{ formatmoney((proizvod[3] / 4) * dec(1.08)) }}">4 rate</option>
+                    <option value="{{ formatmoney((proizvod[3] / 5) * dec(1.08)) }}">5 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 6) * dec(1.08)) }}">6 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 7) * dec(1.08)) }}">7 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 8) * dec(1.08)) }}">8 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 9) * dec(1.08)) }}">9 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 10) * dec(1.08)) }}">10 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 11) * dec(1.08)) }}">11 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 12) * dec(1.08)) }}">12 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 13) * dec(1.1)) }}">13 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 14) * dec(1.1)) }}">14 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 15) * dec(1.1)) }}">15 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 16) * dec(1.1)) }}">16 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 17) * dec(1.1)) }}">17 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 18) * dec(1.1)) }}">18 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 19) * dec(1.1)) }}">19 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 20) * dec(1.1)) }}">20 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 21) * dec(1.1)) }}">21 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 22) * dec(1.1)) }}">22 rate</option>
+                    <option value="{{ formatmoney((proizvod[3] / 23) * dec(1.1)) }}">23 rate</option>
+                    <option value="{{ formatmoney((proizvod[3] / 24) * dec(1.1)) }}">24 rate</option>
                 </select>
-                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos">146,59</span> kn/mj.</span>
+                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos">{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}</span>/mj.</span>
             </div>
             <form action="/cart" method="POST" class="d-flex">
                 <input type="hidden" name="sifra" value="{{ proizvod[0] }}">

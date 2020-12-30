@@ -535,6 +535,6 @@ def money_stuff():
 	def formatmoney(amount):
 		m = "{:,.2f}".format(float(amount)).replace(',', '.')
 		return f'{m[:-3]},{m[-2:]} kn'
-	return {'formatmoney': formatmoney}
+	return {'formatmoney': formatmoney, 'dec': decimal.Decimal}
 
 app.run(debug=True, host='0.0.0.0')
