@@ -21,6 +21,10 @@
                             <img src="{{ slika[0] }}" style="object-fit: contain;" class="w-100 h-100" alt="slika proizvoda {{ loop.index }}">
                         </div>
                     </div>
+                    {% else %}
+                    <div class="ratio ratio-1x1">
+                        <div>slika proizvoda</div>
+                    </div>
                     {% endfor %}
                 </div>
                 <a class="carousel-control-prev" href="#productcarousel" role="button" data-bs-slide="prev">
