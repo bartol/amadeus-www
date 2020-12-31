@@ -1,0 +1,9 @@
+<urlset>
+    <url><loc>https://amadeus2.hr/</loc></url>
+    {% for proizvod in proizvodi %}
+    <url><loc>https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}</loc></url>
+    {% endfor %}
+    {% for grupa in grupe %}
+    <url><loc>https://amadeus2.hr/kategorija/{{ grupa[0] }}-{{ grupa[1]|slugify }}</loc></url>
+    {% endfor %}
+</urlset>

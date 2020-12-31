@@ -483,6 +483,12 @@ def cookieconsent():
 	session['hidecookieconsent'] = True
 	return ''
 
+@app.route('/sitemap.xml')
+def sitemap():
+	cur.execute("SELECT sifra, naziv FROM proizvodi WHERE amadeus2hr = 'x'")
+	proizvodi = cur.fetchall()
+	return render_template('sitemap.xml', proizvodi=proizvodi, grupe=getgroup()), 200, {'Content-Type': 'text/xml'}
+
 @app.route('/robots.txt')
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
