@@ -487,6 +487,14 @@ def cookieconsent():
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('errors/500.html'), 500
+
 # helpers
 
 def getgroup():
