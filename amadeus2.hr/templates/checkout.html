@@ -11,15 +11,15 @@
 </h1>
 
 {% if cart|length %}
-<form class="card p-2 mb-3 mb-lg-4">
+<form class="checkout-form card p-2 mb-3 mb-lg-4" novalidate>
     <h2>Podaci za plaćanje</h2>
-    {% with prefix = 'p' %}
+    {% with prefix = 'p', required = true %}
     {% include 'partials/checkout_form.html' %}
     {% endwith %}
 
     <div class="form-check">
         <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="d.notuse"onclick='
+            <input class="form-check-input" type="checkbox" name="d.notuse" onclick='
                 if (this.checked) document.querySelector(".d").style.display="none";
                 else document.querySelector(".d").style.display="block";' checked>
             Koristi iste podatke za dostavu
@@ -32,8 +32,45 @@
         {% endwith %}
     </div>
 
+    <div class="form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="r.use" onclick='
+                if (this.checked) document.querySelector(".r").style.display="block";
+                else document.querySelector(".r").style.display="none";'>
+            Želim R1 račun
+        </label>
+    </div>
+    <div class="r mt-1" style="display: none;">
+        <h2>Podaci za R1 račun</h2>
+        <label class="form-label w-100">
+            Naziv tvrtke
+            <input type="text" class="form-control" name="tvrtka" placeholder="Naziv tvrtke">
+        </label>
+        <label class="form-label w-100">
+            OIB tvrtke
+            <input type="text" class="form-control" name="oib" placeholder="OIB tvrtke">
+        </label>
+    </div>
+
     <h2 class="mt-2">Dodatne napomene</h2>
     <textarea class="form-control mb-3" name="napomene" rows="3" placeholder="Napomene vezane uz proizvode koje naručujete ili dostavu"></textarea>
+
+    <div class="form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="savedata" checked>
+            Zapamti podatke za sljedeću narudžbu
+        </label>
+    </div>
+
+    <div class="form-check mb-2">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="terms" required>
+            Prihvaćam <a href="#">uvjete poslovanja</a>
+            <div class="invalid-feedback">
+                Molimo prihvatite uvjete poslovanja
+            </div>
+        </label>
+    </div>
 
     {% if cijene.nacinplacanja == 'karticom' %}
     {% else %}
@@ -68,6 +105,27 @@
     <input type="hidden" name="CreditCardName" value="">
 </form>
 {% endif %}
+
+<script>
+    (function () {
+        var forms = document.querySelectorAll('.checkout-form')
+        forms.forEach(function (form) {
+            var submitbtn = form.querySelector('[type=submit]')
+            submitbtn.addEventListener('click', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+
+
+
+
+
 {% else %}
 <div class="mb-3 mb-lg-4">
     Vaša košarica je prazna

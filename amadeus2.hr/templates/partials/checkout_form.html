@@ -1,65 +1,58 @@
-<div class="form-check">
-    <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="{{ prefix }}-osoba" value="fizicka" onclick='
-            document.querySelector(".{{ prefix }}-samo-fizicka").style.display="block";
-            document.querySelector(".{{ prefix }}-samo-pravna").style.display="none";' checked>
-        Fizička osoba
-    </label>
-</div>
-<div class="form-check mb-2">
-    <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="{{ prefix }}-osoba" value="pravna" onclick='
-            document.querySelector(".{{ prefix }}-samo-fizicka").style.display="none";
-            document.querySelector(".{{ prefix }}-samo-pravna").style.display="block";'>
-        Pravna osoba
-    </label>
-</div>
-
-<div class="{{ prefix }}-samo-fizicka">
-    <label class="form-label w-100">
-        Vaše ime
-        <input type="text" class="form-control" name="{{ prefix }}-ime" placeholder="Vaše ime">
-    </label>
-    <label class="form-label w-100">
-        Vaše prezime
-        <input type="text" class="form-control" name="{{ prefix }}-prezime" placeholder="Vaše prezime">
-    </label>
-</div>
-
-<div class="{{ prefix }}-samo-pravna" style="display: none;">
-    <label class="form-label w-100">
-        Naziv tvrtke
-        <input type="text" class="form-control" name="{{ prefix }}-tvrtka" placeholder="Naziv tvrtke">
-    </label>
-    <label class="form-label w-100">
-        OIB tvrtke
-        <input type="text" class="form-control" name="{{ prefix }}-oib" placeholder="OIB tvrtke">
-    </label>
-</div>
-
+<label class="form-label w-100">
+    Ime
+    <input type="text" class="form-control" name="{{ prefix }}-ime" placeholder="Ime" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite ime
+    </div>
+</label>
+<label class="form-label w-100">
+    Prezime
+    <input type="text" class="form-control" name="{{ prefix }}-prezime" placeholder="Prezime" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite prezime
+    </div>
+</label>
 <label class="form-label w-100">
     Ulica i broj
-    <input type="text" class="form-control" name="{{ prefix }}-ulica" placeholder="Ulica i broj">
+    <input type="text" class="form-control" name="{{ prefix }}-ulica" placeholder="Ulica i broj" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite ulicu i broj
+    </div>
 </label>
 <label class="form-label w-100">
     Poštanski broj
-    <input type="text" class="form-control" name="{{ prefix }}-postanskibroj" placeholder="Poštanski broj">
+    <input type="text" class="form-control" name="{{ prefix }}-postanskibroj" placeholder="Poštanski broj" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite poštanski broj
+    </div>
 </label>
 <label class="form-label w-100">
     Mjesto
-    <input type="text" class="form-control" name="{{ prefix }}-mjesto" placeholder="Mjesto">
+    <input type="text" class="form-control" name="{{ prefix }}-mjesto" placeholder="Mjesto" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite mjesto
+    </div>
 </label>
 <label class="form-label w-100">
     Država
-    <select class="form-select" name="{{ prefix }}-drzava" aria-label="Država">
+    <select class="form-select" name="{{ prefix }}-drzava" aria-label="Država" {{ "required" if required }}>
         <option selected>Hrvatska</option>
     </select>
+    <div class="invalid-feedback">
+        Molimo odaberite državu
+    </div>
 </label>
 <label class="form-label w-100">
     Email adresa
-    <input type="text" class="form-control" name="{{ prefix }}-email" placeholder="Email adresa">
+    <input type="text" class="form-control" name="{{ prefix }}-email" placeholder="Email adresa" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite email adresu
+    </div>
 </label>
 <label class="form-label w-100">
     Mobitel
-    <input type="text" class="form-control" name="{{ prefix }}-mobitel" placeholder="Mobitel">
+    <input type="text" class="form-control" name="{{ prefix }}-mobitel" placeholder="Mobitel" {{ "required" if required }}>
+    <div class="invalid-feedback">
+        Molimo upišite mobitel
+    </div>
 </label>
