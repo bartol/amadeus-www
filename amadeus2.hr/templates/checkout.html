@@ -11,10 +11,79 @@
 </h1>
 
 {% if cart|length %}
-<h2>Podaci za plaćanje</h2>
+<form class="card p-2 mb-3 mb-lg-4">
+    <h2>Podaci za plaćanje</h2>
+    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="radio" name="p.osoba" value="fizicka" onclick='document.querySelector(".p-samo-fizicka").classList.toggle("d-none");document.querySelector(".p-samo-pravna").classList.toggle("d-none")' checked>Fizička osoba</label></div>
+    <div class="form-check mb-2"><label class="form-check-label"><input class="form-check-input" type="radio" name="p.osoba" value="pravna" onclick='document.querySelector(".p-samo-fizicka").classList.toggle("d-none");document.querySelector(".p-samo-pravna").classList.toggle("d-none")'>Pravna osoba</label></div>
+    <div class="p-samo-fizicka">
+        <label class="form-label w-100">Vaše ime<input type="text" class="form-control" name="p.ime" placeholder="Vaše ime"></label>
+        <label class="form-label w-100">Vaše prezime<input type="text" class="form-control" name="p.prezime" placeholder="Vaše prezime"></label>
+    </div>
+    <div class="p-samo-pravna d-none">
+        <label class="form-label w-100">Naziv tvrtke<input type="text" class="form-control" name="p.tvrtka" placeholder="Naziv tvrtke"></label>
+        <label class="form-label w-100">OIB tvrtke<input type="text" class="form-control" name="p.oib" placeholder="OIB tvrtke"></label>
+    </div>
+    <label class="form-label w-100">Ulica i broj<input type="text" class="form-control" name="p.ulica" placeholder="Ulica i broj"></label>
+    <label class="form-label w-100">Poštanski broj<input type="text" class="form-control" name="p.postanskibroj" placeholder="Poštanski broj"></label>
+    <label class="form-label w-100">Mjesto<input type="text" class="form-control" name="p.mjesto" placeholder="Mjesto"></label>
+    <label class="form-label w-100">
+        Država
+        <select class="form-select" name="p.drzava" aria-label="Država">
+            <option selected>Hrvatska</option>
+        </select>
+    </label>
+    <label class="form-label w-100">Email adresa<input type="text" class="form-control" name="p.email" placeholder="Email adresa"></label>
+    <label class="form-label w-100">Mobitel<input type="text" class="form-control" name="p.mobitel" placeholder="Mobitel"></label>
 
+    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="d.notuse" onclick='document.querySelector(".d").classList.toggle("d-none")' checked>Koristi iste podatke za dostavu</label></div>
+    <div class="d mt-1 d-none">
+        <h2>Podaci za dostavu</h2>
+        <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="radio" name="d.osoba" value="fizicka" id="fizicka" onclick='document.querySelector(".d-samo-fizicka").classList.toggle("d-none");document.querySelector(".d-samo-pravna").classList.toggle("d-none")' checked>Fizička osoba</label></div>
+        <div class="form-check mb-2"><label class="form-check-label"><input class="form-check-input" type="radio" name="d.osoba" value="pravna" id="pravna" onclick='document.querySelector(".d-samo-fizicka").classList.toggle("d-none");document.querySelector(".d-samo-pravna").classList.toggle("d-none")'>Pravna osoba</label></div>
+        <div class="d-samo-fizicka">
+            <label class="form-label w-100">Vaše ime<input type="text" class="form-control" name="d.ime" placeholder="Vaše ime"></label>
+            <label class="form-label w-100">Vaše prezime<input type="text" class="form-control" name="d.prezime" placeholder="Vaše prezime"></label>
+        </div>
+        <div class="d-samo-pravna" style="display: none;">
+            <label class="form-label w-100">Naziv tvrtke<input type="text" class="form-control" name="d.tvrtka" placeholder="Naziv tvrtke"></label>
+            <label class="form-label w-100">OIB tvrtke<input type="text" class="form-control" name="d.oib" placeholder="OIB tvrtke"></label>
+        </div>
+        <label class="form-label w-100">Ulica i broj<input type="text" class="form-control" name="d.ulica" placeholder="Ulica i broj"></label>
+        <label class="form-label w-100">Poštanski broj<input type="text" class="form-control" name="d.postanskibroj" placeholder="Poštanski broj"></label>
+        <label class="form-label w-100">Mjesto<input type="text" class="form-control" name="d.mjesto" placeholder="Mjesto"></label>
+        <label class="form-label w-100">
+            Država
+            <select class="form-select" name="d.drzava" aria-label="Država">
+                <option selected>Hrvatska</option>
+            </select>
+        </label>
+        <label class="form-label w-100">Email adresa<input type="text" class="form-control" name="d.email" placeholder="Email adresa"></label>
+        <label class="form-label w-100">Mobitel<input type="text" class="form-control" name="d.mobitel" placeholder="Mobitel"></label>
+    </div>
+</form>
 
-
+{% if cijene.nacinplacanja == 'karticom' %}
+<form name="pay" action="https://formtest.wspay.biz/Authorization.aspx" method="POST">
+    <input type="hidden" name="ShopID" value="PIONEERHR">
+    <input type="hidden" name="ShoppingCartID" value="">
+    <input type="hidden" name="Version" value="2.0">
+    <input type="hidden" name="TotalAmount" value="">
+    <input type="hidden" name="Signature" value="">
+    <input type="hidden" name="ReturnURL" value="https://amadeus2.hr/checkout/success">
+    <input type="hidden" name="CancelURL" value="https://amadeus2.hr/checkout/cancel">
+    <input type="hidden" name="ReturnErrorURL" value="https://amadeus2.hr/checkout/failure">
+    <input type="hidden" name="CustomerFirstName" value="">
+    <input type="hidden" name="CustomerLastName" value="">
+    <input type="hidden" name="CustomerEmail" value="">
+    <input type="hidden" name="CustomerAddress" value="">
+    <input type="hidden" name="CustomerCity" value="">
+    <input type="hidden" name="CustomerZIP" value="">
+    <input type="hidden" name="CustomerCountry" value="">
+    <input type="hidden" name="CustomerPhone" value="">
+    <input type="hidden" name="PaymentPlan" value="">
+    <input type="hidden" name="CreditCardName" value="">
+</form>
+{% endif %}
 {% else %}
 <div class="mb-3 mb-lg-4">
     Vaša košarica je prazna
