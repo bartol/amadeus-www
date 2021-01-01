@@ -13,53 +13,37 @@
 {% if cart|length %}
 <form class="card p-2 mb-3 mb-lg-4">
     <h2>Podaci za plaćanje</h2>
-    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="radio" name="p.osoba" value="fizicka" onclick='document.querySelector(".p-samo-fizicka").classList.toggle("d-none");document.querySelector(".p-samo-pravna").classList.toggle("d-none")' checked>Fizička osoba</label></div>
-    <div class="form-check mb-2"><label class="form-check-label"><input class="form-check-input" type="radio" name="p.osoba" value="pravna" onclick='document.querySelector(".p-samo-fizicka").classList.toggle("d-none");document.querySelector(".p-samo-pravna").classList.toggle("d-none")'>Pravna osoba</label></div>
-    <div class="p-samo-fizicka">
-        <label class="form-label w-100">Vaše ime<input type="text" class="form-control" name="p.ime" placeholder="Vaše ime"></label>
-        <label class="form-label w-100">Vaše prezime<input type="text" class="form-control" name="p.prezime" placeholder="Vaše prezime"></label>
-    </div>
-    <div class="p-samo-pravna d-none">
-        <label class="form-label w-100">Naziv tvrtke<input type="text" class="form-control" name="p.tvrtka" placeholder="Naziv tvrtke"></label>
-        <label class="form-label w-100">OIB tvrtke<input type="text" class="form-control" name="p.oib" placeholder="OIB tvrtke"></label>
-    </div>
-    <label class="form-label w-100">Ulica i broj<input type="text" class="form-control" name="p.ulica" placeholder="Ulica i broj"></label>
-    <label class="form-label w-100">Poštanski broj<input type="text" class="form-control" name="p.postanskibroj" placeholder="Poštanski broj"></label>
-    <label class="form-label w-100">Mjesto<input type="text" class="form-control" name="p.mjesto" placeholder="Mjesto"></label>
-    <label class="form-label w-100">
-        Država
-        <select class="form-select" name="p.drzava" aria-label="Država">
-            <option selected>Hrvatska</option>
-        </select>
-    </label>
-    <label class="form-label w-100">Email adresa<input type="text" class="form-control" name="p.email" placeholder="Email adresa"></label>
-    <label class="form-label w-100">Mobitel<input type="text" class="form-control" name="p.mobitel" placeholder="Mobitel"></label>
+    {% with prefix = 'p' %}
+    {% include 'partials/checkout_form.html' %}
+    {% endwith %}
 
-    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="d.notuse" onclick='document.querySelector(".d").classList.toggle("d-none")' checked>Koristi iste podatke za dostavu</label></div>
-    <div class="d mt-1 d-none">
-        <h2>Podaci za dostavu</h2>
-        <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="radio" name="d.osoba" value="fizicka" id="fizicka" onclick='document.querySelector(".d-samo-fizicka").classList.toggle("d-none");document.querySelector(".d-samo-pravna").classList.toggle("d-none")' checked>Fizička osoba</label></div>
-        <div class="form-check mb-2"><label class="form-check-label"><input class="form-check-input" type="radio" name="d.osoba" value="pravna" id="pravna" onclick='document.querySelector(".d-samo-fizicka").classList.toggle("d-none");document.querySelector(".d-samo-pravna").classList.toggle("d-none")'>Pravna osoba</label></div>
-        <div class="d-samo-fizicka">
-            <label class="form-label w-100">Vaše ime<input type="text" class="form-control" name="d.ime" placeholder="Vaše ime"></label>
-            <label class="form-label w-100">Vaše prezime<input type="text" class="form-control" name="d.prezime" placeholder="Vaše prezime"></label>
-        </div>
-        <div class="d-samo-pravna" style="display: none;">
-            <label class="form-label w-100">Naziv tvrtke<input type="text" class="form-control" name="d.tvrtka" placeholder="Naziv tvrtke"></label>
-            <label class="form-label w-100">OIB tvrtke<input type="text" class="form-control" name="d.oib" placeholder="OIB tvrtke"></label>
-        </div>
-        <label class="form-label w-100">Ulica i broj<input type="text" class="form-control" name="d.ulica" placeholder="Ulica i broj"></label>
-        <label class="form-label w-100">Poštanski broj<input type="text" class="form-control" name="d.postanskibroj" placeholder="Poštanski broj"></label>
-        <label class="form-label w-100">Mjesto<input type="text" class="form-control" name="d.mjesto" placeholder="Mjesto"></label>
-        <label class="form-label w-100">
-            Država
-            <select class="form-select" name="d.drzava" aria-label="Država">
-                <option selected>Hrvatska</option>
-            </select>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="d.notuse"onclick='
+                if (this.checked) document.querySelector(".d").style.display="none";
+                else document.querySelector(".d").style.display="block";' checked>
+            Koristi iste podatke za dostavu
         </label>
-        <label class="form-label w-100">Email adresa<input type="text" class="form-control" name="d.email" placeholder="Email adresa"></label>
-        <label class="form-label w-100">Mobitel<input type="text" class="form-control" name="d.mobitel" placeholder="Mobitel"></label>
     </div>
+    <div class="d mt-1" style="display: none;">
+        <h2>Podaci za dostavu</h2>
+        {% with prefix = 'd' %}
+        {% include 'partials/checkout_form.html' %}
+        {% endwith %}
+    </div>
+
+    <h2 class="mt-2">Dodatne napomene</h2>
+    <textarea class="form-control mb-3" name="napomene" rows="3" placeholder="Napomene vezane uz proizvode koje naručujete ili dostavu"></textarea>
+
+    {% if cijene.nacinplacanja == 'karticom' %}
+    {% else %}
+    <button type="submit" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+        </svg>
+        Naruči
+    </button>
+    {% endif %}
 </form>
 
 {% if cijene.nacinplacanja == 'karticom' %}

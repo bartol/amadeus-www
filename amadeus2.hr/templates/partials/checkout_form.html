@@ -1,0 +1,65 @@
+<div class="form-check">
+    <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="{{ prefix }}-osoba" value="fizicka" onclick='
+            document.querySelector(".{{ prefix }}-samo-fizicka").style.display="block";
+            document.querySelector(".{{ prefix }}-samo-pravna").style.display="none";' checked>
+        Fizička osoba
+    </label>
+</div>
+<div class="form-check mb-2">
+    <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="{{ prefix }}-osoba" value="pravna" onclick='
+            document.querySelector(".{{ prefix }}-samo-fizicka").style.display="none";
+            document.querySelector(".{{ prefix }}-samo-pravna").style.display="block";'>
+        Pravna osoba
+    </label>
+</div>
+
+<div class="{{ prefix }}-samo-fizicka">
+    <label class="form-label w-100">
+        Vaše ime
+        <input type="text" class="form-control" name="{{ prefix }}-ime" placeholder="Vaše ime">
+    </label>
+    <label class="form-label w-100">
+        Vaše prezime
+        <input type="text" class="form-control" name="{{ prefix }}-prezime" placeholder="Vaše prezime">
+    </label>
+</div>
+
+<div class="{{ prefix }}-samo-pravna" style="display: none;">
+    <label class="form-label w-100">
+        Naziv tvrtke
+        <input type="text" class="form-control" name="{{ prefix }}-tvrtka" placeholder="Naziv tvrtke">
+    </label>
+    <label class="form-label w-100">
+        OIB tvrtke
+        <input type="text" class="form-control" name="{{ prefix }}-oib" placeholder="OIB tvrtke">
+    </label>
+</div>
+
+<label class="form-label w-100">
+    Ulica i broj
+    <input type="text" class="form-control" name="{{ prefix }}-ulica" placeholder="Ulica i broj">
+</label>
+<label class="form-label w-100">
+    Poštanski broj
+    <input type="text" class="form-control" name="{{ prefix }}-postanskibroj" placeholder="Poštanski broj">
+</label>
+<label class="form-label w-100">
+    Mjesto
+    <input type="text" class="form-control" name="{{ prefix }}-mjesto" placeholder="Mjesto">
+</label>
+<label class="form-label w-100">
+    Država
+    <select class="form-select" name="{{ prefix }}-drzava" aria-label="Država">
+        <option selected>Hrvatska</option>
+    </select>
+</label>
+<label class="form-label w-100">
+    Email adresa
+    <input type="text" class="form-control" name="{{ prefix }}-email" placeholder="Email adresa">
+</label>
+<label class="form-label w-100">
+    Mobitel
+    <input type="text" class="form-control" name="{{ prefix }}-mobitel" placeholder="Mobitel">
+</label>

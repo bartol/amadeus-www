@@ -477,7 +477,7 @@ def cart_set_card():
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
 	cart, cart_products, cijene = getcart()
-	return render_template('checkout.html', cart=cart)
+	return render_template('checkout.html', cart=cart, cijene=cijene)
 
 @app.route('/cookieconsent', methods=['POST'])
 def cookieconsent():
