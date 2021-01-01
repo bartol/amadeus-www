@@ -29,25 +29,34 @@
             Unesi <span class="d-none d-md-inline">promo kod</span>
         </button>
     </form>
-    <h2>Cijena</h2>
-    <table class="table mb-3">
-        <tr>
-            <td>Proizvodi:</td>
-            <td>{{ formatmoney(cijene.proizvodi) }}</td>
-        </tr>
-        <tr>
-            <td>PDV:</td>
-            <td>{{ formatmoney(cijene.pdv) }}</td>
-        </tr>
-        <tr>
-            <td>Dostava:</td>
-            <td>{{ formatmoney(0) }}</td>
-        </tr>
-        <tr>
-            <td><b>Ukupno:</b></td>
-            <td><b>{{ formatmoney(cijene.sum) }}</b></td>
-        </tr>
-    </table>
+
+    <h2>Način plaćanja</h2>
+    <form>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="nacinplacanja" value="po-ponudi"
+                    hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "po-ponudi" %}checked{% endif %}>
+                Plaćanje uplatom po ponudi
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="nacinplacanja" value="pouzecem"
+                    hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "pouzecem" %}checked{% endif %}>
+                Plaćanje pouzećem
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="nacinplacanja" value="karticom"
+                    hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "karticom" %}checked{% endif %}>
+                Plaćanje karticom
+            </label>
+        </div>
+    </form>
+
+    {% include "partials/price_table.html" %}
+
     <div class="d-grid">
         <a href="/checkout" title="Unos podataka za narudžbu" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">

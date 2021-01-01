@@ -411,26 +411,7 @@ def cart():
 		flash(f'Proizvod (šifra: {sifra}) dodan u košaricu', 'success')
 		return redirect('/cart')
 
-	cart = session.get('cart', default=[])
-	cart_products = []
-	for item in cart:
-		cur.execute("""
-			SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
-				SELECT link
-				FROM slike
-				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-			), kolicina FROM proizvodi p
-			WHERE sifra = %s AND amadeus2hr = 'x';
-		""", (item['sifra'],))
-		cart_product = cur.fetchone()
-		cart_products.append(cart_product)
-
-	cijene = {'sum': 0}
-	for idx, item in enumerate(cart_products):
-		cijene['sum'] = cijene['sum'] + (item[3] * decimal.Decimal(cart[idx]['kolicina']))
-	cijene['proizvodi'] = cijene['sum'] * decimal.Decimal(0.8)
-	cijene['pdv'] = cijene['sum'] * decimal.Decimal(0.2)
-
+	cart, cart_products, cijene = getcart()
 	return render_template('cart.html', cart=cart, cart_products=cart_products, cijene=cijene)
 
 @app.route('/cart/delete', methods=['POST'])
@@ -474,9 +455,29 @@ def cart_kolicina():
 	flash(f'Količina ({kolicina}) za proizvod (šifra: {sifra}) uspješno promjenjena', 'success')
 	return redirect('/cart')
 
+@app.route('/cart/setmethod', methods=['POST'])
+def cart_set_method():
+	nacinplacanja = request.form.get('nacinplacanja')
+	session['nacinplacanja'] = nacinplacanja
+
+	cart, cart_products, cijene = getcart()
+	return render_template('partials/price_table.html', cijene=cijene)
+
+@app.route('/cart/setcard', methods=['POST'])
+def cart_set_card():
+	card = request.form.get('card')
+	session['card'] = card
+	brojrata = request.form.get('brojrata', type=int)
+	session['brojrata'] = brojrata
+
+	cart, cart_products, cijene = getcart()
+	return render_template('partials/price_table.html', cijene=cijene)
+
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-	return 'checkout'
+	cart, cart_products, cijene = getcart()
+	return render_template('checkout.html', cart=cart)
 
 @app.route('/cookieconsent', methods=['POST'])
 def cookieconsent():
@@ -531,6 +532,44 @@ def getakcijadana():
 	""", (str(datetime.date.today()),))
 	akcija_dana = cur.fetchone()
 	return akcija_dana
+
+def getcart():
+	cart = session.get('cart', default=[])
+	cart_products = []
+	for item in cart:
+		cur.execute("""
+			SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+				SELECT link
+				FROM slike
+				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
+			), kolicina FROM proizvodi p
+			WHERE sifra = %s AND amadeus2hr = 'x';
+		""", (item['sifra'],))
+		cart_product = cur.fetchone()
+		cart_products.append(cart_product)
+
+	cijene = {'sum': 0}
+	for idx, item in enumerate(cart_products):
+		cijene['sum'] = cijene['sum'] + (item[3] * decimal.Decimal(cart[idx]['kolicina']))
+	cijene['proizvodi'] = cijene['sum'] * decimal.Decimal(0.8)
+	cijene['pdv'] = cijene['sum'] * decimal.Decimal(0.2)
+
+	brojrata = session.get('brojrata', default=1)
+	cijene['brojrata'] = brojrata
+	nacinplacanja = session.get('nacinplacanja', default='po-ponudi')
+	cijene['nacinplacanja'] = nacinplacanja
+
+	if brojrata >= 2 and brojrata <= 12 and nacinplacanja == 'karticom':
+		cijene['rate-2-12'] = cijene['sum'] * decimal.Decimal(0.08)
+		cijene['sum'] = cijene['sum'] + cijene['rate-2-12']
+	if brojrata >= 13 and brojrata <= 24 and nacinplacanja == 'karticom':
+		cijene['rate-13-24'] = cijene['sum'] * decimal.Decimal(0.1)
+		cijene['sum'] = cijene['sum'] + cijene['rate-13-24']
+
+	card = session.get('card', default='VISA')
+	cijene['card'] = card
+
+	return (cart, cart_products, cijene)
 
 # find in list
 def find(lst, key, value):

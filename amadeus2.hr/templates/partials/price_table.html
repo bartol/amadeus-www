@@ -1,0 +1,75 @@
+<div id="price_table">
+    {% if cijene.nacinplacanja == 'karticom' %}
+    <form>
+        <h3 class="h5 mt-2">Kartica</h3>
+        <select class="form-select" name="card" autocomplete="off" aria-label="Kartica" hx-post="/cart/setcard" hx-target="#price_table" hx-swap="outerHTML">
+            <option value="VISA" {{"selected" if cijene.card == "VISA"}}>Visa</option>
+            <option value="MASTERCARD" {{"selected" if cijene.card == "MASTERCARD"}}>MasterCard</option>
+            <option value="MAESTRO" {{"selected" if cijene.card == "MAESTRO"}}>Maestro</option>
+            <option value="DINERS" {{"selected" if cijene.card == "DINERS"}}>Diners</option>
+        </select>
+
+        <h3 class="h5 mt-2">Broj rata</h3>
+        <select class="form-select" name="brojrata" autocomplete="off" aria-label="Broj rata" hx-post="/cart/setcard" hx-target="#price_table" hx-swap="outerHTML">
+            <option value="1" {{"selected" if cijene.brojrata == 1}}>Jednokratno</option>
+            <option value="2" {{"selected" if cijene.brojrata == 2}}>2 rate</option>
+            <option value="3" {{"selected" if cijene.brojrata == 3}}>3 rate</option>
+            <option value="4" {{"selected" if cijene.brojrata == 4}}>4 rate</option>
+            <option value="5" {{"selected" if cijene.brojrata == 5}}>5 rata</option>
+            <option value="6" {{"selected" if cijene.brojrata == 6}}>6 rata</option>
+            <option value="7" {{"selected" if cijene.brojrata == 7}}>7 rata</option>
+            <option value="8" {{"selected" if cijene.brojrata == 8}}>8 rata</option>
+            <option value="9" {{"selected" if cijene.brojrata == 9}}>9 rata</option>
+            <option value="10" {{"selected" if cijene.brojrata == 10}}>10 rata</option>
+            <option value="11" {{"selected" if cijene.brojrata == 11}}>11 rata</option>
+            <option value="12" {{"selected" if cijene.brojrata == 12}}>12 rata</option>
+            <option value="13" {{"selected" if cijene.brojrata == 13}}>13 rata</option>
+            <option value="14" {{"selected" if cijene.brojrata == 14}}>14 rata</option>
+            <option value="15" {{"selected" if cijene.brojrata == 15}}>15 rata</option>
+            <option value="16" {{"selected" if cijene.brojrata == 16}}>16 rata</option>
+            <option value="17" {{"selected" if cijene.brojrata == 17}}>17 rata</option>
+            <option value="18" {{"selected" if cijene.brojrata == 18}}>18 rata</option>
+            <option value="19" {{"selected" if cijene.brojrata == 19}}>19 rata</option>
+            <option value="20" {{"selected" if cijene.brojrata == 20}}>20 rata</option>
+            <option value="21" {{"selected" if cijene.brojrata == 21}}>21 rata</option>
+            <option value="22" {{"selected" if cijene.brojrata == 22}}>22 rate</option>
+            <option value="23" {{"selected" if cijene.brojrata == 23}}>23 rate</option>
+            <option value="24" {{"selected" if cijene.brojrata == 24}}>24 rate</option>
+        </select>
+    </form>
+    {% endif %}
+
+    <div class="mt-3">
+        <h2>Cijena</h2>
+        <table class="table mb-3">
+            <tr>
+                <td>Proizvodi:</td>
+                <td>{{ formatmoney(cijene.proizvodi) }}</td>
+            </tr>
+            <tr>
+                <td>PDV:</td>
+                <td>{{ formatmoney(cijene.pdv) }}</td>
+            </tr>
+            {% if cijene['rate-2-12'] %}
+            <tr>
+                <td>Rate (2-12):</td>
+                <td>{{ formatmoney(cijene['rate-2-12']) }}</td>
+            </tr>
+            {% endif %}
+            {% if cijene['rate-13-24'] %}
+            <tr>
+                <td>Rate (13-24):</td>
+                <td>{{ formatmoney(cijene['rate-13-24']) }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>Dostava:</td>
+                <td>{{ formatmoney(0) }}</td>
+            </tr>
+            <tr>
+                <td><b>Ukupno:</b></td>
+                <td><b>{{ formatmoney(cijene.sum) }}</b></td>
+            </tr>
+        </table>
+    </div>
+</div>
