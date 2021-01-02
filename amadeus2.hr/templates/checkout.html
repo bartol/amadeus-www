@@ -11,7 +11,7 @@
 </h1>
 
 {% if cart|length %}
-<form class="checkout-form card p-2 mb-3 mb-lg-4" novalidate>
+<form class="checkout-form card p-2 mb-3 mb-lg-4" method="POST" novalidate>
     <h2>Podaci za plaćanje</h2>
     {% with prefix = 'p', required = true %}
     {% include 'partials/checkout_form.html' %}
@@ -19,13 +19,13 @@
 
     <div class="form-check">
         <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="d.notuse" onclick='
+            <input class="form-check-input" type="checkbox" name="d-notuse" onclick='
                 if (this.checked) document.querySelector(".d").style.display="none";
-                else document.querySelector(".d").style.display="block";' checked>
+                else document.querySelector(".d").style.display="block";'  {{ "checked" if checkout.get('d-notuse', '') }}>
             Koristi iste podatke za dostavu
         </label>
     </div>
-    <div class="d mt-1" style="display: none;">
+    <div class="d mt-1" {% if checkout.get('d-notuse', '') %}style="display: none;"{% else %}style="display: block;"{% endif %}>
         <h2>Podaci za dostavu</h2>
         {% with prefix = 'd' %}
         {% include 'partials/checkout_form.html' %}
@@ -34,37 +34,37 @@
 
     <div class="form-check">
         <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="r.use" onclick='
+            <input class="form-check-input" type="checkbox" name="r-use" {{ "checked" if checkout.get('r-use', '') }} onclick='
                 if (this.checked) document.querySelector(".r").style.display="block";
                 else document.querySelector(".r").style.display="none";'>
             Želim R1 račun
         </label>
     </div>
-    <div class="r mt-1" style="display: none;">
+    <div class="r mt-1"  {% if checkout.get('r-use', '') %}style="display: block;"{% else %}style="display: none;"{% endif %}>
         <h2>Podaci za R1 račun</h2>
         <label class="form-label w-100">
             Naziv tvrtke
-            <input type="text" class="form-control" name="tvrtka" placeholder="Naziv tvrtke">
+            <input type="text" class="form-control" name="tvrtka" value="{{ checkout.get('tvrtka', '') }}" placeholder="Naziv tvrtke">
         </label>
         <label class="form-label w-100">
             OIB tvrtke
-            <input type="text" class="form-control" name="oib" placeholder="OIB tvrtke">
+            <input type="text" class="form-control" name="oib" value="{{ checkout.get('oib', '') }}" placeholder="OIB tvrtke">
         </label>
     </div>
 
     <h2 class="mt-2">Dodatne napomene</h2>
-    <textarea class="form-control mb-3" name="napomene" rows="3" placeholder="Napomene vezane uz proizvode koje naručujete ili dostavu"></textarea>
+    <textarea class="form-control mb-3" name="napomene" rows="3" placeholder="Napomene vezane uz proizvode koje naručujete ili dostavu">{{ checkout.get('napomene', '') }}</textarea>
 
     <div class="form-check">
         <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="savedata" checked>
+            <input class="form-check-input" type="checkbox" name="savedata" {{ "checked" if checkout.get('savedata', '') }}>
             Zapamti podatke za sljedeću narudžbu
         </label>
     </div>
 
     <div class="form-check mb-2">
         <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="terms" required>
+            <input class="form-check-input" type="checkbox" name="terms" {{ "checked" if checkout.get('terms', '') }} required>
             Prihvaćam <a href="#">uvjete poslovanja</a>
             <div class="invalid-feedback">
                 Molimo prihvatite uvjete poslovanja

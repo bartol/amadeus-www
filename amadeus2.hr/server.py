@@ -473,11 +473,55 @@ def cart_set_card():
 	cart, cart_products, cijene = getcart()
 	return render_template('partials/price_table.html', cijene=cijene)
 
+def set_checkout(formkey, required):
+	formdata = request.form.get(formkey)
+	if formdata:
+		session['checkout'][formkey] = formdata
+	elif required:
+		raise Exception(f'{formkey} not valid')
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+	if request.method == 'POST':
+		session['checkout'] = {}
+		try:
+			set_checkout('p-ime', True)
+			set_checkout('p-prezime', True)
+			set_checkout('p-ulica', True)
+			set_checkout('p-postanskibroj', True)
+			set_checkout('p-mjesto', True)
+			set_checkout('p-drzava', True)
+			set_checkout('p-email', True)
+			set_checkout('p-mobitel', True)
+			set_checkout('terms', True)
+		except:
+			abort(400)
+		set_checkout('d-notuse', False)
+		set_checkout('d-ime', False)
+		set_checkout('d-prezime', False)
+		set_checkout('d-ulica', False)
+		set_checkout('d-postanskibroj', False)
+		set_checkout('d-mjesto', False)
+		set_checkout('d-drzava', False)
+		set_checkout('d-email', False)
+		set_checkout('d-mobitel', False)
+		set_checkout('r-use', False)
+		set_checkout('tvrtka', False)
+		set_checkout('oib', False)
+		set_checkout('napomene', False)
+		set_checkout('savedata', False)
+
+		# ...
+
+		if not session['checkout'].get('savedata'):
+			session['checkout'] = {}
+
+		return redirect('/checkout')
+	if not session.get('checkout'):
+		session['checkout']['d-notuse'] = "on"
+		session['checkout']['savedata'] = "on"
 	cart, cart_products, cijene = getcart()
-	return render_template('checkout.html', cart=cart, cijene=cijene)
+	return render_template('checkout.html', cart=cart, cijene=cijene, checkout=session.get('checkout'))
 
 @app.route('/cookieconsent', methods=['POST'])
 def cookieconsent():
