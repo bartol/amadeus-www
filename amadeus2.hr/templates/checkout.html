@@ -73,6 +73,34 @@
     </div>
 
     {% if cijene.nacinplacanja == 'karticom' %}
+    <input type="hidden" name="ajax" value="on">
+    <button type="submit" class="btn btn-primary" onclick='
+    event.preventDefault()
+    const data = new URLSearchParams(Array.from(new FormData(this.form))).toString()
+    fetch("/checkout", {method: "POST", body: data, headers: {"Content-Type": "application/x-www-form-urlencoded"}}).then(res => res.json()).then(json => {
+        const wspayform = document.querySelector("[name=pay]")
+        wspayform.querySelector("[name=ShoppingCartID]").value = json.order_id
+        wspayform.querySelector("[name=TotalAmount]").value = json.totalamount
+        wspayform.querySelector("[name=Signature]").value = json.signature
+        wspayform.querySelector("[name=CustomerFirstName]").value = json.firstname
+        wspayform.querySelector("[name=CustomerLastName]").value = json.lastname
+        wspayform.querySelector("[name=CustomerEmail]").value = json.email
+        wspayform.querySelector("[name=CustomerAddress]").value = json.address
+        wspayform.querySelector("[name=CustomerCity]").value = json.city
+        wspayform.querySelector("[name=CustomerZIP]").value = json.zip
+        wspayform.querySelector("[name=CustomerCountry]").value = json.country
+        wspayform.querySelector("[name=CustomerPhone]").value = json.phone
+        wspayform.querySelector("[name=PaymentPlan]").value = json.paymentplan
+        wspayform.querySelector("[name=CreditCardName]").value = json.card
+        wspayform.submit()
+    })
+    '>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+            <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+        </svg>
+        Plati karticom
+    </button>
     {% else %}
     <button type="submit" class="btn btn-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -90,9 +118,9 @@
     <input type="hidden" name="Version" value="2.0">
     <input type="hidden" name="TotalAmount" value="">
     <input type="hidden" name="Signature" value="">
-    <input type="hidden" name="ReturnURL" value="https://amadeus2.hr/checkout/success">
-    <input type="hidden" name="CancelURL" value="https://amadeus2.hr/checkout/cancel">
-    <input type="hidden" name="ReturnErrorURL" value="https://amadeus2.hr/checkout/failure">
+    <input type="hidden" name="ReturnURL" value="https://amadeus2.hr/success">
+    <input type="hidden" name="CancelURL" value="https://amadeus2.hr/cancel">
+    <input type="hidden" name="ReturnErrorURL" value="https://amadeus2.hr/failure">
     <input type="hidden" name="CustomerFirstName" value="">
     <input type="hidden" name="CustomerLastName" value="">
     <input type="hidden" name="CustomerEmail" value="">
@@ -103,6 +131,7 @@
     <input type="hidden" name="CustomerPhone" value="">
     <input type="hidden" name="PaymentPlan" value="">
     <input type="hidden" name="CreditCardName" value="">
+    <input type="hidden" name="ReturnMethod" value="POST">
 </form>
 {% endif %}
 

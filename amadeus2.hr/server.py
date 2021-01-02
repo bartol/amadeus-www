@@ -10,6 +10,7 @@ import math, decimal
 from drymail import SMTPMailer, Message
 from urllib.parse import urlparse
 import random
+import hashlib
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -19,6 +20,7 @@ conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
 
 secret_key = config['global']['secret_key'].strip('"')
+wspaykey = config['global']['wspaykey'].strip('"')
 
 mailhost = config['global']['mailhost'].strip('"')
 mailport = config['global']['mailport']
@@ -483,6 +485,7 @@ def set_checkout(formkey, required):
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+	ajax = request.form.get('ajax', type=bool, default=False)
 	if request.method == 'POST':
 		session['checkout'] = {}
 		try:
@@ -514,17 +517,40 @@ def checkout():
 
 		order_id = f'web-{randomDigits(5)}'
 		cart, cart_products, cijene = getcart()
-		html = render_template('emails/checkout.html', checkout=session.get('checkout'),
-			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
-			card=session['card'], brojrata=session['brojrata'])
-		message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-                  receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
-		try:
-			mail.send(message)
-		except:
-			return redirect('/failure')
+		if not ajax:
+			html = render_template('emails/checkout.html', checkout=session.get('checkout'),
+				order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
+				card=session['card'], brojrata=session['brojrata'])
+			message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+					receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
+			try:
+				mail.send(message)
+			except:
+				return redirect('/failure')
 
-		return redirect('/success')
+			return redirect('/success')
+		else:
+			sig_plain = "PIONEERHR" + wspaykey + order_id + wspaykey + "{:.2f}".format(float(cijene['sum'])).replace('.', '') + wspaykey
+			countries = {
+				'Hrvatska': 'HR'
+			}
+			country = countries.get(session['checkout'].get('p-drzava'))
+			plan = "{:02}00".format(session['brojrata']) if session['brojrata'] > 1 else '0000'
+			return {
+				'order_id': order_id,
+				'totalamount': "{:.2f}".format(float(cijene['sum'])).replace('.', ','),
+				'signature': hashlib.sha512(sig_plain.encode('utf-8')).hexdigest(),
+				'firstname': session['checkout'].get('p-ime'),
+				'lastname': session['checkout'].get('p-prezime'),
+				'email': session['checkout'].get('p-email'),
+				'address': session['checkout'].get('p-ulica'),
+				'city': session['checkout'].get('p-mjesto'),
+				'zip': session['checkout'].get('p-postanskibroj'),
+				'country': country,
+				'phone': session['checkout'].get('p-mobitel'),
+				'paymentplan': plan,
+				'card': session.get('card')
+			}
 	if not session.get('checkout'):
 		session['checkout']['d-notuse'] = "on"
 		session['checkout']['savedata'] = "on"
@@ -536,22 +562,45 @@ def cookieconsent():
 	session['hidecookieconsent'] = True
 	return ''
 
-@app.route('/success')
+@app.route('/success', methods=['GET', 'POST'])
 def success():
-	if not session['checkout'].get('savedata'):
-		session['checkout'] = {}
+	if request.method == 'POST':
+		print(request.form)
 
-	flash('uspjesno', 'success')
+		order_id = request.form.get('ShoppingCartID')
+		cart, cart_products, cijene = getcart()
+		html = render_template('emails/checkout.html', checkout=session.get('checkout'),
+			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
+			card=session['card'], brojrata=session['brojrata'])
+		message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+				receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
+		try:
+			mail.send(message)
+		except:
+			return redirect('/failure')
+
+		if not session['checkout'].get('savedata'):
+			session['checkout'] = {}
+
+		session['cart'] = []
+
+	flash('Narudžba je uspješno zaprimljena. Svi detalji su poslani na Vašu email adresu.', 'success')
 	return redirect('/')
 
-@app.route('/failure')
+@app.route('/failure', methods=['GET', 'POST'])
 def failure():
-	flash('neuspjesno', 'danger')
-	return redirect('/')
+	if request.method == 'POST':
+		print(request.form)
 
-@app.route('/cancel')
+	flash('Dogodila se pogreška prilikom obrade narudžbe. Molimo pokušajte ponovo ili nas kontaktirajte na <a href="mailto:amadeus@pioneer.hr" class="alert-link">amadeus@pioneer.hr</a>.', 'danger')
+	return redirect('/checkout')
+
+@app.route('/cancel', methods=['GET', 'POST'])
 def cancel():
-	flash('cancel', 'danger')
+	if request.method == 'POST':
+		print(request.form)
+
+	flash('Narudžba je uspješno otkazana', 'success')
 	return redirect('/')
 
 @app.route('/sitemap.xml')

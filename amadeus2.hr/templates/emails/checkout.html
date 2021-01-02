@@ -98,8 +98,8 @@
     {{ 'Plaćanje uplatom po ponudi' if cijene.nacinplacanja == 'po-ponudi' }}
     {{ 'Plaćanje pouzećem' if cijene.nacinplacanja == 'pouzecem' }}
     {% if cijene.nacinplacanja == 'karticom' %}
-    Plaćanje karticom
-    Kartica: {{ card }}
+    Plaćanje karticom<br>
+    Kartica: {{ card }}<br>
     {% if brojrata > 1 %}
     Broj rata: {{ brojrata }}
     {% endif %}
