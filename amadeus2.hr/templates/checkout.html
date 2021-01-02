@@ -76,6 +76,7 @@
     <input type="hidden" name="ajax" value="on">
     <button type="submit" class="btn btn-primary" onclick='
     event.preventDefault()
+    if (!this.form.checkValidity()) return
     const data = new URLSearchParams(Array.from(new FormData(this.form))).toString()
     fetch("/checkout", {method: "POST", body: data, headers: {"Content-Type": "application/x-www-form-urlencoded"}}).then(res => res.json()).then(json => {
         const wspayform = document.querySelector("[name=pay]")

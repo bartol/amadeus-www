@@ -44,14 +44,14 @@
 </label>
 <label class="form-label w-100">
     Email adresa
-    <input type="text" class="form-control" name="{{ prefix }}-email" value="{{ checkout.get(prefix + '-email', '') }}" placeholder="Email adresa" {{ "required" if required }}>
+    <input type="email" class="form-control" name="{{ prefix }}-email" value="{{ checkout.get(prefix + '-email', '') }}" placeholder="Email adresa" {{ "required" if required }}>
     <div class="invalid-feedback">
         Molimo upišite email adresu
     </div>
 </label>
 <label class="form-label w-100">
     Mobitel
-    <input type="text" class="form-control" name="{{ prefix }}-mobitel" value="{{ checkout.get(prefix + '-mobitel', '') }}" placeholder="Mobitel" {{ "required" if required }}>
+    <input type="tel" class="form-control" name="{{ prefix }}-mobitel" value="{{ checkout.get(prefix + '-mobitel', '') }}" placeholder="Mobitel" {{ "required" if required }}>
     <div class="invalid-feedback">
         Molimo upišite mobitel
     </div>
