@@ -524,10 +524,7 @@ def checkout():
 		except:
 			return redirect('/failure')
 
-		if not session['checkout'].get('savedata'):
-			session['checkout'] = {}
-
-		return redirect('/checkout')
+		return redirect('/success')
 	if not session.get('checkout'):
 		session['checkout']['d-notuse'] = "on"
 		session['checkout']['savedata'] = "on"
@@ -538,6 +535,24 @@ def checkout():
 def cookieconsent():
 	session['hidecookieconsent'] = True
 	return ''
+
+@app.route('/success')
+def success():
+	if not session['checkout'].get('savedata'):
+		session['checkout'] = {}
+
+	flash('uspjesno', 'success')
+	return redirect('/')
+
+@app.route('/failure')
+def failure():
+	flash('neuspjesno', 'danger')
+	return redirect('/')
+
+@app.route('/cancel')
+def cancel():
+	flash('cancel', 'danger')
+	return redirect('/')
 
 @app.route('/sitemap.xml')
 def sitemap():
