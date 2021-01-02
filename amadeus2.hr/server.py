@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 import math, decimal
 from drymail import SMTPMailer, Message
 from urllib.parse import urlparse
+import random
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -511,7 +512,17 @@ def checkout():
 		set_checkout('napomene', False)
 		set_checkout('savedata', False)
 
-		# ...
+		order_id = f'web-{randomDigits(5)}'
+		cart, cart_products, cijene = getcart()
+		html = render_template('emails/checkout.html', checkout=session.get('checkout'),
+			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
+			card=session['card'], brojrata=session['brojrata'])
+		message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+                  receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
+		try:
+			mail.send(message)
+		except:
+			return redirect('/failure')
 
 		if not session['checkout'].get('savedata'):
 			session['checkout'] = {}
@@ -621,6 +632,11 @@ def find(lst, key, value):
         if dic[key] == value:
             return i
     return -1
+
+def randomDigits(digits):
+    lower = 10**(digits-1)
+    upper = 10**digits - 1
+    return random.randint(lower, upper)
 
 @app.template_filter('slugify')
 def _slugify(string):
