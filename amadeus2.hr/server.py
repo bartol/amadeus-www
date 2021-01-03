@@ -490,8 +490,8 @@ def set_checkout(formkey, required):
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
 	ajax = request.form.get('ajax', type=bool, default=False)
+	session['checkout'] = {}
 	if request.method == 'POST':
-		session['checkout'] = {}
 		try:
 			set_checkout('p-ime', True)
 			set_checkout('p-prezime', True)
