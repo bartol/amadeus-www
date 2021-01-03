@@ -27,8 +27,15 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     web_opis TEXT,
     web_istaknut BOOLEAN,
 
+    moddate timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
     tsv TSVECTOR
 );
+
+CREATE EXTENSION moddatetime;
+CREATE TRIGGER update_moddate
+    BEFORE UPDATE ON proizvodi
+    FOR EACH ROW
+    EXECUTE PROCEDURE moddatetime (moddate);
 
 -- CREATE INDEX amadeus2hr_idx ON proizvodi(amadeus2hr) WHERE amadeus2hr IS NOT NULL;
 -- CREATE INDEX pioneerhr_idx ON proizvodi(pioneerhr) WHERE pioneerhr IS NOT NULL;
