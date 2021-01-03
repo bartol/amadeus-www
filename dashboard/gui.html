@@ -387,6 +387,13 @@
             </tr>
             {% endfor %}
             </table>
+
+        <h3>Mailing lista</h3>
+        <pre>
+{%- for email in mailing_list -%}
+{{ email[0] }}
+{% endfor -%}
+        </pre>
         <button type="submit" class="btn btn-primary">Spremi promjene</button>
     </form>
 

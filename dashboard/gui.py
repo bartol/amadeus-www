@@ -339,7 +339,10 @@ def postavke():
         else:
             datumisifre.append((d, akcd[0], akcd[1]))
 
-    return render_template('gui.html', page='postavke', covers=covers,
+    cur.execute("SELECT email FROM mailing_list")
+    mailing_list = cur.fetchall()
+
+    return render_template('gui.html', page='postavke', covers=covers, mailing_list=mailing_list,
         unused_features=unused_features, grupe=grupe, datumi=datumisifre)
 
 @app.route('/postavke/rmfeature', methods=['POST'])
