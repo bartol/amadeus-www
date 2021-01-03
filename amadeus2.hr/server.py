@@ -525,7 +525,7 @@ def checkout():
 		if not ajax:
 			html = render_template('emails/checkout.html', checkout=session.get('checkout'),
 				order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
-				card=session['card'], brojrata=session['brojrata'])
+				card=session.get('card'), brojrata=session.get('brojrata'))
 			message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
 					receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
 			try:
@@ -581,7 +581,7 @@ def success():
 		cart, cart_products, cijene = getcart()
 		html = render_template('emails/checkout.html', checkout=session.get('checkout'),
 			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
-			card=session['card'], brojrata=session['brojrata'])
+			card=session.get('card'), brojrata=session.get('brojrata'))
 		message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
 				receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
 		try:
