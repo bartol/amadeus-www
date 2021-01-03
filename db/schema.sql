@@ -137,3 +137,9 @@ CREATE TABLE IF NOT EXISTS mailing_list (
     sifra SERIAL PRIMARY KEY,
     email TEXT
 );
+
+CREATE TABLE IF NOT EXISTS promo_kodovi (
+    sifra SERIAL PRIMARY KEY,
+    kod TEXT,
+    iznos DECIMAL(9, 2)
+);

@@ -298,6 +298,18 @@ def postavke():
                     WHERE day = %s;
                 """, (sp, d))
 
+        promo_kodovi = request.form.getlist('promo_kod[]')
+        promo_iznosi = request.form.getlist('promo_iznos[]')
+        cur.execute("DELETE FROM promo_kodovi;")
+        for idx, k in enumerate(promo_kodovi):
+            iz = promo_iznosi[idx]
+            if not k or not iz:
+                continue
+            cur.execute("""
+                INSERT INTO promo_kodovi (kod, iznos)
+                VALUES (%s, %s);
+            """, (k, iz))
+
         conn.commit()
         return redirect('/postavke')
 
@@ -342,8 +354,11 @@ def postavke():
     cur.execute("SELECT email FROM mailing_list")
     mailing_list = cur.fetchall()
 
+    cur.execute("SELECT kod, iznos FROM promo_kodovi")
+    promo_kodovi = cur.fetchall()
+
     return render_template('gui.html', page='postavke', covers=covers, mailing_list=mailing_list,
-        unused_features=unused_features, grupe=grupe, datumi=datumisifre)
+        unused_features=unused_features, grupe=grupe, datumi=datumisifre, promo_kodovi=promo_kodovi)
 
 @app.route('/postavke/rmfeature', methods=['POST'])
 def rmfeature():

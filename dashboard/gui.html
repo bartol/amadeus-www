@@ -394,6 +394,33 @@
 {{ email[0] }}
 {% endfor -%}
         </pre>
+
+        <h3>Promo kodovi</h3>
+        <script>
+            function addPromo(key, value) {
+                $("#ptable").append(`<tr>
+                <td><label class="form-label mb-0"><input type="text" name="promo_kod[]" value="${key}" placeholder="Kod" class="form-control"></label></td>
+                <td><label class="form-label mb-0"><input type="text" name="promo_iznos[]" value="${value}" placeholder="Iznos" class="form-control"></label></td>
+                <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
+            </tr>`)
+            }
+        </script>
+        <button type="button" onclick="addPromo('', '')" class="btn btn-primary">&plus; Novi promo kod</button>
+        <table class="table" id="ptable">
+            <tr>
+                <th>Kod</th>
+                <th>Iznos</th>
+                <th>Obriši</th>
+            </tr>
+            {% for promo in promo_kodovi %}
+            <tr>
+                <td><label class="form-label mb-0"><input type="text" name="promo_kod[]" value="{{ promo[0] }}" placeholder="Kod" class="form-control"></label></td>
+                <td><label class="form-label mb-0"><input type="text" name="promo_iznos[]" value="{{ promo[1] }}" placeholder="Iznos" class="form-control"></label></td>
+                <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+
         <button type="submit" class="btn btn-primary">Spremi promjene</button>
     </form>
 
