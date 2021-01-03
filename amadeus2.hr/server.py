@@ -11,6 +11,7 @@ from drymail import SMTPMailer, Message
 from urllib.parse import urlparse
 import random
 import hashlib
+from apscheduler.schedulers.background import BackgroundScheduler
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -33,6 +34,9 @@ pagesize = 60
 
 app = Flask(__name__)
 app.secret_key = secret_key
+
+cron = BackgroundScheduler(daemon=True)
+cron.start()
 
 # routes
 
@@ -603,20 +607,26 @@ def cancel():
 	flash('Narudžba je uspješno otkazana', 'success')
 	return redirect('/')
 
-@app.route('/tracking', methods=['POST'])
+@app.route('/tracking', methods=['GET', 'POST'])
 def tracking():
-	col = request.form.get('col')
-	email = request.form.get('email')
-	current_web_cijena = request.form.get('current_web_cijena')
-	current_web_cijena_s_popustom = request.form.get('current_web_cijena_s_popustom')
-	current_quantity = request.form.get('current_quantity')
-	sifra_proizvoda = request.form.get('sifra_proizvoda')
+	params = request.form
+	if request.method == 'GET':
+		params = request.args
+	col = params.get('col')
+	email = params.get('email')
+	current_web_cijena = params.get('current_web_cijena')
+	current_web_cijena_s_popustom = params.get('current_web_cijena_s_popustom')
+	current_quantity = params.get('current_quantity')
+	sifra_proizvoda = params.get('sifra_proizvoda')
 	if col == "price":
 		cur.execute("""
 		INSERT INTO price_tracking (email,current_web_cijena,current_web_cijena_s_popustom,sifra_proizvoda)
 		VALUES (%s,%s,%s,%s)
 		""", (email, current_web_cijena, current_web_cijena_s_popustom, sifra_proizvoda))
 		conn.commit()
+		if request.method == 'GET':
+			flash('Email uspješno dodan na listu', 'success')
+			return redirect('/')
 		return render_template('partials/tracking_resp.html', success=True)
 	if col == "quantity":
 		cur.execute("""
@@ -624,7 +634,13 @@ def tracking():
 		VALUES (%s,%s,%s)
 		""", (email, current_quantity, sifra_proizvoda))
 		conn.commit()
+		if request.method == 'GET':
+			flash('Email uspješno dodan na listu', 'success')
+			return redirect('/')
 		return render_template('partials/tracking_resp.html', success=True)
+	if request.method == 'GET':
+		flash('Greška prilikom dodavanja na listu', 'danger')
+		return redirect('/')
 	return render_template('partials/tracking_resp.html')
 
 @app.route('/sitemap.xml')
@@ -644,6 +660,50 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('errors/500.html'), 500
+
+# jobs
+
+@cron.scheduled_job('cron', day_of_week='mon-fri', hour='9-19', minute='5')
+def price_tracking_job():
+	cur.execute("""
+	SELECT email, current_web_cijena, current_web_cijena_s_popustom, web_cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
+	FROM price_tracking t
+	INNER JOIN proizvodi p ON p.sifra = t.sifra_proizvoda
+	WHERE sent IS NULL AND (current_web_cijena <> web_cijena OR current_web_cijena_s_popustom <> web_cijena_s_popustom)
+	""")
+	trackers = cur.fetchall()
+	for tracker in trackers:
+		html = render_template('emails/price_tracker.html', tracker=tracker)
+		message = Message(subject=f'[amadeus2.hr] Obavijest o promjeni cijene', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+				receivers=[tracker[0]], reply_to=[internal_email], html=html)
+		try:
+			mail.send(message)
+			cur.execute("UPDATE price_tracking SET sent = 't' WHERE sifra = %s", (tracker[8],))
+			conn.commit()
+		except Exception as e:
+			print(e)
+			pass
+
+@cron.scheduled_job('cron', day_of_week='mon-fri', hour='9-19', minute='10')
+def quantity_tracking_job():
+	cur.execute("""
+	SELECT email, current_quantity, web_cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
+	FROM quantity_tracking t
+	INNER JOIN proizvodi p ON p.sifra = t.sifra_proizvoda
+	WHERE sent IS NULL AND (current_quantity <> p.kolicina)
+	""")
+	trackers = cur.fetchall()
+	for tracker in trackers:
+		html = render_template('emails/quantity_tracker.html', tracker=tracker)
+		message = Message(subject=f'[amadeus2.hr] Obavijest o promjeni dostupnosti', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
+				receivers=[tracker[0]], reply_to=[internal_email], html=html)
+		try:
+			mail.send(message)
+			cur.execute("UPDATE quantity_tracking SET sent = 't' WHERE sifra = %s", (tracker[8],))
+			conn.commit()
+		except Exception as e:
+			print(e)
+			pass
 
 # helpers
 

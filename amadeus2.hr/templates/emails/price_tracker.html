@@ -1,0 +1,25 @@
+{% extends 'emails/base.html' %}
+{% block title %}[amadeus2.hr] Obavijest o promjeni cijene{% endblock %}
+{% block content %}
+
+<h1>Obavijest o promjeni cijene</h1>
+<table style="width: 100%; text-align: left;">
+    <tr>
+        <th>Proizvod</th>
+        <th>Stara cijena</th>
+        <th>Nova cijena</th>
+        <th>Količina</th>
+    </tr>
+    <tr>
+        <td><a href="https://amadeus2.hr/proizvod/{{ tracker[7] }}-{{ tracker[5]|slugify }}">{{ tracker[5] }}</a></td>
+        <td><del>{{ formatmoney(tracker[1]) }}</del><br><b>{{ formatmoney(tracker[2]) }}</b></td>
+        <td><del>{{ formatmoney(tracker[3]) }}</del><br><b>{{ formatmoney(tracker[4]) }}</b></td>
+        <td>{{ tracker[6] }}</td>
+    </tr>
+</table>
+
+<a style="display: block; margin-top: 2rem; margin-bottom: 1rem;" target="_blank" href="http://localhost:5000/tracking?col=price&email={{ tracker[0] }}&current_web_cijena={{ tracker[3] }}&current_web_cijena_s_popustom={{ tracker[4] }}&sifra_proizvoda={{ tracker[7] }}">
+    Nastavi primati obavijesti za ovaj proizvod
+</a>
+
+{% endblock %}
