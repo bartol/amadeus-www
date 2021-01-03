@@ -490,7 +490,6 @@ def set_checkout(formkey, required):
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
 	ajax = request.form.get('ajax', type=bool, default=False)
-	session['checkout'] = {}
 	if request.method == 'POST':
 		try:
 			set_checkout('p-ime', True)
@@ -561,6 +560,7 @@ def checkout():
 				'card': session.get('card')
 			}
 	if not session.get('checkout'):
+		session['checkout'] = {}
 		session['checkout']['d-notuse'] = "on"
 		session['checkout']['savedata'] = "on"
 	cart, cart_products, cijene = getcart()
