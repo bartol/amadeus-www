@@ -607,14 +607,15 @@ def cancel():
 def tracking():
 	col = request.form.get('col')
 	email = request.form.get('email')
-	current_price = request.form.get('current_price')
+	current_web_cijena = request.form.get('current_web_cijena')
+	current_web_cijena_s_popustom = request.form.get('current_web_cijena_s_popustom')
 	current_quantity = request.form.get('current_quantity')
 	sifra_proizvoda = request.form.get('sifra_proizvoda')
 	if col == "price":
 		cur.execute("""
-		INSERT INTO price_tracking (email,current_price,sifra_proizvoda)
-		VALUES (%s,%s,%s)
-		""", (email, current_price, sifra_proizvoda))
+		INSERT INTO price_tracking (email,current_web_cijena,current_web_cijena_s_popustom,sifra_proizvoda)
+		VALUES (%s,%s,%s,%s)
+		""", (email, current_web_cijena, current_web_cijena_s_popustom, sifra_proizvoda))
 		conn.commit()
 		return render_template('partials/tracking_resp.html', success=True)
 	if col == "quantity":

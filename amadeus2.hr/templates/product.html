@@ -159,7 +159,8 @@
             <form class="contact-form" novalidate>
                 {% if proizvod[7] > 0 %}
                 <input type="hidden" name="col" value="price">
-                <input type="hidden" name="current_price" value="{{ proizvod[3] }}">
+                <input type="hidden" name="current_web_cijena" value="{{ proizvod[2] }}">
+                <input type="hidden" name="current_web_cijena_s_popustom" value="{{ proizvod[3] }}">
                 {% else %}
                 <input type="hidden" name="col" value="quantity">
                 <input type="hidden" name="current_quantity" value="{{ proizvod[7] }}">

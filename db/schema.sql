@@ -110,7 +110,8 @@ CREATE TABLE IF NOT EXISTS akcija_dana (
 CREATE TABLE IF NOT EXISTS price_tracking (
     sifra SERIAL PRIMARY KEY,
     email TEXT,
-    current_price DECIMAL(9, 2),
+    current_web_cijena DECIMAL(9, 2),
+    current_web_cijena_s_popustom DECIMAL(9, 2),
     sifra_proizvoda INT,
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra),
     sent BOOLEAN
