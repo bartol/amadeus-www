@@ -1,7 +1,7 @@
 {% if success %}
 <div class="alert alert-success alert-dismissible fade show mt-2 mb-0" role="alert">
     Uspješna prijava na mailing listu
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="this.form.reset(); this.form.classList.remove('was-validated')"></button>
 </div>
 {% else %}
 <div class="alert alert-danger alert-dismissible fade show mt-2 mb-0" role="alert">
