@@ -106,3 +106,21 @@ CREATE TABLE IF NOT EXISTS akcija_dana (
     sifra_proizvoda INT,
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
 );
+
+CREATE TABLE IF NOT EXISTS price_tracking (
+    sifra SERIAL PRIMARY KEY,
+    email TEXT,
+    current_price DECIMAL(9, 2),
+    sifra_proizvoda INT,
+    FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra),
+    sent BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS quantity_tracking (
+    sifra SERIAL PRIMARY KEY,
+    email TEXT,
+    current_quantity INT,
+    sifra_proizvoda INT,
+    FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra),
+    sent BOOLEAN
+);

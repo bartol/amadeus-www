@@ -603,6 +603,29 @@ def cancel():
 	flash('Narudžba je uspješno otkazana', 'success')
 	return redirect('/')
 
+@app.route('/tracking', methods=['POST'])
+def tracking():
+	col = request.form.get('col')
+	email = request.form.get('email')
+	current_price = request.form.get('current_price')
+	current_quantity = request.form.get('current_quantity')
+	sifra_proizvoda = request.form.get('sifra_proizvoda')
+	if col == "price":
+		cur.execute("""
+		INSERT INTO price_tracking (email,current_price,sifra_proizvoda)
+		VALUES (%s,%s,%s)
+		""", (email, current_price, sifra_proizvoda))
+		conn.commit()
+		return render_template('partials/tracking_resp.html', success=True)
+	if col == "quantity":
+		cur.execute("""
+		INSERT INTO quantity_tracking (email,current_quantity,sifra_proizvoda)
+		VALUES (%s,%s,%s)
+		""", (email, current_quantity, sifra_proizvoda))
+		conn.commit()
+		return render_template('partials/tracking_resp.html', success=True)
+	return render_template('partials/tracking_resp.html')
+
 @app.route('/sitemap.xml')
 def sitemap():
 	cur.execute("SELECT sifra, naziv FROM proizvodi WHERE amadeus2hr = 'x'")
