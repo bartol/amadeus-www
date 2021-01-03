@@ -125,3 +125,8 @@ CREATE TABLE IF NOT EXISTS quantity_tracking (
     FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra),
     sent BOOLEAN
 );
+
+CREATE TABLE IF NOT EXISTS mailing_list (
+    sifra SERIAL PRIMARY KEY,
+    email TEXT
+);

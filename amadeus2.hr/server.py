@@ -643,6 +643,19 @@ def tracking():
 		return redirect('/')
 	return render_template('partials/tracking_resp.html')
 
+@app.route('/mailinglist', methods=['POST'])
+def mailinglist():
+	email = request.form.get('email')
+	if not email:
+		return render_template('partials/mailinglist_resp.html')
+	try:
+		cur.execute("INSERT INTO mailing_list (email) VALUES (%s)", (email,))
+		conn.commit()
+	except Exception as e:
+		print(e)
+		return render_template('partials/mailinglist_resp.html')
+	return render_template('partials/mailinglist_resp.html', success=True)
+
 @app.route('/sitemap.xml')
 def sitemap():
 	cur.execute("SELECT sifra, naziv FROM proizvodi WHERE amadeus2hr = 'x'")

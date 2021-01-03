@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-12 col-lg-6 mx-auto mb-3 mb-lg-4">
+        <form class="contact-form my-2" novalidate>
+            <p class="mb-2">Prijavite se na našu mailing listu za dodatne popuste i promo kodove svaki mjesec!</p>
+            <div class="input-group">
+                <input type="email" name="email" class="form-control" placeholder="Vaš email" required>
+                <button type="submit"  title="Prijavi me na mailing listu" class="btn btn-primary rounded-end"
+                    hx-post='/mailinglist' hx-target="#mailinglist-resp">
+                    Prijavi me
+                </button>
+                <div class="invalid-feedback">
+                    Molimo upišite Vašu email adresu
+                </div>
+            </div>
+            <div id="mailinglist-resp"></div>
+        </form>
+    </div>
+</div>
