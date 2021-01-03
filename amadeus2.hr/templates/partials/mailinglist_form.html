@@ -6,6 +6,7 @@
                 <input type="email" name="email" class="form-control" placeholder="Vaš email" required>
                 <button type="submit"  title="Prijavi me na mailing listu" class="btn btn-primary rounded-end"
                     hx-post='/mailinglist' hx-target="#mailinglist-resp">
+                    <span class="spinner-border spinner-border-sm indicator" role="status" aria-hidden="true"></span>
                     Prijavi me
                 </button>
                 <div class="invalid-feedback">

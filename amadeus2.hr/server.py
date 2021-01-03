@@ -520,6 +520,7 @@ def checkout():
 		set_checkout('savedata', False)
 
 		order_id = f'web-{randomDigits(5)}'
+		session['order_id'] = order_id
 		cart, cart_products, cijene = getcart()
 		if not ajax:
 			html = render_template('emails/checkout.html', checkout=session.get('checkout'),
@@ -531,6 +532,10 @@ def checkout():
 				mail.send(message)
 			except:
 				return redirect('/failure')
+
+			if not session['checkout'].get('savedata'):
+				session['checkout'] = {}
+			session['cart'] = []
 
 			return redirect('/success')
 		else:
@@ -572,6 +577,7 @@ def success():
 		print(request.form)
 
 		order_id = request.form.get('ShoppingCartID')
+		session['order_id'] = order_id
 		cart, cart_products, cijene = getcart()
 		html = render_template('emails/checkout.html', checkout=session.get('checkout'),
 			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
@@ -585,11 +591,17 @@ def success():
 
 		if not session['checkout'].get('savedata'):
 			session['checkout'] = {}
-
 		session['cart'] = []
 
 	flash('Narudžba je uspješno zaprimljena. Svi detalji su poslani na Vašu email adresu.', 'success')
+	if session.get('nacinplacanja') == 'po-ponudi':
+		return redirect('/uplata-po-ponudi')
 	return redirect('/')
+
+@app.route('/uplata-po-ponudi')
+def uplata():
+	cart, cart_products, cijene = getcart()
+	return render_template('uplata-po-ponudi.html', order_id=session.get('order_id'), cijene=cijene)
 
 @app.route('/failure', methods=['GET', 'POST'])
 def failure():
