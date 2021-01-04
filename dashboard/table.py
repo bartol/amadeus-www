@@ -6,6 +6,7 @@ import psycopg2
 from psycopg2 import sql
 import configparser
 from datetime import datetime
+import pioneerhr
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -49,7 +50,9 @@ def get(columns, condition = ''):
             'rabat': 'Rabat (read-only)',
             'web_cijena': 'Web cijena',
             'web_cijena_s_popustom': 'Web cijena s popustom',
+            'vp_cijena': 'Veleprodajna cijena',
             'amadeus2hr': 'Prikaži na amadeus2.hr',
+            'pioneerhr_id': 'Šifra na pioneer.hr',
             'pioneerhr': 'Prikaži na pioneer.hr',
             'njuskalohr': 'Prikaži na njuskalo.hr'
         }
@@ -77,15 +80,19 @@ def update(tablepath):
         allowed = [
             'Web cijena',
             'Web cijena s popustom',
+            'Veleprodajna cijena',
             'Prikaži na amadeus2.hr',
+            'Šifra na pioneer.hr',
             'Prikaži na pioneer.hr',
             'Prikaži na njuskalo.hr'
         ]
         replacements = {
             'Web cijena': 'web_cijena',
             'Web cijena s popustom': 'web_cijena_s_popustom',
+            'Veleprodajna cijena': 'vp_cijena',
             'Prikaži na amadeus2.hr': 'amadeus2hr',
             'Prikaži na pioneer.hr': 'pioneerhr',
+            'Šifra na pioneer.hr': 'pioneerhr_id',
             'Prikaži na njuskalo.hr': 'njuskalohr'
         }
         columns = []
@@ -108,8 +115,11 @@ def update(tablepath):
         for row in r:
             sifra = int(row[0])
             values = []
+            update_pioneer = False
             for col in columns:
                 val = row[col[1]]
+                if col[0] == 'pioneerhr_id' and val:
+                    update_pioneer = True
                 if val == '':
                     val = None
                 if col[0] in ['amadeus2hr', 'pioneerhr', 'njuskalohr'] and val:
@@ -121,5 +131,15 @@ def update(tablepath):
 
             if cur.rowcount == 1:
                 print('IZMJENJEN PROIZVOD', sifra)
+
+            if update_pioneer:
+                conn.commit()
+                cur.execute("""
+                SELECT pioneerhr_id, web_cijena, web_cijena_s_popustom, pioneerhr, kolicina
+                FROM proizvodi
+                WHERE sifra = %s
+                """, (sifra,))
+                p = cur.fetchone()
+                pioneerhr.updateproduct(p[0], p[1], p[2], (p[3] == 'x'), p[4])
 
         conn.commit()

@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     -- mjenjaju se u tablici
     amadeus2hr CHAR(1),
     pioneerhr CHAR(1),
+    pioneerhr_id INTEGER,
     njuskalohr CHAR(1),
     web_cijena DECIMAL(9, 2),
     web_cijena_s_popustom DECIMAL(9, 2),
+    vp_cijena DECIMAL(9, 2),
 
     -- mjenjaju se pojedinactno  +znacajke +slike
     web_opis TEXT,
