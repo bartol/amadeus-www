@@ -421,7 +421,7 @@ def cart():
 		return redirect('/cart')
 
 	cart, cart_products, cijene = getcart()
-	return render_template('cart.html', cart=cart, cart_products=cart_products, cijene=cijene)
+	return render_template('cart.html', cart=cart, cart_products=cart_products, cijene=cijene, promo_kod=session.get('promo_kod'))
 
 @app.route('/cart/delete', methods=['POST'])
 def cart_delete():
@@ -825,7 +825,8 @@ def getcart():
 		cijene['promo'] = decimal.Decimal(promostr)
 		cijene['sum'] = cijene['sum'] - cijene['promo']
 
-	# session['promo_iznos'] = str(promo[0])
+	if cijene['sum'] < 0:
+		cijene['sum'] = decimal.Decimal(0)
 
 	card = session.get('card', default='VISA')
 	cijene['card'] = card
