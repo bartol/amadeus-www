@@ -315,6 +315,13 @@
         {% endfor %}
     </table>
 
+    <h3>Prebaci slike i opis sa pioneer.hr</h3>
+    <form class="row row-cols-auto g-3 align-items-center" action="/pioneerhr_migracija" method="POST">
+        <div><input type="text" name="sifra" class="form-control" placeholder="Šifra"></div>
+        <div><input type="text" name="pioneerhr_id" class="form-control" placeholder="Šifra na pioneer.hr"></div>
+        <div><button type="submit" class="btn btn-primary">Prebaci</button></div>
+    </form>
+
     <h1>amadeus2.hr postavke</h1>
     <form method="POST" action="/postavke" enctype="multipart/form-data">
         <h3>Slike</h3>

@@ -12,6 +12,7 @@ import boto3, botocore
 import random
 from werkzeug.utils import secure_filename
 import datetime
+import pioneerhr
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -242,6 +243,12 @@ def rmimg():
     s3.delete_object(Bucket='amadeus2.hr', Key=imgkey)
     return ''
 
+@app.route('/pioneerhr_migracija', methods=['POST'])
+def pioneerhr_migracija():
+    sifra = request.form.get('sifra')
+    pioneerhr_id = request.form.get('pioneerhr_id')
+    pioneerhr.migratedata(pioneerhr_id, sifra)
+    return redirect(f'/product/detail?product={sifra}')
 
 @app.route('/postavke', methods=['GET', 'POST'])
 def postavke():
