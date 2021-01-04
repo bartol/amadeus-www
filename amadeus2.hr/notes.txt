@@ -1,15 +1,3 @@
-stranica:
-
-flask
-flaskwebgui
-jinja
-drymail
-postgresql
-
-bootstrap
-htmx
-posthog
-
 slicne stranice:
 
 https://www.nabava.net/
@@ -54,7 +42,3 @@ https://eurotoner.hr
 https://www.tia-mobiteli.hr
 https://edigital.hr
 https://www.muziker.hr/
-
-
-Newsletter - prijavi se i uštedi!
-https://www.youtube.com/watch?v=eMjZhoS6y1c
