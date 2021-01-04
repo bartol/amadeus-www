@@ -534,6 +534,7 @@ def checkout():
 			except:
 				return redirect('/failure')
 
+			session['cart_sum_tmp'] = str(cijene['sum'])
 			if not session['checkout'].get('savedata'):
 				session['checkout'] = {}
 			session['cart'] = []
@@ -621,13 +622,13 @@ def success():
 
 	flash('Narudžba je uspješno zaprimljena. Svi detalji su poslani na Vašu email adresu.', 'success')
 	if session.get('nacinplacanja') == 'po-ponudi':
-		return redirect('/uplata-po-ponudi')
+		return redirect('/uplata-na-racun')
 	return redirect('/')
 
-@app.route('/uplata-po-ponudi')
+@app.route('/uplata-na-racun')
 def uplata():
-	cart, cart_products, cijene = getcart()
-	return render_template('uplata-po-ponudi.html', order_id=session.get('order_id'), cijene=cijene)
+	return render_template('uplata-na-racun.html', order_id=session.get('order_id'),
+		sum=decimal.Decimal(session.get('cart_sum_tmp') if session.get('cart_sum_tmp') else 0))
 
 @app.route('/failure', methods=['GET', 'POST'])
 def failure():
