@@ -34,16 +34,16 @@
     <form>
         <div class="form-check">
             <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="nacinplacanja" value="po-ponudi"
-                    hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "po-ponudi" %}checked{% endif %}>
-                Plaćanje uplatom po ponudi
+                <input class="form-check-input" type="radio" name="nacinplacanja" value="pouzecem"
+                hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "pouzecem" %}checked{% endif %}>
+                Plaćanje pouzećem
             </label>
         </div>
         <div class="form-check">
             <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="nacinplacanja" value="pouzecem"
-                    hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "pouzecem" %}checked{% endif %}>
-                Plaćanje pouzećem
+                <input class="form-check-input" type="radio" name="nacinplacanja" value="po-ponudi"
+                    hx-post="/cart/setmethod" hx-target="#price_table" hx-swap="outerHTML" {% if cijene.nacinplacanja == "po-ponudi" %}checked{% endif %}>
+                Plaćanje uplatom na bankovni račun
             </label>
         </div>
         <div class="form-check">
