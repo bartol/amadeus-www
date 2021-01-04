@@ -11,7 +11,6 @@ from drymail import SMTPMailer, Message
 from urllib.parse import urlparse
 import random
 import hashlib
-from apscheduler.schedulers.background import BackgroundScheduler
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -36,9 +35,6 @@ pagesize = 60
 
 app = Flask(__name__)
 app.secret_key = secret_key
-
-cron = BackgroundScheduler(daemon=True)
-cron.start()
 
 limiter = Limiter(app, key_func=get_remote_address)
 
@@ -715,7 +711,7 @@ def internal_server_error(e):
 
 # jobs
 
-@cron.scheduled_job('cron', day_of_week='mon-fri', hour='9-19', minute='5')
+@app.route('/cron/send_price_tracking_notifications', methods=['POST'])
 def price_tracking_job():
 	cur.execute("""
 	SELECT email, current_web_cijena, current_web_cijena_s_popustom, web_cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
@@ -735,8 +731,9 @@ def price_tracking_job():
 		except Exception as e:
 			print(e)
 			pass
+	return ""
 
-@cron.scheduled_job('cron', day_of_week='mon-fri', hour='9-19', minute='10')
+@app.route('/cron/send_quantity_tracking_notifications', methods=['POST'])
 def quantity_tracking_job():
 	cur.execute("""
 	SELECT email, current_quantity, web_cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
@@ -756,6 +753,7 @@ def quantity_tracking_job():
 		except Exception as e:
 			print(e)
 			pass
+	return ""
 
 # helpers
 
