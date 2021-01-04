@@ -69,6 +69,12 @@
                 <td>{{ formatmoney(cijene['rate-13-24']) }}</td>
             </tr>
             {% endif %}
+            {% if cijene['promo'] %}
+            <tr>
+                <td>Promo kod:</td>
+                <td>-{{ formatmoney(cijene['promo']) }}</td>
+            </tr>
+            {% endif %}
             <tr>
                 <td>Dostava:</td>
                 <td>{{ formatmoney(0) }}</td>

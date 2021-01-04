@@ -12,6 +12,8 @@ from urllib.parse import urlparse
 import random
 import hashlib
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -37,6 +39,8 @@ app.secret_key = secret_key
 
 cron = BackgroundScheduler(daemon=True)
 cron.start()
+
+limiter = Limiter(app, key_func=get_remote_address)
 
 # routes
 
@@ -214,8 +218,6 @@ def search():
 	query = request.args.get('q')
 	if not query:
 		return redirect('/')
-
-
 	modified = False
 
 	cur.execute("""
@@ -535,6 +537,8 @@ def checkout():
 			if not session['checkout'].get('savedata'):
 				session['checkout'] = {}
 			session['cart'] = []
+			session['promo_kod'] = ''
+			session['promo_iznos'] = ''
 
 			return redirect('/success')
 		else:
@@ -566,6 +570,26 @@ def checkout():
 	cart, cart_products, cijene = getcart()
 	return render_template('checkout.html', cart=cart, cijene=cijene, checkout=session.get('checkout'))
 
+@app.route('/cart/promocheck', methods=['POST'])
+@limiter.limit('20 per hour')
+def promocheck():
+	kod = request.form.get('kod')
+	session['promo_kod'] = kod
+	cur.execute("""
+	SELECT iznos FROM promo_kodovi WHERE kod = %s
+	""", (kod,))
+	promo = cur.fetchone()
+	if promo == None:
+		session['promo_iznos'] = ''
+		return render_template('partials/promocheck_resp.html')
+	session['promo_iznos'] = str(promo[0])
+	return render_template('partials/promocheck_resp.html', success=True, iznos=promo[0])
+
+@app.route('/cart/pricetable', methods=['POST'])
+def getpricetable():
+	cart, cart_products, cijene = getcart()
+	return render_template('partials/price_table.html', cijene=cijene)
+
 @app.route('/cookieconsent', methods=['POST'])
 def cookieconsent():
 	session['hidecookieconsent'] = True
@@ -592,6 +616,8 @@ def success():
 		if not session['checkout'].get('savedata'):
 			session['checkout'] = {}
 		session['cart'] = []
+		session['promo_kod'] = ''
+		session['promo_iznos'] = ''
 
 	flash('Narudžba je uspješno zaprimljena. Svi detalji su poslani na Vašu email adresu.', 'success')
 	if session.get('nacinplacanja') == 'po-ponudi':
@@ -793,6 +819,13 @@ def getcart():
 	if brojrata >= 13 and brojrata <= 24 and nacinplacanja == 'karticom':
 		cijene['rate-13-24'] = cijene['sum'] * decimal.Decimal(0.1)
 		cijene['sum'] = cijene['sum'] + cijene['rate-13-24']
+
+	promostr = session.get('promo_iznos')
+	if promostr:
+		cijene['promo'] = decimal.Decimal(promostr)
+		cijene['sum'] = cijene['sum'] - cijene['promo']
+
+	# session['promo_iznos'] = str(promo[0])
 
 	card = session.get('card', default='VISA')
 	cijene['card'] = card
