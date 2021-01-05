@@ -2,6 +2,51 @@
 {% block title %}{{ proizvod[1] }}, samo {{ formatmoney(proizvod[3]) }} | Amadeus web trgovina{% endblock %}
 {% block opis %}{{ proizvod[4]|striptags|truncate(155) }}{% endblock %}
 {% block slika %}{{ slike[0][0] }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "amadeus2.hr",
+        "item": "https://amadeus2.hr"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ proizvod[6] }}",
+        "item": "https://amadeus2.hr/kategorija/{{ proizvod[5] }}-{{ proizvod[6]|slugify }}"
+      },{
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ proizvod[1] }}"
+      }]
+    }
+</script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "{{ proizvod[1] }}",
+      "image": [
+        {% for slika in slike %}
+        "{{ slika[0] }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+       ],
+      "description": "{{ proizvod[4]|striptags|truncate(155) }}",
+      "sku": "{{ proizvod[0] }}",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://amadeus2.hr{{ request.path }}",
+        "priceCurrency": "HRK",
+        "price": "{{ proizvod[3] }}",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": "https://schema.org/{% if proizvod[7] > 0 %}InStock{% else %}OutOfStock{% endif %}"
+      }
+    }
+</script>
+{% endblock %}
 {% block content %}
 
 <nav aria-label="breadcrumb">

@@ -2,6 +2,24 @@
 {% block title %}{{ grupa[0] }} | Amadeus web trgovina{% endblock %}
 {% block opis %}Proizvodi u kategoriji {{ grupa[0] }}{% endblock %}
 {% block slika %}{{ proizvodi[0][4] }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "amadeus2.hr",
+        "item": "https://amadeus2.hr"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ grupa[0] }}"
+      }]
+    }
+</script>
+{% endblock %}
 {% block content %}
 
 <nav aria-label="breadcrumb">
