@@ -143,11 +143,11 @@
 
             <h3>Opis</h3>
             <textarea name="opis" id="editor">{% if product[2] %}{{ product[2] }}{% endif %}</textarea>
-            <script src="https://cdn.ckeditor.com/ckeditor5/24.0.0/classic/ckeditor.js"></script>
+            <script src="https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js"></script>
             <script>
-                ClassicEditor
-                    .create(document.querySelector('#editor'))
-                    .catch(error => { console.error(error) });
+                CKEDITOR.replace('opis', {
+                    allowedContent: true
+                });
             </script>
 
             <h3>Slike</h3>
