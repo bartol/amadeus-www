@@ -1,5 +1,7 @@
 {% extends 'partials/base.html' %}
 {% block title %}{{ grupa[0] }} | Amadeus web trgovina{% endblock %}
+{% block opis %}Proizvodi u kategoriji {{ grupa[0] }}{% endblock %}
+{% block slika %}{{ proizvodi[0][4] }}{% endblock %}
 {% block content %}
 
 <nav aria-label="breadcrumb">

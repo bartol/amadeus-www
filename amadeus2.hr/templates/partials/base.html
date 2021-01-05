@@ -7,12 +7,30 @@
 	<!-- meta -->
 	<title>{% block title %}{% endblock %}</title>
 	<link rel="icon" type="image/png" href="/static/img/icon.png" />
+	<meta name="description" content="{% block opis %}Amadeus II d.o.o. je trgovina specijalizirana za prodaju putem interneta i nudi više od 1000 raspoloživih proizvoda iz različitih područja informatike, potrošačke elektronike...{% endblock %}">
+	<meta name="image" content="{% block slika %}{% endblock %}">
 
-	<!-- css -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta property="twitter:domain" content="amadeus2.hr">
+	<meta property="twitter:url" content="https://amadeus2.hr{{ request.path }}">
+	<meta name="twitter:title" content="{{ self.title() }}">
+	<meta name="twitter:description" content="{{ self.opis() }}">
+	<meta name="twitter:image" content="{{ self.slika() }}">
+
+	<meta property="og:url" content="https://amadeus2.hr{{ request.path }}">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="{{ self.title() }}">
+	<meta property="og:description" content="{{ self.opis() }}">
+	<meta property="og:image" content="{{ self.slika() }}">
+	<meta property="og:site_name" content="Amadeus web trgovina">
 
 	{% block head %}
 	{% endblock %}
+
+	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+	<!-- css -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-173407510-1"></script>
