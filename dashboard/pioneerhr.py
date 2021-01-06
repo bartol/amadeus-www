@@ -57,12 +57,22 @@ def migratedata(pioneer_id, sifra):
     product_req = requests.get(f'https://pioneer.hr/api/products/{pioneer_id}', auth=(apikey,''))
     product_xml = xmltodict.parse(product_req.text)
     try:
-        opis = product_xml['prestashop']['product']['description_short']['language']['#text'] + '<br><br>' + product_xml['prestashop']['product']['description']['language']['#text']
-        cur.execute("UPDATE proizvodi SET web_opis = %s WHERE sifra = %s", (opis, sifra))
+        opis_short = product_xml['prestashop']['product']['description_short']['language']['#text']
     except:
+        opis_short = ''
+        pass
+    try:
+        opis = product_xml['prestashop']['product']['description']['language']['#text']
+        if opis_short:
+            opis = opis_short + '<br><br>' + opis
+        cur.execute("UPDATE proizvodi SET web_opis = %s WHERE sifra = %s", (opis, sifra))
+    except Exception as e:
+        print(e)
         pass
     try:
         slike = product_xml['prestashop']['product']['associations']['images']['image']
+        if not isinstance(slike, list):
+            slike = [slike]
     except:
         slike = []
         pass
