@@ -13,6 +13,7 @@ import random
 import hashlib
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from waitress import serve
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -871,4 +872,5 @@ def money_stuff():
 		return f'{m[:-3]},{m[-2:]} kn'
 	return {'formatmoney': formatmoney, 'dec': decimal.Decimal}
 
-app.run(debug=True, host='0.0.0.0')
+#app.run(debug=True, host='0.0.0.0')
+serve(app)
