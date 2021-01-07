@@ -1,0 +1,7 @@
+amadeus2.hr {
+    reverse_proxy 0.0.0.0:8080
+}
+
+www.amadeus2.hr {
+    redir https://amadeus2.hr{uri}
+}
