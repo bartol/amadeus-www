@@ -523,7 +523,7 @@ def checkout():
 		if not ajax:
 			html = render_template('emails/checkout.html', checkout=session.get('checkout'),
 				order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
-				card=session.get('card'), brojrata=session.get('brojrata'))
+				card=session.get('card'), brojrata=session.get('brojrata', default=1))
 			message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
 					receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
 			try:
@@ -545,7 +545,7 @@ def checkout():
 				'Hrvatska': 'HR'
 			}
 			country = countries.get(session['checkout'].get('p-drzava'))
-			plan = "{:02}00".format(session['brojrata']) if session['brojrata'] > 1 else '0000'
+			plan = "{:02}00".format(session.get('brojrata', default=1)) if session.get('brojrata', default=1) > 1 else '0000'
 			return {
 				'order_id': order_id,
 				'totalamount': "{:.2f}".format(float(cijene['sum'])).replace('.', ','),
@@ -816,7 +816,7 @@ def getcart():
 
 	brojrata = session.get('brojrata', default=1)
 	cijene['brojrata'] = brojrata
-	nacinplacanja = session.get('nacinplacanja', default='po-ponudi')
+	nacinplacanja = session.get('nacinplacanja', default='pouzecem')
 	cijene['nacinplacanja'] = nacinplacanja
 
 	if brojrata >= 2 and brojrata <= 12 and nacinplacanja == 'karticom':
