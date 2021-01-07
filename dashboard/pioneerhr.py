@@ -33,14 +33,14 @@ def updateproduct(id, web_cijena, web_cijena_s_popustom, enabled, quantity):
     product_xml['prestashop']['product'].pop('quantity')
     product_xml['prestashop']['product'].pop('manufacturer_name')
     product_xml_str = xmltodict.unparse(product_xml)
-    requests.put(f'https://pioneer.hr/api/products/{id}', auth=(apikey,''), data=product_xml_str)
+    requests.put(f'https://pioneer.hr/api/products/{id}', auth=(apikey,''), data=product_xml_str.encode('utf-8'))
 
     kolicina_url = product_xml['prestashop']['product']['associations']['stock_availables']['stock_available']['@xlink:href']
     kolicina_req = requests.get(kolicina_url, auth=(apikey,''))
     kolicina_xml = xmltodict.parse(kolicina_req.text)
     kolicina_xml['prestashop']['stock_available']['quantity'] = str(quantity)
     kolicina_xml_str = xmltodict.unparse(kolicina_xml)
-    requests.put(kolicina_url, auth=(apikey,''), data=kolicina_xml_str)
+    requests.put(kolicina_url, auth=(apikey,''), data=kolicina_xml_str.encode('utf-8'))
 
     popust_id_req = requests.get(f'https://pioneer.hr/api/specific_prices?filter[id_product]=[{id}]', auth=(apikey,''))
     popust_id_xml = xmltodict.parse(popust_id_req.text)
@@ -51,7 +51,7 @@ def updateproduct(id, web_cijena, web_cijena_s_popustom, enabled, quantity):
     popust_xml['prestashop']['specific_price']['reduction_tax'] = '1'
     popust_xml['prestashop']['specific_price']['reduction_type'] = 'amount'
     popust_xml_str = xmltodict.unparse(popust_xml)
-    requests.put(popust_url, auth=(apikey,''), data=popust_xml_str)
+    requests.put(popust_url, auth=(apikey,''), data=popust_xml_str.encode('utf-8'))
 
 def migratedata(pioneer_id, sifra):
     product_req = requests.get(f'https://pioneer.hr/api/products/{pioneer_id}', auth=(apikey,''))

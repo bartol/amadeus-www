@@ -6,7 +6,7 @@ Type=simple
 Restart=always
 RestartSec=5
 WorkingDirectory=/home/amadeus/amadeus2.hr/amadeus2.hr
-ExecStart="venv/bin/python server.py"
+ExecStart="/home/amadeus/amadeus2.hr/amadeus2.hr/server.py"
 
 [Install]
 WantedBy=multi-user.target

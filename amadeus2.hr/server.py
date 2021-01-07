@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!venv/bin/python
 
 from flask import Flask, render_template, request, abort, redirect, session, flash, send_from_directory
 import psycopg2
