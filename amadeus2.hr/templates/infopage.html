@@ -1,0 +1,7 @@
+{% extends 'partials/base.html' %}
+{% block title %}{{ page|replace("-", " ")|capitalize }} | Amadeus web trgovina{% endblock %}
+{% block content %}
+
+{% include "info/"+page+".html" %}
+
+{% endblock %}

@@ -698,6 +698,12 @@ def sitemap():
 	proizvodi = cur.fetchall()
 	return render_template('sitemap.xml', proizvodi=proizvodi, grupe=getgroup()), 200, {'Content-Type': 'text/xml'}
 
+@app.route('/info/<page>')
+def infopage(page):
+	if page in ['uvjeti-poslovanja', 'izjava-o-privatnosti', 'izjava-o-sigurnosti', 'dostava', 'povrat-i-zamjena']:
+		return render_template('infopage.html', page=page)
+	return abort(404)
+
 @app.route('/robots.txt')
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
