@@ -24,7 +24,7 @@
 <div class="card p-2 mb-3 mb-lg-4">
     <h2>Promo kod</h2>
     <form class="contact-form input-group mb-3" novalidate>
-        <input type="text" class="form-control" name="kod" value="{{ promo_kod }}" placeholder="promo kod" required>
+        <input type="text" class="form-control" name="kod" value="{% if promo_kod %}{{ promo_kod }}{% endif %}" placeholder="promo kod" required>
         <button type="submit" class="btn btn-outline-secondary rounded-end" hx-post="/cart/promocheck" hx-target="#promocheck-resp">
             Unesi <span class="d-none d-md-inline">promo kod</span>
         </button>
