@@ -427,7 +427,7 @@ def cjenikexport():
     fmt = request.args.get('format')
     condition = f"sifra IN ({sifre})"
     if not sifre:
-        condition = f"grupa IN ({grupe}) AND kolicina > 0"
+        condition = f"grupa IN ({grupe}) AND kolicina > 0 AND amadeus2hr = 'x'"
     cur.execute(f"""
         SELECT sifra, naziv, cijena, web_cijena_s_popustom, kolicina,
             (SELECT link FROM slike WHERE sifra_proizvoda = p.sifra AND pozicija = 0)

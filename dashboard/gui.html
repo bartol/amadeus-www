@@ -487,7 +487,7 @@
     <form method="POST" action="/cjenik">
         <h3>Lista šifri proizvoda (odvojenih zarezom)</h3>
         <input type="text" placeholder="lista šifri odvojenih zarezom" name="lista_sifri" class="form-control">
-        <h3>ili Proizvodi iz grupe (samo oni sa količinom > 0)</h3>
+        <h3>ili Proizvodi iz grupe (samo oni sa količinom > 0 i prikazani na amadeus2.hr)</h3>
         <ul>
         {% for grupa in grupe %}
             <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="grupe[]" value="{{ grupa[0] }}" class="form-check-input">{{ grupa[1] }}</label></div></li>
