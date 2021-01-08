@@ -160,7 +160,7 @@ def productdetail():
                 cur.execute("""
                     INSERT INTO znacajke (naziv, sifra_grupe)
                     VALUES (%s, %s) RETURNING sifra;
-                """, (naziv, grupa))
+                """, (naziv.strip(), grupa))
                 feature = cur.fetchone()
 
             vrijednost = feature_value[idx]
@@ -168,7 +168,7 @@ def productdetail():
             cur.execute("""
                 INSERT INTO znacajke_vrijednosti (vrijednost, sifra_znacajke, sifra_proizvoda)
                 VALUES (%s,%s,%s);
-            """, (vrijednost, feature[0], sifra))
+            """, (vrijednost.strip(), feature[0], sifra))
 
         cur.execute("DELETE FROM slicni_proizvodi WHERE sifra = %s", (sifra,))
 
