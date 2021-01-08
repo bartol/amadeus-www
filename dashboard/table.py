@@ -48,7 +48,6 @@ def get(columns, condition = ''):
             'marza': 'Marža (read-only)',
             'cijena': 'Cijena (read-only)',
             'rabat': 'Rabat (read-only)',
-            'web_cijena': 'Web cijena',
             'web_cijena_s_popustom': 'Web cijena s popustom',
             'vp_cijena': 'Veleprodajna cijena',
             'amadeus2hr': 'Prikaži na amadeus2.hr',
@@ -87,7 +86,6 @@ def update(tablepath):
             'Prikaži na njuskalo.hr'
         ]
         replacements = {
-            'Web cijena': 'web_cijena',
             'Web cijena s popustom': 'web_cijena_s_popustom',
             'Veleprodajna cijena': 'vp_cijena',
             'Prikaži na amadeus2.hr': 'amadeus2hr',
@@ -135,7 +133,7 @@ def update(tablepath):
             if update_pioneer:
                 conn.commit()
                 cur.execute("""
-                SELECT pioneerhr_id, web_cijena, web_cijena_s_popustom, pioneerhr, kolicina
+                SELECT pioneerhr_id, cijena, web_cijena_s_popustom, pioneerhr, kolicina
                 FROM proizvodi
                 WHERE sifra = %s
                 """, (sifra,))

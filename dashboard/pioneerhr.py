@@ -25,11 +25,11 @@ s3 = boto3.client(
    aws_secret_access_key=aws_secret_access_key
 )
 
-def updateproduct(id, web_cijena, web_cijena_s_popustom, enabled, quantity):
+def updateproduct(id, cijena, web_cijena_s_popustom, enabled, quantity):
     product_req = requests.get(f'https://pioneer.hr/api/products/{id}', auth=(apikey,''))
     product_xml = xmltodict.parse(product_req.text)
     product_enabled = product_xml['prestashop']['product']['active'] = '1' if enabled else '0'
-    product_price_without_tax = product_xml['prestashop']['product']['price'] = "{:.6f}".format(web_cijena * decimal.Decimal(0.8))
+    product_price_without_tax = product_xml['prestashop']['product']['price'] = "{:.6f}".format(cijena * decimal.Decimal(0.8))
     product_xml['prestashop']['product'].pop('quantity')
     product_xml['prestashop']['product'].pop('manufacturer_name')
     product_xml_str = xmltodict.unparse(product_xml)
@@ -47,7 +47,7 @@ def updateproduct(id, web_cijena, web_cijena_s_popustom, enabled, quantity):
     popust_url = popust_id_xml['prestashop']['specific_prices']['specific_price']['@xlink:href']
     popust_req = requests.get(popust_url, auth=(apikey,''))
     popust_xml = xmltodict.parse(popust_req.text)
-    popust = popust_xml['prestashop']['specific_price']['reduction'] = "{:.6f}".format(web_cijena - web_cijena_s_popustom)
+    popust = popust_xml['prestashop']['specific_price']['reduction'] = "{:.6f}".format(cijena - web_cijena_s_popustom)
     popust_xml['prestashop']['specific_price']['reduction_tax'] = '1'
     popust_xml['prestashop']['specific_price']['reduction_type'] = 'amount'
     popust_xml_str = xmltodict.unparse(popust_xml)

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS proizvodi (
     pioneerhr CHAR(1),
     pioneerhr_id INTEGER,
     njuskalohr CHAR(1),
-    web_cijena DECIMAL(9, 2),
+    web_cijena DECIMAL(9, 2), -- ne koristi se više
     web_cijena_s_popustom DECIMAL(9, 2),
     vp_cijena DECIMAL(9, 2),
 
@@ -51,6 +51,7 @@ CREATE FUNCTION products_trigger() RETURNS trigger AS $$
 begin
 new.tsv :=
     setweight(to_tsvector(unaccent(coalesce(new.naziv,''))), 'A') ||
+    setweight(to_tsvector(unaccent(coalesce(new.sifra,''))), 'B') ||
     setweight(to_tsvector(unaccent(coalesce(new.web_opis,''))), 'B');
 return new;
 end

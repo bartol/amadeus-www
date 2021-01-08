@@ -54,7 +54,7 @@ def index():
 	covers = cur.fetchall()
 
 	cur.execute("""
-		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+		SELECT sifra, naziv, cijena, web_cijena_s_popustom, (
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
@@ -137,7 +137,7 @@ def category(id, slug):
 
 	sql = f"""
 		SELECT * FROM (
-			SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT sifra, naziv, cijena, web_cijena_s_popustom, (
 				SELECT link
 				FROM slike
 				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
@@ -171,7 +171,7 @@ def product(id, slug):
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
-		SELECT p.sifra, p.naziv, web_cijena, web_cijena_s_popustom, web_opis, g.sifra, g.naziv, kolicina
+		SELECT p.sifra, p.naziv, cijena, web_cijena_s_popustom, web_opis, g.sifra, g.naziv, kolicina
 		FROM proizvodi p
 		INNER JOIN grupe g ON p.grupa = g.sifra
 		WHERE amadeus2hr = 'x' AND p.sifra = %s;
@@ -189,7 +189,7 @@ def product(id, slug):
 	slike = cur.fetchall()
 
 	cur.execute("""
-		SELECT p.sifra, naziv, web_cijena, web_cijena_s_popustom, (
+		SELECT p.sifra, naziv, cijena, web_cijena_s_popustom, (
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
@@ -306,7 +306,7 @@ def search():
 
 	sql = f"""
 		SELECT * FROM (
-			SELECT sifra, ts_headline(naziv, query) AS naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT sifra, ts_headline(naziv, query) AS naziv, cijena, web_cijena_s_popustom, (
 				SELECT link
 				FROM slike
 				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
@@ -344,7 +344,7 @@ def search_autocomplete():
 
 	query += ':*'
 	cur.execute("""
-		SELECT sifra, ts_headline(naziv, query) AS naziv, web_cijena, web_cijena_s_popustom, (
+		SELECT sifra, ts_headline(naziv, query) AS naziv, cijena, web_cijena_s_popustom, (
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
@@ -721,10 +721,10 @@ def internal_server_error(e):
 @app.route('/cron/send_price_tracking_notifications', methods=['POST'])
 def price_tracking_job():
 	cur.execute("""
-	SELECT email, current_web_cijena, current_web_cijena_s_popustom, web_cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
+	SELECT email, current_web_cijena, current_web_cijena_s_popustom, cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
 	FROM price_tracking t
 	INNER JOIN proizvodi p ON p.sifra = t.sifra_proizvoda
-	WHERE sent IS NULL AND (current_web_cijena <> web_cijena OR current_web_cijena_s_popustom <> web_cijena_s_popustom)
+	WHERE sent IS NULL AND (current_web_cijena <> cijena OR current_web_cijena_s_popustom <> web_cijena_s_popustom)
 	""")
 	trackers = cur.fetchall()
 	for tracker in trackers:
@@ -743,7 +743,7 @@ def price_tracking_job():
 @app.route('/cron/send_quantity_tracking_notifications', methods=['POST'])
 def quantity_tracking_job():
 	cur.execute("""
-	SELECT email, current_quantity, web_cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
+	SELECT email, current_quantity, cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
 	FROM quantity_tracking t
 	INNER JOIN proizvodi p ON p.sifra = t.sifra_proizvoda
 	WHERE sent IS NULL AND (current_quantity <> p.kolicina)
@@ -782,7 +782,7 @@ def getgroup():
 
 def getakcijadana():
 	cur.execute("""
-		SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, kolicina, (
+		SELECT sifra, naziv, cijena, web_cijena_s_popustom, kolicina, (
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
@@ -798,7 +798,7 @@ def getcart():
 	cart_products = []
 	for item in cart:
 		cur.execute("""
-			SELECT sifra, naziv, web_cijena, web_cijena_s_popustom, (
+			SELECT sifra, naziv, cijena, web_cijena_s_popustom, (
 				SELECT link
 				FROM slike
 				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
