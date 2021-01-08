@@ -181,6 +181,8 @@
                         <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="${value}" placeholder="Vrijednost" class="form-control"></label></td>
                         <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
                     </tr>`)
+                    const features = document.querySelectorAll("#ftable input[type=text]")
+                    features[features.length - (key ? 1 : 2)].focus()
                 }
             </script>
             <p>
