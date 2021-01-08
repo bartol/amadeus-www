@@ -52,6 +52,8 @@ def tableget():
     only_amadeus2hr = True if request.form.get('only_amadeus2hr') else False
     only_pioneerhr = True if request.form.get('only_pioneerhr') else False
     only_njuskalohr = True if request.form.get('only_njuskalohr') else False
+    only_dostupni = True if request.form.get('only_dostupni') else False
+    only_nedostupni = True if request.form.get('only_nedostupni') else False
     limit = request.form.get('limit')
     offset = request.form.get('offset')
     sort = request.form.get('sort')
@@ -69,6 +71,10 @@ def tableget():
         condition.append("pioneerhr = 'x'")
     if only_njuskalohr:
         condition.append("njuskalohr = 'x'")
+    if only_dostupni:
+        condition.append("p.kolicina > 0")
+    if only_nedostupni:
+        condition.append("p.kolicina = 0")
     conditionstr = ' AND '.join(condition)
     if len(condition) > 0:
         conditionstr = 'WHERE ' + conditionstr
