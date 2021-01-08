@@ -48,6 +48,7 @@ def tableget():
     columns = request.form.getlist('columns[]')
     grupe = request.form.getlist('grupe[]')
     query = request.form.get('pretraga')
+    sifsearch = request.form.get('sifsearch')
     only_amadeus2hr = True if request.form.get('only_amadeus2hr') else False
     only_pioneerhr = True if request.form.get('only_pioneerhr') else False
     only_njuskalohr = True if request.form.get('only_njuskalohr') else False
@@ -60,6 +61,8 @@ def tableget():
         condition.append(f"g.sifra IN ({','.join(grupe)})")
     if query:
         condition.append(f"p.naziv ILIKE '%{query}%'")
+    if sifsearch:
+        condition.append(f"p.sifra = {sifsearch}")
     if only_amadeus2hr:
         condition.append("amadeus2hr = 'x'")
     if only_pioneerhr:
