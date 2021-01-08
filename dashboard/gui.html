@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
+    <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark d-print-none">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">amadeus-dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,7 @@
                     <a class="nav-link {% if page == 'tableupdate' %}active{% endif %}" href="/table/update">Preuzmi promjene iz tablice</a>
                     <a class="nav-link {% if page == 'productlist' %}active{% endif %}" href="/product/list">Izmjena proizvoda</a>
                     <a class="nav-link {% if page == 'postavke' %}active{% endif %}" href="/postavke">Postavke</a>
+                    <a class="nav-link {% if page == 'cjenik' %}active{% endif %}" href="/cjenik">Napravi cjenik</a>
                 </div>
             </div>
         </div>
@@ -480,6 +481,85 @@
         })
     </script>
     {% endif %}
+
+    {% if page == 'cjenik' %}
+    <h1>Napravi cjenik</h1>
+    <form method="POST" action="/cjenik">
+        <h3>Lista šifri proizvoda (odvojenih zarezom)</h3>
+        <input type="text" placeholder="lista šifri odvojenih zarezom" name="lista_sifri" class="form-control">
+        <h3>ili Proizvodi iz grupe (samo oni sa količinom > 0)</h3>
+        <ul>
+        {% for grupa in grupe %}
+            <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="grupe[]" value="{{ grupa[0] }}" class="form-check-input">{{ grupa[1] }}</label></div></li>
+        {% endfor %}
+        </ul>
+        <h3>Format</h3>
+        <ul>
+            <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="format" value="pdf" checked class="form-check-input">pdf</label></div></li>
+            <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="format" value="csv" class="form-check-input">csv</label></div></li>
+        </ul>
+        <button type="submit" class="btn btn-primary">Napravi cjenik</button>
+    </form>
+    {% endif %}
+    {% if page == 'cjenik-odabirznacajki' %}
+    <h1>Odaberi značajke</h1>
+    <form method="GET" action="/cjenik-export">
+        <input type="hidden" name="lista_sifri" value="{{ sifre }}">
+        <input type="hidden" name="format" value="{{ fmt }}">
+        {% for grupa in grupe %}
+            <input type="hidden" name="grupe[]" value="{{ grupa }}">
+        {% endfor %}
+        <ul>
+            {% for znacajka in znacajke %}
+                <li><div class="form-check form-switch"><label class="form-check-label"><input type="checkbox" name="znacajke[]" checked value="{{ znacajka[0] }}" class="form-check-input">{{ znacajka[1] }}</label></div></li>
+            {% endfor %}
+        </ul>
+        <button type="submit" class="btn btn-primary">Napravi cjenik</button>
+    </form>
+    {% endif %}
+    {% if page == 'cjenik-pdf' %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="https://amadeus2.hr">
+            <img src="https://www2.amadeus2.hr/static/img/logo.png" alt="Amadeus" title="Amadeus web trgovina" width="160" height="32">
+        </a>
+        {{ today }}
+    </div>
+    <div class="row mb-3">
+    {% for proizvod in proizvodi %}
+        <div class="col-6 p-2 border position-relative d-flex flex-column justify-content-between">
+            <div>
+                <h5 class="mb-1"><b><a href="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="text-decoration-none text-body stretched-link">{{ proizvod[1] }}</a></b></h5>
+                <p style="font-size: 12px;" class="lh-sm mb-0 clearfix">
+                    {% if proizvod[5] %}<img class="w-50 float-end" src="{{ proizvod[5] }}">{% endif %}
+
+                    {% for znacajka in znacajke_proizvoda[loop.index-1] %}
+                    {{ znacajka[0] }}: {{ znacajka[1] }}<br>
+                    {% endfor %}
+                    MPC: {{ formatmoney(proizvod[2]) }}
+                </p>
+            </div>
+            <div class="d-flex justify-content-between align-items-end">
+                {% if proizvod[3] %}<h5 class="my-0"><b>AKCIJA: {{ formatmoney(proizvod[3]) }}</b></h5>{% endif %}
+                <p style="font-size: 12px;" class="lh-sm mb-0">
+                    Šifra: {{ proizvod[0] }}<br>
+                    Količina: {{ proizvod[4] }} kom
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    <p align="center" style="font-size: 0.9rem">
+        <span style="white-space: nowrap">AMADEUS II d.o.o.</span> /
+        <a href="https://amadeus2.hr" style="white-space: nowrap">amadeus2.hr</a> /
+        <a href="https://pioneer.hr" style="white-space: nowrap">pioneer.hr</a> /
+        <a href="mailto:prodaja@pioneer.hr" style="white-space: nowrap">prodaja@pioneer.hr</a> /
+        <a href="tel:+38520670111" style="white-space: nowrap">+385 (20) 670 111</a> /
+        <a href="https://goo.gl/maps/74YCcjpq3PBWpKZK9" style="white-space: nowrap">Vladimira Nazora 45, 20340 Ploče</a> /
+        <a href="https://www.instagram.com/amadeusploce/" style="white-space: nowrap">Instagram</a> /
+        <a href="https://www.facebook.com/amadeus.ploce" style="white-space: nowrap">Facebook</a>
+    </p>
+    {% endif %}
+
 
     {% if page == 'success' %}
     <div class="mt-2">success</div>

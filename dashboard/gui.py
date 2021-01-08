@@ -13,6 +13,7 @@ import random
 from werkzeug.utils import secure_filename
 import datetime
 import pioneerhr
+from slugify import slugify
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -22,7 +23,7 @@ bazatmpdir = os.path.join(config['baza']['bazatmpdir'].strip('"'), 'table')
 browser_path= os.path.join(config['gui']['browser_path'].strip('"'))
 
 app = Flask(__name__, template_folder='.')
-ui = FlaskUI(app, width=1000, height=750, browser_path=browser_path, port=5001)
+ui = FlaskUI(app, maximized=True, browser_path=browser_path, port=5001)
 
 conn = psycopg2.connect(dbconn)
 cur = conn.cursor()
@@ -391,9 +392,80 @@ def getname():
         return product[0]
     return ''
 
+@app.route('/cjenik', methods=['GET', 'POST'])
+def cjenik():
+    if request.method == 'POST':
+        grupe = ','.join(request.form.getlist('grupe[]'))
+        sifre = request.form.get('lista_sifri')
+        fmt = request.form.get('format')
+        znacajke = []
+        if sifre:
+            cur.execute(f"SELECT DISTINCT grupa FROM proizvodi WHERE sifra IN ({sifre});")
+            pgrupe_tuple = cur.fetchall()
+            pgrupe_list = []
+            for p in pgrupe_tuple: pgrupe_list.append(str(p[0]))
+            pgrupe = ','.join(pgrupe_list)
+            cur.execute(f"SELECT sifra,naziv FROM znacajke WHERE sifra_grupe IN ({pgrupe});")
+            znacajke = cur.fetchall()
+        elif grupe:
+            cur.execute(f"SELECT sifra,naziv FROM znacajke WHERE sifra_grupe IN ({grupe});")
+            znacajke = cur.fetchall()
+        return render_template('gui.html', page='cjenik-odabirznacajki', grupe=grupe, sifre=sifre,
+            fmt=fmt, znacajke=znacajke)
+    cur.execute("SELECT sifra, naziv FROM grupe ORDER BY naziv ASC;")
+    grupe = cur.fetchall()
+    return render_template('gui.html', page='cjenik', grupe=grupe)
+
+@app.route('/cjenik-export')
+def cjenikexport():
+    sifre = request.args.get('lista_sifri')
+    sifre_list = sifre.split(',')
+    grupe_list = request.args.getlist('grupe[]')
+    grupe = ','.join(grupe_list)
+    znacajke_list = request.args.getlist('znacajke[]')
+    znacajke_str = ','.join(znacajke_list)
+    fmt = request.args.get('format')
+    condition = f"sifra IN ({sifre})"
+    if not sifre:
+        condition = f"grupa IN ({grupe}) AND kolicina > 0"
+    cur.execute(f"""
+        SELECT sifra, naziv, cijena, web_cijena_s_popustom, kolicina,
+            (SELECT link FROM slike WHERE sifra_proizvoda = p.sifra AND pozicija = 0)
+        FROM proizvodi p
+        WHERE {condition};""")
+    proizvodi = cur.fetchall()
+    znacajke_proizvoda = []
+    for proizvod in proizvodi:
+        cur.execute(f"""
+            SELECT naziv, vrijednost
+            FROM znacajke_vrijednosti v
+            INNER JOIN znacajke z ON z.sifra = v.sifra_znacajke
+            WHERE sifra_proizvoda = %s AND z.sifra IN ({znacajke_str})
+            ORDER BY naziv ASC
+        """, (proizvod[0],))
+        znacajke = cur.fetchall()
+        znacajke_proizvoda.append(znacajke)
+
+    today = datetime.date.today()
+
+    return render_template('gui.html', page='cjenik-pdf', grupe=grupe, sifre=sifre,
+            fmt=fmt, znacajke=znacajke, proizvodi=proizvodi,
+            znacajke_proizvoda=znacajke_proizvoda, today=today.strftime('%d/%m/%Y'))
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
+
+@app.template_filter('slugify')
+def _slugify(string):
+	return slugify(string)
+
+@app.context_processor
+def money_stuff():
+	def formatmoney(amount):
+		m = "{:,.2f}".format(float(amount)).replace(',', '.')
+		return f'{m[:-3]},{m[-2:]} kn'
+	return {'formatmoney': formatmoney}
 
 # app.run(debug=True)
 ui.run()
