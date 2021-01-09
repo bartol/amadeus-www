@@ -146,3 +146,17 @@ CREATE TABLE IF NOT EXISTS promo_kodovi (
     kod TEXT,
     iznos DECIMAL(9, 2)
 );
+
+CREATE TABLE IF NOT EXISTS promo_stranica (
+    sifra SERIAL PRIMARY KEY,
+    naziv TEXT,
+    img_link TEXT
+);
+
+CREATE TABLE IF NOT EXISTS promo_stranica_proizvodi (
+    sifra SERIAL PRIMARY KEY,
+    sifra_promo_stranice INT,
+    FOREIGN KEY (sifra_promo_stranice) REFERENCES promo_stranica(sifra),
+    sifra_proizvoda INT,
+    FOREIGN KEY (sifra_proizvoda) REFERENCES proizvodi(sifra)
+);
