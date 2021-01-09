@@ -6,7 +6,10 @@
 
 {% set msgid = random_int(5) %}
 
-<h2>Kontaktirajte nas</h2>
+<h2>
+    {% if contact_title %}{{ contact_title }}{% else %}Kontaktirajte nas{% endif %}
+    {% if contact_subtitle %}<span class="fs-6 text-nowrap">({{ contact_subtitle }})</span>{% endif %}
+</h2>
 <form class="mb-3 mb-lg-4 contact-form" novalidate>
     <label class="form-label w-100 mb-2">
         <input type="email" name="email" class="form-control" placeholder="Vaš email" aria-label="Vaš email" required>

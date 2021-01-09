@@ -167,6 +167,9 @@
                 </div>
             </form>
             {% else %}
+            {% with contact_title = 'Pošaljite upit', contact_subtitle = 'Proizvod je možda moguće nabaviti' %}
+            {% include "partials/contact_form.html" %}
+            {% endwith %}
             <div class="d-grid">
                 <button class="btn btn-danger">
                     Proizvod trenutno nije dostupan
