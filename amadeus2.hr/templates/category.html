@@ -1,7 +1,7 @@
 {% extends 'partials/base.html' %}
 {% block title %}{{ grupa[0] }} | Amadeus web trgovina{% endblock %}
 {% block opis %}Proizvodi u kategoriji {{ grupa[0] }}{% endblock %}
-{% block slika %}{{ proizvodi[0][4] }}{% endblock %}
+{% block slika %}{% if proizvodi|length and proizvodi[0][4] %}{{ proizvodi[0][4] }}{% else %}https://amadeus2.hr/static/img/logo-lg.png{% endif %}{% endblock %}
 {% block head %}
 <script type="application/ld+json">
     {
