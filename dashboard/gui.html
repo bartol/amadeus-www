@@ -527,17 +527,17 @@
     <table class="mb-3">
     {% for proizvod in proizvodi %}
     {% if (loop.index % 2) == 1 %}<tr style="page-break-inside: avoid;">{% endif %}
-    <td class="p-0" style="height: 1px;">
+    <td class="p-0 w-50" style="height: 1px;">
         <div class="p-2 h-100 border position-relative d-flex flex-column justify-content-between">
             <div>
                 <h5 class="mb-1"><b><a href="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="text-decoration-none text-body stretched-link">{{ proizvod[1] }}</a></b></h5>
-                <p style="font-size: 12px;" class="lh-sm mb-0 clearfix">
-                    {% if proizvod[5] %}<img class="w-50 float-end" src="{{ proizvod[5] }}">{% endif %}
+                <div style="font-size: 12px;" class="lh-sm mb-0 clearfix">
+                    {% if proizvod[5] %}<div class="float-end ratio ratio-1x1" style="width: 40%;"><img src="{{ proizvod[5] }}" style="object-fit: contain;"></div>{% endif %}
                     {% for znacajka in znacajke_proizvoda[loop.index-1] %}
                     {{ znacajka[0] }}: {{ znacajka[1] }}<br>
                     {% endfor %}
                     MPC: {{ formatmoney(proizvod[2]) }}
-                </p>
+                </div>
             </div>
             <div class="d-flex justify-content-between align-items-end">
                 {% if proizvod[3] %}<h5 class="my-0"><b>AKCIJA: {{ formatmoney(proizvod[3]) }}</b></h5>{% endif %}
