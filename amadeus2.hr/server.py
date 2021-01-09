@@ -203,7 +203,8 @@ def product(id, slug):
 		SELECT naziv, vrijednost
 		FROM znacajke_vrijednosti v
 		INNER JOIN znacajke z ON z.sifra = v.sifra_znacajke
-		WHERE sifra_proizvoda = %s;
+		WHERE sifra_proizvoda = %s
+		ORDER BY naziv ASC;
 	""", (id,))
 	znacajke = cur.fetchall()
 
