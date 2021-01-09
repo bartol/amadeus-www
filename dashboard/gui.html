@@ -531,7 +531,6 @@
                 <h5 class="mb-1"><b><a href="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="text-decoration-none text-body stretched-link">{{ proizvod[1] }}</a></b></h5>
                 <p style="font-size: 12px;" class="lh-sm mb-0 clearfix">
                     {% if proizvod[5] %}<img class="w-50 float-end" src="{{ proizvod[5] }}">{% endif %}
-
                     {% for znacajka in znacajke_proizvoda[loop.index-1] %}
                     {{ znacajka[0] }}: {{ znacajka[1] }}<br>
                     {% endfor %}

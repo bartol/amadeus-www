@@ -2,7 +2,7 @@
 
 import table
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
 from flaskwebgui import FlaskUI
 import psycopg2
 import configparser
@@ -14,6 +14,7 @@ from werkzeug.utils import secure_filename
 import datetime
 import pioneerhr
 from slugify import slugify
+import csv, io
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -445,12 +446,40 @@ def cjenikexport():
         """, (proizvod[0],))
         znacajke = cur.fetchall()
         znacajke_proizvoda.append(znacajke)
-
-    today = datetime.date.today()
-
-    return render_template('gui.html', page='cjenik-pdf', grupe=grupe, sifre=sifre,
-            fmt=fmt, znacajke=znacajke, proizvodi=proizvodi,
-            znacajke_proizvoda=znacajke_proizvoda, today=today.strftime('%d/%m/%Y'))
+    if fmt == 'pdf':
+        today = datetime.date.today()
+        return render_template('gui.html', page='cjenik-pdf', grupe=grupe, sifre=sifre,
+                fmt=fmt, znacajke=znacajke, proizvodi=proizvodi,
+                znacajke_proizvoda=znacajke_proizvoda, today=today.strftime('%d/%m/%Y'))
+    else:
+        dest = io.StringIO()
+        writer = csv.writer(dest)
+        header = ['Šifra', 'Model', 'MPC (kn)', 'AKCIJA (kn)', 'Lager (kom)']
+        znacajke_header = []
+        for sifra in znacajke_list:
+            cur.execute("SELECT naziv FROM znacajke WHERE sifra = %s", (sifra,))
+            znacajka = cur.fetchone()
+            znacajke_header.append(znacajka[0])
+        znacajke_header.sort()
+        header = header + znacajke_header
+        writer.writerow(header)
+        for idx, proizvod in enumerate(proizvodi):
+            row = [proizvod[0], proizvod[1], proizvod[2], proizvod[3], proizvod[4]]
+            for znacajka in znacajke_header:
+                znacajke_proizvoda1 = znacajke_proizvoda[idx]
+                found = False
+                for z in znacajke_proizvoda1:
+                    if z[0] == znacajka:
+                        row.append(z[1])
+                        found = True
+                        break
+                if not found:
+                    row.append('')
+            writer.writerow(row)
+        output = make_response(dest.getvalue())
+        output.headers["Content-Disposition"] = "attachment; filename=cjenik.csv"
+        output.headers["Content-type"] = "text/csv"
+        return output
 
 @app.errorhandler(404)
 def page_not_found(e):
