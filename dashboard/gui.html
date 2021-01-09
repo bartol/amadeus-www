@@ -524,9 +524,11 @@
         </a>
         {{ today }}
     </div>
-    <div class="row mb-3">
+    <table class="mb-3">
     {% for proizvod in proizvodi %}
-        <div class="col-6 p-2 border position-relative d-flex flex-column justify-content-between">
+    {% if (loop.index % 2) == 1 %}<tr style="page-break-inside: avoid;">{% endif %}
+    <td class="p-0" style="height: 1px;">
+        <div class="p-2 h-100 border position-relative d-flex flex-column justify-content-between">
             <div>
                 <h5 class="mb-1"><b><a href="https://amadeus2.hr/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" class="text-decoration-none text-body stretched-link">{{ proizvod[1] }}</a></b></h5>
                 <p style="font-size: 12px;" class="lh-sm mb-0 clearfix">
@@ -545,8 +547,10 @@
                 </p>
             </div>
         </div>
+    </td>
+    {% if (loop.index % 2) == 0 %}</tr>{% endif %}
     {% endfor %}
-    </div>
+    </table>
     <p align="center" style="font-size: 0.9rem">
         <span style="white-space: nowrap">AMADEUS II d.o.o.</span> /
         <a href="https://amadeus2.hr" style="white-space: nowrap">amadeus2.hr</a> /
