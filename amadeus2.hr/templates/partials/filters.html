@@ -14,7 +14,7 @@
     </div>
     {% endif %}
     <h2 class="h4">Sortiranje</h2>
-    <select name="s" autocomplete="off" class="form-select mb-3" aria-label="Sortiranje">
+    <select name="s" autocomplete="off" class="form-select mb-3" aria-label="Sortiranje" onchange="this.form.submit()">
         <option value="" {{"selected" if sort == ""}}>Zadano</option>
         <option value="a-z" {{"selected" if sort == "a-z"}}>Naziv (A do Z)</option>
         <option value="z-a" {{"selected" if sort == "z-a"}}>Naziv (Z do A)</option>
@@ -30,7 +30,7 @@
                 <label class="form-check-label">
                     <input type="checkbox" name="g[]" value="{{ grupa[0] }}"
                     {% if grupa[2] %}checked{% endif %}
-                    class="form-check-input">
+                    class="form-check-input" onchange="this.form.submit()">
                     {{ grupa[1] }}
                 </label>
             </div>
@@ -47,7 +47,7 @@
                 <label class="form-check-label">
                     <input type="checkbox" name="z-{{ sifra }}[]" value="{{ vrijednost[0] }}"
                     {% if vrijednost[1] %}checked{% endif %}
-                    class="form-check-input">
+                    class="form-check-input" onchange="this.form.submit()">
                     {{ vrijednost[0] }}
                 </label>
             </div>
