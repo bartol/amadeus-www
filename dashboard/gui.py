@@ -375,8 +375,12 @@ def postavke():
     cur.execute("SELECT kod, iznos FROM promo_kodovi")
     promo_kodovi = cur.fetchall()
 
+    cur.execute("SELECT sifra, naziv FROM promo_stranica")
+    promo_stranice = cur.fetchall()
+
     return render_template('gui.html', page='postavke', covers=covers, mailing_list=mailing_list,
-        unused_features=unused_features, grupe=grupe, datumi=datumisifre, promo_kodovi=promo_kodovi)
+        unused_features=unused_features, grupe=grupe, datumi=datumisifre,
+        promo_kodovi=promo_kodovi, promo_stranice=promo_stranice)
 
 @app.route('/postavke/rmfeature', methods=['POST'])
 def rmfeature():
@@ -480,6 +484,54 @@ def cjenikexport():
         output.headers["Content-Disposition"] = "attachment; filename=cjenik.csv"
         output.headers["Content-type"] = "text/csv"
         return output
+
+@app.route('/promostr/add', methods=['POST'])
+def promostradd():
+    naziv = request.form.get('naziv')
+    cur.execute("INSERT INTO promo_stranica (naziv) VALUES (%s) RETURNING sifra;", (naziv.strip(),))
+    promostr = cur.fetchone()
+    conn.commit()
+    return redirect(f'/promostr?id={promostr[0]}')
+
+@app.route('/promostr/del', methods=['POST'])
+def promostrdel():
+    strid = request.form.get('id')
+    cur.execute('DELETE FROM promo_stranica WHERE sifra = %s', (strid,))
+    conn.commit()
+    return redirect('/postavke')
+
+@app.route('/promostr', methods=['GET', 'POST'])
+def promostrdetail():
+    if not request.args.get('id'):
+        return redirect('/postavke')
+    sifra = request.args.get('id')
+    if request.method == 'POST':
+        naziv = request.form.get('naziv')
+        cur.execute("UPDATE promo_stranica SET naziv = %s WHERE sifra = %s", (naziv, sifra))
+        ps_proizvodi = request.form.getlist('ps_proizvodi[]')
+        cur.execute("DELETE FROM promo_stranica_proizvodi WHERE sifra_promo_stranice = %s", (sifra,))
+        for sifra_proizvoda in ps_proizvodi:
+            try:
+                cur.execute("""
+                INSERT INTO promo_stranica_proizvodi (sifra_promo_stranice, sifra_proizvoda)
+                VALUES (%s, %s)""", (sifra, sifra_proizvoda))
+            except:
+                continue
+        conn.commit()
+        return redirect(f'/promostr?id={sifra}')
+
+    cur.execute("SELECT naziv FROM promo_stranica WHERE sifra = %s", (sifra,))
+    promostr = cur.fetchone()
+
+    cur.execute("""
+        SELECT sifra_proizvoda, p.naziv
+        FROM promo_stranica_proizvodi ps
+        LEFT JOIN proizvodi p ON p.sifra = ps.sifra_proizvoda
+        WHERE sifra_promo_stranice = %s""", (sifra,))
+    promostr_proizvodi = cur.fetchall()
+
+    return render_template('gui.html', page='promostrdetail', promostr=promostr,
+        promostr_proizvodi=promostr_proizvodi)
 
 @app.errorhandler(404)
 def page_not_found(e):

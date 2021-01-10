@@ -47,11 +47,11 @@ CREATE TRIGGER update_moddate
 
 CREATE EXTENSION unaccent;
 
-CREATE FUNCTION products_trigger() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION products_trigger() RETURNS trigger AS $$
 begin
 new.tsv :=
     setweight(to_tsvector(unaccent(coalesce(new.naziv,''))), 'A') ||
-    setweight(to_tsvector(unaccent(coalesce(new.sifra,''))), 'B') ||
+    setweight(to_tsvector(new.sifra::text), 'B') ||
     setweight(to_tsvector(unaccent(coalesce(new.web_opis,''))), 'B');
 return new;
 end
@@ -149,8 +149,7 @@ CREATE TABLE IF NOT EXISTS promo_kodovi (
 
 CREATE TABLE IF NOT EXISTS promo_stranica (
     sifra SERIAL PRIMARY KEY,
-    naziv TEXT,
-    img_link TEXT
+    naziv TEXT
 );
 
 CREATE TABLE IF NOT EXISTS promo_stranica_proizvodi (
