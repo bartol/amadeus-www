@@ -633,7 +633,7 @@ def failure():
 	if request.method == 'POST':
 		print(request.form)
 
-	flash('Dogodila se pogreška prilikom obrade narudžbe. Molimo pokušajte ponovo ili nas kontaktirajte na <a href="mailto:prodaja@pioneer.hr" class="alert-link">prodaja@pioneer.hr</a>.', 'danger')
+	flash('Dogodila se pogreška prilikom obrade narudžbe. Molimo pokušajte ponovo ili nas kontaktirajte na <a href="mailto:info@pioneer.hr" class="alert-link">info@pioneer.hr</a>.', 'danger')
 	return redirect('/checkout')
 
 @app.route('/cancel', methods=['GET', 'POST'])
