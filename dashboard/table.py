@@ -138,6 +138,10 @@ def update(tablepath):
                 WHERE sifra = %s
                 """, (sifra,))
                 p = cur.fetchone()
-                pioneerhr.updateproduct(p[0], p[1], p[2], (p[3] == 'x'), p[4])
+                try:
+                    pioneerhr.updateproduct(p[0], p[1], p[2], (p[3] == 'x'), p[4])
+                except Exception as e:
+                    print(f'POGREŠKA PRI IZMJENI PROIZVODA {sifra} NA pioneer.hr')
+                    print(e)
 
         conn.commit()

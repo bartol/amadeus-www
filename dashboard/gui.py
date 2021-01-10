@@ -95,10 +95,7 @@ def tableget():
 def tableupdate():
     if request.method == 'POST':
         tablepath = request.form.get('tablepath')
-        try:
-            table.update(tablepath)
-        except Exception as e:
-            return render_template('gui.html', page='err', msg=str(e))
+        table.update(tablepath)
         return render_template('gui.html', page='success')
 
     files = glob.glob(os.path.join(bazatmpdir, "*.csv"))

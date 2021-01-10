@@ -35,7 +35,8 @@ def updateproduct(id, cijena, web_cijena_s_popustom, enabled, quantity):
     product_xml_str = xmltodict.unparse(product_xml)
     requests.put(f'https://pioneer.hr/api/products/{id}', auth=(apikey,''), data=product_xml_str.encode('utf-8'))
 
-    kolicina_url = product_xml['prestashop']['product']['associations']['stock_availables']['stock_available']['@xlink:href']
+    kolicine = product_xml['prestashop']['product']['associations']['stock_availables']['stock_available']
+    kolicina_url = kolicine[0]['@xlink:href'] if isinstance(kolicine, list) else kolicine['@xlink:href']
     kolicina_req = requests.get(kolicina_url, auth=(apikey,''))
     kolicina_xml = xmltodict.parse(kolicina_req.text)
     kolicina_xml['prestashop']['stock_available']['quantity'] = str(quantity)
@@ -44,7 +45,8 @@ def updateproduct(id, cijena, web_cijena_s_popustom, enabled, quantity):
 
     popust_id_req = requests.get(f'https://pioneer.hr/api/specific_prices?filter[id_product]=[{id}]', auth=(apikey,''))
     popust_id_xml = xmltodict.parse(popust_id_req.text)
-    popust_url = popust_id_xml['prestashop']['specific_prices']['specific_price']['@xlink:href']
+    popusti = popust_id_xml['prestashop']['specific_prices']['specific_price']
+    popust_url = popusti[0]['@xlink:href'] if isinstance(popusti, list) else popusti['@xlink:href']
     popust_req = requests.get(popust_url, auth=(apikey,''))
     popust_xml = xmltodict.parse(popust_req.text)
     popust = popust_xml['prestashop']['specific_price']['reduction'] = "{:.6f}".format(cijena - web_cijena_s_popustom)
