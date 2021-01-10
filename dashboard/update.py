@@ -109,7 +109,7 @@ with open(f"{tmp_malmat}.csv", encoding='cp852') as f:
             'sifra': int(p[1]),
             'grupa': int(p[3]),
             'naziv': p[4].rstrip(),
-            'kolicina': int(float(c[14])),
+            'kolicina': int(float(c[11])),
             'nabavna_cijena': float(c[18]),
             'marza': float(c[16]),
             'cijena': float(c[9]),
