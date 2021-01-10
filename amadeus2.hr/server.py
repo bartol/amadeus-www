@@ -27,8 +27,10 @@ wspaykey = config['global']['wspaykey'].strip('"')
 
 mailhost = config['global']['mailhost'].strip('"')
 mailport = config['global']['mailport']
+mailuser = config['global']['mailuser'].strip('"')
+mailpass = config['global']['mailpass'].strip('"')
 
-mail = SMTPMailer(host=mailhost, port=mailport)
+mail = SMTPMailer(host=mailhost, port=mailport, user=mailuser, password=mailpass, ssl=True)
 
 internal_email = config['global']['internal_email'].strip('"')
 
