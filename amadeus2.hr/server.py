@@ -482,9 +482,13 @@ def cart_set_card():
 	cart, cart_products, cijene = getcart()
 	return render_template('partials/price_table.html', cijene=cijene)
 
-def set_checkout(formkey, required):
+def set_checkout(formkey, required, checkbox=False):
 	formdata = request.form.get(formkey)
-	if formdata:
+	if checkbox:
+		session['checkout'][formkey] = True if formdata else False
+		if required and session['checkout'][formkey] == False:
+			raise Exception(f'{formkey} not valid')
+	if formdata != None:
 		session['checkout'][formkey] = formdata
 	elif required:
 		raise Exception(f'{formkey} not valid')
@@ -502,10 +506,10 @@ def checkout():
 			set_checkout('p-drzava', True)
 			set_checkout('p-email', True)
 			set_checkout('p-mobitel', True)
-			set_checkout('terms', True)
+			set_checkout('terms', True, checkbox=True)
 		except:
 			abort(400)
-		set_checkout('d-notuse', False)
+		set_checkout('d-notuse', False, checkbox=True)
 		set_checkout('d-ime', False)
 		set_checkout('d-prezime', False)
 		set_checkout('d-ulica', False)
@@ -514,11 +518,11 @@ def checkout():
 		set_checkout('d-drzava', False)
 		set_checkout('d-email', False)
 		set_checkout('d-mobitel', False)
-		set_checkout('r-use', False)
+		set_checkout('r-use', False, checkbox=True)
 		set_checkout('tvrtka', False)
 		set_checkout('oib', False)
 		set_checkout('napomene', False)
-		set_checkout('savedata', False)
+		set_checkout('savedata', False, checkbox=True)
 
 		order_id = f'web-{randomDigits(5)}'
 		session['order_id'] = order_id
@@ -526,7 +530,7 @@ def checkout():
 		if not ajax:
 			html = render_template('emails/checkout.html', checkout=session.get('checkout'),
 				order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
-				card=session.get('card'), brojrata=session.get('brojrata', default=1))
+				card=session.get('card', default='VISA'), brojrata=session.get('brojrata', default=1))
 			message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
 					receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
 			try:
@@ -562,7 +566,7 @@ def checkout():
 				'country': country,
 				'phone': session['checkout'].get('p-mobitel'),
 				'paymentplan': plan,
-				'card': session.get('card')
+				'card': session.get('card', default='VISA')
 			}
 	if not session.get('checkout'):
 		session['checkout'] = {}
@@ -606,7 +610,7 @@ def success():
 		cart, cart_products, cijene = getcart()
 		html = render_template('emails/checkout.html', checkout=session.get('checkout'),
 			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
-			card=session.get('card'), brojrata=session.get('brojrata'))
+			card=session.get('card', default='VISA'), brojrata=session.get('brojrata', default=1))
 		message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
 				receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
 		try:
