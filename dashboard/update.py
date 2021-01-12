@@ -102,6 +102,7 @@ with open(f"{tmp_malmat}.csv", encoding='cp852') as f:
         for cj in cijene:
             if cj[2] == p[1]:
                 c = cj
+                break
         if len(c) == 0:
             continue
 
