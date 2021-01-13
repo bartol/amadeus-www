@@ -374,7 +374,7 @@ def contact():
 			return ""
 		html = render_template('emails/admin/contact.html', email=customer_email, message=customer_message, url=url)
 		message = Message(subject='[amadeus2.hr] Nova poruka', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-                  receivers=[internal_email], reply_to=[customer_email], html=html)
+                  receivers=[internal_email], reply_to=[customer_email], bcc=['web@amadeus2.hr'], html=html)
 		try:
 			mail.send(message)
 			return render_template('partials/contact_resp.html', message=customer_message, success=True)
@@ -532,7 +532,7 @@ def checkout():
 				order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
 				card=session.get('card', default='VISA'), brojrata=session.get('brojrata', default=1))
 			message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-					receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
+					receivers=[session['checkout'].get('p-email')], reply_to=[internal_email], bcc=[internal_email, 'web@amadeus2.hr'], html=html)
 			try:
 				mail.send(message)
 			except:
@@ -612,7 +612,7 @@ def success():
 			order_id=order_id, cart=cart, cart_products=cart_products, cijene=cijene,
 			card=session.get('card', default='VISA'), brojrata=session.get('brojrata', default=1))
 		message = Message(subject=f'[amadeus2.hr] Narudžba ({order_id})', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-				receivers=[internal_email,session['checkout'].get('p-email')], reply_to=[internal_email], html=html)
+				receivers=[session['checkout'].get('p-email')], reply_to=[internal_email], bcc=[internal_email, 'web@amadeus2.hr'], html=html)
 		try:
 			mail.send(message)
 		except:
@@ -737,7 +737,7 @@ def price_tracking_job():
 	for tracker in trackers:
 		html = render_template('emails/price_tracker.html', tracker=tracker)
 		message = Message(subject=f'[amadeus2.hr] Obavijest o promjeni cijene', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-				receivers=[tracker[0]], reply_to=[internal_email], html=html)
+				receivers=[tracker[0]], reply_to=[internal_email], bcc=['web@amadeus2.hr'], html=html)
 		try:
 			mail.send(message)
 			cur.execute("UPDATE price_tracking SET sent = 't' WHERE sifra = %s", (tracker[8],))
@@ -759,7 +759,7 @@ def quantity_tracking_job():
 	for tracker in trackers:
 		html = render_template('emails/quantity_tracker.html', tracker=tracker)
 		message = Message(subject=f'[amadeus2.hr] Obavijest o promjeni dostupnosti', sender=('Amadeus web trgovina', 'web@amadeus2.hr'),
-				receivers=[tracker[0]], reply_to=[internal_email], html=html)
+				receivers=[tracker[0]], reply_to=[internal_email], bcc=['web@amadeus2.hr'], html=html)
 		try:
 			mail.send(message)
 			cur.execute("UPDATE quantity_tracking SET sent = 't' WHERE sifra = %s", (tracker[8],))
