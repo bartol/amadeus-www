@@ -8,6 +8,13 @@
                     <span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
                 </div>
             </div>
+            {% if proizvod[5] > 0 %}
+            <div>
+                <div class="position-absolute top-0 end-0">
+                    <span class="badge rounded-pill bg-success">RASPOLOŽIVO ODMAH</span>
+                </div>
+            </div>
+            {% endif %}
         </div>
         <h3 class="h6">
             <a href="/proizvod/{{ proizvod[0] }}-{{ proizvod[1]|slugify }}" title="Više informacija" class="stretched-link text-decoration-none text-dark overflow-hidden"

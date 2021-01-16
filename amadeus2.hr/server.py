@@ -60,7 +60,7 @@ def index():
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-		) FROM proizvodi p
+		), kolicina FROM proizvodi p
 		WHERE web_istaknut = 't' AND amadeus2hr = 'x';
 	""")
 	istaknuti_proizvodi = cur.fetchall()
@@ -143,7 +143,7 @@ def category(id, slug):
 				SELECT link
 				FROM slike
 				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-			)
+			), kolicina
 			{znacajke_exists_sql}
 			FROM proizvodi p
 			WHERE grupa = %s AND amadeus2hr = 'x' {condition_sql}
@@ -195,7 +195,7 @@ def product(id, slug):
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-		) FROM slicni_proizvodi s
+		), kolicina FROM slicni_proizvodi s
 		INNER JOIN proizvodi p ON s.sifra_slicnog = p.sifra
 		WHERE s.sifra = %s;
 	""", (id,))
@@ -313,7 +313,7 @@ def search():
 				SELECT link
 				FROM slike
 				WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-			)
+			), kolicina
 			{znacajke_exists_sql}
 			FROM proizvodi p, websearch_to_tsquery(unaccent(%s)) query
 			WHERE tsv @@ query AND amadeus2hr = 'x' {condition_sql}
@@ -351,7 +351,7 @@ def search_autocomplete():
 			SELECT link
 			FROM slike
 			WHERE sifra_proizvoda = p.sifra AND pozicija = 0
-		)
+		), kolicina
 		FROM proizvodi p, websearch_to_tsquery(unaccent(%s)) query
 		WHERE tsv @@ query AND amadeus2hr = 'x'
 		ORDER BY ts_rank(tsv, query) DESC
