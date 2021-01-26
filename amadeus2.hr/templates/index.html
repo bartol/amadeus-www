@@ -13,12 +13,12 @@
             <li data-bs-target="#covercarousel" data-bs-slide-to="{{ loop.index - 1 }}" class="{% if loop.index == 1 %}active{% endif %}"></li>
             {% endfor %}
         </ol>
-        <div class="carousel-inner">
+        <div class="carousel-inner h-100">
             {% for cover in covers %}
-            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+            <div class="carousel-item h-100 {% if loop.index == 1 %}active{% endif %}">
                 <a href="{{ cover[1] }}">
                     <img src="https://cdn.statically.io/img/{{ (cover[0]|urlparse).hostname }}/f=auto,w=975,q=90/{{ (cover[0]|urlparse).path }}"
-                        onerror="this.src='{{ cover[0] }}'; this.onerror='';" class="d-block w-100" alt="cover slika {{ loop.index }}">
+                        onerror="this.src='{{ cover[0] }}'; this.onerror='';" class="d-block w-100 h-100" style="object-fit: contain;" alt="cover slika {{ loop.index }}">
                 </a>
             </div>
             {% endfor %}
