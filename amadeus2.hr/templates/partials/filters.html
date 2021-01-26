@@ -21,7 +21,7 @@
         <option value="min-max" {{"selected" if sort == "min-max"}}>Cijena (niža prema višoj)</option>
         <option value="max-min" {{"selected" if sort == "max-min"}}>Cijena (viša prema nižoj)</option>
     </select>
-    {% if filtergrupe|length %}
+    {% if filtergrupe|length > 1 %}
     <h2 class="h4">Kategorije</h2>
     <ul class="list-unstyled">
         {% for grupa in filtergrupe %}

@@ -101,10 +101,11 @@ def category(id, slug):
 		modified = True
 
 	cur.execute("""
-		SELECT DISTINCT z.sifra, naziv, vrijednost
+		SELECT DISTINCT z.sifra, z.naziv, vrijednost
 		FROM znacajke_vrijednosti v
 		INNER JOIN znacajke z ON v.sifra_znacajke = z.sifra
-		WHERE sifra_grupe = %s
+		INNER JOIN proizvodi p ON v.sifra_proizvoda = p.sifra
+		WHERE sifra_grupe = %s AND amadeus2hr = 'x'
 		ORDER BY naziv, vrijednost ASC;
 	""", (id,))
 	znacajkelist = cur.fetchall()
@@ -275,11 +276,13 @@ def search():
 		modified = True
 
 	cur.execute(f"""
-		SELECT DISTINCT z.sifra, naziv, vrijednost
+		SELECT DISTINCT z.sifra, z.naziv, vrijednost, g.naziv
 		FROM znacajke_vrijednosti v
 		INNER JOIN znacajke z ON v.sifra_znacajke = z.sifra
-		WHERE sifra_grupe IN ({",".join(grupearr)})
-		ORDER BY naziv, vrijednost ASC;
+		INNER JOIN proizvodi p ON v.sifra_proizvoda = p.sifra
+		INNER JOIN grupe g ON g.sifra = sifra_grupe
+		WHERE sifra_grupe IN ({",".join(grupearr)}) AND amadeus2hr = 'x'
+		ORDER BY z.naziv, vrijednost ASC;
 	""")
 	znacajkelist = cur.fetchall()
 
@@ -294,7 +297,7 @@ def search():
 		if z[0] in znacajke:
 			znacajke[z[0]]['vrijednosti'].append(vrijednost)
 		else:
-			znacajke[z[0]] = { 'naziv': z[1], 'vrijednosti': [vrijednost] }
+			znacajke[z[0]] = { 'naziv': f"{z[1]} ({z[3]})" if len(grupearr) > 1 else z[1], 'vrijednosti': [vrijednost] }
 		if selected:
 			if z[0] in sel:
 				sel[z[0]].append(z[2])
