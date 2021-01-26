@@ -210,7 +210,11 @@ def product(id, slug):
 	""", (id,))
 	znacajke = cur.fetchall()
 
-	return render_template('product.html', proizvod=proizvod, slike=slike,
+	web_desc = proizvod[1] + '; '
+	for znacajka in znacajke:
+		web_desc = web_desc + f'{znacajka[0]}: {znacajka[1]}, '
+
+	return render_template('product.html', proizvod=proizvod, slike=slike, web_desc=web_desc,
 		preporuceni_proizvodi=preporuceni_proizvodi, znacajke=znacajke, akcija_dana=akcija_dana)
 
 @app.route('/search')

@@ -1,6 +1,6 @@
 {% extends 'partials/base.html' %}
 {% block title %}{{ proizvod[1] }}, samo {{ formatmoney(proizvod[3]) }} | Amadeus web trgovina{% endblock %}
-{% block opis %}{{ proizvod[4]|striptags|truncate(155) }}{% endblock %}
+{% block opis %}{{ web_desc + (proizvod[4]|striptags|truncate(155)) }}{% endblock %}
 {% block slika %}{% if slike|length %}{{ slike[0][0] }}{% else %}https://amadeus2.hr/static/img/logo-lg.png{% endif %}{% endblock %}
 {% block head %}
 <script type="application/ld+json">
@@ -34,7 +34,7 @@
         "{{ slika[0] }}"{% if not loop.last %},{% endif %}
         {% endfor %}
        ],
-      "description": "{{ proizvod[4]|striptags|truncate(155) }}",
+      "description": "{{ web_desc + (proizvod[4]|striptags|truncate(155)) }}",
       "sku": "{{ proizvod[0] }}",
       "offers": {
         "@type": "Offer",
