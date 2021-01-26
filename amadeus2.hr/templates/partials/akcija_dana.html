@@ -3,9 +3,11 @@
 <div class="card mb-3 mb-lg-4">
     <div class="row g-0 m-2">
         <div class="col-5">
-            <div class="d-flex align-items-center h-100">
+            <div class="ratio ratio-4x3">
+                <div class="h-100">
                 <img src="https://cdn.statically.io/img/{{ (akcija_dana[5]|urlparse).hostname }}/f=auto,w=250,q=90/{{ (akcija_dana[5]|urlparse).path }}"
-                    onerror="this.src='{{ akcija_dana[5] }}'; this.onerror='';" alt="slika proizvoda" width="100%">
+                    onerror="this.src='{{ akcija_dana[5] }}'; this.onerror='';" alt="slika proizvoda" class="w-100 h-100" style="object-fit: contain;">
+                </div>
             </div>
         </div>
         <div class="col-7">
