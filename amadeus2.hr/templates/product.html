@@ -75,6 +75,7 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% if slike|length > 1 %}
                 <a class="carousel-control-prev" href="#productcarousel" role="button" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -93,6 +94,7 @@
                     </li>
                     {% endfor %}
                 </ol>
+                {% endif %}
             </div>
         </div>
     </div>
