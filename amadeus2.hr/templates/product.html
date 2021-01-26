@@ -117,11 +117,11 @@
             <div class="d-flex mb-3 mb-md-4 align-items-center">
                 <select class="form-select" aria-label="Odaberi broj rata" title="Odaberi broj rata" autocomplete="off"
                     onchange="document.getElementById('placanje_rate_iznos').innerHTML = this.value">
-                    <option value="{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}" selected>2 rate</option>
+                    <option value="{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}">2 rate</option>
                     <option value="{{ formatmoney((proizvod[3] / 3) * dec(1.08)) }}">3 rate</option>
                     <option value="{{ formatmoney((proizvod[3] / 4) * dec(1.08)) }}">4 rate</option>
                     <option value="{{ formatmoney((proizvod[3] / 5) * dec(1.08)) }}">5 rata</option>
-                    <option value="{{ formatmoney((proizvod[3] / 6) * dec(1.08)) }}">6 rata</option>
+                    <option value="{{ formatmoney((proizvod[3] / 6) * dec(1.08)) }}" selected>6 rata</option>
                     <option value="{{ formatmoney((proizvod[3] / 7) * dec(1.08)) }}">7 rata</option>
                     <option value="{{ formatmoney((proizvod[3] / 8) * dec(1.08)) }}">8 rata</option>
                     <option value="{{ formatmoney((proizvod[3] / 9) * dec(1.08)) }}">9 rata</option>
