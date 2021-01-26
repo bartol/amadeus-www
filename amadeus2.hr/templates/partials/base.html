@@ -226,6 +226,7 @@
 				}
 			}
 			txt = text_list[text_list_i];
+			document.querySelector(selector_target).dataset.placeholder = txt;
 			if (i < txt.length) {
 				if (placeholder) {
 					document.querySelector(selector_target).placeholder += txt.charAt(i);
