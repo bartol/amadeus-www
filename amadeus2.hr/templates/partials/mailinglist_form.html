@@ -3,7 +3,10 @@
         <form class="contact-form my-3" novalidate>
             <p class="mb-2">Prijavite se na našu mailing listu za <b>dodatne popuste</b> svaki mjesec</p>
             <div class="input-group">
-                <input type="email" name="email" class="form-control" placeholder="Vaš email" required>
+                <label>
+                    <span class="visually-hidden">Vaš email</span>
+                    <input type="email" name="email" class="form-control" placeholder="Vaš email" required>
+                </label>
                 <button type="submit"  title="Prijavi me na mailing listu" class="btn btn-primary rounded-end"
                     hx-post='/mailinglist' hx-target="#mailinglist-resp">
                     <span class="spinner-border spinner-border-sm indicator" role="status" aria-hidden="true"></span>
