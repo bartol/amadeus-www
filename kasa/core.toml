@@ -1,4 +1,0 @@
-DatabaseURL = "postgres://postgres@localhost:5432/testiranje25"
-LogPath = "core.log"
-Device = "kasa 1"
-PDV = 25

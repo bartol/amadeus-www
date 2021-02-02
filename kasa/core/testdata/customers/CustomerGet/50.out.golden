@@ -1,2 +1,0 @@
-core.Customer{}
-&errors.errorString{s:"sql: no rows in result set"}

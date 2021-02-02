@@ -1,8 +1,0 @@
-[]core.Category{
-    {CategoryID:4, Name:"Igraće konzole", URL:"igrace-konzole"},
-    {CategoryID:5, Name:"Klima uređaji", URL:"klima-uredaji"},
-    {CategoryID:1, Name:"Laptopi", URL:"laptopi"},
-    {CategoryID:2, Name:"Računala", URL:"racunala"},
-    {CategoryID:3, Name:"Televizije", URL:"televizije"},
-}
-nil

@@ -1,2 +1,0 @@
-core.Customer{CustomerID:7, Name:"novi kupac d.d.", Address:"Vladimira Nazora 45", PostalCode:"20340", City:"Ploče", Country:"Hrvatska", Phone:"0998765432", OIB:"1111111111", CreatedAt:"", UpdatedAt:"", Type:"Pravna osoba", TypeID:2}
-nil
