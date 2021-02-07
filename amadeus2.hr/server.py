@@ -20,7 +20,6 @@ config.read('config.ini')
 
 dbconn = config['global']['dbconn'].strip('"')
 conn = psycopg2.connect(dbconn)
-cur = conn.cursor()
 
 secret_key = config['global']['secret_key'].strip('"')
 wspaykey = config['global']['wspaykey'].strip('"')
@@ -45,6 +44,7 @@ limiter = Limiter(app, key_func=get_remote_address)
 
 @app.route('/')
 def index():
+	cur = conn.cursor()
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
@@ -70,6 +70,7 @@ def index():
 
 @app.route('/kategorija/<int:id>-<string:slug>')
 def category(id, slug):
+	cur = conn.cursor()
 
 	cur.execute("SELECT naziv FROM grupe WHERE sifra = %s", (id,))
 	grupa = cur.fetchone()
@@ -171,6 +172,7 @@ def category(id, slug):
 
 @app.route('/proizvod/<int:id>-<string:slug>')
 def product(id, slug):
+	cur = conn.cursor()
 	akcija_dana = getakcijadana()
 
 	cur.execute("""
@@ -220,6 +222,7 @@ def product(id, slug):
 
 @app.route('/search')
 def search():
+	cur = conn.cursor()
 	query = request.args.get('q')
 	if not query:
 		return redirect('/')
@@ -348,6 +351,7 @@ def search():
 
 @app.route('/search_autocomplete')
 def search_autocomplete():
+	cur = conn.cursor()
 	query = request.args.get('q')
 	if not query:
 		return ""
@@ -392,6 +396,7 @@ def contact():
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
+	cur = conn.cursor()
 	# add item
 	if request.method == 'POST':
 		sifra = request.form.get('sifra', type=int)
@@ -446,6 +451,7 @@ def cart_delete():
 
 @app.route('/cart/kolicina', methods=['POST'])
 def cart_kolicina():
+	cur = conn.cursor()
 	sifra = request.form.get('sifra', type=int)
 	kolicina = request.form.get('kolicina', type=int)
 
@@ -585,6 +591,7 @@ def checkout():
 @app.route('/cart/promocheck', methods=['POST'])
 @limiter.limit('20 per hour')
 def promocheck():
+	cur = conn.cursor()
 	kod = request.form.get('kod')
 	session['promo_kod'] = kod
 	cur.execute("""
@@ -659,6 +666,7 @@ def cancel():
 
 @app.route('/tracking', methods=['GET', 'POST'])
 def tracking():
+	cur = conn.cursor()
 	params = request.form
 	if request.method == 'GET':
 		params = request.args
@@ -695,6 +703,7 @@ def tracking():
 
 @app.route('/mailinglist', methods=['POST'])
 def mailinglist():
+	cur = conn.cursor()
 	email = request.form.get('email')
 	if not email:
 		return render_template('partials/mailinglist_resp.html')
@@ -708,6 +717,7 @@ def mailinglist():
 
 @app.route('/sitemap.xml')
 def sitemap():
+	cur = conn.cursor()
 	cur.execute("SELECT sifra, naziv FROM proizvodi WHERE amadeus2hr = 'x'")
 	proizvodi = cur.fetchall()
 	return render_template('sitemap.xml', proizvodi=proizvodi, grupe=getgroup()), 200, {'Content-Type': 'text/xml'}
@@ -734,6 +744,7 @@ def internal_server_error(e):
 
 @app.route('/cron/send_price_tracking_notifications', methods=['POST'])
 def price_tracking_job():
+	cur = conn.cursor()
 	cur.execute("""
 	SELECT email, current_web_cijena, current_web_cijena_s_popustom, cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
 	FROM price_tracking t
@@ -756,6 +767,7 @@ def price_tracking_job():
 
 @app.route('/cron/send_quantity_tracking_notifications', methods=['POST'])
 def quantity_tracking_job():
+	cur = conn.cursor()
 	cur.execute("""
 	SELECT email, current_quantity, cijena, web_cijena_s_popustom, p.naziv, p.kolicina, p.sifra, t.sifra
 	FROM quantity_tracking t
@@ -779,6 +791,7 @@ def quantity_tracking_job():
 # helpers
 
 def getgroup():
+	cur = conn.cursor()
 	cur.execute("""
 		SELECT * FROM (
 			SELECT sifra, naziv, img_html, (
@@ -795,6 +808,7 @@ def getgroup():
 	return grupe
 
 def getakcijadana():
+	cur = conn.cursor()
 	cur.execute("""
 		SELECT sifra, naziv, cijena, web_cijena_s_popustom, kolicina, (
 			SELECT link
@@ -808,6 +822,7 @@ def getakcijadana():
 	return akcija_dana
 
 def getcart():
+	cur = conn.cursor()
 	cart = session.get('cart', default=[])
 	cart_products = []
 	for item in cart:
