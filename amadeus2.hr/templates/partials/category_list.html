@@ -16,7 +16,7 @@
     {% for grupa in grupe %}
     <a href="/kategorija/{{ grupa[0] }}-{{ grupa[1]|slugify }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
         <span>
-            {{ grupa[2]|safe }}
+            {% if grupa[2] %}{{ grupa[2]|safe }}{% endif %}
             {{ grupa[1] }}
         </span>
         <span class="badge bg-secondary rounded-pill">{{ grupa[3] }}</span>
