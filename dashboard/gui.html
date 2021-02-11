@@ -533,7 +533,7 @@
     <form method="GET" action="/cjenik-export">
         <input type="hidden" name="lista_sifri" value="{{ sifre }}">
         <input type="hidden" name="format" value="{{ fmt }}">
-        {% for grupa in grupe %}
+        {% for grupa in grupe.split(",") %}
             <input type="hidden" name="grupe[]" value="{{ grupa }}">
         {% endfor %}
         <ul>
@@ -660,6 +660,7 @@
     <div class="mt-2">404</div>
     {% endif %}
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
