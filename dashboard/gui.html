@@ -511,7 +511,7 @@
 
     {% if page == 'cjenik' %}
     <h1>Napravi cjenik</h1>
-    <form method="POST" action="/cjenik">
+    <form method="GET" action="/cjenik-export">
         <h3>Lista šifri proizvoda (odvojenih zarezom)</h3>
         <input type="text" placeholder="lista šifri odvojenih zarezom" name="lista_sifri" class="form-control">
         <h3>ili Proizvodi iz grupe (samo oni sa količinom > 0 i prikazani na amadeus2.hr)</h3>
@@ -523,7 +523,7 @@
         <h3>Format</h3>
         <ul>
             <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="format" value="pdf" checked class="form-check-input">pdf</label></div></li>
-            <li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="format" value="csv" class="form-check-input">csv</label></div></li>
+            <!--<li><div class="form-check form-switch"><label class="form-check-label"><input type="radio" name="format" value="csv" class="form-check-input">csv</label></div></li>-->
         </ul>
         <button type="submit" class="btn btn-primary">Napravi cjenik</button>
     </form>

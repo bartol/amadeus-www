@@ -434,7 +434,8 @@ def cjenikexport():
         SELECT sifra, naziv, cijena, web_cijena_s_popustom, kolicina,
             (SELECT link FROM slike WHERE sifra_proizvoda = p.sifra AND pozicija = 0)
         FROM proizvodi p
-        WHERE {condition};""")
+        WHERE {condition}
+        ORDER BY web_cijena_s_popustom ASC;""")
     proizvodi = cur.fetchall()
     znacajke_proizvoda = []
     for proizvod in proizvodi:
@@ -442,7 +443,7 @@ def cjenikexport():
             SELECT naziv, vrijednost
             FROM znacajke_vrijednosti v
             INNER JOIN znacajke z ON z.sifra = v.sifra_znacajke
-            WHERE sifra_proizvoda = %s AND z.sifra IN ({znacajke_str})
+            WHERE sifra_proizvoda = %s
             ORDER BY naziv ASC
         """, (proizvod[0],))
         znacajke = cur.fetchall()
