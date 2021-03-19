@@ -802,7 +802,8 @@ def getgroup():
 			FROM grupe g
 		) _
 		WHERE broj_proizvoda > 0
-		ORDER BY broj_proizvoda DESC;
+		ORDER BY broj_proizvoda DESC
+		LIMIT 10;
 	""")
 	grupe = cur.fetchall()
 	return grupe
