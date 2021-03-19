@@ -1,0 +1,294 @@
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+
+	
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  
+  <!-- Add fancyBox -->
+  <link rel="stylesheet" href="class/fancybox/jquery.fancybox.css" type="text/css" media="screen">
+  <script type="text/javascript" src="class/fancybox/jquery.fancybox.pack.js"></script>
+  <!-- Optionally add helpers - button, thumbnail and/or media -->
+  <link rel="stylesheet" href="class/fancybox/helpers/jquery.fancybox-buttons.css" type="text/css" media="screen">
+  <script type="text/javascript" src="class/fancybox/helpers/jquery.fancybox-buttons.js"></script>
+  <script type="text/javascript" src="class/fancybox/helpers/jquery.fancybox-media.js"></script>
+  <link rel="stylesheet" href="class/fancybox/helpers/jquery.fancybox-thumbs.css" type="text/css" media="screen">
+  <script type="text/javascript" src="class/fancybox/helpers/jquery.fancybox-thumbs.js"></script>
+  <script type="text/javascript">
+    beforeShow: function(){
+     $("body").css({'overflow-y':'hidden'});
+    },
+    afterClose: function(){
+     $("body").css({'overflow-y':'visible'});
+    }
+  </script>
+  <script type="text/javascript">
+    /*replacing <i> for robots to <a> for users*/
+        $('.fancybox-media').fancybox({
+    		openEffect : 'none',
+    		closeEffect : 'none',
+    		helpers : {
+    		media : {}
+    		}
+    	});
+    	$(document).ready(function () {
+    		
+            $("i.must_be_href[title]").each(function(){
+                var title = $(this).attr("title");
+                if (title.indexOf('/goods') == 0 || title.indexOf('/clickBanner') == 0) {
+                    $(this).replaceWith("<a href='" + title + "' target='_blank' class='"+$(this).attr("class")+"'>"+$(this).html()+"</a>");
+                } else {
+                    $(this).replaceWith("<a href='" + title + "' class='"+$(this).attr("class")+"'>"+$(this).html()+"</a>");
+                }
+            });
+    /*
+    */
+    
+    });
+  </script>
+
+</head>
+
+<body id="lp-dsn">
+    <div class="dsn-all">
+        <nav class="navbar navbar-inverse navbar-expand-md navbar-dark bg-primary">
+            <div class="container">
+              
+                <div class="nav-fix" id="navbarSupportedContent">
+                    <ul class="navbar-nav ">
+                        <a href="index.html"><img class="navbar-brand" src="images/index/logo.jpg"></a>
+                         <li class="nav-item">
+            <a class="nav-link" href="cf.html">Bežični štapni usisavači</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="ec.html">Kontroliranje zraka u prostoriji</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="hc.html">Njega kose</a>
+          </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12"> </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-5" >
+            <div class="container">
+                <div class="row index-pad-3">
+                    <div class="col-md-12 index-nopad">
+                        <div>
+                            <div class="carousel-inner" role="listbox">
+                                <div class="active">
+                                    <a href="cr.html">
+                  <img class="d-block img-fluid deny" src="images/index/index_25.jpg" >
+<img class="center-block img-fluid d-block mob-fix allow" src="images/index/index_25m.jpg">				  
+              </a>
+                                </div>
+                               
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+		
+	
+		
+
+		
+		
+		 <div class="container">
+			 
+                <div class="row">
+
+                    <a href="cf.html">
+                        <div class="col-md-4 index-pad">
+
+                            <img class="center-block img-fluid d-block deny" src="images/index/index_10m.jpg">
+							<img class="center-block img-fluid d-block mob-fix allow" src="images/index/index_10m.jpg">
+
+                            <div class="txt-k-in glow">
+                                <p class="lead">Bežični štapni usisavači</p>
+								<p class="para">Snažni i lagani. Čišćenje od poda do stropa.</p>
+
+                                <span class="btn_sm btn-primary 10bottom">Saznaj više</span>
+
+                            </div>
+
+                            <a  class="fancybox-media" href="https://www.youtube.com/watch?v=sYK-zWjxLdI">
+                                <img class="playbtn" src="images/playerButton.png"> </a>
+                        </div>
+                    </a>
+
+           
+ <a href="ec.html">
+                        <div class="col-md-4 index-pad">
+
+                            <img class="center-block img-fluid d-block deny" src="images/index/index_13m.jpg">
+							<img class="center-block img-fluid d-block mob-fix allow" src="images/index/index_13m.jpg">
+
+                            <div class="txt-k-in glow">
+                                <p class="lead">Kontroliranje zraka u prostoriji</p>
+								<p class="para">Dyson pročišćavači i ovlaživači kontroliraju zrak kojeg udišete.</p>
+
+                                <span class="btn_sm btn-primary 10bottom">Saznaj više</span>
+
+                            </div>
+
+                            <a  class="fancybox-media" href="https://www.youtube.com/watch?v=hgA1vdh2tdQ">
+                                <img class="playbtn" src="images/playerButton.png"> </a>
+                        </div>
+                    </a>
+					
+					<a href="hc.html">
+                        <div class="col-md-4 index-pad">
+
+                            <img class="center-block img-fluid d-block deny" src="images/index/index_14m.jpg">
+							<img class="center-block img-fluid d-block mob-fix allow" src="images/index/index_14m.jpg">
+
+                            <div class="txt-k-in glow">
+                                <p class="lead">Njega kose</p>
+								<p class="para">
+Manje oslanjanja na toplinu. Poboljšano oblikovanje. Korištenje s kablom ili bez.  </p>
+
+                                <span class="btn_sm btn-primary 10bottom">Saznaj više</span>
+
+                            </div>
+
+                            <a  class="fancybox-media" href="https://www.youtube.com/watch?v=bEDLqqZ8zsQ">
+                                <img class="playbtn" src="images/playerButton.png"> </a>
+                        </div>
+                    </a>
+					
+					
+                </div>
+            </div>
+		
+        <div class="py-5">
+            <div class="container">
+                <div class="row">
+
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class="py-5 deny-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 index-pad">
+                        <div class="txt-j-in">
+						<p class="lead-2">Dyson danas</p>
+                            <p class="para-2">Danas, Dyson uređaji se nalaze u više od 65 zemalja diljem svijeta. Dyson je narastao od jednog čovjeka i jedne ideje do tehnološke tvrtke s više od 1000 zaposlenih inženjera u cijelom svijetu. No, raste i dalje. U središtu tvrtke je stalno-rastuća želja za zapošljavanjem novih inženjera i znanstvenika. Više ideja, više inovacija. </p>
+                        </div><a  class="fancybox-media" href="https://www.youtube.com/watch?v=3DHAnmTCS5Q&t=3s">
+                            <img class="playbtn" src="images/playerButton.png"> </a>
+                        <img class="center-block img-fluid d-block" src="images/index/index_24.jpg">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		
+		
+		
+		
+		<div class="py-5">
+            <div class="container">
+                <div class="row">
+
+                    
+                        <div class="col-md-6 index-pad">
+
+                            <img class="center-block img-fluid d-block deny" src="images/index/index_21.jpg">
+							<img class="center-block img-fluid d-block mob-fix allow" src="images/index/index_21m.jpg">
+
+                            <div class="txt-k-in glow">
+                                <p class="lead">Snažan i pouzdan</p>
+							
+
+                                
+
+                            </div>
+
+                            <a  class="fancybox-media" href="https://www.youtube.com/watch?v=F2YurW2Dn4A">
+                                <img class="playbtn" src="images/playerButton.png"> </a>
+                        </div>
+                  
+                 
+                        <div class="col-md-6 index-pad">
+
+                            <img class="center-block img-fluid d-block deny" src="images/index/index_23.jpg">
+							<img class="center-block img-fluid d-block mob-fix allow" src="images/index/index_23m.jpg">
+
+                            <div class="txt-k-in white">
+                                <p class="lead">Dyson tehnologija</p>
+							
+
+                                
+
+                            </div>
+
+                            <a  class="fancybox-media" href="https://www.youtube.com/watch?v=lruxSHB12mc">
+                                <img class="playbtn" src="images/playerButton.png"> </a>
+                        </div>
+                   
+                </div>
+            </div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+       
+		
+		
+		
+		
+		
+		<div class="py-5 deny-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                            <p class="caveat"><sup></sup></p>
+                       
+                       
+
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		
+		
+		
+
+		
+		
+		
+    </div>
+
+</body>
+
+
+</html>

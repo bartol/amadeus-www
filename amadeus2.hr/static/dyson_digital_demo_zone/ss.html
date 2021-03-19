@@ -1,0 +1,300 @@
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+
+	
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  
+  <!-- Add fancyBox -->
+  <link rel="stylesheet" href="class/fancybox/jquery.fancybox.css" type="text/css" media="screen">
+  <script type="text/javascript" src="class/fancybox/jquery.fancybox.pack.js"></script>
+  <!-- Optionally add helpers - button, thumbnail and/or media -->
+  <link rel="stylesheet" href="class/fancybox/helpers/jquery.fancybox-buttons.css" type="text/css" media="screen">
+  <script type="text/javascript" src="class/fancybox/helpers/jquery.fancybox-buttons.js"></script>
+  <script type="text/javascript" src="class/fancybox/helpers/jquery.fancybox-media.js"></script>
+  <link rel="stylesheet" href="class/fancybox/helpers/jquery.fancybox-thumbs.css" type="text/css" media="screen">
+  <script type="text/javascript" src="class/fancybox/helpers/jquery.fancybox-thumbs.js"></script>
+  <script type="text/javascript">
+    beforeShow: function(){
+     $("body").css({'overflow-y':'hidden'});
+    },
+    afterClose: function(){
+     $("body").css({'overflow-y':'visible'});
+    }
+  </script>
+  <script type="text/javascript">
+    /*replacing <i> for robots to <a> for users*/
+        $('.fancybox-media').fancybox({
+    		openEffect : 'none',
+    		closeEffect : 'none',
+    		helpers : {
+    		media : {}
+    		}
+    	});
+    	$(document).ready(function () {
+    		
+            $("i.must_be_href[title]").each(function(){
+                var title = $(this).attr("title");
+                if (title.indexOf('/goods') == 0 || title.indexOf('/clickBanner') == 0) {
+                    $(this).replaceWith("<a href='" + title + "' target='_blank' class='"+$(this).attr("class")+"'>"+$(this).html()+"</a>");
+                } else {
+                    $(this).replaceWith("<a href='" + title + "' class='"+$(this).attr("class")+"'>"+$(this).html()+"</a>");
+                }
+            });
+    /*
+    */
+    
+    });
+  </script>
+
+</head>
+
+<body id="lp-dsn">
+    <div class="dsn-all">
+ <nav class="navbar navbar-inverse navbar-expand-md navbar-dark bg-primary">
+            <div class="container">
+              
+                <div class="nav-fix" id="navbarSupportedContent">
+                    <ul class="navbar-nav ">
+                        <a href="index.html"><img class="navbar-brand" src="images/index/logo.jpg"></a>
+                         <li class="nav-item">
+            <a class="nav-link" href="cf.html">Bežični štapni usisavači</a>
+          </li>
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="ec.html">Kontroliranje zraka u prostoriji</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="hc.html">Njega kose</a>
+          </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          
+          <img class="center-block img-fluid d-block mob-fix deny" src="images/ss/ss_01.jpg">
+		  <img class="center-block img-fluid d-block mob-fix allow" src="images/ss/ss_01_mob.jpg">
+       
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+        
+          <img class="center-block img-fluid d-block mob-fix deny" src="images/ss/ss_02.jpg">
+		  <img class="center-block img-fluid d-block mob-fix allow" src="images/ss/ss_02_mob.jpg">
+       
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="text-center pad-b">Redizajnirani nastavci</h1>
+        </div>
+      </div>
+      <div class="row">
+     
+        <div class="col-md-4 matrix">
+          <img class="center-block img-fluid d-block" src="images/ss/ss_13.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b">Koncentrator za oblikovanje </p>
+            <p class="para-2">Širi, tanji dizajn novog koncentratora za oblikovanje stvara jaki protok zraka koji je savršen za oblikovanje. I zato što je zrak usmjeren možete oblikovati pramen po pramen, bez diranja ostalih dijelova. </p>
+          </div>
+        </div>
+		<div class="col-md-4 matrix">
+          <img class="center-block img-fluid d-block" src="images/ss/ss_15.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b">Mlaznica za zaglađivanje</p>
+            <p class="para-2">Suši kosu glatkim, kontroliranim protokom zraka kako bi dobili gladak, prirodni završetak. </p>
+          </div>
+        </div>
+        <div class="col-md-4 matrix">
+          <img class="center-block img-fluid d-block" src="images/ss/ss_17.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b">
+Difuzor (raspršivač)</p>
+            <p class="para-2">Redizajniran da jednakomjerno rasprši više zraka prema vašim kovrčama, difuzor siulira prirodno sušenje, manjuje statički elektricitet i definira kovrče i valove. Duljim zubcima obuhvaćate više kose s većom kontrolom - i prodiru dublje u kosu. </p>
+          </div>
+        </div>
+		 <div class="col-md-4 matrix">
+          <img class="center-block img-fluid d-block" src="images/ss/ss_18.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b">
+Češalj sa širokim zubcima</p>
+            <p class="para-2">Napravljen za kovrčavu kosu, češalj ima robusne zubce koji produžuju hosu kako se suši, ili stvaraju  volumen i oblik. </p>
+          </div>
+        </div>
+		 <div class="col-md-4 matrix">
+          <img class="center-block img-fluid d-block" src="images/ss/ss_19.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b">
+Nježan zračni nastavak</p>
+            <p class="para-2">Napravljen da bude blaži prema finoj kosi i osjetljivom vlasištu, raspršuje zrak stvarajući nježan, hladniji zrak - dok i dalje brzo suši. </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+   <div class="py-5" style="background:black;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+         
+          <img class="center-block img-fluid d-block mob-fix deny" src="images/ss/ss_03.jpg">
+		  <img class="center-block img-fluid d-block mob-fix allow" src="images/ss/ss_03_mob.jpg">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5" style="background:black;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          
+          <img class="center-block img-fluid d-block mob-fix deny" src="images/ss/ss_04.jpg">
+		  <img class="center-block img-fluid d-block mob-fix allow" src="images/ss/ss_04_mob.jpg">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+  
+   <div class="py-5" style="background:black;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          
+          <img class="center-block img-fluid d-block mob-fix deny" src="images/ss/ss_05.jpg">
+		  <img class="center-block img-fluid d-block mob-fix allow" src="images/ss/ss_05_mob.jpg">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="py-5">
+    <div class="container">
+  <div class="row">
+        <div class="col-md-12 index-pad-3">
+          <h1 class="text-center pad-b"><b>Specifikacije  </b></h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <img class="center-block img-fluid d-block" src="images/ss/i1.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b"><b>Snaga</b></p>
+            <p class="para-2">1200 Watt</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img class="center-block img-fluid d-block" src="images/ss/i2.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b"><b>Protok zraka </b></p>
+            <p class="para-2">2.4 m³/min </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img class="center-block img-fluid d-block" src="images/ss/i3.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b"><b>Težina</b></p>
+            <p class="para-2">618 g</p>
+          </div>
+        </div>
+      </div>
+	  <div class="row">
+        <div class="col-md-4">
+          <img class="center-block img-fluid d-block" src="images/ss/i4.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b"><b>Dimenzije </b></p>
+            <p class="para-2">245 x 78 x 97 mm (V x T x D)</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img class="center-block img-fluid d-block" src="images/ss/i5.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b"><b>Negativni ioni </b></p>
+            <p class="para-2">Pomažu u smanjivanju statičkog elektriciteta</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img class="center-block img-fluid d-block" src="images/ss/i6.jpg">
+          <div class="txt-c-in">
+            <p class="lead pad-b"><b>Dužina kabla</b></p>
+            <p class="para-2">1.8 m</p>
+          </div>
+        </div>
+      </div>
+   </div>
+      </div>
+  
+  
+     <div class="py-5" id="lp-dsn_s">
+            <div class="container">
+                 <div class="row">
+        <div class="col-md-12 index-pad-3">
+         <h1 class="text-center pad-b"><b></b></h1><br>
+ <div class="row"><a href="#" class="btn btn-primary topup maxw">Prikaži sve proizvode</a></div>
+        </div>
+      </div>
+
+
+
+
+               
+            </div>
+        </div>
+  <div class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 topup2">
+                        
+                           
+							
+							<!-- <p class="caveat"><sup>1</sup>Independently tested on real hair against top 20 best-selling hairdryers. December 2018.</p> -->
+							
+					
+
+						
+
+                    </div>
+                </div>
+            </div>
+        </div> 
+  
+  </div></div>
+
+
+
+</body>
+
+</html>
