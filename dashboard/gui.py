@@ -531,6 +531,50 @@ def promostrdetail():
     return render_template('gui.html', page='promostrdetail', promostr=promostr,
         promostr_proizvodi=promostr_proizvodi)
 
+@app.route('/virt')
+def virt():
+    cur.execute("""
+        SELECT sifra, naziv
+        FROM proizvodi
+        WHERE sifra > 100000""")
+    proizvodi = cur.fetchall()
+
+    cur.execute("""
+        SELECT sifra, naziv
+        FROM grupe
+        WHERE sifra > 100000""")
+    vgrupe = cur.fetchall()
+
+    cur.execute("SELECT sifra, naziv FROM grupe")
+    grupe = cur.fetchall()
+
+    return render_template('gui.html', page='virtlist', grupe=grupe,
+        proizvodi=proizvodi, vgrupe=vgrupe)
+
+@app.route('/virt/p', methods=['POST'])
+def virtp():
+    cur.execute("SELECT sifra FROM proizvodi ORDER BY sifra DESC LIMIT 1;")
+    zadnja_sifra = cur.fetchone()[0]
+    nova_sifra = int(zadnja_sifra) + 1
+    naziv = request.form.get('naziv')
+    grupa = request.form.get('grupa')
+    cur.execute("INSERT INTO proizvodi (sifra, naziv, grupa) VALUES (%s, %s, %s);", (nova_sifra, naziv, grupa))
+    conn.commit()
+    return redirect('/virt')
+
+
+@app.route('/virt/g', methods=['POST'])
+def virtg():
+    cur.execute("SELECT sifra FROM grupe ORDER BY sifra DESC LIMIT 1;")
+    zadnja_sifra = cur.fetchone()[0]
+    nova_sifra = int(zadnja_sifra) + 1
+    naziv = request.form.get('naziv')
+    cur.execute("INSERT INTO grupe (sifra, naziv) VALUES (%s, %s);", (nova_sifra, naziv))
+    conn.commit()
+    return redirect('/virt')
+
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('gui.html', page='404'), 404
