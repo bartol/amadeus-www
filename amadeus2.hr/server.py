@@ -226,6 +226,8 @@ def search():
 	query = request.args.get('q')
 	if not query:
 		return redirect('/')
+	if query.lower() == "dyson":
+		return redirect('/static/dyson_digital_demo_zone/index.html')
 	modified = False
 
 	cur.execute("""
