@@ -1,0 +1,6 @@
+product page:
+prva slika            naziv cijena i to
+summary               video
+druga slika           specifikacije
+kontakt forma         o brendu
+slicni proizvodi
