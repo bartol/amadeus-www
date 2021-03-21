@@ -56,42 +56,126 @@ iframe {
 	width: 100%;
 	height: 100vh;
 }
-#panel div {
+#panel > div {
 	padding: 16px;
 }
-button {
+.button {
 	background-color: #fff;
 	color: #000;
 	border: none;
 	padding: 10px 20px;
 	margin: 8px;
-	border-radius: 5px 15px 5px 15px;
+	border-radius: var(--radius-sm);
 	transition: all 0.3s ease;
-	box-shadow: 5px 5px teal;
+	box-shadow: var(--shadow);
+	cursor: pointer;
 }
-button:hover {
+.button:hover {
 	box-shadow: none;
 }
-button:active {
-	background-color: #ddd;
+.button:focus {
+	outline: none;
 }
-input {
+body:not(.using-mouse) .button:focus {
+	box-shadow: none;
+}
+.button-nofill {
+	background-color: #000;
+	color: #fff;
+	border: none;
+	padding: 8px 18px;
+	border: 2px solid #fff;
+	margin: 8px;
+	border-radius: var(--radius-sm);
+	transition: all 0.3s ease;
+	box-shadow: var(--shadow);
+	cursor: pointer;
+}
+.button-nofill:hover {
+	box-shadow: none;
+}
+.button-nofill:focus {
+	outline: none;
+}
+body:not(.using-mouse) .button-nofill:focus {
+	box-shadow: none;
+}
+.input {
 	background-color: #000;
 	color: #fff;
 	border: 2px solid #fff;
 	padding: 8px;
 	margin: 8px;
-	border-radius: 5px 15px 5px 15px;
+	border-radius: var(--radius-sm);
 	transition: all 0.3s ease;
-	box-shadow: 5px 5px teal;
+	box-shadow: var(--shadow);
 }
-input:hover {
+.input:hover {
 	box-shadow: none
 }
-input:focus {
-	border-color: #ddd;
+.input:focus {
+	box-shadow: none;
+	outline: none;
 }
-input::placeholder {
+.input::placeholder {
 	color: #777;
 	opacity: 1;
 }
+.angled_wrapper {
+	margin: 5%;
+	width: 40%;
+}
+.angled-r,
+.angled-l {
+	transform: perspective(1000px) rotateY(25deg);
+	perspective: 10px;
+	transform-style: preserve-3d;
+	box-shadow: var(--shadow);
+	transition: all 0.5s;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+}
+.angled-r {
+	transform: perspective(1000px) rotateY(-25deg);
+	perspective: -10px;
+}
+.angled-r:focus-within,
+.angled-r:hover,
+.angled-l:focus-within,
+.angled-l:hover {
+	transform: perspective(0px) rotateY(0deg);
+	box-shadow: none;
+}
+:root {
+	--shadow: 5px 5px teal;
+	--radius-sm: 5px 15px 5px 15px;
+	--radius-lg: 12px 40px 12px 40px;
+	--plyr-color-main: teal;
+}
+.aspect {
+	position: relative;
+	background: #fff;
+}
+.aspect:before {
+	display: block;
+	content: "";
+	width: 100%;
+	padding-top: 56.25%;
+}
+.aspect .img_wrapper {
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+	cursor: zoom-in;
+	/*background-color: rgba(0, 128, 128, 0.4);*/
+}
+
+.img_wrapper img {
+	object-fit: contain;
+	height: 100%;
+	width: 100%;
+	/*filter: grayscale(100%);
+	mix-blend-mode: multiply;
+	background-blend-mode: hard-light;*/
+}
+
+
