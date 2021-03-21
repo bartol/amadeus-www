@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS products (
 	discounted_price DECIMAL(9, 2),
 	wholesale_price DECIMAL(9, 2),
 	summary TEXT,
+	video_link TEXT,
 	updated_at TIMESTAMP,
 	tsv TSVECTOR
 );
