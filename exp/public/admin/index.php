@@ -59,6 +59,20 @@
 				</div>
 			</div>
 
+			<a href="/" class="card">
+				<div class="aspect-1">
+					<img src="https://s3.eu-central-1.amazonaws.com/amadeus2.hr/img/2381-8202-0001186197_1.png">
+				</div>
+				<div class="card_label">
+					<div>VIVAX SMART FLY 6 DIAMOND BLACK</div>
+					<div class="prices">
+						<div class="old_price">1699,00 kn</div>
+						<div>1.099,00 kn (-600,00 kn)</div>
+					</div>
+					<div class="green dostupnost">Raspoloživo odmah</div>
+				</div>
+			</a>
+
 
 			<!--<iframe src="https://uptime.bdeak.net/785702036" defer></iframe>-->
 		</div>

@@ -118,7 +118,8 @@ body:not(.using-mouse) .button-nofill:focus {
 	outline: none;
 }
 .input::placeholder {
-	color: #777;
+	/*color: #777;*/
+	color: #999;
 	opacity: 1;
 }
 .angled_wrapper {
@@ -166,16 +167,66 @@ body:not(.using-mouse) .button-nofill:focus {
 	position: absolute;
 	top: 0; right: 0; bottom: 0; left: 0;
 	cursor: zoom-in;
-	/*background-color: rgba(0, 128, 128, 0.4);*/
 }
-
 .img_wrapper img {
 	object-fit: contain;
 	height: 100%;
 	width: 100%;
-	/*filter: grayscale(100%);
-	mix-blend-mode: multiply;
-	background-blend-mode: hard-light;*/
 }
-
-
+.green {
+	color: #0cce6b;
+}
+.red {
+	color: #ff4e42;
+}
+.yellow {
+	color: #ffa400;
+}
+.card {
+	width: 15%;
+	margin: 18px;
+	border: 2px solid #fff;
+	border-radius: var(--radius-lg);
+	transition: all 0.3s ease;
+	box-shadow: var(--shadow);
+	overflow: hidden;
+	position: relative;
+	text-decoration: none;
+	color: #fff;
+	display: block;
+}
+.card:hover {
+	box-shadow: none;
+}
+.card:focus {
+	outline: none;
+}
+body:not(.using-mouse) .card:focus {
+	box-shadow: none;
+}
+.card_label {
+	margin: 8px;
+	padding-top: 2px;
+}
+.aspect-1 {
+	width: 100%;
+	padding-bottom: 100%;
+	position: relative;
+}
+.aspect-1 img {
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+	width: 100%;
+	border-bottom: 2px solid #fff;
+}
+.prices {
+	margin-top: 4px;
+}
+.old_price {
+	text-decoration: line-through;
+	font-size: 12px;
+}
+.dostupnost {
+	margin-top: 4px;
+	margin-left: 20px;
+}
