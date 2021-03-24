@@ -238,3 +238,6 @@ body:not(.using-mouse) .card:focus {
 	88% {transform: translateY(-8px);}
 	92% {transform: translateY(-4px);}
 }
+.delay {
+	animation-delay: 5s !important;
+}

@@ -39,7 +39,7 @@
 			<br>
 
 
-			<div class="angled_wrapper bounce">
+			<div class="angled_wrapper bounce delay">
 				<div class="angled-r">
 					<div id="player" data-plyr-provider="youtube" data-plyr-embed-id="bTqVqk7FSmY"></div>
 				</div>
