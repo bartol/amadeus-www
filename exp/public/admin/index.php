@@ -39,7 +39,7 @@
 			<br>
 
 
-			<div class="angled_wrapper">
+			<div class="angled_wrapper bounce">
 				<div class="angled-r">
 					<div id="player" data-plyr-provider="youtube" data-plyr-embed-id="bTqVqk7FSmY"></div>
 				</div>
@@ -49,7 +49,7 @@
 			<br>
 			<br>
 
-			<div class="angled_wrapper">
+			<div class="angled_wrapper bounce">
 				<div class="angled-l">
 					<div class="aspect">
 						<div class="img_wrapper" onclick="pswp_init()">

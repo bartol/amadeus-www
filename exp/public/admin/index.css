@@ -228,5 +228,13 @@ body:not(.using-mouse) .card:focus {
 }
 .dostupnost {
 	margin-top: 4px;
-	margin-left: 20px;
+	margin-left: 16px;
+}
+.bounce:not(:hover):not(:focus-within) {
+  animation: bounce 10s ease infinite;
+}
+@keyframes bounce {
+	80%, 84%, 90%, 96%, 100% {transform: translateY(0);}
+	88% {transform: translateY(-8px);}
+	92% {transform: translateY(-4px);}
 }
