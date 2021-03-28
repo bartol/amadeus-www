@@ -675,9 +675,12 @@
     </table>
 	<h1>Novi virtualni proizvod</h1>
 	<form action="/virt/p" method="POST">
-		<input type="text" placeholder="naziv" name="naziv" class="form-control">
+		naziv:
+		<input required type="text" placeholder="naziv" name="naziv" class="form-control">
+		cijena bez popusta:
+		<input required type="text" placeholder="cijena bez popusta" name="cijena" class="form-control">
 		grupa:
-    	<select name="grupa" class="form-select js-example-basic-single">
+    	<select required name="grupa" class="form-select js-example-basic-single">
         {% for grupa in grupe %}
         <option value="{{ grupa[0] }}">{{ grupa[1] }}</option>
         {% endfor %}
@@ -694,11 +697,13 @@
         <tr>
             <th>Šifra</th>
             <th>Naziv</th>
+            <th>Cijena bez popusta</th>
         </tr>
     {% for proizvod in proizvodi %}
         <tr>
             <td><a href="/product/detail?product={{ proizvod[0] }}">{{ proizvod[0] }}</a></td>
             <td><a href="/product/detail?product={{ proizvod[0] }}">{{ proizvod[1] }}</a></td>
+            <td>{{ proizvod[2] }}</td>
         </tr>
     {% endfor %}
     </table>

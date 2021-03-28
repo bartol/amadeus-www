@@ -534,7 +534,7 @@ def promostrdetail():
 @app.route('/virt')
 def virt():
     cur.execute("""
-        SELECT sifra, naziv
+        SELECT sifra, naziv, cijena
         FROM proizvodi
         WHERE sifra > 100000""")
     proizvodi = cur.fetchall()
@@ -553,12 +553,15 @@ def virt():
 
 @app.route('/virt/p', methods=['POST'])
 def virtp():
-    cur.execute("SELECT sifra FROM proizvodi ORDER BY sifra DESC LIMIT 1;")
+    cur.execute("SELECT max(sifra) FROM proizvodi;")
     zadnja_sifra = cur.fetchone()[0]
     nova_sifra = int(zadnja_sifra) + 1
     naziv = request.form.get('naziv')
+    cijena = request.form.get('cijena')
     grupa = request.form.get('grupa')
-    cur.execute("INSERT INTO proizvodi (sifra, naziv, grupa) VALUES (%s, %s, %s);", (nova_sifra, naziv, grupa))
+    cur.execute(
+        "INSERT INTO proizvodi (sifra, naziv, grupa, cijena, kolicina) VALUES (%s, %s, %s, %s, 100);",
+        (nova_sifra, naziv, grupa, cijena))
     conn.commit()
     return redirect('/virt')
 
