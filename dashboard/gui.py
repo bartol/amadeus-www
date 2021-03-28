@@ -539,17 +539,11 @@ def virt():
         WHERE sifra > 100000""")
     proizvodi = cur.fetchall()
 
-    cur.execute("""
-        SELECT sifra, naziv
-        FROM grupe
-        WHERE sifra > 100000""")
-    vgrupe = cur.fetchall()
-
     cur.execute("SELECT sifra, naziv FROM grupe")
     grupe = cur.fetchall()
 
     return render_template('gui.html', page='virtlist', grupe=grupe,
-        proizvodi=proizvodi, vgrupe=vgrupe)
+        proizvodi=proizvodi)
 
 @app.route('/virt/p', methods=['POST'])
 def virtp():
@@ -564,18 +558,6 @@ def virtp():
         (nova_sifra, naziv, grupa, cijena))
     conn.commit()
     return redirect('/virt')
-
-
-@app.route('/virt/g', methods=['POST'])
-def virtg():
-    cur.execute("SELECT sifra FROM grupe ORDER BY sifra DESC LIMIT 1;")
-    zadnja_sifra = cur.fetchone()[0]
-    nova_sifra = int(zadnja_sifra) + 1
-    naziv = request.form.get('naziv')
-    cur.execute("INSERT INTO grupe (sifra, naziv) VALUES (%s, %s);", (nova_sifra, naziv))
-    conn.commit()
-    return redirect('/virt')
-
 
 
 @app.errorhandler(404)
