@@ -231,7 +231,7 @@ body:not(.using-mouse) .card:focus {
 	margin-left: 16px;
 }
 .bounce:not(:hover):not(:focus-within) {
-  animation: bounce 10s ease infinite;
+	animation: bounce 10s ease infinite;
 }
 @keyframes bounce {
 	80%, 84%, 90%, 96%, 100% {transform: translateY(0);}

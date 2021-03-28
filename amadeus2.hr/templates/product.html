@@ -42,7 +42,7 @@
         "priceCurrency": "HRK",
         "price": "{{ proizvod[3] }}",
         "itemCondition": "https://schema.org/NewCondition",
-        "availability": "https://schema.org/{% if proizvod[7] > 0 %}InStock{% else %}OutOfStock{% endif %}"
+        "availability": "https://schema.org/{% if proizvod[7]|int > 0 %}InStock{% else %}OutOfStock{% endif %}"
       }
     }
 </script>
@@ -110,7 +110,9 @@
                 </div>
                 <span class="text-nowrap">
                     <b>{{ formatmoney(proizvod[3]) }}</b>
+                    {% if proizvod[2] and proizvod[3] %}
                     <span class="badge rounded-pill bg-danger">-{{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
+                    {% endif %}
                 </span>
             </h3>
             <h2 class="fs-6 fw-bold mt-2 mt-lg-3">Cijena za plaćanje na rate:</h2>
@@ -143,7 +145,7 @@
                 </select>
                 <span class="text-nowrap ms-2"><span id="placanje_rate_iznos" title="Iznos jedne mjesečne rate">{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}</span>/mj.</span>
             </div>
-            {% if proizvod[7] > 0 %}
+            {% if proizvod[7]|int > 0 %}
             <div class="text-success mb-3" style="margin-top: -0.25rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
@@ -209,13 +211,13 @@
             </div>
         </div>
         <div class="card p-2 mb-3 mb-lg-4">
-            {% if proizvod[7] > 0 %}
+            {% if proizvod[7]|int > 0 %}
             <h2 class="h5">Obavijesti me o promjeni cijene</h2>
             {% else %}
             <h2 class="h5">Obavijesti me kad proizvod postane dostupan</h2>
             {% endif %}
             <form class="contact-form" novalidate>
-                {% if proizvod[7] > 0 %}
+                {% if proizvod[7]|int > 0 %}
                 <input type="hidden" name="col" value="price">
                 <input type="hidden" name="current_web_cijena" value="{{ proizvod[2] }}">
                 <input type="hidden" name="current_web_cijena_s_popustom" value="{{ proizvod[3] }}">
@@ -227,7 +229,7 @@
                 <div class="input-group">
                     <input type="email" class="form-control" name="email" placeholder="Vaš email" required>
                     <button type="submit" class="btn btn-primary rounded-end" hx-post='/tracking' hx-target="#tracking-resp"
-                        title="{% if proizvod[7] > 0 %}Obavijesti me o promjeni cijene{% else %}Obavijesti me kad proizvod postane dostupan{% endif %}">
+                        title="{% if proizvod[7]|int > 0 %}Obavijesti me o promjeni cijene{% else %}Obavijesti me kad proizvod postane dostupan{% endif %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell icon" viewBox="0 0 16 16">
                             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
                         </svg>

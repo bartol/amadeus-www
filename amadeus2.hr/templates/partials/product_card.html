@@ -5,10 +5,10 @@
                 onerror="this.src='{{ proizvod[4] }}'; this.onerror='';" alt="slika proizvoda" style="object-fit: contain;" class="w-100 h-100">
             <div>
                 <div class="position-absolute bottom-0 start-0">
-                    <span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>
+                    {% if proizvod[2] and proizvod[3] %}<span class="badge rounded-pill bg-danger">UŠTEDI {{ formatmoney(proizvod[2]-proizvod[3]) }}</span>{% endif %}
                 </div>
             </div>
-            {% if proizvod[5] > 0 %}
+            {% if proizvod[5]|int > 0 %}
             <div>
                 <div class="position-absolute top-0 end-0">
                     <span class="badge rounded-pill bg-secondary">RASPOLOŽIVO ODMAH</span>
