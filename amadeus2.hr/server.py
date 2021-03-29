@@ -905,7 +905,6 @@ def date_stuff():
 @app.context_processor
 def money_stuff():
 	def formatmoney(amount):
-		if not isinstance(amount, int): return 0
 		m = "{:,.2f}".format(float(amount)).replace(',', '.')
 		return f'{m[:-3]},{m[-2:]} kn'
 	return {'formatmoney': formatmoney, 'dec': decimal.Decimal}
