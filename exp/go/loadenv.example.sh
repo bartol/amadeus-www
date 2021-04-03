@@ -1,2 +1,2 @@
-export DB=
 export PORT=
+export DB=

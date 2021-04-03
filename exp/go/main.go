@@ -1,5 +1,15 @@
 package main
 
+import "net/http"
+
+func main() {
+	http.HandleFunc("/", indexHandler)
+	http.ListenAndServe(":8080", nil)
+}
+
+/*
+package main
+
 // go + postgresql + systemd
 
 import (
@@ -55,5 +65,4 @@ func main() {
  * Hope this helps =)
  *
  * [GreyHands] [so/q/9950098] [cc by-sa 3.0]
- */
-
+*/

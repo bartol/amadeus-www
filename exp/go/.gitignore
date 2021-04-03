@@ -1,2 +1,2 @@
-loadenv.local.sh
-data.sqlite
+loadenv.sh
+db/data.sqlite

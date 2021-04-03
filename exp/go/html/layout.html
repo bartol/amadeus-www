@@ -1,0 +1,17 @@
+<html>
+	<head>
+		<title>{{block "title" .}}Default page title{{end}}</title>
+	</head>
+	<body>
+		<header>
+			logo
+			<nav>nav</nav>
+		</header>
+		<main>
+			{{block "content" .}}
+				fallback content
+			{{end}}
+		</main>
+		{{block "additional_scripts" .}}{{end}}
+	</body>
+</html>
