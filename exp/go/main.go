@@ -1,10 +1,24 @@
 package main
 
-import "net/http"
+import (
+	"embed"
+	"log"
+	"net/http"
+	"os"
+)
+
+//go:embed assets
+var assets embed.FS
 
 func main() {
 	http.HandleFunc("/", indexHandler)
-	http.ListenAndServe(":8080", nil)
+	http.HandleFunc("/proizvod/", productHandler)
+	http.HandleFunc("/kategorija/", categoryHandler)
+	http.Handle("/assets/", http.FileServer(http.FS(assets)))
+
+	port := os.Getenv("PORT")
+	log.Println("Server listening on http://localhost:" + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 /*
