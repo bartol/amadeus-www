@@ -4,6 +4,7 @@ set -x
 
 file_name=$(mktemp /tmp/bin.XXXXX)
 process_name=$(basename $file_name)
+script_root=$(dirname $0)
 
 trap cleanup EXIT
 cleanup() {
@@ -11,7 +12,7 @@ cleanup() {
 	rm $file_name
 }
 
-source ./loadenv.sh || exit
+source $script_root/loadenv.sh || exit
 go build -o $file_name && $file_name &
 while inotifywait -rqe MODIFY --exclude "\.*~|\.swp" .; do
 	go build -o $file_name || continue
