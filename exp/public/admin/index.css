@@ -241,3 +241,34 @@ body:not(.using-mouse) .card:focus {
 .delay {
 	animation-delay: 5s !important;
 }
+.lcard {
+	width: 90%;
+	margin: 18px;
+	border: 2px solid #fff;
+	border-radius: var(--radius-lg);
+	transition: all 0.3s ease;
+	box-shadow: var(--shadow);
+	overflow: hidden;
+	position: relative;
+	text-decoration: none;
+	color: #fff;
+	display: block;
+
+	display: flex;
+
+}
+.lcard:hover {
+	box-shadow: none;
+}
+.lcard:focus {
+	outline: none;
+}
+.lcard > * {
+	width: 50%;
+}
+.lold_price {
+	text-decoration: line-through;
+}
+.ltext {
+	margin: 8px;
+}

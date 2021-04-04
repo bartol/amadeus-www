@@ -73,6 +73,28 @@
 				</div>
 			</a>
 
+			<a href="/" class="lcard">
+				<div>
+				<div class="aspect-1">
+					<img src="https://s3.eu-central-1.amazonaws.com/amadeus2.hr/img/2381-8202-0001186197_1.png">
+				</div>
+				</div>
+				<div class="ltext">
+					<div>VIVAX SMART FLY 6 DIAMOND BLACK with little bit longer title</div>
+					<div>
+						CPU: Ryzen 7 2600<br>
+						GPU: GTX 1070<br>
+						RAM: 8 GB
+					</div>
+					<div>
+						<div class="lold_price">1699,00 kn</div>
+						<div>1.099,00 kn</div>
+					</div>
+					<div class="green">+ Raspoloživo odmah</div>
+					<div class="green">+ Besplatna dostava</div>
+				</div>
+			</a>
+
 
 			<!--<iframe src="https://uptime.bdeak.net/785702036" defer></iframe>-->
 		</div>
