@@ -143,7 +143,7 @@
                     <option value="{{ formatmoney((proizvod[3] / 23) * dec(1.1)) }}">23 rate</option>
                     <option value="{{ formatmoney((proizvod[3] / 24) * dec(1.1)) }}">24 rate</option>
                 </select>
-                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos" title="Iznos jedne mjesečne rate">{{ formatmoney((proizvod[3] / 2) * dec(1.08)) }}</span>/mj.</span>
+                <span class="text-nowrap ms-2"><span id="placanje_rate_iznos" title="Iznos jedne mjesečne rate">{{ formatmoney((proizvod[3] / 6) * dec(1.08)) }}</span>/mj.</span>
             </div>
             {% if proizvod[7]|int > 0 %}
             <div class="text-success mb-3" style="margin-top: -0.25rem">
