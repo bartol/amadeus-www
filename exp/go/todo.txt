@@ -26,14 +26,18 @@ emails/
 
 
 integracije:
-youtube
-google images
+openstreetmap
 nabava.net
+
+prodajni kanali:
+amadeus2.hr
+pioneer.hr
 njuskalo.hr
+nabava.net
 
 nacini placanja:
 placanje pouzecem
 placanje uplatom na bankovni racun
 placanje karticom (ws pay)
 placanje karticom (revolut)
-placanje kriptovalutama (paycek)
+placanje kriptovalutama (pay cek)
