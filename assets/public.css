@@ -1,0 +1,119 @@
+body {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 16px;
+}
+header {
+	position: sticky;
+	top: 0;
+	background-color: #000;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 0;
+	border-bottom: 1px solid #333;
+}
+header > * {
+	margin: 8px 12px;
+}
+.logo {
+	display: flex;
+	margin-left: 0;
+	padding-bottom: 2px;
+}
+.logo img {
+	filter: invert(1);
+}
+.nav {
+	display: flex;
+	margin-left: 4px;
+	margin-right: 16px;
+}
+.dropdown_link {
+	display: inline-flex;
+	padding: 8px 12px;
+	border-radius: var(--radius-md);
+}
+.dropdown_link svg {
+	padding-top: 2px;
+	padding-left: 2px;
+}
+.dropdown_link:hover,
+.dropdown:hover .dropdown_link {
+	background-color: #111;
+}
+.dropdown {
+	position: relative;
+}
+.dropdown_content {
+	display: none;
+	left: 0;
+	padding-top: 8px;
+	position: absolute;
+	top: 100%;
+	z-index: 9999;
+}
+.dropdown:hover .dropdown_content {
+	display: block;
+}
+.dropdown_content .list {
+	background-color: #000;
+	border: 1px solid #333;
+	border-radius: var(--radius-md);
+	display: flex;
+}
+.dropdown_content .card {
+	width: 160px;
+	margin: 10px 8px;
+}
+.dropdown_content .card_header {
+	display: block;
+}
+.dropdown_content .card_header_imgw {
+	height: 96px;
+	margin: 4px 8px;
+	border-radius: var(--radius-sm);
+	overflow: hidden;
+}
+.dropdown_content .card_header_imgw img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+.dropdown_content .card_header_title {
+	display: flex;
+	align-items: center;
+	margin-top: 8px;
+}
+.dropdown_content .card_header_title svg {
+	flex-shrink: 0;
+}
+.dropdown_content .sublist a {
+	display: block;
+	color: #aaa;
+}
+.dropdown_content .card_header_title span,
+.dropdown_content .sublist a {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.dropdown_content .card_header_title,
+.dropdown_content .sublist a {
+	padding: 4px 8px;
+	border-radius: var(--radius-sm);
+}
+.dropdown_content .card_header:hover .card_header_title,
+.dropdown_content .sublist a:hover {
+	background-color: #111;
+}
+.dropdown_content .card_header:hover .card_header_imgw img {
+	transform: scale(1.05);
+}
+.search {
+	flex-grow: 1;
+}
+.search input {
+	width: 100%;
+}
