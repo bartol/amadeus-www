@@ -137,3 +137,31 @@ body:not(.using-mouse) .dropdown_content .card_header:focus .card_header_imgw im
 .search input {
 	width: 100%;
 }
+main {
+	padding: 36px 0;
+}
+footer {
+	padding: 24px 0;
+	border-top: 1px solid #333;
+}
+.nacini_placanja {
+	font-size: 12px;
+}
+.nacini_placanja tr {
+	height: 76px;
+}
+.nacini_placanja .card {
+	width: 88px;
+	vertical-align: top;
+}
+.nacini_placanja .card svg,
+.nacini_placanja .logos {
+	margin-top: 6px;
+}
+.nacini_placanja .logos img {
+	height: 20px;
+}
+.nacini_placanja svg {
+	width: 64px;
+	height: 64px;
+}
