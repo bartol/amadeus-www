@@ -15,25 +15,39 @@
   </head>
   <body>
 
-    <nav id="menu">
+	<!--
+	<nav id="menu">
 		<ul>
 		<li>Proizvodi</li>
 		<li>Kategorije</li>
 		</ul>
-    </nav>
+	</nav>
+	-->
 
     <main id="panel">
 		<div>
 			<button class="toggle-button button">☰</button>
-			<br>
-			<br>
-			<br>
-			<br>
-			<input type="text" class="input" placeholder="naziv">
-			<button class="button-nofill">Košarica (1291 kn)</button>
-			<button class="button">Košarica (1291 kn)</button>
-			<br>
 
+
+
+			<header>
+				<a class="logo" href="/">
+					<img src="https://cdn.statically.io/img/amadeus2.hr/f=auto,q=90/static/img/logo.png" alt="Amadeus" title="Amadeus web trgovina" width="180" height="36">
+				</a>
+				<nav>
+
+				</nav>
+				<input type="text" class="input search" placeholder="Pretraži 571 proizvod">
+				<button class="button-nofill">Košarica</button>
+			</header>
+
+
+
+
+			<br>
+			<br>
+			<br>
+			<button class="button">Košarica (1291 kn)</button>
 			<br>
 			<br>
 			<br>
@@ -100,8 +114,9 @@
 		</div>
     </main>
 
-
+	<!--
 	<script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js"></script>
+	-->
 	<script>
 		var slideout = new Slideout({
 			'panel': document.getElementById('panel'),

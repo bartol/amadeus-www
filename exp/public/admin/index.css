@@ -5,6 +5,9 @@ body {
 	background-color: #000;
 	font-family: 'Roboto', sans-serif;
 }
+a {
+	text-decoration: none;
+}
 .slideout-menu {
 	position: fixed;
 	top: 0;
@@ -271,4 +274,17 @@ body:not(.using-mouse) .card:focus {
 }
 .ltext {
 	margin: 8px;
+}
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.logo {
+	display: inline-block;
+	filter: invert(1);
+	margin: 8px;
+}
+.search {
+	flex-grow: 1;
 }
