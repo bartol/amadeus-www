@@ -65,6 +65,3 @@ body:not(.using-mouse) .btn:focus {
 	color: #aaa;
 	opacity: 1;
 }
-.lnk {
-	text-decoration: none;
-}

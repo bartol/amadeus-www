@@ -142,36 +142,48 @@ footer {
 	display: flex;
 	justify-content: space-between;
 }
+.nacini_placanja {
+	font-size: 14px;
+	line-height: 1;
+}
+.nacini_placanja tr {
+	height: 78px;
+}
+.nacini_placanja .box svg {
+	width: 64px;
+	height: 64px;
+	fill: #fff;
+}
+.nacini_placanja .box.with_text {
+	width: 90px;
+	vertical-align: top;
+	line-height: 1.2;
+}
+.nacini_placanja .box.with_text svg {
+	margin-bottom: 6px;
+}
+.social_icons {
+	margin-top: 16px;
+}
 .social_icons svg,
 .social_icons img {
 	width: 32px;
 	height: 32px;
 	margin-right: 6px;
 }
-.nacini_placanja {
-	font-size: 14px;
-	line-height: 1.2;
-}
-.nacini_placanja tr {
-	height: 76px;
-}
-.nacini_placanja .card {
-	width: 88px;
-	vertical-align: top;
-}
-.nacini_placanja .logos {
+.card_icons,
+.coin_icons {
 	margin-top: 6px;
 }
-.nacini_placanja .card svg {
-	margin-bottom: 6px;
+.card_icons svg {
+	width: 35px;
+	height: 22px;
+	margin-right: 2px;
 }
-.nacini_placanja .logos img {
+.coin_icons svg {
+	width: 20px;
 	height: 20px;
-}
-.nacini_placanja svg {
-	width: 64px;
-	height: 64px;
-	fill: #fff;
+	margin-right: 2px;
 }
 .copy {
 	font-size: 12px;
