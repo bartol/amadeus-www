@@ -12,9 +12,13 @@ header {
 	align-items: center;
 	padding: 12px 0;
 	border-bottom: 1px solid #333;
+	line-height: 1.2;
 }
 header > * {
 	margin: 8px 12px;
+}
+header a:hover {
+	text-decoration: none;
 }
 .logo {
 	display: flex;
@@ -23,14 +27,6 @@ header > * {
 }
 .logo img {
 	filter: invert(1);
-	transition: filter 0.1s ease;
-}
-.logo:hover img,
-body:not(.using-mouse) .logo:focus img {
-	filter: invert(34%) sepia(44%) saturate(1616%) hue-rotate(143deg) brightness(96%) contrast(104%);
-}
-.logo:focus {
-	outline: none;
 }
 .nav {
 	display: flex;
@@ -143,9 +139,18 @@ main {
 footer {
 	padding: 24px 0;
 	border-top: 1px solid #333;
+	display: flex;
+	justify-content: space-between;
+}
+.social_icons svg,
+.social_icons img {
+	width: 32px;
+	height: 32px;
+	margin-right: 6px;
 }
 .nacini_placanja {
-	font-size: 12px;
+	font-size: 14px;
+	line-height: 1.2;
 }
 .nacini_placanja tr {
 	height: 76px;
@@ -154,9 +159,11 @@ footer {
 	width: 88px;
 	vertical-align: top;
 }
-.nacini_placanja .card svg,
 .nacini_placanja .logos {
 	margin-top: 6px;
+}
+.nacini_placanja .card svg {
+	margin-bottom: 6px;
 }
 .nacini_placanja .logos img {
 	height: 20px;
@@ -164,4 +171,11 @@ footer {
 .nacini_placanja svg {
 	width: 64px;
 	height: 64px;
+	fill: #fff;
+}
+.copy {
+	font-size: 12px;
+	color: #999;
+	text-align: center;
+	margin-bottom: 24px;
 }
