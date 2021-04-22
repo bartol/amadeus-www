@@ -144,7 +144,7 @@ footer {
 }
 .nacini_placanja {
 	font-size: 14px;
-	line-height: 1;
+	line-height: 1.2;
 }
 .nacini_placanja tr {
 	height: 78px;
@@ -157,7 +157,6 @@ footer {
 .nacini_placanja .box.with_text {
 	width: 90px;
 	vertical-align: top;
-	line-height: 1.2;
 }
 .nacini_placanja .box.with_text svg {
 	margin-bottom: 6px;
@@ -173,7 +172,7 @@ footer {
 }
 .card_icons,
 .coin_icons {
-	margin-top: 6px;
+	margin-top: 4px;
 }
 .card_icons svg {
 	width: 35px;
