@@ -14,6 +14,9 @@ body {
 	font-family: 'Roboto', sans-serif;
 	line-height: 1.5;
 }
+::selection {
+	background: teal;
+}
 a {
 	text-decoration: none;
 	color: #fff;
