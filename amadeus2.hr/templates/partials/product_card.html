@@ -23,7 +23,9 @@
             </a>
         </h3>
         <h4 class="h6 mb-0">
+{% if proizvod[2] > proizvod[3] %}
             <span class="d-block text-decoration-line-through" style="font-size: 0.75rem;">{{ formatmoney(proizvod[2]) }}</span>
+{% endif %}
             <b>{{ formatmoney(proizvod[3]) }}</b>
         </h4>
     </div>
