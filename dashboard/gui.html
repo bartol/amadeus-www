@@ -179,8 +179,8 @@
             <script>
                 function addFeature(key, value) {
                     $("#ftable").append(`<tr>
-                        <td><label class="form-label mb-0"><input type="text" name="feature[]" value="${key}" placeholder="Naziv" class="form-control"></label></td>
-                        <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="${value}" placeholder="Vrijednost" class="form-control"></label></td>
+                        <td><label class="form-label mb-0"><input type="text" name="feature[]" value="${key}" placeholder="Naziv" class="form-control" list="suggestions-z"></label></td>
+                        <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="${value}" placeholder="Vrijednost" class="form-control" list="suggestions-zv"></label></td>
                         <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
                     </tr>`)
                     const features = document.querySelectorAll("#ftable input[type=text]")
@@ -206,12 +206,22 @@
                 </tr>
                 {% for znacajka in znacajke %}
                 <tr>
-                    <td><label class="form-label mb-0"><input type="text" name="feature[]" value="{{ znacajka[0] }}" placeholder="Naziv" class="form-control"></label></td>
-                    <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="{{ znacajka[1] }}" placeholder="Vrijednost" class="form-control"></label></td>
+                    <td><label class="form-label mb-0"><input type="text" name="feature[]" value="{{ znacajka[0] }}" placeholder="Naziv" class="form-control" list="suggestions-z"></label></td>
+                    <td><label class="form-label mb-0"><input type="text" name="feature_value[]" value="{{ znacajka[1] }}" placeholder="Vrijednost" class="form-control" list="suggestions-zv"></label></td>
                     <td><button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger">&times; Obriši</button></td>
                 </tr>
                 {% endfor %}
             </table>
+			<datalist id="suggestions-z">
+				{% for z in sve_znacajke %}
+				<option value="{{ z[0] }}">
+				{% endfor %}
+			</datalist>
+			<datalist id="suggestions-zv">
+				{% for v in sve_znacajke_vrijednosti %}
+				<option value="{{ v[0] }}">
+				{% endfor %}
+			</datalist>
 
             <h3>Slični proizvodi</h3>
             <script>

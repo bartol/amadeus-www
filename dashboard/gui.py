@@ -230,8 +230,15 @@ def productdetail():
     """, (sifra,))
     slicni = cur.fetchall()
 
+    cur.execute("SELECT DISTINCT naziv FROM znacajke;")
+    sve_znacajke = cur.fetchall()
+
+    cur.execute("SELECT DISTINCT vrijednost FROM znacajke_vrijednosti;")
+    sve_znacajke_vrijednosti = cur.fetchall()
+
     return render_template('gui.html', page='productdetail', product=product,  slike=slike,
-        znacajke=znacajke, ostale_znacajke=ostale_znacajke, slicni=slicni)
+        znacajke=znacajke, ostale_znacajke=ostale_znacajke, slicni=slicni,
+        sve_znacajke=sve_znacajke, sve_znacajke_vrijednosti=sve_znacajke_vrijednosti)
 
 @app.route('/product/uploadimg', methods=['POST'])
 def uploadimg():
