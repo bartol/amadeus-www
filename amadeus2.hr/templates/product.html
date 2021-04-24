@@ -177,14 +177,9 @@
                 </div>
             </form>
             {% else %}
-            {% with contact_title = 'Pošaljite upit', contact_subtitle = 'Proizvod je možda moguće nabaviti' %}
+            {% with contact_title = 'Proizvod dostupan uz narudžbu', contact_subtitle = 'Zainteresiran(a) sam za '+proizvod[1] %}
             {% include "partials/contact_form.html" %}
             {% endwith %}
-            <div class="d-grid">
-                <button class="btn btn-danger">
-                    Proizvod trenutno nije dostupan
-                </button>
-            </div>
             {% endif %}
         </div>
         <div class="card p-2 mb-3 mb-lg-4">
@@ -211,13 +206,13 @@
             </div>
         </div>
         <div class="card p-2 mb-3 mb-lg-4">
-            {% if proizvod[7]|int > 0 %}
+            {% if proizvod[7]|int >= 0 %}
             <h2 class="h5">Obavijesti me o promjeni cijene</h2>
             {% else %}
             <h2 class="h5">Obavijesti me kad proizvod postane dostupan</h2>
             {% endif %}
             <form class="contact-form" novalidate>
-                {% if proizvod[7]|int > 0 %}
+                {% if proizvod[7]|int >= 0 %}
                 <input type="hidden" name="col" value="price">
                 <input type="hidden" name="current_web_cijena" value="{{ proizvod[2] }}">
                 <input type="hidden" name="current_web_cijena_s_popustom" value="{{ proizvod[3] }}">
@@ -229,7 +224,7 @@
                 <div class="input-group">
                     <input type="email" class="form-control" name="email" placeholder="Vaš email" required>
                     <button type="submit" class="btn btn-primary rounded-end" hx-post='/tracking' hx-target="#tracking-resp"
-                        title="{% if proizvod[7]|int > 0 %}Obavijesti me o promjeni cijene{% else %}Obavijesti me kad proizvod postane dostupan{% endif %}">
+                        title="{% if proizvod[7]|int >= 0 %}Obavijesti me o promjeni cijene{% else %}Obavijesti me kad proizvod postane dostupan{% endif %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell icon" viewBox="0 0 16 16">
                             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
                         </svg>
@@ -247,7 +242,7 @@
 </div>
 
 <div class="row">
-    <div class="col-12 col-md-6 col-lg-7 col-xl-8">
+    <div class="col-12 {% if preporuceni_proizvodi|length > 0 %}col-md-6 col-lg-7 col-xl-8{% endif %}">
         {% if znacajke|length > 0 %}
         <h2>Specifikacije</h2>
         <div class="card p-2 mb-3">
@@ -296,5 +291,4 @@
 </div>
 
 {% include "partials/mailinglist_form.html" %}
-
 {% endblock %}

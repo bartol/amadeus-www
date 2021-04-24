@@ -8,9 +8,8 @@
 
 <h2>
     {% if contact_title %}{{ contact_title }}{% else %}Kontaktirajte nas{% endif %}
-    {% if contact_subtitle %}<span class="fs-6 text-nowrap">({{ contact_subtitle }})</span>{% endif %}
 </h2>
-<form class="mb-3 mb-lg-4 contact-form" novalidate>
+<form class="{% if contact_subtitle %}{% else %}mb-3 mb-lg-4{% endif %} contact-form" novalidate>
     <label class="form-label w-100 mb-2">
         <span class="visually-hidden">Vaš email</span>
         <input type="email" name="email" class="form-control" placeholder="Vaš email" aria-label="Vaš email" required>
@@ -20,7 +19,7 @@
     </label>
     <label class="w-100">
         <span class="visually-hidden">Poruka</span>
-        <textarea name="message" class="form-control" placeholder="Poruka" rows="3" required></textarea>
+        <textarea name="message" class="form-control" placeholder="Poruka" rows="{% if contact_subtitle %}2{% else %}3{% endif %}" required>{% if contact_subtitle %}{{ contact_subtitle }}{% endif %}</textarea>
         <div class="invalid-feedback mb-2">
             Molimo upišite poruku
         </div>
