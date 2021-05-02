@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -x
-
 file_name=$(mktemp /tmp/bin.XXXXX)
 process_name=$(basename $file_name)
 
