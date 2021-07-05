@@ -1,0 +1,12 @@
+amadeus2.hr, b2b.amadeus2.hr, pioneer.hr, pioneerdj.hr + njuskalo.hr
+segmenti: amadeus, pioneer, pioneerdj, b2b, admin
+
+:: integracije
+ws pay
+pay cek
+nabava.net
+njuskalo
+
+:: footer
+ducan
+veleprodaja

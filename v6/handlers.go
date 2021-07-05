@@ -1,7 +1,10 @@
 package main
 
 import (
+	"log"
 	"net/http"
+
+	"github.com/bartol/amadeus2.hr/data"
 )
 
 func routerHandler(w http.ResponseWriter, r *http.Request) {
@@ -11,9 +14,11 @@ func routerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	x := extract(r.URL.Path)
 	w.Write([]byte(x))
-	// check if x is product
 	// check if x is category
+	// check if x is product
 	// check if x is redirect
+	// try if amadeus2.hr link
+	// try if pioneer.hr link
 	// 404
 	/*
 		p := html.IndexParams{
@@ -27,6 +32,8 @@ func routerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	p, err := data.ProductList(map[string]string{})
+	log.Print(p, err)
 	w.Write([]byte("index"))
 }
 
@@ -47,7 +54,11 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func cartHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("cart"))
+	w.Write([]byte(r.Host))
+}
+
+func adminHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("admin"))
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
