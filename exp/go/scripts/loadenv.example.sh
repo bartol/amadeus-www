@@ -1,2 +1,0 @@
-export PORT=
-export DB=
