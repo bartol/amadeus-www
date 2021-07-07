@@ -1,5 +1,5 @@
 package data
 
-func (db DB) RedirectCheck(slug string) bool {
+func (db *DB) RedirectCheck(slug string) bool {
 	return false
 }

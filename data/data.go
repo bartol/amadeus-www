@@ -1,5 +1,11 @@
 package data
 
+import "database/sql"
+
+type DB struct {
+	*sql.DB
+}
+
 type Product struct {
 	ID          int
 	Name        string

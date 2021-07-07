@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"database/sql"
 	"embed"
 	"log"
 	"net/http"
@@ -9,12 +10,13 @@ import (
 	"strings"
 
 	"github.com/bdeak4/amadeus2.hr/data"
+	_ "github.com/mattn/go-sqlite3"
 )
+
+var db *data.DB
 
 //go:embed assets
 var assets embed.FS
-
-var db data.DB
 
 func main() {
 	// load env from file
@@ -42,12 +44,14 @@ func main() {
 		}
 	}
 
-	// get connection to database
-	database, err := data.DatabaseGet()
+	// connect to database
+	conn, err := sql.Open("sqlite3", os.Getenv("DB"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	db = database
+	defer conn.Close()
+
+	db = &data.DB{conn}
 
 	// surface web routes
 	http.HandleFunc("/", surfaceRouter)

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"database/sql"
 	"net/http"
 )
 
@@ -44,8 +44,16 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 	p, err := db.ProductGet(slug)
-	log.Println(p, err)
-	w.Write([]byte("product"))
+	if err == sql.ErrNoRows {
+		notFoundHandler(w, r)
+		return
+	}
+	if err != nil {
+		internalServerErrorHandler(w, r)
+		return
+	}
+
+	w.Write([]byte(p.Name))
 }
 
 func categoryHandler(slug string, w http.ResponseWriter, r *http.Request) {
@@ -65,4 +73,9 @@ func adminRouter(w http.ResponseWriter, r *http.Request) {
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("404"))
+}
+
+func internalServerErrorHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write([]byte("500"))
 }

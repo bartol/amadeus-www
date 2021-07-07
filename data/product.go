@@ -1,13 +1,13 @@
 package data
 
-func (db DB) ProductCheck(slug string) bool {
+func (db *DB) ProductCheck(slug string) bool {
 	return true
 }
 
-func (db DB) ProductGet(slug string) (Product, error) {
+func (db *DB) ProductGet(slug string) (Product, error) {
 	var name string
 	var description string
-	err := db.Conn.QueryRow(`
+	err := db.QueryRow(`
 	SELECT
 		name,
 		description
@@ -28,7 +28,7 @@ func (db DB) ProductGet(slug string) (Product, error) {
 	return p, nil
 }
 
-func (db DB) ProductList(filters map[string]string) ([]Product, error) {
+func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 	// filters: query, category_slug, feature, sort, page, price_min, price_max
 	return []Product{}, nil
 }
