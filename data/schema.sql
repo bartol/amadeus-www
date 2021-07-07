@@ -7,43 +7,38 @@ CREATE TABLE IF NOT EXISTS products (
 	slug TEXT,
 	updated_at INTEGER
 );
-
 CREATE TABLE IF NOT EXISTS product_prices (
 	product_id INTEGER REFERENCES products(id),
 	type INTEGER,
 	amount INTEGER,
 	min_quantity INTEGER
 );
-
 CREATE TABLE IF NOT EXISTS categories (
 	id INTEGER PRIMARY KEY,
 	name TEXT,
 	description TEXT,
 	slug TEXT
 );
-
 CREATE TABLE IF NOT EXISTS featured_products (
 	category_id INTEGER REFERENCES categories(id),
 	product_id INTEGER REFERENCES products(id),
 	label TEXT
 );
-
 CREATE TABLE IF NOT EXISTS product_categories (
 	product_id INTEGER REFERENCES products(id),
 	category_id INTEGER REFERENCES categories(id)
 );
-
 CREATE TABLE IF NOT EXISTS product_images (
 	product_id INTEGER REFERENCES products(id),
 	image_url TEXT,
 	position INTEGER
 );
-
 CREATE TABLE IF NOT EXISTS product_features (
 	product_id INTEGER REFERENCES products(id),
 	key TEXT,
 	value TEXT,
-	filterable INTEGER
+	filterable INTEGER,
+	position INTEGER
 );
 
 

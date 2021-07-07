@@ -5,27 +5,54 @@ func (db *DB) ProductCheck(slug string) bool {
 }
 
 func (db *DB) ProductGet(slug string) (Product, error) {
-	var name string
-	var description string
+	var (
+		id          int
+		name        string
+		description string
+		quantity    int
+		video_url   string
+	)
 	err := db.QueryRow(`
 	SELECT
-		name,
-		description
+		id, name, description, quantity, video_url
 	FROM
 		products
 	WHERE
 		slug = ?
-	`, slug).Scan(&name, &description)
+	;`, slug).Scan(
+		&id, &name, &description, &quantity, &video_url,
+	)
 	if err != nil {
 		return Product{}, err
 	}
-
-	p := Product{
-		Name:        name,
-		Description: description,
+	prices, err := db.PriceList(id)
+	if err != nil {
+		return Product{}, err
 	}
-
-	return p, nil
+	categories, err := db.CategoryList(id)
+	if err != nil {
+		return Product{}, err
+	}
+	image_urls, err := db.ImageList(id)
+	if err != nil {
+		return Product{}, err
+	}
+	features, err := db.FeatureList(id)
+	if err != nil {
+		return Product{}, err
+	}
+	return Product{
+		ID:          id,
+		Name:        name,
+		Prices:      prices,
+		Categories:  categories,
+		Description: description,
+		Quantity:    quantity,
+		ImageURLs:   image_urls,
+		VideoURL:    video_url,
+		Features:    features,
+		Slug:        slug,
+	}, nil
 }
 
 func (db *DB) ProductList(filters map[string]string) ([]Product, error) {

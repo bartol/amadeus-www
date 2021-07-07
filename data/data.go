@@ -34,8 +34,8 @@ type Price struct {
 
 type Category struct {
 	Name             string
-	Description      string
 	Slug             string
+	Description      string
 	FeaturedProducts []FeaturedProduct
 }
 

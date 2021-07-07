@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 )
 
@@ -12,28 +13,23 @@ func surfaceRouter(w http.ResponseWriter, r *http.Request) {
 		indexHandler(w, r)
 		return
 	}
-
 	// extract slug from path
 	slug := extractSlug(r.URL.Path)
-
 	// check if slug matches product
 	if db.ProductCheck(slug) {
 		productHandler(slug, w, r)
 		return
 	}
-
 	// check if slug matches category
 	if db.CategoryCheck(slug) {
 		categoryHandler(slug, w, r)
 		return
 	}
-
 	// check if slug matches redirect
 	if db.RedirectCheck(slug) {
 		redirectHandler(slug, w, r)
 		return
 	}
-
 	// page not found
 	notFoundHandler(w, r)
 }
@@ -49,10 +45,10 @@ func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err != nil {
+		log.Print(err)
 		internalServerErrorHandler(w, r)
 		return
 	}
-
 	w.Write([]byte(p.Name))
 }
 
