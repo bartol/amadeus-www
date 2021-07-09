@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"database/sql"
 	"embed"
 	"log"
 	"net/http"
@@ -10,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/bdeak4/amadeus2.hr/data"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// connect to database
-	conn, err := sql.Open("sqlite3", os.Getenv("DB"))
+	conn, err := sqlx.Open("sqlite3", os.Getenv("DB"))
 	if err != nil {
 		log.Fatal(err)
 	}

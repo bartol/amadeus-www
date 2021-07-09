@@ -1,9 +1,9 @@
 package data
 
-import "database/sql"
+import "github.com/jmoiron/sqlx"
 
 type DB struct {
-	*sql.DB
+	*sqlx.DB
 }
 
 type Product struct {
@@ -13,8 +13,8 @@ type Product struct {
 	Categories  []Category
 	Description string
 	Quantity    int
-	ImageURLs   []string
-	VideoURL    string
+	Images      []string
+	Video       string
 	Features    []Feature
 	Slug        string
 }
@@ -47,15 +47,9 @@ type FeaturedProduct struct {
 }
 
 type Feature struct {
-	Key        string
-	Value      string
-	Filterable int
+	Key   string
+	Value string
 }
-
-const (
-	NotFilterable = 0
-	Filterable    = 1
-)
 
 const (
 	SortRecommended = 0
