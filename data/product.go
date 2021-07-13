@@ -9,7 +9,6 @@ import (
 
 func (db *DB) ProductCheck(slug string) bool {
 	var n int
-
 	err := db.Get(&n, `
 	SELECT
 		1
@@ -21,13 +20,11 @@ func (db *DB) ProductCheck(slug string) bool {
 	if err != nil {
 		return false
 	}
-
 	return true
 }
 
 func (db *DB) ProductGet(slug string) (Product, error) {
 	var p Product
-
 	err := db.Get(&p, `
 	SELECT
 		rowid, name, description, quantity, video, slug
@@ -39,80 +36,26 @@ func (db *DB) ProductGet(slug string) (Product, error) {
 	if err != nil {
 		return Product{}, err
 	}
-
-	err = db.Select(&p.Prices, `
-	SELECT
-		type, amount, minquantity
-	FROM
-		product_prices
-	WHERE
-		productid = ?
-	;`, p.RowID)
+	err = db.productExternalGet(&p)
 	if err != nil {
 		return Product{}, err
 	}
-
-	err = db.Select(&p.Categories, `
-	SELECT
-		name, slug
-	FROM
-		product_categories AS pc
-		JOIN categories AS c ON pc.categoryid = c.rowid
-	WHERE
-		productid = ?
-	;`, p.RowID)
-	if err != nil {
-		return Product{}, err
-	}
-
-	err = db.Select(&p.Images, `
-	SELECT
-		url
-	FROM
-		product_images
-	WHERE
-		productid = ?
-	ORDER BY
-		position ASC
-	;`, p.RowID)
-	if err != nil {
-		return Product{}, err
-	}
-
-	err = db.Select(&p.Features, `
-	SELECT
-		key, value
-	FROM
-		product_features
-	WHERE
-		productid = ?
-	ORDER BY
-		position ASC
-	;`, p.RowID)
-	if err != nil {
-		return Product{}, err
-	}
-
 	return p, nil
 }
 
 func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 	var products []Product
-
 	if len(filters) == 0 {
 		err := errors.New("No filters defined")
 		return []Product{}, err
 	}
-
 	var wheresql []string
 	var args []interface{}
-
 	if val, ok := filters["query"]; ok {
 		query := strings.Replace(val, " ", "* ", -1) + "*"
 		wheresql = append(wheresql, `idx MATCH ?`)
 		args = append(args, query)
 	}
-
 	if val, ok := filters["category_slug"]; ok {
 		wheresql = append(wheresql, `? IN (
 			SELECT
@@ -125,7 +68,6 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 		)`)
 		args = append(args, val)
 	}
-
 	if val, ok := filters["features"]; ok {
 		var features []map[string]string
 		err := json.Unmarshal([]byte(val), &features)
@@ -148,7 +90,6 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 			}
 		}
 	}
-
 	if type_, ok := filters["price_type"]; ok {
 		if val, ok := filters["price_min"]; ok {
 			wheresql = append(wheresql, `(
@@ -177,9 +118,7 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 			args = append(args, val)
 		}
 	}
-
 	var orderbysql string
-
 	if val, ok := filters["sort"]; ok {
 		switch val {
 		case "1":
@@ -218,9 +157,7 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 			}
 		}
 	}
-
 	var pagesql string
-
 	if val, ok := filters["page"]; ok {
 		page_size := "30"
 		if val, ok := filters["page_size"]; ok {
@@ -234,7 +171,6 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 		args = append(args, page_size)
 		args = append(args, offset)
 	}
-
 	q := `
 	SELECT
 		p.rowid, name, quantity, slug
@@ -246,11 +182,68 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 	` + orderbysql + `
 	` + pagesql + `
 	;`
-
 	err := db.Select(&products, q, args...)
 	if err != nil {
 		return []Product{}, err
 	}
-
+	for _, p := range products {
+		err := db.productExternalGet(&p)
+		if err != nil {
+			return []Product{}, err
+		}
+	}
 	return products, nil
+}
+
+func (db *DB) productExternalGet(p *Product) error {
+	err := db.Select(&p.Prices, `
+	SELECT
+		type, amount, minquantity
+	FROM
+		product_prices
+	WHERE
+		productid = ?
+	;`, p.RowID)
+	if err != nil {
+		return err
+	}
+	err = db.Select(&p.Categories, `
+	SELECT
+		name, slug
+	FROM
+		product_categories AS pc
+		JOIN categories AS c ON pc.categoryid = c.rowid
+	WHERE
+		productid = ?
+	;`, p.RowID)
+	if err != nil {
+		return err
+	}
+	err = db.Select(&p.Images, `
+	SELECT
+		url
+	FROM
+		product_images
+	WHERE
+		productid = ?
+	ORDER BY
+		position ASC
+	;`, p.RowID)
+	if err != nil {
+		return err
+	}
+	err = db.Select(&p.Features, `
+	SELECT
+		key, value
+	FROM
+		product_features
+	WHERE
+		productid = ?
+	ORDER BY
+		position ASC
+	;`, p.RowID)
+	if err != nil {
+		return err
+	}
+	return nil
 }

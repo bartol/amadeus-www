@@ -40,6 +40,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 	p, err := db.ProductGet(slug)
+	pp(p)
 	if err == sql.ErrNoRows {
 		notFoundHandler(w, r)
 		return
