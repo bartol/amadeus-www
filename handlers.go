@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -11,29 +10,23 @@ import (
 // surface web handlers
 
 func surfaceRouter(w http.ResponseWriter, r *http.Request) {
-	// if root then serve index page
 	if r.URL.Path == "/" {
 		indexHandler(w, r)
 		return
 	}
-	// extract slug from path
 	slug := extractSlug(r.URL.Path)
-	// check if slug matches product
 	if db.ProductCheck(slug) {
 		productHandler(slug, w, r)
 		return
 	}
-	// check if slug matches category
 	if db.CategoryCheck(slug) {
 		categoryHandler(slug, w, r)
 		return
 	}
-	// check if slug matches redirect
 	if db.RedirectCheck(slug) {
 		redirectHandler(slug, w, r)
 		return
 	}
-	// page not found
 	notFoundHandler(w, r)
 }
 
@@ -43,8 +36,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 	p, err := db.ProductGet(slug)
-	s, _ := json.MarshalIndent(p, "", "\t")
-	fmt.Print(string(s))
 	if err == sql.ErrNoRows {
 		notFoundHandler(w, r)
 		return
@@ -54,11 +45,23 @@ func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 		internalServerErrorHandler(w, r)
 		return
 	}
-	w.Write([]byte(p.Name))
+	s, _ := json.MarshalIndent(p, "", "\t")
+	w.Write(s)
 }
 
 func categoryHandler(slug string, w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("category"))
+	c, err := db.CategoryGet(slug)
+	if err == sql.ErrNoRows {
+		notFoundHandler(w, r)
+		return
+	}
+	if err != nil {
+		log.Print(err)
+		internalServerErrorHandler(w, r)
+		return
+	}
+	s, _ := json.MarshalIndent(c, "", "\t")
+	w.Write(s)
 }
 
 func redirectHandler(slug string, w http.ResponseWriter, r *http.Request) {
