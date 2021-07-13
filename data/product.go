@@ -1,8 +1,10 @@
 package data
 
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
+	"strconv"
+	"strings"
 )
 
 func (db *DB) ProductCheck(slug string) bool {
@@ -102,14 +104,17 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 		return []Product{}, err
 	}
 
-	var fromsql string
-	var wheresql string
+	var wheresql []string
 	var args []interface{}
 
-	// filters: query, feature, sort, page, price_min, price_max, price_type
+	if val, ok := filters["query"]; ok {
+		query := strings.Replace(val, " ", "* ", -1) + "*"
+		wheresql = append(wheresql, `idx MATCH ?`)
+		args = append(args, query)
+	}
 
 	if val, ok := filters["category_slug"]; ok {
-		wheresql = wheresql + `? IN (
+		wheresql = append(wheresql, `? IN (
 			SELECT
 				slug
 			FROM
@@ -117,28 +122,135 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 				JOIN categories AS c ON pc.categoryid = c.rowid
 			WHERE
 				productid = p.rowid
-		)`
+		)`)
 		args = append(args, val)
+	}
+
+	if val, ok := filters["features"]; ok {
+		var features []map[string]string
+		err := json.Unmarshal([]byte(val), &features)
+		if err != nil {
+			return []Product{}, err
+		}
+		for _, f := range features {
+			for k, v := range f {
+				wheresql = append(wheresql, `(
+					SELECT
+						value
+					FROM
+						product_features
+					WHERE
+						productid = p.rowid
+						AND key = ?
+				) = ?`)
+				args = append(args, k)
+				args = append(args, v)
+			}
+		}
+	}
+
+	if type_, ok := filters["price_type"]; ok {
+		if val, ok := filters["price_min"]; ok {
+			wheresql = append(wheresql, `(
+				SELECT
+					amount
+				FROM
+					product_prices
+				WHERE
+					productid = p.rowid
+					AND type = ?
+			) > ?`)
+			args = append(args, type_)
+			args = append(args, val)
+		}
+		if val, ok := filters["price_max"]; ok {
+			wheresql = append(wheresql, `(
+				SELECT
+					amount
+				FROM
+					product_prices
+				WHERE
+					productid = p.rowid
+					AND type = ?
+			) < ?`)
+			args = append(args, type_)
+			args = append(args, val)
+		}
+	}
+
+	var orderbysql string
+
+	if val, ok := filters["sort"]; ok {
+		switch val {
+		case "1":
+			if type_, ok := filters["price_type"]; ok {
+				orderbysql = `ORDER BY (
+					SELECT
+						amount
+					FROM
+						product_prices
+					WHERE
+						productid = p.rowid
+						AND type = ?
+						
+				) ASC`
+				args = append(args, type_)
+			}
+		case "2":
+			if type_, ok := filters["price_type"]; ok {
+				orderbysql = `ORDER BY (
+					SELECT
+						amount
+					FROM
+						product_prices
+					WHERE
+						productid = p.rowid
+						AND type = ?
+						
+				) DESC`
+				args = append(args, type_)
+			}
+		case "3":
+			orderbysql = `ORDER BY updated_at DESC`
+		default:
+			if _, ok := filters["query"]; ok {
+				orderbysql = `ORDER BY rank`
+			}
+		}
+	}
+
+	var pagesql string
+
+	if val, ok := filters["page"]; ok {
+		page_size := "30"
+		if val, ok := filters["page_size"]; ok {
+			page_size = val
+		}
+		pagesql = `LIMIT ? OFFSET ?`
+		npage, _ := strconv.Atoi(val)
+		npage_size, _ := strconv.Atoi(page_size)
+		noffset := (npage - 1) * npage_size
+		offset := strconv.Itoa(noffset)
+		args = append(args, page_size)
+		args = append(args, offset)
 	}
 
 	q := `
 	SELECT
-		rowid, name, quantity, slug
+		p.rowid, name, quantity, slug
 	FROM
-		products AS p
-		` + fromsql + `
+		products_fts AS p_fts
+		JOIN products AS p ON p_fts.rowid = p.rowid
 	WHERE
-		` + wheresql + `
+		` + strings.Join(wheresql, " AND ") + `
+	` + orderbysql + `
+	` + pagesql + `
 	;`
-
-	fmt.Println(q)
 
 	err := db.Select(&products, q, args...)
 	if err != nil {
 		return []Product{}, err
 	}
-
-	pp(products)
 
 	return products, nil
 }

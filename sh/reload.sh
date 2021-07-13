@@ -10,7 +10,7 @@ cleanup() {
 trap cleanup EXIT INT HUP
 
 while inotifywait -rqe MODIFY --exclude "\.swp" .; do
-	go build -o $bin || continue
+	go build --tags "fts5" -o $bin || continue
 	pidof -q $process && kill $(pidof $process)
 	$bin &
 done
