@@ -41,10 +41,10 @@ type Category struct {
 }
 
 type FeaturedProduct struct {
-	Label    string
-	Name     string
-	ImageURL string
-	Price    int
+	Label string
+	Name  string
+	Image string
+	Price int
 }
 
 type Feature struct {
