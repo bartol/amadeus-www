@@ -2,11 +2,14 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
 
 // surface web handlers
+
 func surfaceRouter(w http.ResponseWriter, r *http.Request) {
 	// if root then serve index page
 	if r.URL.Path == "/" {
@@ -40,7 +43,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 	p, err := db.ProductGet(slug)
-	pp(p)
+	s, _ := json.MarshalIndent(p, "", "\t")
+	fmt.Print(string(s))
 	if err == sql.ErrNoRows {
 		notFoundHandler(w, r)
 		return
@@ -62,11 +66,13 @@ func redirectHandler(slug string, w http.ResponseWriter, r *http.Request) {
 }
 
 // admin handlers
+
 func adminRouter(w http.ResponseWriter, r *http.Request) {
 
 }
 
 // error handlers
+
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("404"))
