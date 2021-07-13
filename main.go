@@ -68,6 +68,10 @@ func main() {
 		port = "8080"
 	}
 
+	db.ProductList(map[string]string{
+		"category_slug": "test",
+	})
+
 	log.Println("Server listening on http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

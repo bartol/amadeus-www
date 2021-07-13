@@ -7,7 +7,7 @@ type DB struct {
 }
 
 type Product struct {
-	ID          int
+	RowID       int
 	Name        string
 	Prices      []Price
 	Categories  []Category
@@ -33,6 +33,7 @@ type Price struct {
 }
 
 type Category struct {
+	RowID            int
 	Name             string
 	Slug             string
 	Description      string

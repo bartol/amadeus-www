@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS products (
-	id INTEGER PRIMARY KEY,
 	name TEXT,
 	description TEXT,
 	quantity INTEGER,
@@ -9,38 +8,37 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE TABLE IF NOT EXISTS product_prices (
-	productid INTEGER REFERENCES products(id),
+	productid INTEGER REFERENCES products(rowid) ON DELETE CASCADE,
 	type INTEGER,
 	amount INTEGER,
 	minquantity INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS categories (
-	id INTEGER PRIMARY KEY,
 	name TEXT,
 	description TEXT,
 	slug TEXT PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS featured_products (
-	categoryid INTEGER REFERENCES categories(id),
-	productid INTEGER REFERENCES products(id),
+	categoryid INTEGER REFERENCES categories(rowid) ON DELETE CASCADE,
+	productid INTEGER REFERENCES products(rowid) ON DELETE CASCADE,
 	label TEXT
 );
 
 CREATE TABLE IF NOT EXISTS product_categories (
-	productid INTEGER REFERENCES products(id),
-	categoryid INTEGER REFERENCES categories(id)
+	productid INTEGER REFERENCES products(rowid) ON DELETE CASCADE,
+	categoryid INTEGER REFERENCES categories(rowid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS product_images (
-	productid INTEGER REFERENCES products(id),
+	productid INTEGER REFERENCES products(rowid) ON DELETE CASCADE,
 	url TEXT,
 	position INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS product_features (
-	productid INTEGER REFERENCES products(id),
+	productid INTEGER REFERENCES products(rowid) ON DELETE CASCADE,
 	key TEXT,
 	value TEXT,
 	filterable INTEGER,
