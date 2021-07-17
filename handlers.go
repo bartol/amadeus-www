@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/bdeak4/amadeus2.hr/html"
 )
 
 // surface web handlers
@@ -27,22 +29,27 @@ func surfaceRouter(w http.ResponseWriter, r *http.Request) {
 		redirectHandler(slug, w, r)
 		return
 	}
-	notFoundHandler(w, r)
+	notFoundHandler(w)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("index"))
+	p := html.IndexParams{
+		Message: "test msg",
+	}
+	err := html.Index(w, p)
+	if err != nil {
+		internalServerErrorHandler(w, err)
+	}
 }
 
 func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 	p, err := db.ProductGet(slug)
 	if err == sql.ErrNoRows {
-		notFoundHandler(w, r)
+		notFoundHandler(w)
 		return
 	}
 	if err != nil {
-		log.Print(err)
-		internalServerErrorHandler(w, r)
+		internalServerErrorHandler(w, err)
 		return
 	}
 	s, _ := json.MarshalIndent(p, "", "\t")
@@ -52,12 +59,11 @@ func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 func categoryHandler(slug string, w http.ResponseWriter, r *http.Request) {
 	c, err := db.CategoryGet(slug)
 	if err == sql.ErrNoRows {
-		notFoundHandler(w, r)
+		notFoundHandler(w)
 		return
 	}
 	if err != nil {
-		log.Print(err)
-		internalServerErrorHandler(w, r)
+		internalServerErrorHandler(w, err)
 		return
 	}
 	s, _ := json.MarshalIndent(c, "", "\t")
@@ -76,12 +82,13 @@ func adminRouter(w http.ResponseWriter, r *http.Request) {
 
 // error handlers
 
-func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+func notFoundHandler(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write([]byte("404"))
 }
 
-func internalServerErrorHandler(w http.ResponseWriter, r *http.Request) {
+func internalServerErrorHandler(w http.ResponseWriter, err error) {
+	log.Print(err)
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte("500"))
 }
