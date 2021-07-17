@@ -36,7 +36,7 @@ func (db *DB) ProductGet(slug string) (Product, error) {
 	if err != nil {
 		return Product{}, err
 	}
-	err = db.productExternalGet(&p)
+	err = db.foreignFieldsGet(&p)
 	if err != nil {
 		return Product{}, err
 	}
@@ -187,7 +187,7 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 		return []Product{}, err
 	}
 	for _, p := range products {
-		err := db.productExternalGet(&p)
+		err := db.foreignFieldsGet(&p)
 		if err != nil {
 			return []Product{}, err
 		}
@@ -195,7 +195,7 @@ func (db *DB) ProductList(filters map[string]string) ([]Product, error) {
 	return products, nil
 }
 
-func (db *DB) productExternalGet(p *Product) error {
+func (db *DB) foreignFieldsGet(p *Product) error {
 	err := db.Select(&p.Prices, `
 	SELECT
 		type, amount, minquantity

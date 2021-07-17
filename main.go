@@ -36,7 +36,6 @@ func main() {
 			if err := os.Setenv(key, value); err != nil {
 				log.Fatal(err)
 			}
-
 		}
 
 		if err := scanner.Err(); err != nil {
@@ -53,10 +52,8 @@ func main() {
 
 	db = &data.DB{conn}
 
-	// surface web routes
+	// routes
 	http.HandleFunc("/", surfaceRouter)
-
-	// admin routes
 	http.HandleFunc("/admin/", adminRouter)
 
 	// serve files bundled in bin

@@ -71,7 +71,7 @@ func redirectHandler(slug string, w http.ResponseWriter, r *http.Request) {
 // admin handlers
 
 func adminRouter(w http.ResponseWriter, r *http.Request) {
-
+	w.Write([]byte("admin"))
 }
 
 // error handlers
