@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -33,9 +32,7 @@ func surfaceRouter(w http.ResponseWriter, r *http.Request) {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	p := html.IndexParams{
-		Message: "test msg",
-	}
+	p := html.IndexParams{}
 	err := html.Index(w, p)
 	if err != nil {
 		internalServerErrorHandler(w, err)
@@ -43,7 +40,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
-	p, err := db.ProductGet(slug)
+	product, err := db.ProductGet(slug)
 	if err == sql.ErrNoRows {
 		notFoundHandler(w)
 		return
@@ -52,12 +49,15 @@ func productHandler(slug string, w http.ResponseWriter, r *http.Request) {
 		internalServerErrorHandler(w, err)
 		return
 	}
-	s, _ := json.MarshalIndent(p, "", "\t")
-	w.Write(s)
+
+	p := html.ProductParams{Product: product}
+	if err := html.Product(w, p); err != nil {
+		internalServerErrorHandler(w, err)
+	}
 }
 
 func categoryHandler(slug string, w http.ResponseWriter, r *http.Request) {
-	c, err := db.CategoryGet(slug)
+	category, err := db.CategoryGet(slug)
 	if err == sql.ErrNoRows {
 		notFoundHandler(w)
 		return
@@ -66,8 +66,18 @@ func categoryHandler(slug string, w http.ResponseWriter, r *http.Request) {
 		internalServerErrorHandler(w, err)
 		return
 	}
-	s, _ := json.MarshalIndent(c, "", "\t")
-	w.Write(s)
+
+	filters := map[string]string{"category_slug": slug}
+	products, err := db.ProductList(filters)
+	if err != nil {
+		internalServerErrorHandler(w, err)
+		return
+	}
+
+	p := html.CategoryParams{Category: category, Products: products}
+	if err := html.Category(w, p); err != nil {
+		internalServerErrorHandler(w, err)
+	}
 }
 
 func redirectHandler(slug string, w http.ResponseWriter, r *http.Request) {

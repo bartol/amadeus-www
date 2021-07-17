@@ -1,0 +1,15 @@
+{{define "title"}}category{{end}}
+{{define "body"}}
+
+<h1>{{ .Category.Name }}</h1>
+
+featured products
+
+<pre>{{ .Category.FeaturedProducts }}</pre>
+
+
+products
+
+<pre>{{ .Products }}</pre>
+
+{{end}}
